@@ -1,3 +1,11 @@
+/* --- THEME DEFINITIONS --- */
+/* Default styles for theme/range buttons if no theme is active (fallback) */
+.theme-button, .range-button, .size-button {
+	background-color: #e0e0e0;
+	color: #333;
+	border: 1px solid #ccc;
+}
+
 /* 1. Candy Theme (Girlish) */
 body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
 body.theme-candy .control-label { color: #c71585; }
