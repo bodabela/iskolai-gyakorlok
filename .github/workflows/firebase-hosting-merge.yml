@@ -5,16 +5,20 @@ name: Deploy to Firebase Hosting on merge
 on:
   push:
     branches:
-      - main
+      - main # Vagy az az ág, amire a telepítést szeretnéd indítani
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: npm ci && npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: actions/checkout@v4 # Letölti a kódodat a repositoryból
+      # Az alábbi sor volt a probléma forrása statikus projekteknél,
+      # mivel nincs szükség npm build lépésre. Ezért töröljük/kihagyjuk.
+      # - run: npm ci && npm run build
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0 # Firebase Hosting telepítő action
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
+          # Győződj meg róla, hogy ez a secret helyesen van beállítva a GitHub repositoryd Settings -> Secrets -> Actions alatt
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ISKOLAI_GYAKORLOK }}
-          channelId: live
-          projectId: iskolai-gyakorlok
+          channelId: live # Telepítés a 'live' csatornára (alapértelmezett)
+          projectId: iskolai-gyakorlok # A Firebase/GCP projekt azonosítója
