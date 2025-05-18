@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1. Osztály - Hiányos műveletek</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px; 
+        }
+
+        .theme-selector, .range-selector {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+       
+        .theme-button, .range-button {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-button:hover, .range-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .theme-button.active, .range-button.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000); 
+            transform: translateY(1px);
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px; 
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px; 
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em); 
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em); 
+            margin-bottom: 25px;
+        }
+        .task {
+            margin-bottom: 30px; 
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0; 
+            font-size: clamp(1.1em, 3.5vw, 1.3em); 
+            transition: color 0.5s ease;
+        }
+        .new-task-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px; 
+        }
+
+        .task p {
+            line-height: 1.6; 
+            font-size: clamp(1em, 3vw, 1.1em); 
+            margin-bottom: 10px; 
+            transition: color 0.5s ease;
+        }
+        .operation {
+            font-size: clamp(1.5em, 4.5vw, 1.8em); 
+            font-weight: bold;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap; 
+            transition: color 0.5s ease;
+        }
+        .task-number-display { 
+            display: inline-flex; 
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            font-weight: bold;
+            border-radius: 4px; 
+            margin: 0 5px;
+            vertical-align: middle;
+            color: #000000; 
+        }
+
+        input[type="number"] {
+            padding: 10px; 
+            margin: 5px; 
+            border-radius: 8px;
+            font-size: clamp(1em, 3vw, 1.1em); 
+            width: 60px; 
+            text-align: center;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            transition: border-color 0.5s ease;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        button.task-button { 
+            padding: 10px 20px; 
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em); 
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+        .feedback {
+            margin-top: 10px; 
+            font-weight: bold;
+            padding: 8px; 
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em); 
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        /* Number Line Styles */
+        .number-line-container {
+            margin-top: 20px;
+            margin-bottom: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto; 
+        }
+        .number-line {
+            min-width: 400px; 
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .number-line .axis { stroke-width: 2; transition: stroke 0.5s ease; }
+        .number-line .tick { stroke-width: 1.5; transition: stroke 0.5s ease; }
+        .number-line .number-text { 
+            font-size: 11px; 
+            text-anchor: middle; 
+            dominant-baseline: middle; 
+            font-family: 'Arial', sans-serif; 
+            transition: fill 0.5s ease; 
+        }
+        .number-line .arrow-shaft { stroke-width: 2.5; transition: stroke 0.5s ease; }
+        .number-line .arrow-head { stroke-width: 2.5; transition: fill 0.5s ease; }
+        .number-line .label-text-num, .number-line .label-text-op { font-size: 13px; font-weight: bold; text-anchor: middle; font-family: 'Arial', sans-serif; transition: fill 0.5s ease;}
+        .number-line .question-mark-text { font-size: 15px; font-weight: bold; text-anchor: middle; transition: fill 0.5s ease; }
+        .number-line .result-marker { transition: fill 0.5s ease; } 
+        .number-line .label-bg-rect { transition: fill 0.5s ease; rx:3; ry:3; }
+
+
+        /* --- THEME DEFINITIONS --- */
+        /* Default styles for theme/range buttons if no theme is active (fallback) */
+        .theme-button, .range-button {
+            background-color: #e0e0e0;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        
+        /* Shared Number Line Base Styles (will be overridden by themes) */
+        .number-line .axis { stroke: #333; }
+        .number-line .tick { stroke: #555; }
+        .number-line .number-text { fill: #333; }
+        .number-line .operation-arrow { stroke: #007bff; }
+        .number-line .helper-arrow-green { stroke: #28a745; }
+        .number-line .unknown-arrow { stroke: #ff9800; }
+        .number-line .arrow-head { fill: currentColor; }
+        .number-line .label-text-num, .number-line .label-text-op { fill: #000; }
+        .number-line .question-mark-text { fill: #e53935; }
+        .number-line .result-marker { fill: #4caf50; }
+
+        /* 1. Candy Theme (Girlish) */
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
+        body.theme-candy .control-label { color: #c71585; }
+        body.theme-candy .theme-button.active, body.theme-candy .range-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
+        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
+        body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
+        body.theme-candy .task-header h3 { color: #ff69b4; }
+        body.theme-candy .task p { color: #8a2be2; }
+        body.theme-candy .operation { color: #9932cc; }
+        body.theme-candy input[type="number"] { border: 2px solid #ffb6c1; }
+        body.theme-candy button.task-button { background-color: #ff69b4; }
+        body.theme-candy button.task-button:hover { background-color: #ff1493; }
+        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border: 1px solid #90ee90; }
+        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border: 1px solid #ffb6c1; }
+        body.theme-candy .number-line .axis { stroke: #ba55d3; }
+        body.theme-candy .number-line .tick { stroke: #dda0dd; }
+        body.theme-candy .number-line .number-text { fill: #8a2be2; }
+        body.theme-candy .number-line .operation-arrow { stroke: #ff69b4; }
+        body.theme-candy .number-line .helper-arrow-green { stroke: #98fb98; }
+        body.theme-candy .number-line .unknown-arrow { stroke: #afeeee; }
+        body.theme-candy .number-line .label-text-num, body.theme-candy .number-line .label-text-op { fill: #9932cc; }
+        body.theme-candy .number-line .question-mark-text { fill: #ff1493; }
+        body.theme-candy .number-line .result-marker { fill: #da70d6; }
+
+        /* 2. Space Theme (Boyish) */
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;}
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .theme-button.active, body.theme-space .range-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
+        body.theme-space .task-header h3 { color: #93c5fd; }
+        body.theme-space .task p { color: #cbd5e1; }
+        body.theme-space .operation { color: #e2e8f0; }
+        body.theme-space input[type="number"] { border: 2px solid #475569; background-color: #1e293b; color: #e2e8f0;}
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space button.task-button:hover { background-color: #1d4ed8; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+        body.theme-space .number-line .axis { stroke: #94a3b8; }
+        body.theme-space .number-line .tick { stroke: #64748b; }
+        body.theme-space .number-line .number-text { fill: #e2e8f0; }
+        body.theme-space .number-line .operation-arrow { stroke: #facc15; }
+        body.theme-space .number-line .helper-arrow-green { stroke: #4ade80; }
+        body.theme-space .number-line .unknown-arrow { stroke: #fb923c; }
+        body.theme-space .number-line .label-text-num, body.theme-space .number-line .label-text-op { fill: #93c5fd; }
+        body.theme-space .number-line .question-mark-text { fill: #f87171; }
+        body.theme-space .number-line .result-marker { fill: #60a5fa; }
+
+        /* 3. Jungle Theme (Boyish) */
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;}
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
+        body.theme-jungle .task-header h3 { color: #558b2f; }
+        body.theme-jungle .task p { color: #2e7d32; }
+        body.theme-jungle .operation { color: #1b5e20; }
+        body.theme-jungle input[type="number"] { border: 2px solid #81c784; }
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle button.task-button:hover { background-color: #689f38; }
+        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-jungle .number-line .axis { stroke: #558b2f; }
+        body.theme-jungle .number-line .tick { stroke: #81c784; }
+        body.theme-jungle .number-line .number-text { fill: #1b5e20; }
+        body.theme-jungle .number-line .operation-arrow { stroke: #ff8f00; }
+        body.theme-jungle .number-line .helper-arrow-green { stroke: #7cb342; }
+        body.theme-jungle .number-line .unknown-arrow { stroke: #f4511e; }
+        body.theme-jungle .number-line .label-text-num, body.theme-jungle .number-line .label-text-op { fill: #388e3c; }
+        body.theme-jungle .number-line .question-mark-text { fill: #d84315; }
+        body.theme-jungle .number-line .result-marker { fill: #558b2f; }
+
+        /* 4. Magic Forest Theme (Girlish) */
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;}
+        body.theme-magicforest .control-label { color: #9932cc; }
+        body.theme-magicforest .theme-button.active, body.theme-magicforest .range-button.active { background-color: #9370db; color: #f8f0ff; }
+        body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
+        body.theme-magicforest h1, body.theme-magicforest h2 { color: #8a2be2; }
+        body.theme-magicforest .task { background-color: #f5f5f5; border: 2px dashed #ba55d3; }
+        body.theme-magicforest .task-header h3 { color: #9932cc; }
+        body.theme-magicforest .task p { color: #4b0082; }
+        body.theme-magicforest .operation { color: #483d8b; }
+        body.theme-magicforest input[type="number"] { border: 2px solid #ba55d3; }
+        body.theme-magicforest button.task-button { background-color: #9370db; }
+        body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
+        body.theme-magicforest .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-magicforest .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-magicforest .number-line .axis { stroke: #800080; }
+        body.theme-magicforest .number-line .tick { stroke: #da70d6; }
+        body.theme-magicforest .number-line .number-text { fill: #483d8b; }
+        body.theme-magicforest .number-line .operation-arrow { stroke: #9932cc; }
+        body.theme-magicforest .number-line .helper-arrow-green { stroke: #3cb371; }
+        body.theme-magicforest .number-line .unknown-arrow { stroke: #ffd700; }
+        body.theme-magicforest .number-line .label-text-num, body.theme-magicforest .number-line .label-text-op { fill: #8a2be2; }
+        body.theme-magicforest .number-line .question-mark-text { fill: #9400d3; }
+        body.theme-magicforest .number-line .result-marker { fill: #8a2be2; }
+
+        /* 5. Robo/Tech Theme (Boyish) */
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;}
+        body.theme-tech .control-label { color: #26c6da; }
+        body.theme-tech .theme-button.active, body.theme-tech .range-button.active { background-color: #00838f; color: #e0f7fa; }
+        body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
+        body.theme-tech h1, body.theme-tech h2 { color: #00acc1; }
+        body.theme-tech .task { background-color: #455a64; border: 2px dashed #78909c; }
+        body.theme-tech .task-header h3 { color: #26c6da; }
+        body.theme-tech .task p { color: #b0bec5; }
+        body.theme-tech .operation { color: #eceff1; }
+        body.theme-tech input[type="number"] { border: 2px solid #78909c; background-color: #37474f; color: #eceff1; }
+        body.theme-tech button.task-button { background-color: #0097a7; }
+        body.theme-tech button.task-button:hover { background-color: #00838f; }
+        body.theme-tech .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-tech .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-tech .number-line .axis { stroke: #90a4ae; }
+        body.theme-tech .number-line .tick { stroke: #b0bec5; }
+        body.theme-tech .number-line .number-text { fill: #eceff1; }
+        body.theme-tech .number-line .operation-arrow { stroke: #ffab00; }
+        body.theme-tech .number-line .helper-arrow-green { stroke: #00e676; }
+        body.theme-tech .number-line .unknown-arrow { stroke: #76ff03; }
+        body.theme-tech .number-line .label-text-num, body.theme-tech .number-line .label-text-op { fill: #26c6da; }
+        body.theme-tech .number-line .question-mark-text { fill: #00e676; }
+        body.theme-tech .number-line .result-marker { fill: #00acc1; }
+        
+        /* 6. Ocean Theme (Girlish) */
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;}
+        body.theme-ocean .control-label { color: #00acc1; }
+        body.theme-ocean .theme-button.active, body.theme-ocean .range-button.active { background-color: #4db6ac; color: #e0f2f1; }
+        body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
+        body.theme-ocean h1, body.theme-ocean h2 { color: #00897b; }
+        body.theme-ocean .task { background-color: #e0f7fa; border: 2px dashed #80deea; }
+        body.theme-ocean .task-header h3 { color: #00acc1; }
+        body.theme-ocean .task p { color: #00695c; }
+        body.theme-ocean .operation { color: #004d40; }
+        body.theme-ocean input[type="number"] { border: 2px solid #80deea; }
+        body.theme-ocean button.task-button { background-color: #26a69a; }
+        body.theme-ocean button.task-button:hover { background-color: #00897b; }
+        body.theme-ocean .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-ocean .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-ocean .number-line .axis { stroke: #00796b; }
+        body.theme-ocean .number-line .tick { stroke: #4db6ac; }
+        body.theme-ocean .number-line .number-text { fill: #004d40; }
+        body.theme-ocean .number-line .operation-arrow { stroke: #ff7f50; }
+        body.theme-ocean .number-line .helper-arrow-green { stroke: #98fb98; }
+        body.theme-ocean .number-line .unknown-arrow { stroke: #f0e68c; }
+        body.theme-ocean .number-line .label-text-num, body.theme-ocean .number-line .label-text-op { fill: #00897b; }
+        body.theme-ocean .number-line .question-mark-text { fill: #ff7f50; }
+        body.theme-ocean .number-line .result-marker { fill: #00acc1; }
+
+        /* 7. Sport Theme (Boyish) */
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;}
+        body.theme-sport .control-label { color: #1976d2; }
+        body.theme-sport .theme-button.active, body.theme-sport .range-button.active { background-color: #1976d2; color: #e3f2fd; }
+        body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
+        body.theme-sport h1, body.theme-sport h2 { color: #d32f2f; }
+        body.theme-sport .task { background-color: #e3f2fd; border: 2px dashed #42a5f5; }
+        body.theme-sport .task-header h3 { color: #1976d2; }
+        body.theme-sport .task p { color: #0d47a1; }
+        body.theme-sport .operation { color: #01579b; }
+        body.theme-sport input[type="number"] { border: 2px solid #42a5f5; }
+        body.theme-sport button.task-button { background-color: #2196f3; }
+        body.theme-sport button.task-button:hover { background-color: #1976d2; }
+        body.theme-sport .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sport .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-sport .number-line .axis { stroke: #1565c0; }
+        body.theme-sport .number-line .tick { stroke: #42a5f5; }
+        body.theme-sport .number-line .number-text { fill: #0d47a1; }
+        body.theme-sport .number-line .operation-arrow { stroke: #fbc02d; }
+        body.theme-sport .number-line .helper-arrow-green { stroke: #66bb6a; }
+        body.theme-sport .number-line .unknown-arrow { stroke: #ff7043; }
+        body.theme-sport .number-line .label-text-num, body.theme-sport .number-line .label-text-op { fill: #1976d2; }
+        body.theme-sport .number-line .question-mark-text { fill: #d32f2f; }
+        body.theme-sport .number-line .result-marker { fill: #1e88e5; }
+
+        /* 8. Flower Garden Theme (Girlish) */
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;}
+        body.theme-flowergarden .control-label { color: #ff7f50; }
+        body.theme-flowergarden .theme-button.active, body.theme-flowergarden .range-button.active { background-color: #ffdab9; color: #8b4513; }
+        body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
+        body.theme-flowergarden h1, body.theme-flowergarden h2 { color: #ff6347; }
+        body.theme-flowergarden .task { background-color: #fffafa; border: 2px dashed #ffe4b5; }
+        body.theme-flowergarden .task-header h3 { color: #ff7f50; }
+        body.theme-flowergarden .task p { color: #8b4513; }
+        body.theme-flowergarden .operation { color: #a0522d; }
+        body.theme-flowergarden input[type="number"] { border: 2px solid #ffdab9; }
+        body.theme-flowergarden button.task-button { background-color: #ffa07a; }
+        body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
+        body.theme-flowergarden .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-flowergarden .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-flowergarden .number-line .axis { stroke: #cd853f; }
+        body.theme-flowergarden .number-line .tick { stroke: #f4a460; }
+        body.theme-flowergarden .number-line .number-text { fill: #556b2f; }
+        body.theme-flowergarden .number-line .operation-arrow { stroke: #ffd700; }
+        body.theme-flowergarden .number-line .helper-arrow-green { stroke: #90ee90; }
+        body.theme-flowergarden .number-line .unknown-arrow { stroke: #adff2f; }
+        body.theme-flowergarden .number-line .label-text-num, body.theme-flowergarden .number-line .label-text-op { fill: #ff7f50; }
+        body.theme-flowergarden .number-line .question-mark-text { fill: #ff6347; }
+        body.theme-flowergarden .number-line .result-marker { fill: #ff8c00; }
+
+        /* 9. Adventure Theme (Boyish) */
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;}
+        body.theme-adventure .control-label { color: #6d4c41; }
+        body.theme-adventure .theme-button.active, body.theme-adventure .range-button.active { background-color: #a1887f; color: #efebe9; }
+        body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
+        body.theme-adventure h1, body.theme-adventure h2 { color: #bf360c; }
+        body.theme-adventure .task { background-color: #d7ccc8; border: 2px dashed #8d6e63; }
+        body.theme-adventure .task-header h3 { color: #6d4c41; }
+        body.theme-adventure .task p { color: #4e342e; }
+        body.theme-adventure .operation { color: #3e2723; }
+        body.theme-adventure input[type="number"] { border: 2px solid #8d6e63; }
+        body.theme-adventure button.task-button { background-color: #795548; }
+        body.theme-adventure button.task-button:hover { background-color: #5d4037; }
+        body.theme-adventure .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-adventure .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-adventure .number-line .axis { stroke: #6d4c41; }
+        body.theme-adventure .number-line .tick { stroke: #8d6e63; }
+        body.theme-adventure .number-line .number-text { fill: #3e2723; }
+        body.theme-adventure .number-line .operation-arrow { stroke: #ffab40; }
+        body.theme-adventure .number-line .helper-arrow-green { stroke: #43a047; }
+        body.theme-adventure .number-line .unknown-arrow { stroke: #8bc34a; }
+        body.theme-adventure .number-line .label-text-num, body.theme-adventure .number-line .label-text-op { fill: #bf360c; }
+        body.theme-adventure .number-line .question-mark-text { fill: #d84315; }
+        body.theme-adventure .number-line .result-marker { fill: #795548; }
+
+        /* 10. Sky Theme (Girlish) */
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;}
+        body.theme-sky .control-label { color: #00bfff; }
+        body.theme-sky .theme-button.active, body.theme-sky .range-button.active { background-color: #add8e6; color: #005a9c; }
+        body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
+        body.theme-sky h1, body.theme-sky h2 { color: #1e90ff; }
+        body.theme-sky .task { background-color: #f5faff; border: 2px dashed #add8e6; }
+        body.theme-sky .task-header h3 { color: #00bfff; }
+        body.theme-sky .task p { color: #5f9ea0; }
+        body.theme-sky .operation { color: #4682b4; }
+        body.theme-sky input[type="number"] { border: 2px solid #b0e0e6; }
+        body.theme-sky button.task-button { background-color: #87cefa; }
+        body.theme-sky button.task-button:hover { background-color: #6495ed; }
+        body.theme-sky .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sky .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-sky .number-line .axis { stroke: #708090; }
+        body.theme-sky .number-line .tick { stroke: #b0c4de; }
+        body.theme-sky .number-line .number-text { fill: #4682b4; }
+        body.theme-sky .number-line .operation-arrow { stroke: #ffd700; }
+        body.theme-sky .number-line .helper-arrow-green { stroke: #f0e68c; }
+        body.theme-sky .number-line .unknown-arrow { stroke: #d3d3d3; } 
+        body.theme-sky .number-line .arrow-head { fill: currentColor; }
+        body.theme-sky .number-line .label-text-num, body.theme-sky .number-line .label-text-op { fill: #1e90ff; }
+        body.theme-sky .number-line .question-mark-text { fill: #00bfff; }
+        body.theme-sky .number-line .result-marker { fill: #87ceeb; }
+
+    </style>
+</head>
+<body class="theme-candy"> <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button id="themeBtnCandy" class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button id="themeBtnMagicForest" class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button id="themeBtnOcean" class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button id="themeBtnFlowerGarden" class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                <button id="themeBtnSky" class="theme-button" data-theme="theme-sky">Égbolt</button>
+                <button id="themeBtnSpace" class="theme-button" data-theme="theme-space">Űr</button>
+                <button id="themeBtnJungle" class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button id="themeBtnTech" class="theme-button" data-theme="theme-tech">Techno</button>
+                <button id="themeBtnSport" class="theme-button" data-theme="theme-sport">Sport</button>
+                <button id="themeBtnAdventure" class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+        <div>
+            <p class="control-label">Számkör választó:</p>
+            <div class="range-selector">
+                <button class="range-button" data-range="5">5-ös</button>
+                <button class="range-button active" data-range="10">10-es</button> <button class="range-button" data-range="20">20-as</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>1. Osztály - Matematika Feladatok</h1>
+        <h2>Téma: Hiányos műveletek (Pótlás)</h2>
+
+        <div class="task">
+            <div class="task-header">
+                <h3>1. Feladat: Mennyi hiányzik?</h3>
+                <button class="task-button new-task-button" onclick="generateTask1()">Új feladat</button>
+            </div>
+            <p id="task1_description_p">Pótold a hiányzó számot, hogy az összeg helyes legyen!</p>
+            <div class="operation">
+                <div class="task-number-display" id="task1_img_num1" style="background-color: #FFD700;">3</div>
+                <span style="font-size: 1.5em; margin: 0 5px;">+</span>
+                <input type="number" id="task1_answer" min="0" max="10"> 
+                <span style="font-size: 1.5em; margin: 0 5px;">=</span>
+                <div class="task-number-display" id="task1_img_sum" style="background-color: #87CEEB;">7</div>
+            </div>
+            <div class="number-line-container">
+                <svg id="numberLine1" class="number-line" viewBox="0 0 360 70" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <marker id="arrowhead-axis" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                            <polygon points="0 0, 8 3, 0 6" fill="#333" />
+                        </marker>
+                         <marker id="arrowhead-axis-left" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+                            <polygon points="8 0, 0 3, 8 6" fill="#333" />
+                        </marker>
+                        <marker id="op-arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                            <polygon points="0 0, 8 3, 0 6" class="arrow-head" />
+                        </marker>
+                    </defs>
+                    <line id="axis1" class="axis"/>
+                    <g class="ticks-and-numbers">
+                        </g>
+                    <line id="arrow1_op1" class="arrow-shaft operation-arrow" marker-end="url(#op-arrowhead)"/>
+                    <text id="label1_op1_num" class="label-text-num"></text>
+                    <text id="label1_op1_op" class="label-text-op"></text> 
+                    <line id="arrow1_op2" class="arrow-shaft unknown-arrow" marker-end="url(#op-arrowhead)"/>
+                    <text id="label1_op2_op" class="label-text-op"></text> 
+                    <text id="label1_op2_q_mark" class="question-mark-text">?</text> 
+                    <circle id="marker1_res" class="result-marker" r="3.5"/>
+                </svg>
+            </div>
+            <button class="task-button" onclick="checkTask1()">Ellenőrzés</button>
+            <p id="task1_feedback" class="feedback"></p>
+        </div>
+
+        <div class="task">
+             <div class="task-header">
+                <h3>2. Feladat: Mennyit vettünk el?</h3>
+                <button class="task-button new-task-button" onclick="generateTask2()">Új feladat</button>
+            </div>
+            <p id="task2_description_p">Írd be a számot, amennyit el kell vennünk, hogy az eredmény jó legyen!</p>
+            <div class="operation">
+                <div class="task-number-display" id="task2_img_minuend" style="background-color: #90EE90;">9</div>
+                <span style="font-size: 1.5em; margin: 0 5px;">-</span>
+                <input type="number" id="task2_answer" min="0" max="10"> 
+                <span style="font-size: 1.5em; margin: 0 5px;">=</span>
+                <div class="task-number-display" id="task2_img_difference" style="background-color: #FFA07A;">4</div>
+            </div>
+            <div class="number-line-container">
+                <svg id="numberLine2" class="number-line" viewBox="0 0 360 110" preserveAspectRatio="xMidYMid meet"> 
+                    <line id="axis2" class="axis" />
+                    <g class="ticks-and-numbers">
+                        </g>
+                    <line id="arrow2_known" class="arrow-shaft operation-arrow" marker-end="url(#op-arrowhead)"/>
+                    <text id="label2_known_num" class="label-text-num"></text>
+                    <line id="arrow2_unknown_sub" class="arrow-shaft unknown-arrow" marker-end="url(#op-arrowhead)"/>
+                    <text id="label2_unknown_op" class="label-text-op"></text>
+                    <text id="label2_unknown_num_q" class="question-mark-text">?</text> 
+                    <circle id="marker2_result" class="result-marker" r="3.5"/>
+                </svg>
+            </div>
+            <button class="task-button" onclick="checkTask2()">Ellenőrzés</button>
+            <p id="task2_feedback" class="feedback"></p>
+        </div>
+
+        <div class="task">
+            <div class="task-header">
+                <h3>3. Feladat: Mennyi volt eredetileg?</h3>
+                <button class="task-button new-task-button" onclick="generateTask3()">Új feladat</button>
+            </div>
+            <p id="task3_description_p">Melyik számból kell elvenni 6-ot, hogy 8 maradjon?</p>
+            <div class="operation">
+                <input type="number" id="task3_answer" min="0" max="20"> 
+                <span style="font-size: 1.5em; margin: 0 5px;">-</span>
+                <div class="task-number-display" id="task3_img_subtrahend" style="background-color: #FFC0CB;">6</div>
+                <span style="font-size: 1.5em; margin: 0 5px;">=</span>
+                <div class="task-number-display" id="task3_img_difference" style="background-color: #DDA0DD;">8</div>
+            </div>
+            <div class="number-line-container">
+                <svg id="numberLine3" class="number-line" viewBox="0 0 490 150" preserveAspectRatio="xMidYMid meet"> <line id="axis3" class="axis" />
+                     <g class="ticks-and-numbers">
+                        </g>
+                    <text id="label3_start_q_top" class="question-mark-text">?</text>
+                    <rect id="label3_sub_num_top_bg" class="label-bg-rect" /> 
+                    <line id="arrow3_subtraction_top" class="arrow-shaft unknown-arrow" marker-end="url(#op-arrowhead)"/>
+                    <text id="label3_sub_op_top" class="label-text-op"></text>
+                    <text id="label3_sub_num_top" class="label-text-num"></text>
+                    <circle id="marker3_result_top" class="result-marker" r="3.5"/>
+                    
+                    <line id="arrow3_add1_bottom" class="arrow-shaft operation-arrow" marker-end="url(#op-arrowhead)"/>
+                    <text id="label3_add1_num_bottom" class="label-text-num"></text>
+                    <text id="label3_add1_op_bottom" class="label-text-op"></text>
+                    <line id="arrow3_add2_bottom" class="arrow-shaft helper-arrow-green" marker-end="url(#op-arrowhead)"/>
+                    <text id="label3_add2_num_bottom" class="label-text-num"></text>
+                    <text id="label3_add2_op_bottom" class="label-text-op"></text>
+                </svg>
+            </div>
+            <button class="task-button" onclick="checkTask3()">Ellenőrzés</button>
+            <p id="task3_feedback" class="feedback"></p>
+        </div>
+
+    </div>
+
+    <script>
+        const SVG_NS = "http://www.w3.org/2000/svg";
+        
+        let currentNumberRange = 10; 
+
+        let task1Data = { num1: 3, sum: 7, correctAnswer: 4 };
+        let task2Data = { minuend: 9, difference: 4, correctAnswer: 5 };
+        let task3Data = { subtrahend: 6, difference: 8, correctAnswer: 14 };
+
+
+        function drawTicksAndNumbers(svgElement, groupClass, startX, spacing, maxNum, yAxis, highlightedNumbers = []) {
+            const g = svgElement.querySelector(groupClass);
+            if (!g) return;
+            g.innerHTML = ''; 
+
+            const textYPosition = yAxis + 15; 
+            const rectHeight = 18;
+             
+
+            for (let i = 0; i <= maxNum; i++) {
+                const x = startX + i * spacing;
+                const tick = document.createElementNS(SVG_NS, "line");
+                tick.setAttribute("class", "tick");
+                tick.setAttribute("x1", x);
+                tick.setAttribute("y1", yAxis - 5); 
+                tick.setAttribute("x2", x);
+                tick.setAttribute("y2", yAxis + 5); 
+                g.appendChild(tick);
+
+                const currentHighlight = highlightedNumbers.find(h => h.value === i);
+
+                if (currentHighlight && currentHighlight.color !== 'transparent') { 
+                    const rect = document.createElementNS(SVG_NS, "rect");
+                    const rectWidth = rectHeight; 
+                    rect.setAttribute("x", x - rectWidth / 2);
+                    rect.setAttribute("y", textYPosition - rectHeight / 2); 
+                    rect.setAttribute("width", rectWidth);
+                    rect.setAttribute("height", rectHeight);
+                    rect.setAttribute("fill", currentHighlight.color);
+                    rect.setAttribute("rx", 4);
+                    rect.setAttribute("ry", 4);
+                    g.appendChild(rect); 
+                }
+
+                const text = document.createElementNS(SVG_NS, "text");
+                text.setAttribute("class", "number-text");
+                text.setAttribute("x", x);
+                text.setAttribute("y", textYPosition); 
+                text.setAttribute("dominant-baseline", "middle");
+                text.textContent = i;
+                g.appendChild(text);
+            }
+        }
+
+        function updateNumberDisplayDiv(divId, number, backgroundColorHex = "87CEEB") {
+            const divElement = document.getElementById(divId);
+            if (divElement) {
+                divElement.textContent = number;
+                divElement.style.backgroundColor = `#${backgroundColorHex}`;
+            }
+        }
+        
+        function calculateSpacing(svgWidth, startX, maxNum) {
+            const usableWidth = svgWidth - startX - 20; 
+            return maxNum > 0 ? usableWidth / maxNum : usableWidth; 
+        }
+
+
+        function initNumberLine1(num1 = task1Data.num1, sum = task1Data.sum) {
+            const svg = document.getElementById("numberLine1");
+            const axis = document.getElementById("axis1");
+            const startX = 40; 
+            const svgWidth = parseInt(svg.getAttribute("viewBox").split(" ")[2]);
+            const maxNumOnLine = currentNumberRange; 
+            const spacing = calculateSpacing(svgWidth, startX, maxNumOnLine);
+            
+            const yAxis = 40; 
+            const yArrows = yAxis - 15; 
+            const yText = yArrows - 7; 
+
+            axis.setAttribute("x1", startX);
+            axis.setAttribute("y1", yAxis);
+            axis.setAttribute("x2", startX + maxNumOnLine * spacing + 10); 
+            axis.setAttribute("y2", yAxis);
+            
+            const highlightedNumbers1 = [
+                { value: num1, color: '#FFD700' }, 
+                { value: sum, color: '#87CEEB' }   
+            ];
+            drawTicksAndNumbers(svg, ".ticks-and-numbers", startX, spacing, maxNumOnLine, yAxis, highlightedNumbers1);
+
+            // Csak az ismeretlent jelző nyíl marad
+            let x1_op2 = startX + num1 * spacing;
+            let x2_op2 = startX + sum * spacing;
+            document.getElementById("arrow1_op2").setAttribute("x1", x1_op2);
+            document.getElementById("arrow1_op2").setAttribute("y1", yArrows);
+            document.getElementById("arrow1_op2").setAttribute("x2", x2_op2); 
+            document.getElementById("arrow1_op2").setAttribute("y2", yArrows);
+
+            const label1Op2Op = document.getElementById("label1_op2_op");
+            label1Op2Op.setAttribute("x", (x1_op2 + x2_op2) / 2 - 6); 
+            label1Op2Op.setAttribute("y", yText);
+            label1Op2Op.textContent = "+";
+            
+            const label1Op2QMark = document.getElementById("label1_op2_q_mark");
+            label1Op2QMark.setAttribute("x", (x1_op2 + x2_op2) / 2 + 6); 
+            label1Op2QMark.setAttribute("y", yText);
+            
+            document.getElementById("marker1_res").setAttribute("cx", startX + sum * spacing);
+            document.getElementById("marker1_res").setAttribute("cy", yAxis);
+
+            // Az első nyíl és feliratának eltávolítása (vagy láthatatlanná tétele)
+            document.getElementById("arrow1_op1").style.display = "none";
+            document.getElementById("label1_op1_num").style.display = "none";
+            const label1Op1Op = svg.querySelector("#label1_op1_op"); 
+            if(label1Op1Op) label1Op1Op.style.display = "none";
+        }
+
+        function initNumberLine2(minuend = task2Data.minuend, difference = task2Data.difference) {
+            const svg = document.getElementById("numberLine2");
+            const axis = document.getElementById("axis2");
+            const startX = 40;
+            const svgWidth = parseInt(svg.getAttribute("viewBox").split(" ")[2]);
+            const maxNumOnLine = currentNumberRange; 
+            const spacing = calculateSpacing(svgWidth, startX, maxNumOnLine);
+
+            const yAxis = 70; 
+            const yNumbers = yAxis + 20;
+            const yArrows = yAxis - 35; 
+            const yText = yArrows - 7;
+
+            axis.setAttribute("x1", startX);
+            axis.setAttribute("y1", yAxis);
+            axis.setAttribute("x2", startX + maxNumOnLine * spacing + 10);
+            axis.setAttribute("y2", yAxis);
+
+            const highlightedNumbers2 = [
+                { value: minuend, color: '#90EE90' },    
+                { value: difference, color: '#FFA07A' } 
+            ];
+            drawTicksAndNumbers(svg, ".ticks-and-numbers", startX, spacing, maxNumOnLine, yAxis, highlightedNumbers2);
+
+            // Csak az ismeretlen kivonást jelző nyíl marad
+            let x1_unknown = startX + minuend * spacing;
+            let x2_unknown = startX + difference * spacing;
+            const arrowUnknownSub = document.getElementById("arrow2_unknown_sub");
+            arrowUnknownSub.setAttribute("x1", x1_unknown);
+            arrowUnknownSub.setAttribute("y1", yArrows); 
+            arrowUnknownSub.setAttribute("x2", x2_unknown); 
+            arrowUnknownSub.setAttribute("y2", yArrows); 
+
+            const labelUnknownOp = document.getElementById("label2_unknown_op");
+            labelUnknownOp.setAttribute("x", (x1_unknown + x2_unknown) / 2 - 6); 
+            labelUnknownOp.setAttribute("y", yText); 
+            labelUnknownOp.textContent = "-";
+
+            const labelUnknownNumQ = document.getElementById("label2_unknown_num_q");
+            labelUnknownNumQ.setAttribute("x", (x1_unknown + x2_unknown) / 2 + 6); 
+            labelUnknownNumQ.setAttribute("y", yText); 
+            labelUnknownNumQ.textContent = "?"; 
+            
+            const markerResult = document.getElementById("marker2_result");
+            markerResult.setAttribute("cx", startX + difference * spacing);
+            markerResult.setAttribute("cy", yAxis);
+
+            // Az ismert mennyiséget jelző nyíl és felirat eltávolítása
+            document.getElementById("arrow2_known").style.display = "none";
+            document.getElementById("label2_known_num").style.display = "none";
+        }
+
+        function initNumberLine3(minuend = task3Data.correctAnswer, subtrahend = task3Data.subtrahend, difference = task3Data.difference) {
+            const svg = document.getElementById("numberLine3");
+            const axis = document.getElementById("axis3");
+            const startX = 40;
+            const svgWidth = parseInt(svg.getAttribute("viewBox").split(" ")[2]);
+            const maxNumOnLine = currentNumberRange; 
+            const spacing = calculateSpacing(svgWidth, startX, maxNumOnLine);
+            
+            const yAxis = 80; 
+            const yNumbers = yAxis + 20; 
+            const yArrowsTop = yAxis - 50; 
+            const yTextTop = yArrowsTop - 7; 
+            const yArrowsBottom = yAxis - 30 ; 
+            const yTextBottom = yArrowsBottom + 12; 
+
+            axis.setAttribute("x1", startX);
+            axis.setAttribute("y1", yAxis);
+            axis.setAttribute("x2", startX + maxNumOnLine * spacing + 10);
+            axis.setAttribute("y2", yAxis);
+
+            const highlightedNumbers3 = [
+                { value: difference, color: '#DDA0DD' }
+            ];
+            drawTicksAndNumbers(svg, ".ticks-and-numbers", startX, spacing, maxNumOnLine, yAxis, highlightedNumbers3);
+            
+            // Felső sorozat: ? - 6 = 8
+            const qMarkTopX = startX + minuend * spacing;
+            const labelStartQTop = document.getElementById("label3_start_q_top");
+            labelStartQTop.setAttribute("x", qMarkTopX);
+            labelStartQTop.setAttribute("y", yNumbers + 15); // Lejjebb tolva
+            labelStartQTop.textContent = "?";
+            labelStartQTop.style.fill = "#e53935"; 
+            
+            let x1_sub_top = startX + minuend * spacing;
+            let x2_sub_top = startX + difference * spacing;
+            const arrowSubTop = document.getElementById("arrow3_subtraction_top");
+            arrowSubTop.setAttribute("x1", x1_sub_top);
+            arrowSubTop.setAttribute("y1", yArrowsTop); 
+            arrowSubTop.setAttribute("x2", x2_sub_top); 
+            arrowSubTop.setAttribute("y2", yArrowsTop); 
+
+            const midPointSubTopX = (x1_sub_top + x2_sub_top) / 2;
+            
+            const labelSubNumTopBg = document.getElementById("label3_sub_num_top_bg");
+            const labelSubNumTop = document.getElementById("label3_sub_num_top");
+            labelSubNumTop.textContent = subtrahend.toString();
+            
+            const tempTextForWidth = document.createElementNS(SVG_NS, "text");
+            tempTextForWidth.setAttribute("class", "label-text-num");
+            tempTextForWidth.style.visibility = "hidden";
+            tempTextForWidth.textContent = subtrahend.toString();
+            svg.appendChild(tempTextForWidth);
+            const textWidthSub = tempTextForWidth.getComputedTextLength();
+            svg.removeChild(tempTextForWidth);
+
+            const rectWidthSub = textWidthSub + 11; // A felhasználó által preferált érték 
+            const rectHeightSub = 20; 
+
+            labelSubNumTopBg.setAttribute("x", midPointSubTopX + 6 - rectWidthSub / 2); 
+            labelSubNumTopBg.setAttribute("y", yTextTop - rectHeightSub / 2 - 5); // Korrigálva, hogy ne lógjon ki (-5 eltávolítva)
+            labelSubNumTopBg.setAttribute("width", rectWidthSub);
+            labelSubNumTopBg.setAttribute("height", rectHeightSub);
+            labelSubNumTopBg.setAttribute("fill", "#FFC0CB"); 
+
+            document.getElementById("label3_sub_op_top").setAttribute("x", midPointSubTopX - 6);
+            document.getElementById("label3_sub_op_top").setAttribute("y", yTextTop); 
+            document.getElementById("label3_sub_op_top").textContent = "-";
+            document.getElementById("label3_sub_op_top").style.fill = "#ff9800"; 
+            labelSubNumTop.setAttribute("x", midPointSubTopX + 6); 
+            labelSubNumTop.setAttribute("y", yTextTop); 
+            labelSubNumTop.style.fill = "#000000"; 
+            
+            document.getElementById("marker3_result_top").setAttribute("cx", startX + difference * spacing);
+            document.getElementById("marker3_result_top").setAttribute("cy", yAxis);
+
+            // Alsó sorozat: 8 + 6 = ?
+            const firstAddendBottom = difference; 
+            const secondAddendBottom = subtrahend; 
+            const sumResultBottom = minuend; 
+
+            // Első nyíl (0-tól difference-ig) elrejtése
+            document.getElementById("arrow3_add1_bottom").style.display = "none";
+            document.getElementById("label3_add1_num_bottom").style.display = "none";
+            const label3Add1OpBottom = svg.querySelector("#label3_add1_op_bottom");
+            if(label3Add1OpBottom) label3Add1OpBottom.style.display = "none";
+
+            // Csak a második nyíl: difference-től minuend-ig (+subtrahend)
+            let x1_add2_bottom = startX + difference * spacing;
+            let x2_add2_bottom = startX + minuend * spacing;
+            const arrow2Bottom = document.getElementById("arrow3_add2_bottom");
+            arrow2Bottom.setAttribute("x1", x1_add2_bottom);
+            arrow2Bottom.setAttribute("y1", yArrowsBottom); 
+            arrow2Bottom.setAttribute("x2", x2_add2_bottom); 
+            arrow2Bottom.setAttribute("y2", yArrowsBottom); 
+
+            document.getElementById("label3_add2_op_bottom").setAttribute("x", (x1_add2_bottom + x2_add2_bottom) / 2 - 6); 
+            document.getElementById("label3_add2_op_bottom").setAttribute("y", yTextBottom); 
+            document.getElementById("label3_add2_op_bottom").textContent = "+";
+            document.getElementById("label3_add2_num_bottom").setAttribute("x", (x1_add2_bottom + x2_add2_bottom) / 2 + 6); 
+            document.getElementById("label3_add2_num_bottom").setAttribute("y", yTextBottom); 
+            document.getElementById("label3_add2_num_bottom").textContent = subtrahend.toString();
+        }
+
+        function generateTask1() {
+            let sumMax = currentNumberRange;
+            if (sumMax < 2) sumMax = 2; 
+            task1Data.num1 = Math.floor(Math.random() * (sumMax -1)) + 1; 
+            task1Data.correctAnswer = Math.floor(Math.random() * (sumMax - task1Data.num1)) + 1; 
+            task1Data.sum = task1Data.num1 + task1Data.correctAnswer;
+            if (task1Data.sum > currentNumberRange) { 
+                 task1Data.sum = currentNumberRange;
+                 task1Data.correctAnswer = task1Data.sum - task1Data.num1;
+                 if (task1Data.correctAnswer < 1) { 
+                    task1Data.num1 = Math.max(1, Math.floor(currentNumberRange / 2)); 
+                    task1Data.correctAnswer = currentNumberRange - task1Data.num1;
+                    if (task1Data.correctAnswer < 1 && currentNumberRange > 1) { 
+                        task1Data.num1 = currentNumberRange - 1;
+                        task1Data.correctAnswer = 1;
+                        task1Data.sum = currentNumberRange;
+                    } else if (currentNumberRange === 1) {
+                        task1Data.num1 = 1;
+                        task1Data.correctAnswer = 0; 
+                        task1Data.sum = 1;
+                    }
+                 }
+            }
+
+            document.getElementById('task1_description_p').textContent = `Mennyit kell adni ${task1Data.num1}-hez, hogy ${task1Data.sum} legyen?`;
+            updateNumberDisplayDiv("task1_img_num1", task1Data.num1, "FFD700");
+            updateNumberDisplayDiv("task1_img_sum", task1Data.sum, "87CEEB");
+            document.getElementById('task1_answer').value = '';
+            document.getElementById('task1_answer').max = currentNumberRange;
+            document.getElementById('task1_feedback').textContent = '';
+            document.getElementById('task1_feedback').className = 'feedback';
+            initNumberLine1(task1Data.num1, task1Data.sum);
+        }
+
+        function generateTask2() {
+            let minuendMax = currentNumberRange;
+            if (minuendMax < 2) minuendMax = 2;
+            task2Data.minuend = Math.floor(Math.random() * (minuendMax -1)) + 2; 
+            task2Data.correctAnswer = Math.floor(Math.random() * (task2Data.minuend -1)) + 1; 
+            task2Data.difference = task2Data.minuend - task2Data.correctAnswer;
+            if (task2Data.difference < 0) { 
+                task2Data.difference = 0;
+                task2Data.correctAnswer = task2Data.minuend;
+            }
+
+            document.getElementById('task2_description_p').textContent = `Mennyit kell kivonni ${task2Data.minuend}-ből, hogy ${task2Data.difference} legyen?`;
+            updateNumberDisplayDiv("task2_img_minuend", task2Data.minuend, "90EE90");
+            updateNumberDisplayDiv("task2_img_difference", task2Data.difference, "FFA07A");
+            document.getElementById('task2_answer').value = '';
+            document.getElementById('task2_answer').max = currentNumberRange;
+            document.getElementById('task2_feedback').textContent = '';
+            document.getElementById('task2_feedback').className = 'feedback';
+            initNumberLine2(task2Data.minuend, task2Data.difference);
+        }
+
+        function generateTask3() {
+            let correctAnswerMax = currentNumberRange;
+            if (correctAnswerMax < 2) correctAnswerMax = 2; 
+            
+            task3Data.subtrahend = Math.floor(Math.random() * (correctAnswerMax - 1)) + 1; 
+            task3Data.difference = Math.floor(Math.random() * (correctAnswerMax - task3Data.subtrahend)) + 1; 
+            task3Data.correctAnswer = task3Data.difference + task3Data.subtrahend; 
+
+            if (task3Data.correctAnswer > currentNumberRange) {
+                task3Data.correctAnswer = currentNumberRange;
+                if (task3Data.subtrahend >= task3Data.correctAnswer) {
+                    task3Data.subtrahend = task3Data.correctAnswer -1;
+                    if (task3Data.subtrahend < 1) task3Data.subtrahend = 1; 
+                }
+                task3Data.difference = task3Data.correctAnswer - task3Data.subtrahend;
+                if(task3Data.difference < 0) { 
+                    task3Data.difference = 0;
+                    task3Data.correctAnswer = task3Data.subtrahend; 
+                }
+            }
+
+            document.getElementById('task3_description_p').textContent = `Melyik számból kell elvenni ${task3Data.subtrahend}-ot, hogy ${task3Data.difference} maradjon?`;
+            updateNumberDisplayDiv("task3_img_subtrahend", task3Data.subtrahend, "FFC0CB");
+            updateNumberDisplayDiv("task3_img_difference", task3Data.difference, "DDA0DD");
+            document.getElementById('task3_answer').value = '';
+            document.getElementById('task3_answer').max = currentNumberRange;
+            document.getElementById('task3_feedback').textContent = '';
+            document.getElementById('task3_feedback').className = 'feedback';
+            initNumberLine3(task3Data.correctAnswer, task3Data.subtrahend, task3Data.difference);
+        }
+
+
+        function clearFeedback(feedbackEl) {
+            setTimeout(() => {
+                feedbackEl.textContent = '';
+                feedbackEl.className = 'feedback';
+            }, 10000); 
+        }
+
+        function checkTask1() {
+            const answer = parseInt(document.getElementById('task1_answer').value);
+            const feedbackEl = document.getElementById('task1_feedback');
+            if (answer === task1Data.correctAnswer) { 
+                feedbackEl.textContent = 'Ügyes vagy! Pontosan ' + task1Data.correctAnswer + ' hiányzott.';
+                feedbackEl.className = 'feedback correct';
+            } else if (isNaN(answer)) {
+                feedbackEl.textContent = 'Kérlek, írj be egy számot!';
+                feedbackEl.className = 'feedback incorrect';
+            }
+            else {
+                feedbackEl.textContent = 'Ez még nem jó. Gondold át, mennyit kell a ' + task1Data.num1 + '-hoz adni, hogy ' + task1Data.sum + ' legyen!';
+                feedbackEl.className = 'feedback incorrect';
+            }
+            clearFeedback(feedbackEl);
+        }
+
+        function checkTask2() {
+            const answer = parseInt(document.getElementById('task2_answer').value);
+            const feedbackEl = document.getElementById('task2_feedback');
+            if (answer === task2Data.correctAnswer) { 
+                feedbackEl.textContent = 'Nagyszerű! Valóban ' + task2Data.correctAnswer + '-öt kellett elvenni.';
+                feedbackEl.className = 'feedback correct';
+            } else if (isNaN(answer)) {
+                feedbackEl.textContent = 'Kérlek, írj be egy számot!';
+                feedbackEl.className = 'feedback incorrect';
+            }
+            else {
+                feedbackEl.textContent = 'Nem pontos. Számolj utána, mennyit kell elvenni a ' + task2Data.minuend + '-ből, hogy ' + task2Data.difference + ' maradjon!';
+                feedbackEl.className = 'feedback incorrect';
+            }
+            clearFeedback(feedbackEl);
+        }
+
+        function checkTask3() {
+            const answer = parseInt(document.getElementById('task3_answer').value);
+            const feedbackEl = document.getElementById('task3_feedback');
+            if (answer === task3Data.correctAnswer) { 
+                feedbackEl.textContent = 'Kiváló! A ' + task3Data.correctAnswer + '-ből kell elvenni ' + task3Data.subtrahend + '-ot.';
+                feedbackEl.className = 'feedback correct';
+            } else if (isNaN(answer)) {
+                feedbackEl.textContent = 'Kérlek, írj be egy számot!';
+                feedbackEl.className = 'feedback incorrect';
+            }
+            else {
+                feedbackEl.textContent = 'Ez még nem az igazi. Melyik az a szám, amiből ha elveszel ' + task3Data.subtrahend + '-ot, ' + task3Data.difference + '-at kapsz?';
+                feedbackEl.className = 'feedback incorrect';
+            }
+            clearFeedback(feedbackEl);
+        }
+        
+        // Theme switcher logic
+        const bodyEl = document.body;
+        const themeButtons = document.querySelectorAll('.theme-button');
+        const rangeButtons = document.querySelectorAll('.range-button');
+
+        function applyTheme(themeClass) {
+            bodyEl.className = ''; 
+            bodyEl.classList.add(themeClass); 
+
+            themeButtons.forEach(btn => {
+                if (btn.dataset.theme === themeClass) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+             // Re-apply active range button style based on currentNumberRange
+            rangeButtons.forEach(btn => {
+                if (parseInt(btn.dataset.range) === currentNumberRange) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const selectedTheme = button.dataset.theme;
+                applyTheme(selectedTheme);
+            });
+        });
+
+        rangeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentNumberRange = parseInt(button.dataset.range);
+                
+                rangeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Regenerate tasks for the new range
+                generateTask1();
+                generateTask2();
+                generateTask3();
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            generateTask1(); 
+            generateTask2();
+            generateTask3();
+            const defaultTheme = 'theme-candy'; 
+            applyTheme(defaultTheme); 
+            // Set initial active range button
+            rangeButtons.forEach(btn => {
+                if (parseInt(btn.dataset.range) === currentNumberRange) {
+                    btn.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

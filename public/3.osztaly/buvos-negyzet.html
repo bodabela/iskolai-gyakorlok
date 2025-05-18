@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bűvös Négyzet Feladatlap</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px; 
+        }
+
+        .theme-selector, .size-selector, .range-selector {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+       
+        .theme-button, .size-button, .range-button {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-button:hover, .size-button:hover, .range-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .theme-button.active, .size-button.active, .range-button.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000); 
+            transform: translateY(1px);
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px; 
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px; 
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em); 
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em); 
+            margin-bottom: 25px;
+        }
+        .task {
+            margin-bottom: 30px; 
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0; 
+            font-size: clamp(1.1em, 3.5vw, 1.3em); 
+            transition: color 0.5s ease;
+        }
+        .new-task-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px; 
+        }
+
+        .task p {
+            line-height: 1.6; 
+            font-size: clamp(1em, 3vw, 1.1em); 
+            margin-bottom: 10px; 
+            transition: color 0.5s ease;
+        }
+       
+        button.task-button { 
+            padding: 10px 20px; 
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em); 
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+        .feedback {
+            margin-top: 10px; 
+            font-weight: bold;
+            padding: 8px; 
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em); 
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        .magic-square-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .magic-square-grid {
+            display: grid;
+            border: 2px solid; /* Szín a témából jön */
+            transition: border-color 0.5s ease;
+        }
+        /* A grid-template-columns a JS-ben lesz beállítva */
+        
+        .magic-square-cell {
+            /* width és height a JS-ben lesz beállítva */
+            border: 1px solid; /* Szín a témából jön */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: border-color 0.5s ease;
+        }
+        .magic-square-cell input {
+            width: 90%;
+            height: 90%;
+            text-align: center;
+            font-size: 1.2em; /* Ez lehet, hogy még finomhangolásra szorul a nagyobb celláknál */
+            border: none;
+            background-color: transparent;
+            transition: color 0.5s ease, background-color 0.5s ease;
+        }
+         .magic-square-cell input:disabled {
+            font-weight: bold;
+        }
+
+        .magic-sum-display {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: color 0.5s ease;
+        }
+        .generation-error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+
+        /* --- THEME DEFINITIONS --- */
+        /* Default styles for theme/range buttons if no theme is active (fallback) */
+        .theme-button, .range-button, .size-button {
+            background-color: #e0e0e0;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        
+        /* 1. Candy Theme (Girlish) */
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
+        body.theme-candy .control-label { color: #c71585; }
+        body.theme-candy .theme-button.active, body.theme-candy .range-button.active, body.theme-candy .size-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
+        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
+        body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
+        body.theme-candy .task-header h3 { color: #ff69b4; }
+        body.theme-candy .task p { color: #8a2be2; }
+        body.theme-candy input[type="number"] { border: 2px solid #ffb6c1; } 
+        body.theme-candy button.task-button { background-color: #ff69b4; }
+        body.theme-candy button.task-button:hover { background-color: #ff1493; }
+        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border: 1px solid #90ee90; }
+        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border: 1px solid #ffb6c1; }
+        body.theme-candy .magic-square-grid { border-color: #ffb6c1; }
+        body.theme-candy .magic-square-cell { border-color: #ffc0cb; }
+        body.theme-candy .magic-square-cell input { color: #800080; } 
+        body.theme-candy .magic-square-cell input:disabled { color: #c71585; } 
+        body.theme-candy .magic-sum-display { color: #9932cc; }
+
+
+        /* 2. Space Theme (Boyish) */
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;}
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .theme-button.active, body.theme-space .range-button.active, body.theme-space .size-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
+        body.theme-space .task-header h3 { color: #93c5fd; }
+        body.theme-space .task p { color: #cbd5e1; }
+        body.theme-space input[type="number"] { border: 2px solid #475569; background-color: #1e293b; color: #e2e8f0;}
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space button.task-button:hover { background-color: #1d4ed8; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+        body.theme-space .magic-square-grid { border-color: #475569; }
+        body.theme-space .magic-square-cell { border-color: #64748b; }
+        body.theme-space .magic-square-cell input { color: #e0f2fe; background-color: #0f172a; } 
+        body.theme-space .magic-square-cell input:disabled { color: #93c5fd; }
+        body.theme-space .magic-sum-display { color: #60a5fa; }
+
+
+        /* 3. Jungle Theme (Boyish) */
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;}
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active, body.theme-jungle .size-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
+        body.theme-jungle .task-header h3 { color: #558b2f; }
+        body.theme-jungle .task p { color: #2e7d32; }
+        body.theme-jungle input[type="number"] { border: 2px solid #81c784; }
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle button.task-button:hover { background-color: #689f38; }
+        body.theme-jungle .magic-square-grid { border-color: #558b2f; }
+        body.theme-jungle .magic-square-cell { border-color: #81c784; }
+        body.theme-jungle .magic-square-cell input { color: #1b5e20; }
+        body.theme-jungle .magic-square-cell input:disabled { color: #388e3c; }
+        body.theme-jungle .magic-sum-display { color: #558b2f; }
+
+
+        /* 4. Magic Forest Theme (Girlish) */
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;}
+        body.theme-magicforest .control-label { color: #9932cc; }
+        body.theme-magicforest .theme-button.active, body.theme-magicforest .range-button.active, body.theme-magicforest .size-button.active { background-color: #9370db; color: #f8f0ff; }
+        body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
+        body.theme-magicforest h1, body.theme-magicforest h2 { color: #8a2be2; }
+        body.theme-magicforest .task { background-color: #f5f5f5; border: 2px dashed #ba55d3; }
+        body.theme-magicforest .task-header h3 { color: #9932cc; }
+        body.theme-magicforest .task p { color: #4b0082; }
+        body.theme-magicforest input[type="number"] { border: 2px solid #ba55d3; }
+        body.theme-magicforest button.task-button { background-color: #9370db; }
+        body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
+        body.theme-magicforest .magic-square-grid { border-color: #9370db; }
+        body.theme-magicforest .magic-square-cell { border-color: #ba55d3; }
+        body.theme-magicforest .magic-square-cell input { color: #483d8b; }
+        body.theme-magicforest .magic-square-cell input:disabled { color: #8a2be2; }
+        body.theme-magicforest .magic-sum-display { color: #9932cc; }
+
+
+        /* 5. Robo/Tech Theme (Boyish) */
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;}
+        body.theme-tech .control-label { color: #26c6da; }
+        body.theme-tech .theme-button.active, body.theme-tech .range-button.active, body.theme-tech .size-button.active { background-color: #00838f; color: #e0f7fa; }
+        body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
+        body.theme-tech h1, body.theme-tech h2 { color: #00acc1; }
+        body.theme-tech .task { background-color: #455a64; border: 2px dashed #78909c; }
+        body.theme-tech .task-header h3 { color: #26c6da; }
+        body.theme-tech .task p { color: #b0bec5; }
+        body.theme-tech input[type="number"] { border: 2px solid #78909c; background-color: #37474f; color: #eceff1; }
+        body.theme-tech button.task-button { background-color: #0097a7; }
+        body.theme-tech button.task-button:hover { background-color: #00838f; }
+        body.theme-tech .magic-square-grid { border-color: #546e7a; }
+        body.theme-tech .magic-square-cell { border-color: #78909c; }
+        body.theme-tech .magic-square-cell input { color: #eceff1; background-color: #455a64; }
+        body.theme-tech .magic-square-cell input:disabled { color: #b0bec5; }
+        body.theme-tech .magic-sum-display { color: #26c6da; }
+        
+        /* 6. Ocean Theme (Girlish) */
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;}
+        body.theme-ocean .control-label { color: #00acc1; }
+        body.theme-ocean .theme-button.active, body.theme-ocean .range-button.active, body.theme-ocean .size-button.active { background-color: #4db6ac; color: #e0f2f1; }
+        body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
+        body.theme-ocean h1, body.theme-ocean h2 { color: #00897b; }
+        body.theme-ocean .task { background-color: #e0f7fa; border: 2px dashed #80deea; }
+        body.theme-ocean .task-header h3 { color: #00acc1; }
+        body.theme-ocean .task p { color: #00695c; }
+        body.theme-ocean input[type="number"] { border: 2px solid #80deea; }
+        body.theme-ocean button.task-button { background-color: #26a69a; }
+        body.theme-ocean button.task-button:hover { background-color: #00897b; }
+        body.theme-ocean .magic-square-grid { border-color: #26a69a; }
+        body.theme-ocean .magic-square-cell { border-color: #4dd0e1; }
+        body.theme-ocean .magic-square-cell input { color: #004d40; }
+        body.theme-ocean .magic-square-cell input:disabled { color: #00796b; }
+        body.theme-ocean .magic-sum-display { color: #00897b; }
+
+        /* 7. Sport Theme (Boyish) */
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;}
+        body.theme-sport .control-label { color: #1976d2; }
+        body.theme-sport .theme-button.active, body.theme-sport .range-button.active, body.theme-sport .size-button.active { background-color: #1976d2; color: #e3f2fd; }
+        body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
+        body.theme-sport h1, body.theme-sport h2 { color: #d32f2f; }
+        body.theme-sport .task { background-color: #e3f2fd; border: 2px dashed #42a5f5; }
+        body.theme-sport .task-header h3 { color: #1976d2; }
+        body.theme-sport .task p { color: #0d47a1; }
+        body.theme-sport input[type="number"] { border: 2px solid #42a5f5; }
+        body.theme-sport button.task-button { background-color: #2196f3; }
+        body.theme-sport button.task-button:hover { background-color: #1976d2; }
+        body.theme-sport .magic-square-grid { border-color: #1976d2; }
+        body.theme-sport .magic-square-cell { border-color: #42a5f5; }
+        body.theme-sport .magic-square-cell input { color: #01579b; }
+        body.theme-sport .magic-square-cell input:disabled { color: #0d47a1; }
+        body.theme-sport .magic-sum-display { color: #1565c0; }
+
+        /* 8. Flower Garden Theme (Girlish) */
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;}
+        body.theme-flowergarden .control-label { color: #ff7f50; }
+        body.theme-flowergarden .theme-button.active, body.theme-flowergarden .range-button.active, body.theme-flowergarden .size-button.active { background-color: #ffdab9; color: #8b4513; }
+        body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
+        body.theme-flowergarden h1, body.theme-flowergarden h2 { color: #ff6347; }
+        body.theme-flowergarden .task { background-color: #fffafa; border: 2px dashed #ffe4b5; }
+        body.theme-flowergarden .task-header h3 { color: #ff7f50; }
+        body.theme-flowergarden .task p { color: #8b4513; }
+        body.theme-flowergarden input[type="number"] { border: 2px solid #ffdab9; }
+        body.theme-flowergarden button.task-button { background-color: #ffa07a; }
+        body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
+        body.theme-flowergarden .magic-square-grid { border-color: #ffa07a; }
+        body.theme-flowergarden .magic-square-cell { border-color: #ffdab9; }
+        body.theme-flowergarden .magic-square-cell input { color: #800000; } 
+        body.theme-flowergarden .magic-square-cell input:disabled { color: #a0522d; } 
+        body.theme-flowergarden .magic-sum-display { color: #d2691e; } 
+
+        /* 9. Adventure Theme (Boyish) */
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;}
+        body.theme-adventure .control-label { color: #6d4c41; }
+        body.theme-adventure .theme-button.active, body.theme-adventure .range-button.active, body.theme-adventure .size-button.active { background-color: #a1887f; color: #efebe9; }
+        body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
+        body.theme-adventure h1, body.theme-adventure h2 { color: #bf360c; }
+        body.theme-adventure .task { background-color: #d7ccc8; border: 2px dashed #8d6e63; }
+        body.theme-adventure .task-header h3 { color: #6d4c41; }
+        body.theme-adventure .task p { color: #4e342e; }
+        body.theme-adventure input[type="number"] { border: 2px solid #8d6e63; }
+        body.theme-adventure button.task-button { background-color: #795548; }
+        body.theme-adventure button.task-button:hover { background-color: #5d4037; }
+        body.theme-adventure .magic-square-grid { border-color: #795548; }
+        body.theme-adventure .magic-square-cell { border-color: #a1887f; }
+        body.theme-adventure .magic-square-cell input { color: #3e2723; }
+        body.theme-adventure .magic-square-cell input:disabled { color: #5d4037; }
+        body.theme-adventure .magic-sum-display { color: #4e342e; }
+
+        /* 10. Sky Theme (Girlish) */
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;}
+        body.theme-sky .control-label { color: #00bfff; }
+        body.theme-sky .theme-button.active, body.theme-sky .range-button.active, body.theme-sky .size-button.active { background-color: #add8e6; color: #005a9c; }
+        body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
+        body.theme-sky h1, body.theme-sky h2 { color: #1e90ff; }
+        body.theme-sky .task { background-color: #f5faff; border: 2px dashed #add8e6; }
+        body.theme-sky .task-header h3 { color: #00bfff; }
+        body.theme-sky .task p { color: #5f9ea0; }
+        body.theme-sky input[type="number"] { border: 2px solid #b0e0e6; }
+        body.theme-sky button.task-button { background-color: #87cefa; }
+        body.theme-sky button.task-button:hover { background-color: #6495ed; }
+        body.theme-sky .magic-square-grid { border-color: #87cefa; }
+        body.theme-sky .magic-square-cell { border-color: #b0e0e6; }
+        body.theme-sky .magic-square-cell input { color: #191970; } 
+        body.theme-sky .magic-square-cell input:disabled { color: #4682b4; } 
+        body.theme-sky .magic-sum-display { color: #00bfff; }
+
+    </style>
+</head>
+<body class="theme-candy"> 
+    <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button id="themeBtnCandy" class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button id="themeBtnMagicForest" class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button id="themeBtnOcean" class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button id="themeBtnFlowerGarden" class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                <button id="themeBtnSky" class="theme-button" data-theme="theme-sky">Égbolt</button>
+                <button id="themeBtnSpace" class="theme-button" data-theme="theme-space">Űr</button>
+                <button id="themeBtnJungle" class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button id="themeBtnTech" class="theme-button" data-theme="theme-tech">Techno</button>
+                <button id="themeBtnSport" class="theme-button" data-theme="theme-sport">Sport</button>
+                <button id="themeBtnAdventure" class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+        <div>
+            <p class="control-label">Bűvös négyzet mérete:</p>
+            <div class="size-selector">
+                <button class="size-button active" data-size="3">3x3</button>
+                <button class="size-button" data-size="5">5x5</button>
+            </div>
+        </div>
+        <div>
+            <p class="control-label">Számok a cellákban (maximum):</p>
+            <div class="range-selector">
+                <button class="range-button" data-range="10">10</button>
+                <button class="range-button active" data-range="20">20</button>
+                <button class="range-button" data-range="50">50</button>
+                <button class="range-button" data-range="100">100</button>
+                <button class="range-button" data-range="1000">1000</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Bűvös Négyzet</h1>
+        <div class="task">
+            <div class="task-header">
+                <h3>Töltsd ki a bűvös négyzetet!</h3>
+                <button class="task-button new-task-button" onclick="generateNewMagicSquare()">Új feladat</button>
+            </div>
+            <p>A sorok, oszlopok és átlók összege mindenhol ugyanannyi kell, hogy legyen.</p>
+            
+            <div class="magic-square-container">
+                <div id="magicSquareGrid" class="magic-square-grid size-3x3">
+                    </div>
+                <div id="magicSumDisplay" class="magic-sum-display">Bűvös összeg: <span>-</span></div>
+                <div id="generationErrorMessage" class="generation-error-message" style="display:none;"></div>
+            </div>
+            <button class="task-button" onclick="checkMagicSquare()">Ellenőrzés</button>
+            <p id="magicFeedback" class="feedback"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentTheme = 'theme-candy';
+        let currentGridSize = 3;
+        let currentNumberPoolMax = 20;
+        let magicSquareData = []; 
+        let emptyCellCoords = []; 
+        let magicSum = 0;
+
+        const bodyEl = document.body;
+        const themeButtons = document.querySelectorAll('.theme-button');
+        const sizeButtons = document.querySelectorAll('.size-button');
+        const rangeButtons = document.querySelectorAll('.range-button');
+        const magicSquareGridEl = document.getElementById('magicSquareGrid');
+        const magicSumDisplayEl = document.getElementById('magicSumDisplay').querySelector('span');
+        const feedbackEl = document.getElementById('magicFeedback');
+        const generationErrorEl = document.getElementById('generationErrorMessage');
+
+        function applyTheme(themeClass) {
+            bodyEl.className = ''; 
+            bodyEl.classList.add(themeClass); 
+            currentTheme = themeClass;
+
+            themeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeClass);
+            });
+            rangeButtons.forEach(btn => {
+                 btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberPoolMax);
+            });
+             sizeButtons.forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.size) === currentGridSize);
+            });
+        }
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                applyTheme(button.dataset.theme);
+            });
+        });
+
+        sizeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentGridSize = parseInt(button.dataset.size);
+                sizeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                generateNewMagicSquare();
+            });
+        });
+
+        rangeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentNumberPoolMax = parseInt(button.dataset.range);
+                rangeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                generateNewMagicSquare();
+            });
+        });
+        
+       function generateMagicSquareInternal(N, maxValInCell) {
+            const square = Array(N).fill(null).map(() => Array(N).fill(0));
+            const d = 1; 
+
+            const max_a_for_progression = maxValInCell - (N * N - 1) * d;
+
+            if (max_a_for_progression < 1) {
+                generationErrorEl.textContent = `A(z) ${N}x${N}-es négyzethez legalább ${N*N}-es számkör szükséges a cellákban (1-től kezdődő, ${d} különbségű sorozat esetén). Jelenlegi maximum: ${maxValInCell}. Kérlek, válassz nagyobb számkört vagy kisebb négyzetet.`;
+                generationErrorEl.style.display = 'block';
+                magicSquareGridEl.innerHTML = ''; 
+                magicSumDisplayEl.textContent = '-';
+                return null; 
+            }
+            generationErrorEl.style.display = 'none';
+
+            const start_a = Math.floor(Math.random() * max_a_for_progression) + 1;
+
+            const numbers = [];
+            for (let i = 0; i < N * N; i++) {
+                numbers.push(start_a + i * d);
+            }
+
+            let num = 1; 
+            let r = 0;
+            let c = Math.floor(N / 2);
+
+            while (num <= N * N) {
+                square[r][c] = numbers[num-1]; 
+
+                num++;
+                const prev_r = r;
+                const prev_c = c;
+                r--;
+                c++;
+
+                if (r < 0) r = N - 1;
+                if (c === N) c = 0;
+
+                if (square[r][c] !== 0) { 
+                    r = (prev_r + 1) % N;
+                    c = prev_c;
+                }
+            }
+            
+            magicSum = N * (start_a + ((N * N - 1) / 2) * d);
+            return square;
+        }
+
+
+        function renderMagicSquare() {
+            magicSquareGridEl.innerHTML = '';
+            if (!magicSquareData || magicSquareData.length === 0) { 
+                magicSumDisplayEl.textContent = '-';
+                return;
+            }
+
+            const N = currentGridSize;
+            const cellSize = (currentNumberPoolMax === 1000 && N === 5) ? 65 : (currentNumberPoolMax === 1000 && N === 3) ? 70 : 50; // Dinamikus cellaméret
+            
+            magicSquareGridEl.className = 'magic-square-grid'; 
+            magicSquareGridEl.classList.add(N === 3 ? 'size-3x3' : 'size-5x5');
+            magicSquareGridEl.style.gridTemplateColumns = `repeat(${N}, ${cellSize}px)`;
+            magicSquareGridEl.style.gridTemplateRows = `repeat(${N}, ${cellSize}px)`;
+
+
+            emptyCellCoords = []; 
+            const totalCells = N * N;
+            let numTargetEmptyCells = Math.max(N, Math.floor(totalCells * 0.4)); 
+
+            const allCellCoords = [];
+            for (let r_idx = 0; r_idx < N; r_idx++) {
+                for (let c_idx = 0; c_idx < N; c_idx++) {
+                    allCellCoords.push({ r: r_idx, c: c_idx });
+                }
+            }
+
+            for (let i = allCellCoords.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allCellCoords[i], allCellCoords[j]] = [allCellCoords[j], allCellCoords[i]];
+            }
+            
+            const tempEmptySet = new Set(); 
+
+            for(let i=0; i < numTargetEmptyCells && i < allCellCoords.length; i++){
+                const coord = allCellCoords[i];
+                tempEmptySet.add(`${coord.r}-${coord.c}`);
+            }
+            
+            // --- Post-processing to ensure no line is full ---
+            const lines = [];
+            for (let r = 0; r < N; r++) { // Rows
+                const row = [];
+                for (let c = 0; c < N; c++) row.push({ r, c });
+                lines.push(row);
+            }
+            for (let c = 0; c < N; c++) { // Columns
+                const col = [];
+                for (let r = 0; r < N; r++) col.push({ r, c });
+                lines.push(col);
+            }
+            const diag1 = []; // Main diagonal
+            for (let i = 0; i < N; i++) diag1.push({ r: i, c: i });
+            lines.push(diag1);
+            const diag2 = []; // Anti-diagonal
+            for (let i = 0; i < N; i++) diag2.push({ r: i, c: N - 1 - i });
+            lines.push(diag2);
+
+            lines.forEach(line => {
+                const isFull = line.every(cell => !tempEmptySet.has(`${cell.r}-${cell.c}`));
+                if (isFull && line.length > 0) {
+                    const cellToEmpty = line[Math.floor(Math.random() * line.length)];
+                    tempEmptySet.add(`${cellToEmpty.r}-${cellToEmpty.c}`);
+                }
+            });
+            
+            emptyCellCoords = []; // Újraépítjük az emptyCellCoords tömböt a Set alapján
+            tempEmptySet.forEach(strCoord => {
+                const [r,c] = strCoord.split('-').map(Number);
+                emptyCellCoords.push({r,c});
+            });
+            // --- End of post-processing ---
+
+
+            for (let r = 0; r < N; r++) {
+                for (let c = 0; c < N; c++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('magic-square-cell');
+                    cell.style.width = `${cellSize}px`;
+                    cell.style.height = `${cellSize}px`;
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.dataset.row = r;
+                    input.dataset.col = c;
+                    input.min = 1; 
+                    input.max = currentNumberPoolMax * N * 2; 
+
+                    const isEmpty = emptyCellCoords.some(coord => coord.r === r && coord.c === c);
+
+                    if (isEmpty) {
+                        input.value = '';
+                        input.disabled = false;
+                    } else {
+                        input.value = magicSquareData[r][c];
+                        input.disabled = true;
+                    }
+                    cell.appendChild(input);
+                    magicSquareGridEl.appendChild(cell);
+                }
+            }
+            magicSumDisplayEl.textContent = magicSum;
+        }
+
+        function generateNewMagicSquare() {
+            feedbackEl.textContent = '';
+            feedbackEl.className = 'feedback';
+            generationErrorEl.style.display = 'none'; 
+
+            magicSquareData = generateMagicSquareInternal(currentGridSize, currentNumberPoolMax);
+            renderMagicSquare();
+        }
+
+        function checkMagicSquare() {
+            if (!magicSquareData || magicSquareData.length === 0) {
+                 feedbackEl.textContent = 'Először generálj egy feladatot a megfelelő beállításokkal!';
+                 feedbackEl.className = 'feedback incorrect';
+                 return;
+            }
+            let isCorrect = true;
+            const userInputs = [];
+            let allCellsFilled = true;
+
+            for (let r = 0; r < currentGridSize; r++) {
+                userInputs[r] = [];
+                let rowSum = 0;
+                for (let c = 0; c < currentGridSize; c++) {
+                    const inputEl = magicSquareGridEl.querySelector(`input[data-row="${r}"][data-col="${c}"]`);
+                    if (!inputEl.value && !inputEl.disabled) { 
+                        allCellsFilled = false;
+                    }
+                    const val = parseInt(inputEl.value);
+                    if (isNaN(val)) { 
+                        if(!inputEl.disabled) isCorrect = false; 
+                        userInputs[r][c] = inputEl.disabled ? magicSquareData[r][c] : 0; 
+                    } else {
+                         userInputs[r][c] = val;
+                    }
+                    rowSum += userInputs[r][c];
+                }
+                if (rowSum !== magicSum) isCorrect = false;
+            }
+
+            if (!allCellsFilled) {
+                feedbackEl.textContent = 'Kérlek, tölts ki minden üres mezőt!';
+                feedbackEl.className = 'feedback incorrect';
+                return;
+            }
+
+            for (let c = 0; c < currentGridSize; c++) {
+                let colSum = 0;
+                for (let r = 0; r < currentGridSize; r++) {
+                    colSum += userInputs[r][c];
+                }
+                if (colSum !== magicSum) isCorrect = false;
+            }
+
+            let diag1Sum = 0;
+            let diag2Sum = 0;
+            for (let i = 0; i < currentGridSize; i++) {
+                diag1Sum += userInputs[i][i];
+                diag2Sum += userInputs[i][currentGridSize - 1 - i];
+            }
+            if (diag1Sum !== magicSum || diag2Sum !== magicSum) isCorrect = false;
+
+            if (isCorrect) {
+                feedbackEl.textContent = 'Gratulálok, a bűvös négyzet helyes!';
+                feedbackEl.className = 'feedback correct';
+            } else {
+                feedbackEl.textContent = `Sajnos nem jó. A bűvös összegnek ${magicSum}-nak kellene lennie mindenhol.`;
+                feedbackEl.className = 'feedback incorrect';
+            }
+        }
+
+
+        function clearFeedback(feedbackEl) {
+            setTimeout(() => {
+                feedbackEl.textContent = '';
+                feedbackEl.className = 'feedback';
+            }, 10000); 
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            generateNewMagicSquare(); 
+            const defaultTheme = 'theme-candy'; 
+            applyTheme(defaultTheme); 
+            
+            rangeButtons.forEach(btn => { 
+                if (parseInt(btn.dataset.range) === currentNumberPoolMax) {
+                    btn.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
