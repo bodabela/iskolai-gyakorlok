@@ -441,7 +441,7 @@
         body.theme-ocean .label-text-num, body.theme-ocean .label-text-op { fill: #00897b; } /* Teal 500 */
         body.theme-ocean .question-mark-text { fill: #ff7f50; } /* Coral */
         body.theme-ocean .result-marker { fill: #00acc1; } /* Cyan 600 */
-        body.theme-ocean .number-line .dot-marker { fill: #00796b; } /* Teal 600 */
+        body.theme-ocean .dot-marker { fill: #00796b; } /* Teal 600 */
 
         /* 7. Sport Theme (Boyish) */
         body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;}
@@ -623,6 +623,58 @@
             <p id="task1_feedback" class="feedback"></p>
         </div>
         <svg class="svg-container" id="addition-svg"></svg>
+
+        <div id="taskContainerSubtraction" class="task">
+            <div class="task-header">
+                <h3>2. Feladat: Kivonás tízesátlépéssel</h3>
+                <button class="task-button new-task-button" onclick="generateSubtractionTask()">Új feladat</button>
+            </div>
+            <p id="task2_description_p">Mennyit vonjunk ki X-ből, hogy Y legyen? Bontsd fel a kivonandó számot!</p>
+            <div class="operation-display" id="subtraction-operation-display">
+                <div class="task-number-display" id="task2_num1_display" style="background-color: #FFD700;">0</div>
+                <span>&nbsp;-&nbsp;</span>
+                <div class="task-number-display" id="task2_num2_display" style="background-color: #87CEEB;">0</div>
+                <span>&nbsp;=&nbsp;</span>
+                <span class="placeholder-question">?</span>
+            </div>
+             <div class="operation-display" id="task2_decomposition_steps" style="padding-left: 80px"> </div>
+
+            <div class="number-line-container">
+                 <svg id="subtractionNumberLine" class="number-line" viewBox="0 0 490 150" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <marker id="arrowhead-axis-sub" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                            <polygon points="0 0, 8 3, 0 6" class="axis"/>
+                        </marker>
+                         <marker id="arrowhead-axis-left-sub" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+                            <polygon points="8 0, 0 3, 8 6" class="axis"/>
+                        </marker>
+                        <marker id="op-arrowhead-sub" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="0">
+                            <polygon points="8 0, 0 3, 8 6" class="arrow-head" />
+                        </marker>
+                         <circle id="dot-marker-sub" r="3.5" class="dot-marker"/>
+                    </defs>
+                    <line id="subtractionAxis" class="axis"/>
+                    <g class="ticks-and-numbers subtraction-ticks"></g>
+
+                    <line id="subtractionArrow1" class="arrow-shaft operation-arrow" marker-end="url(#op-arrowhead-sub)"/>
+                    <text id="subtractionLabel1Num" class="label-text-num"></text>
+                    <text id="subtractionLabel1Op" class="label-text-op">-</text>
+
+                    <line id="subtractionArrow2" class="arrow-shaft helper-arrow-green" marker-end="url(#op-arrowhead-sub)"/>
+                    <text id="subtractionLabel2Num" class="label-text-num"></text>
+                    <text id="subtractionLabel2Op" class="label-text-op">-</text>
+
+                    <circle id="subtractionResultMarker" class="result-marker" r="3.5"/>
+                    <text id="subtractionResultQuestion" class="question-mark-text">?</text>
+
+                </svg>
+            </div>
+
+            <button class="task-button" onclick="checkSubtractionTask()">Ellenőrzés</button>
+            <p id="task2_feedback" class="feedback"></p>
+        </div>
+         <svg class="svg-container" id="subtraction-svg"></svg>
+
         </div>
 
     <script>
@@ -634,13 +686,16 @@
 
         // Feladat adatok
         let task1Data = { num1: 0, num2: 0, dec_to_make_ten: 0, dec_remaining: 0, sum: 0 };
+        let task2Data = { num1: 0, num2: 0, dec_to_ten: 0, dec_remaining: 0, difference: 0 };
+
 
         // DOM elemek
         const bodyEl = document.body;
         const themeButtons = document.querySelectorAll('.theme-button');
-        // const rangeButtons = document.querySelectorAll('.range-button'); // Számkör gombok eltávolítva
         const taskContainerAdditionEl = document.getElementById('taskContainerAddition');
         const additionNumberLineSvg = document.getElementById('additionNumberLine');
+        const taskContainerSubtractionEl = document.getElementById('taskContainerSubtraction');
+        const subtractionNumberLineSvg = document.getElementById('subtractionNumberLine');
 
 
         // Téma alkalmazása
@@ -653,7 +708,6 @@
             themeButtons.forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.theme === themeClass);
             });
-             // Számkör gombok kiemelése eltávolítva
         }
 
         // Téma gombok eseménykezelői
@@ -663,16 +717,12 @@
             });
         });
 
-         // Számkör gombok eseménykezelői eltávolítva
-
 
         // Szám megjelenítő div frissítése
         function updateNumberDisplayDiv(divId, number, backgroundColorHex = "87CEEB") {
             const divElement = document.getElementById(divId);
             if (divElement) {
                 divElement.textContent = number;
-                // Háttérszín frissítése (opcionális, a témák már kezelik a szöveg/határ színt)
-                // divElement.style.backgroundColor = `#${backgroundColorHex}`;
             }
         }
 
@@ -927,9 +977,6 @@
             const feedbackEl = document.getElementById('task1_feedback');
             feedbackEl.textContent = ''; // Visszajelzés törlése
             feedbackEl.className = 'feedback'; // Visszajelzés stílusának visszaállítása
-            // Removed clearing task1_final_answer_main as it's now a span
-            // document.getElementById('task1_final_answer_main').value = '';
-
 
             // Számok generálása tízesátlépéshez (pl. 6+?, 7+?, 8+?, 9+?)
             task1Data.num1 = Math.floor(Math.random() * 4) + 6; // Első szám 6 és 9 között
@@ -1025,6 +1072,285 @@
             clearFeedback(feedbackEl);
         }
 
+
+        // Kivonás feladat generálása
+        function generateSubtractionTask() {
+             const feedbackEl = document.getElementById('task2_feedback');
+            feedbackEl.textContent = ''; // Visszajelzés törlése
+            feedbackEl.className = 'feedback'; // Visszajelzés stílusának visszaállítása
+
+            // Számok generálása tízesátlépéshez kivonásnál
+            // Első szám (kisebbítendő): 11 és currentNumberRange (20) között
+            task2Data.num1 = Math.floor(Math.random() * (currentNumberRange - 11 + 1)) + 11;
+            // Második szám (kivonandó): úgy, hogy a tízes átlépés megtörténjen
+            // A kivonandó első része annyi, amennyit vissza kell lépni 10-ig
+            task2Data.dec_to_ten = task2Data.num1 - 10;
+            // A kivonandó második része (ami 10-ből vonódik ki) 1 és 9 között lehet
+            task2Data.dec_remaining = Math.floor(Math.random() * 9) + 1;
+            // A kivonandó teljes értéke
+            task2Data.num2 = task2Data.dec_to_ten + task2Data.dec_remaining;
+
+             // Ellenőrizzük, hogy a kivonandó nem nagyobb, mint a kisebbítendő
+            if (task2Data.num2 >= task2Data.num1) {
+                generateSubtractionTask(); // Újrageneráljuk, ha nem érvényes
+                return;
+            }
+
+            task2Data.difference = task2Data.num1 - task2Data.num2;
+
+            // Feladat szövegének frissítése
+            document.getElementById('task2_description_p').textContent = `Mennyit vonjunk ki ${task2Data.num1}-ből, hogy ${task2Data.difference} legyen? Bontsd fel a kivonandó számot!`;
+
+            // Számok megjelenítése a div-ekben
+            updateNumberDisplayDiv("task2_num1_display", task2Data.num1, "FFD700"); // Arany szín
+            updateNumberDisplayDiv("task2_num2_display", task2Data.num2, "87CEEB"); // Világoskék szín
+
+            // Felbontás lépéseinek HTML struktúrájának generálása
+            const stepsEl = document.getElementById('task2_decomposition_steps');
+            stepsEl.innerHTML = `
+                <div class="task-number-display" id="task2_num1_recomposed_step" style="background-color: #FFD700">${task2Data.num1}</div>
+                <span style="margin: 0 5px;">-</span>
+                <input type="number" id="task2_dec_input1" style="width:45px; font-size: 1em;" min="0" placeholder="?">
+                <span style="margin: 0 5px;">-</span>
+                <input type="number" id="task2_dec_input2" style="width:45px; font-size: 1em;" min="0" placeholder="?">
+                <span style="margin: 0 5px;">=</span>
+                <input type="number" id="task2_final_answer_dec" style="width:60px;" min="0" max="${currentNumberRange}" placeholder="?">
+            `;
+            // Max érték beállítása a végső válaszmezőre (task2_final_answer_dec)
+            document.getElementById('task2_final_answer_dec').max = currentNumberRange;
+
+
+            // Vonalak és számegyenes rajzolása a DOM frissülése után
+            // Kis késleltetés, hogy a böngző renderelje az elemeket
+            setTimeout(() => {
+                drawSubtractionLines(); // Draw the original decomposition lines for subtraction
+                drawSubtractionNumberLine(); // Draw the new number line for subtraction
+            }, 50);
+        }
+
+         // Vonalak rajzolása a kivonás feladathoz (eredeti SVG)
+         function drawSubtractionLines() {
+            const svgEl = document.getElementById('subtraction-svg');
+             if (!svgEl) return; // Exit if the SVG container doesn't exist
+
+            // SVG tartalom törlése
+            svgEl.innerHTML = '';
+
+            const num2Display = document.getElementById('task2_num2_display');
+            const decInput1 = document.getElementById('task2_dec_input1');
+            const decInput2 = document.getElementById('task2_dec_input2');
+
+            // Ellenőrizzük, hogy az elemek léteznek-e
+            if (!num2Display || !decInput1 || !decInput2) {
+                console.error("Nem találhatóak az elemek a vonalak rajzolásához (kivonás).");
+                return;
+            }
+
+            // Elemek pozícióinak lekérése a viewport-hoz képest
+            const num2Rect = num2Display.getBoundingClientRect();
+            const input1Rect = decInput1.getBoundingClientRect();
+            const input2Rect = decInput2.getBoundingClientRect();
+            const containerRect = taskContainerSubtractionEl.getBoundingClientRect(); // A container pozíciója
+
+            // SVG koordináták kiszámítása (a container bal felső sarkához képest)
+            // Y koordinátákhoz hozzáadunk 100px-et a lejjebb tolásért
+            const svgX1 = num2Rect.left + num2Rect.width / 2 - containerRect.left + 20; // num2 aljának közepe
+            const svgY1 = num2Rect.bottom - containerRect.top + 160; // num2 alja + 100px lejjebb
+
+            const svgX2_1 = input1Rect.left + input1Rect.width / 2 - containerRect.left + 20; // input1 tetejének közepe
+            const svgY2_1 = input1Rect.top - containerRect.top + 160; // input1 teteje + 100px lejjebb
+
+            const svgX2_2 = input2Rect.left + input2Rect.width / 2 - containerRect.left + 20; // input2 tetejének közepe
+            const svgY2_2 = input2Rect.top - containerRect.top + 160; // input2 teteje + 100px lejjebb
+
+            // Első vonal (num2 -> input1)
+            const line1 = document.createElementNS(SVG_NS, 'line');
+            line1.setAttribute('x1', svgX1);
+            line1.setAttribute('y1', svgY1);
+            line1.setAttribute('x2', svgX2_1);
+            line1.setAttribute('y2', svgY2_1);
+            line1.setAttribute('stroke', 'gray'); // Vonal színe
+            line1.setAttribute('stroke-width', 2); // Vonal vastagsága
+            line1.setAttribute('marker-end', 'url(#arrowhead)'); // Nyíl a végére (ha van arrowhead definíció)
+
+            // Második vonal (num2 -> input2)
+            const line2 = document.createElementNS(SVG_NS, 'line');
+            line2.setAttribute('x1', svgX1);
+            line2.setAttribute('y1', svgY1);
+            line2.setAttribute('x2', svgX2_2);
+            line2.setAttribute('y2', svgY2_2);
+            line2.setAttribute('stroke', 'gray'); // Vonal színe
+            line2.setAttribute('stroke-width', 2); // Vonal vastagsága
+            line2.setAttribute('marker-end', 'url(#arrowhead)'); // Nyíl a végére
+
+            // Nyílhegy definíció (opcionális, de jól mutat) - Ezt lehetne közösíteni a számegyenes SVG-vel, de most a gyors megoldás kedvéért itt is definiáljuk
+            // Már definiálva van az összeadásnál, de ha külön SVG-ben van, akkor újra kell definiálni vagy hivatkozni rá.
+            // Most újra definiáljuk itt is, ha az SVG-k külön vannak. Ha egy SVG-ben lennének, elég lenne egyszer.
+             const defs = svgEl.querySelector('defs') || document.createElementNS(SVG_NS, 'defs');
+             if (!svgEl.querySelector('defs')) svgEl.appendChild(defs);
+
+             if (!defs.querySelector('#arrowhead')) {
+                 const arrowhead = document.createElementNS(SVG_NS, 'marker');
+                 arrowhead.setAttribute('id', 'arrowhead');
+                 arrowhead.setAttribute('markerWidth', '10');
+                 arrowhead.setAttribute('markerHeight', '7');
+                 arrowhead.setAttribute('refX', '10');
+                 arrowhead.setAttribute('refY', '3.5');
+                 arrowhead.setAttribute('orient', 'auto');
+                 arrowhead.setAttribute('markerUnits', 'strokeWidth');
+                 const polygon = document.createElementNS(SVG_NS, 'polygon');
+                 polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
+                 polygon.setAttribute('fill', 'gray'); // Nyílhegy színe
+                 arrowhead.appendChild(polygon);
+                 defs.appendChild(arrowhead);
+             }
+
+
+            // Vonalak hozzáadása az SVG-hez
+            svgEl.appendChild(line1);
+            svgEl.appendChild(line2);
+        }
+
+        // Vonalak rajzolása a kivonás feladathoz (számegyenes)
+        function drawSubtractionNumberLine() {
+            const svg = subtractionNumberLineSvg;
+            const axis = document.getElementById("subtractionAxis");
+            const startX = 40; // Starting X position for the number line
+            const svgWidth = parseInt(svg.getAttribute("viewBox").split(" ")[2]); // Get SVG width from viewBox
+            const maxNumOnLine = currentNumberRange; // Draw up to the current number range
+            const spacing = calculateSpacing(svgWidth, startX, maxNumOnLine);
+
+            const yAxis = 80; // Y position for the number line axis
+            const yArrows = yAxis - 30; // Y position for the arrows (above the axis)
+            const yText = yArrows - 7; // Y position for text labels above arrows
+            const yQuestionMark = yAxis + 30; // Y position for the question mark (below the axis)
+
+
+            // Draw the main axis
+            axis.setAttribute("x1", startX);
+            axis.setAttribute("y1", yAxis);
+            axis.setAttribute("x2", startX + maxNumOnLine * spacing + 10); // Extend slightly beyond max number
+            axis.setAttribute("y2", yAxis);
+            // Add arrowheads to the axis (optional, but good practice for number lines)
+            axis.setAttribute('marker-end', 'url(#arrowhead-axis-sub)');
+            axis.setAttribute('marker-start', 'url(#arrowhead-axis-left-sub)');
+
+
+            // Highlight numbers: starting number, 10, and the difference
+            const highlightedNumbers = [
+                { value: task2Data.num1, color: '#FFD700' }, // Gold color for starting number
+                { value: 10, color: '#ADD8E6' }, // Light Blue color for 10 (will be a dot)
+                // The difference will be marked by the result marker and question mark text
+            ];
+            drawTicksAndNumbers(svg, ".subtraction-ticks", startX, spacing, maxNumOnLine, yAxis, highlightedNumbers);
+
+            // Draw the first arrow: from num1 back to 10
+            const arrow1 = document.getElementById("subtractionArrow1");
+            const x1_arrow1 = startX + task2Data.num1 * spacing;
+            const x2_arrow1 = startX + 10 * spacing;
+            arrow1.setAttribute("x1", x1_arrow1);
+            arrow1.setAttribute("y1", yArrows);
+            arrow1.setAttribute("x2", x2_arrow1);
+            arrow1.setAttribute("y2", yArrows);
+            arrow1.setAttribute("class", "arrow-shaft operation-arrow"); // Apply theme color class
+            arrow1.setAttribute("marker-end", "url(#op-arrowhead-sub)"); // Arrow points left
+
+            // Label for the first arrow (amount subtracted to reach 10)
+            const label1Num = document.getElementById("subtractionLabel1Num");
+            const label1Op = document.getElementById("subtractionLabel1Op");
+            label1Num.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 + 6); // Position label text
+            label1Num.setAttribute("y", yText);
+            label1Num.textContent = task2Data.dec_to_ten.toString();
+             label1Op.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 - 6); // Position label text
+            label1Op.setAttribute("y", yText);
+            label1Op.textContent = "-";
+
+
+            // Draw the second arrow: from 10 back to difference
+            const arrow2 = document.getElementById("subtractionArrow2");
+            const x1_arrow2 = startX + 10 * spacing;
+            const x2_arrow2 = startX + task2Data.difference * spacing;
+            arrow2.setAttribute("x1", x1_arrow2);
+            arrow2.setAttribute("y1", yArrows);
+            arrow2.setAttribute("x2", x2_arrow2);
+            arrow2.setAttribute("y2", yArrows);
+             arrow2.setAttribute("class", "arrow-shaft helper-arrow-green"); // Apply theme color class (e.g., green for helper step)
+             arrow2.setAttribute("marker-end", "url(#op-arrowhead-sub)"); // Arrow points left
+
+
+            // Label for the second arrow (remaining amount subtracted)
+            const label2Num = document.getElementById("subtractionLabel2Num");
+            const label2Op = document.getElementById("subtractionLabel2Op");
+            label2Num.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 + 6); // Position label text
+            label2Num.setAttribute("y", yText);
+            label2Num.textContent = task2Data.dec_remaining.toString();
+             label2Op.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 - 6); // Position label text
+            label2Op.setAttribute("y", yText);
+            label2Op.textContent = "-";
+
+
+            // Position the result marker (circle)
+            const resultMarker = document.getElementById("subtractionResultMarker");
+            resultMarker.setAttribute("cx", startX + task2Data.difference * spacing);
+            resultMarker.setAttribute("cy", yAxis);
+             resultMarker.setAttribute("class", "result-marker"); // Apply theme color class
+
+            // Position the question mark text below the result marker
+            const resultQuestion = document.getElementById("subtractionResultQuestion");
+            resultQuestion.setAttribute("x", startX + task2Data.difference * spacing);
+            resultQuestion.setAttribute("y", yQuestionMark); // Position below the axis
+             resultQuestion.setAttribute("class", "question-mark-text"); // Apply theme color class
+             resultQuestion.textContent = "?"; // Ensure it's a question mark
+        }
+
+
+        // Kivonás feladat ellenőrzése
+        function checkSubtractionTask() {
+             // Értékek beolvasása az input mezőkből
+            const decInput1Val = parseInt(document.getElementById('task2_dec_input1').value);
+            const decInput2Val = parseInt(document.getElementById('task2_dec_input2').value);
+            // Check only the task2_final_answer_dec for the final answer
+            const finalAnswerDecVal = parseInt(document.getElementById('task2_final_answer_dec').value);
+
+
+            const feedbackEl = document.getElementById('task2_feedback'); // Visszajelzés elem
+
+            // Ellenőrzések
+            // 1. A kivonandó első része helyes? (annyit bontottunk le, amennyi 10-ig kell)
+            let correctDecompositionPart1 = (decInput1Val === task2Data.dec_to_ten);
+            // 2. A két felbontott rész összege kiadja az eredeti kivonandó számot?
+            let correctDecompositionSum = (decInput1Val + decInput2Val === task2Data.num2);
+            // 3. A végeredmény helyes? (csak a felbontás utáni mezőt ellenőrizzük)
+            let correctFinalAnswer = (finalAnswerDecVal === task2Data.difference);
+
+
+            // Visszajelzés logikája
+            if (isNaN(decInput1Val) || isNaN(decInput2Val) || isNaN(finalAnswerDecVal)) {
+                // Ha valamelyik mező üres vagy nem szám
+                feedbackEl.textContent = 'Kérlek, tölts ki minden mezőt!';
+                feedbackEl.className = 'feedback incorrect';
+            } else if (correctDecompositionPart1 && correctDecompositionSum && correctFinalAnswer) {
+                // Minden helyes
+                feedbackEl.textContent = 'Ügyes vagy! A felbontás és a végeredmény is helyes.';
+                feedbackEl.className = 'feedback correct';
+            } else if (!(correctDecompositionPart1 && correctDecompositionSum) && correctFinalAnswer) {
+                // Végeredmény jó, de a felbontás nem
+                feedbackEl.textContent = 'A végeredmény jó, de a felbontás nem tökéletes. Próbáld újra a felbontást!';
+                feedbackEl.className = 'feedback incorrect';
+            } else if ((correctDecompositionPart1 && correctDecompositionSum) && !correctFinalAnswer) {
+                // Felbontás jó, de a végeredmény nem
+                feedbackEl.textContent = 'A felbontás jó, de a végeredmény nem. Számold újra!';
+                feedbackEl.className = 'feedback incorrect';
+            } else {
+                // Semmi sem jó
+                feedbackEl.textContent = 'Sajnos sem a felbontás, sem a végeredmény nem jó. Próbáld újra!';
+                feedbackEl.className = 'feedback incorrect';
+            }
+            // Visszajelzés eltüntetése 10 másodperc után
+            clearFeedback(feedbackEl);
+        }
+
+
         // Visszajelzés törlése idő után
         function clearFeedback(feedbackEl) {
             setTimeout(() => {
@@ -1037,6 +1363,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Összeadás feladat generálása induláskor
             generateAdditionTask();
+            // Kivonás feladat generálása induláskor
+            generateSubtractionTask();
 
             // Alapértelmezett téma alkalmazása és a hozzá tartozó gomb kiemelése
             const defaultTheme = 'theme-candy';
@@ -1048,6 +1376,8 @@
                 setTimeout(() => {
                     drawAdditionLines(); // Draw the original decomposition lines
                     drawAdditionNumberLine(); // Draw the new number line
+                    drawSubtractionLines(); // Draw the original decomposition lines for subtraction
+                    drawSubtractionNumberLine(); // Draw the new number line for subtraction
                 }, 100);
             });
         });
