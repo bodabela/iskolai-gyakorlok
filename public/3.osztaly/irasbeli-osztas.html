@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Általános test stílusok */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -19,6 +20,7 @@
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
+        /* Vezérlőelemek konténerének stílusai */
         .controls-container {
             display: flex;
             flex-direction: column;
@@ -33,6 +35,7 @@
             max-width: 900px;
         }
 
+        /* Beállítások sorának stílusai */
         .settings-row {
             display: flex;
             flex-wrap: wrap;
@@ -40,6 +43,7 @@
             gap: 8px; 
             width:100%;
         }
+        /* Beállítás csoportok stílusai */
         .settings-group {
             display: flex;
             flex-direction: column;
@@ -47,6 +51,7 @@
             gap: 5px;
         }
 
+        /* Vezérlőelemek címkéinek stílusai */
         .control-label {
             font-weight: bold;
             margin-bottom: 5px;
@@ -54,6 +59,7 @@
             transition: color 0.5s ease;
         }
 
+        /* Beállító gombok általános stílusai */
         .setting-button {
             padding: 8px 12px;
             border: 1px solid transparent;
@@ -67,11 +73,12 @@
             transform: translateY(-1px);
             opacity: 0.9;
         }
-        .setting-button.active {
+        .setting-button.active { /* Aktív beállító gomb stílusa */
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
             transform: translateY(1px);
         }
 
+        /* Fő konténer stílusai (feladat és címek) */
         .container {
             background-color: #ffffff;
             padding: 20px;
@@ -83,6 +90,7 @@
             transition: background-color 0.5s ease, border-color 0.5s ease;
         }
 
+        /* Címek stílusai */
         h1, h2 {
             text-align: center;
             transition: color 0.5s ease;
@@ -95,6 +103,7 @@
             font-size: clamp(1.3em, 4vw, 1.6em);
             margin-bottom: 25px;
         }
+        /* Feladat konténer stílusai */
         .task {
             margin-bottom: 30px;
             padding: 20px;
@@ -102,6 +111,7 @@
             transition: background-color 0.5s ease, border-color 0.5s ease;
             position: relative; 
         }
+        /* Feladat fejlécének stílusai */
         .task-header {
             display: flex;
             justify-content: space-between;
@@ -120,6 +130,7 @@
             margin-left: 10px; 
         }
 
+        /* Feladat szövegének stílusai */
         .task p {
             line-height: 1.6;
             font-size: clamp(1em, 3vw, 1.1em);
@@ -127,6 +138,7 @@
             transition: color 0.5s ease;
         }
         
+        /* Feladat gombok általános stílusai */
         button.task-button { 
             padding: 10px 20px;
             color: white;
@@ -145,6 +157,7 @@
             transform: translateY(0px);
         }
 
+        /* Visszajelzés területének stílusai */
         .feedback {
             margin-top: 10px;
             font-weight: bold;
@@ -154,6 +167,7 @@
             transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
         }
 
+        /* Osztási rács stílusai */
         .main-division-grid {
             display: grid;
             gap: 1px; 
@@ -163,6 +177,7 @@
             position: relative; 
         }
 
+        /* Rács celláinak általános stílusai */
         .grid-cell {
             width: 30px;
             height: 30px;
@@ -176,19 +191,20 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             background-color: transparent; 
         }
-        .grid-cell.dividend-digit { }
-        .grid-cell.operand-highlight-cell { 
+        .grid-cell.dividend-digit { /* Osztandó számjegyeinek cellái */ }
+        .grid-cell.operand-highlight-cell { /* Aktuális művelet operandusainak kiemelése */
             box-shadow: 0 0 0 1.5px #0d6efd; 
         }
-        .grid-cell.op-symbol {
+        .grid-cell.op-symbol { /* Műveleti jelek cellái */
             font-weight: bold;
         }
-         .grid-cell.brought-down-digit-cell {} 
-        .grid-cell.cell-with-line-below {
+         .grid-cell.brought-down-digit-cell {} /* Lehozott számjegy cellája (tartalmazhat inputot) */
+        .grid-cell.cell-with-line-below { /* Aláhúzandó cellák */
             border-bottom-width: 1.5px;
             border-bottom-style: solid;
         }
 
+        /* Rács celláiban lévő input mezők stílusai */
         .grid-cell input.styled-input {
             width: 100%;
             height: 100%;
@@ -203,18 +219,19 @@
             box-sizing: border-box;
             color: #333; 
         }
-        .grid-cell input.styled-input:disabled {
+        .grid-cell input.styled-input:disabled { /* Letiltott input mezők stílusa */
              font-weight: bold;
              background-color: #e9ecef; 
              color: #495057;
         }
         
+        /* Végső maradék megjelenítési területének stílusai */
         .final-remainder-display {
             margin-top: 0.8rem;
             font-weight: bold;
             font-size: 1.1em;
         }
-        .final-remainder-display input.styled-input { 
+        .final-remainder-display input.styled-input { /* Önálló mód maradék inputjának stílusa */
             width: 40px; 
             height: 30px;
             font-size: inherit;
@@ -224,7 +241,7 @@
             margin-left: 5px;
         }
         
-        /* Default Theme Styles */
+        /* Alapértelmezett téma stílusok */
         .setting-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
         .task-button { background-color: #007bff; color: white; }
         .container { background-color: #ffffff; border: 1px solid #e5e7eb; }
@@ -234,30 +251,31 @@
         .control-label { color: #333; }
         h1, h2 { color: #007bff; }
         .grid-cell.dividend-digit { color: #212529; }
-        .grid-cell.brought-down-digit-cell input.styled-input { color: #212529 !important; } 
-         .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #212529 !important; } /* For step-by-step text */
+        .grid-cell.brought-down-digit-cell input.styled-input { color: #212529 !important; } /* Lehozott számjegy szövegszíne (önálló mód input) */
+         .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #212529 !important; } /* Lehozott számjegy szövegszíne (lépésenkénti mód szöveg) */
         .final-remainder-display { color: #333; }
         .grid-cell.op-symbol { color: #212529; }
         .grid-cell.cell-with-line-below { border-bottom-color: #6c757d; }
 
-        /* Step Color Scheme 0 - Blueish */
-        .quotient-cell-bg-0 { background-color: #b0e0e6 !important; } 
-        .quotient-cell-bg-0 input.styled-input { color: #333 !important; } 
-        .multiply-result-bg-0 { background-color: #e6f2ff !important; } 
-        .subtract-result-bg-0 { background-color: #cce0ff !important; } 
+        /* Lépésenkénti színezési séma 0 - Kékes */
+        .quotient-cell-bg-0 { background-color: #b0e0e6 !important; } /* Hányados cella háttere */
+        .quotient-cell-bg-0 input.styled-input { color: #333 !important; } /* Hányados input szövegszíne */
+        .multiply-result-bg-0 { background-color: #e6f2ff !important; } /* Szorzás eredményének háttere */
+        .subtract-result-bg-0 { background-color: #cce0ff !important; } /* Kivonás eredményének háttere */
 
-        /* Step Color Scheme 1 - Greenish */
-        .quotient-cell-bg-1 { background-color: #98fb98 !important; } 
+        /* Lépésenkénti színezési séma 1 - Zöldes */
+        .quotient-cell-bg-1 { background-color: #98fb98 !important; }
         .quotient-cell-bg-1 input.styled-input { color: #333 !important; }
         .multiply-result-bg-1 { background-color: #e9f7ef !important; } 
         .subtract-result-bg-1 { background-color: #c8e6c9 !important; } 
         
-        /* Step Color Scheme 2 - Purplish */
+        /* Lépésenkénti színezési séma 2 - Lilás */
         .quotient-cell-bg-2 { background-color: #d8bfd8 !important; } 
         .quotient-cell-bg-2 input.styled-input { color: #333 !important; }
         .multiply-result-bg-2 { background-color: #f3e5f5 !important; } 
         .subtract-result-bg-2 { background-color: #e0cde2 !important; } 
 
+        /* Input mezők hátterének átlátszóvá tétele, ha a szülő cellának van lépés-specifikus háttere */
         .multiply-result-bg-0 input.styled-input, .multiply-result-bg-0 input.styled-input:disabled,
         .subtract-result-bg-0 input.styled-input, .subtract-result-bg-0 input.styled-input:disabled,
         .multiply-result-bg-1 input.styled-input, .multiply-result-bg-1 input.styled-input:disabled,
@@ -267,7 +285,7 @@
         .quotient-cell-bg-0 input.styled-input, .quotient-cell-bg-0 input.styled-input:disabled, 
         .quotient-cell-bg-1 input.styled-input, .quotient-cell-bg-1 input.styled-input:disabled, 
         .quotient-cell-bg-2 input.styled-input, .quotient-cell-bg-2 input.styled-input:disabled,
-        .brought-down-digit-cell.subtract-result-bg-0 input.styled-input, /* For independent mode brought down digit */
+        .brought-down-digit-cell.subtract-result-bg-0 input.styled-input, /* Önálló mód lehozott számjegy input */
         .brought-down-digit-cell.subtract-result-bg-1 input.styled-input,
         .brought-down-digit-cell.subtract-result-bg-2 input.styled-input
         {
@@ -275,7 +293,7 @@
         }
 
 
-        /* --- Candy Theme Only --- */
+        /* --- Candy (Cukorka) Téma --- */
         body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
         body.theme-candy .control-label { color: #c71585; }
         body.theme-candy .setting-button { background-color: #ffc0cb; color: #800080; border-color: #ffb6c1;}
@@ -301,7 +319,7 @@
         body.theme-candy .final-remainder-display { color: #9932cc; }
         body.theme-candy .grid-cell.op-symbol { color: #9932cc; }
 
-        /* Candy Theme Step Colors */
+        /* Candy Téma Lépésenkénti Színei */
         body.theme-candy .quotient-cell-bg-0 { background-color: #ffc0cb !important; } 
         body.theme-candy .quotient-cell-bg-0 input.styled-input { color: #800000 !important; } 
         body.theme-candy .multiply-result-bg-0 { background-color: #ffe4e1 !important; } 
@@ -326,7 +344,7 @@
         body.theme-candy .quotient-cell-bg-0 input.styled-input, body.theme-candy .quotient-cell-bg-0 input.styled-input:disabled,
         body.theme-candy .quotient-cell-bg-1 input.styled-input, body.theme-candy .quotient-cell-bg-1 input.styled-input:disabled,
         body.theme-candy .quotient-cell-bg-2 input.styled-input, body.theme-candy .quotient-cell-bg-2 input.styled-input:disabled,
-        body.theme-candy .brought-down-digit-cell.subtract-result-bg-0 input.styled-input, /* For independent mode brought down digit */
+        body.theme-candy .brought-down-digit-cell.subtract-result-bg-0 input.styled-input, 
         body.theme-candy .brought-down-digit-cell.subtract-result-bg-1 input.styled-input,
         body.theme-candy .brought-down-digit-cell.subtract-result-bg-2 input.styled-input
          {
@@ -336,7 +354,6 @@
     </style>
 </head>
 <body>
-
     <div class="controls-container">
         <div class="w-full mt-4">
             <p class="control-label text-center">Beállítások:</p>
@@ -394,7 +411,7 @@
     </div>
 
     <script>
-        // Global DOM Element References
+        // Globális DOM Elemek Referenciái
         const dividendLengthSelector = document.getElementById('dividendLengthSelector');
         const remainderTypeSelector = document.getElementById('remainderTypeSelector');
         const helpLevelSelector = document.getElementById('helpLevelSelector');
@@ -405,7 +422,7 @@
         const finalRemainderValueEl = document.getElementById('finalRemainderValue'); 
         const bodyEl = document.body;
 
-        // Object to store current settings and task state
+        // Aktuális beállítások és feladat állapotát tároló objektumok
         let currentSettings = {
             theme: 'theme-candy', 
             dividendLength: 3,   
@@ -421,10 +438,11 @@
             steps: []            
         };
         
+        // Az osztási folyamat állapotát követő változók
         let currentStepIndex = 0;       
         let currentSubStep = 'estimate'; 
 
-        // Event Handlers
+        // Eseménykezelők a beállító gombokhoz
         dividendLengthSelector.addEventListener('click', (e) => {
             if (e.target.classList.contains('setting-button')) {
                 currentSettings.dividendLength = parseInt(e.target.dataset.length);
@@ -447,9 +465,13 @@
             }
         });
 
+        // Eseménykezelők a fő funkciógombokhoz
         newTaskButton.addEventListener('click', generateNewTask);
         checkStepButton.addEventListener('click', handleCheck);
 
+        /**
+         * Alkalmazza az aktuálisan kiválasztott témát és frissíti a gombok aktív állapotát.
+         */
         function applyTheme() {
             bodyEl.className = ''; 
             bodyEl.classList.add(currentSettings.theme); 
@@ -458,19 +480,27 @@
             updateActiveButtonVisuals(helpLevelSelector, helpLevelSelector.querySelector(`[data-help="${currentSettings.helpLevel}"]`));
         }
         
+        /**
+         * Kiemeli az aktív gombot egy gombcsoporton belül.
+         * @param {HTMLElement} container - A gombcsoportot tartalmazó elem.
+         * @param {HTMLElement} activeButton - Az aktívvá váló gomb.
+         */
         function updateActiveButtonVisuals(container, activeButton) {
             if (!container || !activeButton) return;
             container.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
             activeButton.classList.add('active');
         }
 
+        /**
+         * Új osztási feladatot generál a jelenlegi beállítások alapján.
+         */
         function generateNewTask() {
             currentStepIndex = 0;
             currentSubStep = 'estimate';
             task = { dividend: 0, divisor: 0, quotientDigits: [], finalRemainder: 0, steps: [] };
             
             mainDivisionGrid.innerHTML = ''; 
-            document.getElementById('finalRemainderArea').innerHTML = 'Maradék: <span id="finalRemainderValueInputContainer">-</span>';
+            document.getElementById('finalRemainderArea').innerHTML = 'Maradék: <span id="finalRemainderValueInputContainer">-</span>'; 
             feedbackArea.textContent = '\u00A0'; 
             feedbackArea.className = 'feedback mt-4'; 
             
@@ -519,6 +549,9 @@
             updateTaskInstructions();   
         }
 
+    /**
+     * Kiszámítja az írásbeli osztás helyes lépéseit és eredményeit.
+     */
     function calculateCorrectSteps() {
         let dividendStr = String(task.dividend);
         let currentRemainderForNextStep = 0; 
@@ -566,6 +599,10 @@
         }
     }
 
+        /**
+         * Megjeleníti az osztási feladatot a rácson.
+         * "Önálló" módban az összes számítási lépéshez input mezőket hoz létre.
+         */
         function renderTaskDisplay() {
             mainDivisionGrid.innerHTML = ''; 
             const dividendStr = String(task.dividend);
@@ -604,9 +641,10 @@
 
             mainDivisionGrid.appendChild(createGridCell('=', firstRow, currentCol++, ['op-symbol']));
 
+            // Hányados beviteli mezőinek létrehozása
             for (let i = 0; i < quotientLength; i++) {
                 const inputId = `q-${i}`;
-                const input = createStyledInput(true, inputId, 'quotient'); 
+                const input = createStyledInput(currentSettings.helpLevel !== 'independent', inputId, 'quotient'); 
                 const colorIndex = i % 3; 
                 const cell = createGridCell(null, firstRow, currentCol++);
                 cell.classList.add(`quotient-cell-bg-${colorIndex}`); 
@@ -615,13 +653,14 @@
             }
              if (quotientLength === 0) { 
                  const inputId = `q-0`;
-                 const input = createStyledInput(true, inputId, 'quotient');
+                 const input = createStyledInput(currentSettings.helpLevel !== 'independent', inputId, 'quotient');
                  const cell = createGridCell(null, firstRow, currentCol++);
                  cell.classList.add(`quotient-cell-bg-0`); 
                  cell.appendChild(input);
                  mainDivisionGrid.appendChild(cell);
             }
 
+            // "Önálló" mód: A teljes számítási terület létrehozása input mezőkkel
             if (currentSettings.helpLevel === 'independent') {
                 let currentRowDynamic = 1; 
                 task.steps.forEach((step, stepIdx) => {
@@ -630,6 +669,7 @@
                     if (!alignToDividendCell) return;
                     const targetAlignColumn = parseInt(alignToDividendCell.dataset.gridColumnActual);
 
+                    // Szorzás eredményének input mezői
                     currentRowDynamic++;
                     const multiplyResultStr = String(step.multiplyResult);
                     const multiplyActualStartCol = targetAlignColumn - multiplyResultStr.length + 1;
@@ -647,6 +687,7 @@
                         mainDivisionGrid.appendChild(cell);
                     }
 
+                    // Kivonás eredményének (részmaradék) input mezői
                     currentRowDynamic++;
                     const subtractResultStr = String(step.subtractResult);
                     const subtractActualStartCol = targetAlignColumn - subtractResultStr.length + 1;
@@ -659,6 +700,7 @@
                         mainDivisionGrid.appendChild(cell);
                     }
 
+                    // Lehozott számjegy input mezője (ha van)
                     if (step.nextDigitToBringDown !== null) {
                         const broughtDownCellCol = targetAlignColumn - subtractResultStr.length + 1 + subtractResultStr.length; 
                         const inputId = `bd-${stepIdx}`; 
@@ -669,6 +711,7 @@
                         mainDivisionGrid.appendChild(cell);
                     }
                 });
+                // Végső maradék input mezőjének beállítása "Önálló" módban
                 const remainderInputContainer = document.getElementById('finalRemainderValueInputContainer');
                 if (remainderInputContainer) {
                     const input = createStyledInput(false, 'final-remainder-input', 'remainder');
@@ -676,11 +719,14 @@
                     remainderInputContainer.innerHTML = ''; 
                     remainderInputContainer.appendChild(input);
                 }
-            } else {
+            } else { // Lépésenkénti vagy vezetett mód: a maradék csak egy span
                  document.getElementById('finalRemainderArea').innerHTML = 'Maradék: <span id="finalRemainderValueInputContainer">-</span>';
             }
         }
         
+        /**
+         * Létrehoz egy rács cellát a megadott tartalommal, pozícióval és osztályokkal.
+         */
         function createGridCell(content, row, col, classList = []) {
             const cell = document.createElement('div');
             cell.classList.add('grid-cell', ...classList);
@@ -690,6 +736,9 @@
             return cell;
         }
 
+        /**
+         * Létrehoz egy stílusozott input mezőt.
+         */
         function createStyledInput(disabled, id, type = null) { 
             const input = document.createElement('input');
             input.type = 'text'; 
@@ -722,6 +771,9 @@
             return input;
         }
 
+        /**
+         * Kezeli a bevitelt és a fókuszt a következő input mezőre többjegyű számok esetén.
+         */
         function handleInputAndFocusNext(event) {
             const currentInput = event.target;
             if (currentInput.value.length >= currentInput.maxLength && currentSettings.helpLevel !== 'guided') {
@@ -734,41 +786,44 @@
                 let targetInput = null;
 
                 if (currentSettings.helpLevel === 'independent') {
-                    if (type === 'q') {
+                    // "Önálló" mód: fókuszálás logikája
+                    if (type === 'q') { // Hányados
                         const nextQuotientIndex = stepIndex + 1;
                         if (nextQuotientIndex < task.quotientDigits.length) {
                             targetInput = document.getElementById(`q-${nextQuotientIndex}`);
-                        } else {
+                        } else { // Utolsó hányados számjegy után
                             targetInput = document.getElementById(`m-0-0`) || document.getElementById(`s-0-0`) || document.getElementById(`bd-0`) || document.getElementById('final-remainder-input');
                         }
-                    } else if (type === 'm') {
+                    } else if (type === 'm') { // Szorzás
                         const multiplyResultStr = String(task.steps[stepIndex].multiplyResult);
                         if (currentDigitIndex < multiplyResultStr.length - 1) {
                             targetInput = document.getElementById(`m-${stepIndex}-${currentDigitIndex + 1}`);
-                        } else {
-                            targetInput = document.getElementById(`s-${stepIndex}-0`) || (task.steps[stepIndex].nextDigitToBringDown !== null ? document.getElementById(`bd-${stepIndex}`) : null) || (stepIndex + 1 < task.steps.length ? document.getElementById(`q-${stepIndex + 1}`) : document.getElementById('final-remainder-input'));
+                        } else { // Szorzás utolsó számjegye után
+                            targetInput = document.getElementById(`s-${stepIndex}-0`) || // Kivonás első számjegye
+                                         (task.steps[stepIndex].nextDigitToBringDown !== null ? document.getElementById(`bd-${stepIndex}`) : null) || // Vagy lehozott számjegy
+                                         (stepIndex + 1 < task.steps.length ? document.getElementById(`q-${stepIndex + 1}`) : document.getElementById('final-remainder-input')); // Vagy következő hányados, vagy végső maradék
                         }
-                    } else if (type === 's') {
+                    } else if (type === 's') { // Kivonás
                         const subtractResultStr = String(task.steps[stepIndex].subtractResult);
                         if (currentDigitIndex < subtractResultStr.length - 1) {
                             targetInput = document.getElementById(`s-${stepIndex}-${currentDigitIndex + 1}`);
-                        } else {
+                        } else { // Kivonás utolsó számjegye után
                             if (task.steps[stepIndex].nextDigitToBringDown !== null) {
-                                targetInput = document.getElementById(`bd-${stepIndex}`);
-                            } else if (stepIndex + 1 < task.steps.length) { // Check if there's a next step
-                                targetInput = document.getElementById(`q-${stepIndex + 1}`);
+                                targetInput = document.getElementById(`bd-${stepIndex}`); // Lehozott számjegy
+                            } else if (stepIndex + 1 < task.steps.length) { 
+                                targetInput = document.getElementById(`q-${stepIndex + 1}`); // Következő hányados
                             } else {
-                                targetInput = document.getElementById('final-remainder-input');
+                                targetInput = document.getElementById('final-remainder-input'); // Végső maradék
                             }
                         }
-                    } else if (type === 'bd') {
-                         if (stepIndex + 1 < task.steps.length) {
-                            targetInput = document.getElementById(`q-${stepIndex + 1}`);
+                    } else if (type === 'bd') { // Lehozott számjegy után
+                         if (stepIndex + 1 < task.steps.length) { // Van következő lépés
+                            targetInput = document.getElementById(`q-${stepIndex + 1}`); // Következő hányados
                         } else {
-                            targetInput = document.getElementById('final-remainder-input');
+                            targetInput = document.getElementById('final-remainder-input'); // Végső maradék
                         }
                     }
-                } else { // Step-by-step 
+                } else { // Lépésenkénti mód
                      if (type === 'm') {
                         const multiplyResultStr = String(task.steps[stepIndex].multiplyResult);
                         if (currentDigitIndex < multiplyResultStr.length - 1) {
@@ -785,6 +840,7 @@
 
                 if (targetInput) {
                     if(targetInput.disabled && currentSettings.helpLevel === 'independent') {
+                        // "Önálló" módban az inputok már engedélyezve vannak a prepareCurrentStepInputs által
                     } else if (targetInput.disabled) {
                          targetInput.disabled = false; 
                     }
@@ -793,6 +849,9 @@
             }
         }
         
+        /**
+         * Kiemeli az aktuális művelet operandusait (csak lépésenkénti és vezetett módban).
+         */
         function updateOperandHighlights() {
             document.querySelectorAll('.grid-cell.operand-highlight-cell').forEach(cell => cell.classList.remove('operand-highlight-cell'));
             if (currentSettings.helpLevel === 'independent') return; 
@@ -896,6 +955,11 @@
         }
 
 
+        /**
+         * Előkészíti a beviteli mezőket az aktuális lépéshez.
+         * "Önálló" módban minden releváns mezőt engedélyez.
+         * Más módokban a `currentSubStep` alapján engedélyezi a mezőket.
+         */
         function prepareCurrentStepInputs() {
             mainDivisionGrid.querySelectorAll('input.styled-input').forEach(inp => { 
                 inp.style.borderColor = ''; 
@@ -1317,7 +1381,7 @@
                     if (currentStepData.nextDigitToBringDown !== null) {
                         const broughtDownCellContainer = mainDivisionGrid.querySelector(`.grid-cell.brought-down-digit-cell[data-step-context="${currentStepIndex}"]`);
                         if (broughtDownCellContainer) {
-                             if (currentSettings.helpLevel !== 'independent') { // Only set textContent if not independent (where it's an input)
+                             if (currentSettings.helpLevel !== 'independent') { 
                                 broughtDownCellContainer.textContent = currentStepData.nextDigitToBringDown;
                             }
                         } else {
