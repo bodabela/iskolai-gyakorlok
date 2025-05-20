@@ -670,6 +670,7 @@
                     const targetAlignColumn = parseInt(alignToDividendCell.dataset.gridColumnActual);
 
                     // Szorzás eredményének input mezői
+					/*
                     currentRowDynamic++;
                     const multiplyResultStr = String(step.multiplyResult);
                     const multiplyActualStartCol = targetAlignColumn - multiplyResultStr.length + 1;
@@ -686,6 +687,7 @@
                         cell.appendChild(input);
                         mainDivisionGrid.appendChild(cell);
                     }
+					*/
 
                     // Kivonás eredményének (részmaradék) input mezői
                     currentRowDynamic++;
@@ -1207,22 +1209,9 @@
                 });
 
                 task.steps.forEach((step, stepIdx) => {
-                    const multiplyResultStr = String(step.multiplyResult);
-                    let userMultiplyResultStr = "";
-                    for (let i = 0; i < multiplyResultStr.length; i++) {
-                        const mInput = document.getElementById(`m-${stepIdx}-${i}`);
-                        if (mInput) {
-                            userMultiplyResultStr += mInput.value;
-                             if (mInput.value === "" || parseInt(mInput.value) !== parseInt(multiplyResultStr[i])) {
-                                allCorrect = false; updateInputFieldFeedback(mInput, false);
-                            } else { updateInputFieldFeedback(mInput, true); }
-                        } else { allCorrect = false; }
-                    }
-                     if (userMultiplyResultStr !== multiplyResultStr && multiplyResultStr.length > 0) allCorrect = false;
-
 
                     const subtractResultStr = String(step.subtractResult);
-                     let userSubtractResultStr = "";
+                    let userSubtractResultStr = "";
                     for (let i = 0; i < subtractResultStr.length; i++) {
                         const sInput = document.getElementById(`s-${stepIdx}-${i}`);
                          if (sInput) {
@@ -1232,7 +1221,7 @@
                             } else { updateInputFieldFeedback(sInput, true); }
                         } else { allCorrect = false; }
                     }
-                     if (userSubtractResultStr !== subtractResultStr && subtractResultStr.length > 0) allCorrect = false;
+                    if (userSubtractResultStr !== subtractResultStr && subtractResultStr.length > 0) allCorrect = false;
                     
                     if (step.nextDigitToBringDown !== null) {
                         const bdInput = document.getElementById(`bd-${stepIdx}`);
