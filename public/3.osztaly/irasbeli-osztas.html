@@ -173,20 +173,20 @@
             border-radius: 4px; 
             box-sizing: border-box;
             transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            background-color: transparent; /* Default transparent background */
+            background-color: transparent; 
         }
         .grid-cell.dividend-digit {
             /* Style for dividend digits */
         }
-        .grid-cell.operand-highlight-cell { /* New class for highlighting operand cells */
+        .grid-cell.operand-highlight-cell { 
             background-color: #cfe2ff; 
             box-shadow: 0 0 0 1.5px #0d6efd; 
         }
         .grid-cell.op-symbol {
             font-weight: bold;
         }
-         .grid-cell.brought-down-digit { /* This class styles the text if needed, highlighting is via operand-highlight-cell */
-            font-weight: bold; 
+         .grid-cell.brought-down-digit { 
+            /* No specific font-weight or color by default here. Inherits or set by theme to match dividend-digit. */
         }
         .grid-cell.cell-with-line-below {
             border-bottom-width: 1.5px;
@@ -202,8 +202,8 @@
             margin: 0;
             border-radius: 4px;
             text-align: center;
-            border: 1px solid #d1d5db; /* Default border for inputs */
-            background-color: #fff; /* Default background for inputs */
+            border: 1px solid #d1d5db; 
+            background-color: #fff; 
             box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
             box-sizing: border-box;
             color: #333;
@@ -213,7 +213,6 @@
              background-color: #e9ecef; 
              color: #495057;
         }
-        /* No special style for .operand-highlight-input, cell highlight is enough */
         
         .final-remainder-display {
             margin-top: 0.8rem;
@@ -229,13 +228,10 @@
         .task { background-color: #f9fafb; border: 1px dashed #d1d5db; }
         .feedback.correct { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
         .feedback.incorrect { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
-        /* .grid-cell input.styled-input defaults are above */
-        /* .grid-cell input.styled-input:disabled defaults are above */
         .control-label { color: #333; }
         h1, h2 { color: #007bff; }
         .grid-cell.dividend-digit { color: #212529; }
-        /* .grid-cell.current-dividend-part removed as operand-highlight-cell takes over specific highlighting */
-        .grid-cell.brought-down-digit { color: #0d6efd; } /* Text color for brought down digit */
+        .grid-cell.brought-down-digit { color: #212529; } /* Match dividend digit color */
         .final-remainder-display { color: #333; }
         .grid-cell.op-symbol { color: #212529; }
         .grid-cell.cell-with-line-below { border-bottom-color: #6c757d; }
@@ -252,13 +248,12 @@
         body.theme-candy .task-header h3 { color: #ff69b4; }
         body.theme-candy .task p { color: #8a2be2; }
         body.theme-candy .grid-cell.dividend-digit { color: #9932cc; }
+        body.theme-candy .grid-cell.brought-down-digit { color: #9932cc; } /* Match dividend digit color for Candy theme */
         
-        body.theme-candy .grid-cell.operand-highlight-cell { /* Candy theme operand highlight */
+        body.theme-candy .grid-cell.operand-highlight-cell { 
             background-color: #ffeff2; 
             box-shadow: 0 0 0 1.5px #ff69b4; 
         }
-        body.theme-candy .grid-cell.brought-down-digit { color: #ff1493; } /* Candy theme text color */
-
 
         body.theme-candy button.task-button { background-color: #ff69b4; color: white; }
         body.theme-candy button.task-button:hover { background-color: #ff1493; }
@@ -570,14 +565,13 @@
             if (type === 'quotient') {
                 input.classList.add('quotient-digit-input');
                 input.dataset.index = id.split('-')[1]; 
-            } else if (type === 'multiply' || type === 'subtract') { // Added type check
+            } else if (type === 'multiply' || type === 'subtract') { 
                 input.classList.add(`${type}-digit-value`);
                 input.dataset.type = type; 
                 const parts = id.split('-'); 
                 if (parts.length > 2) { 
                     input.dataset.digitIndex = parts[2]; 
                 }
-                // Add event listener for auto-focus on multiply and subtract inputs
                 input.addEventListener('input', handleInputAndFocusNext);
             }
             
@@ -586,17 +580,12 @@
             return input;
         }
 
-        /**
-         * Handles auto-focusing to the next input field within a multi-digit number.
-         * @param {Event} event - The input event.
-         */
         function handleInputAndFocusNext(event) {
             const currentInput = event.target;
-            // Proceed only if the input is full and not in guided mode
             if (currentInput.value.length >= currentInput.maxLength && currentSettings.helpLevel !== 'guided') {
                 const inputId = currentInput.id;
-                const parts = inputId.split('-'); // e.g., ['m', '0', '0'] or ['s', '0', '0']
-                const type = parts[0]; // 'm' (multiply) or 's' (subtract)
+                const parts = inputId.split('-'); 
+                const type = parts[0]; 
                 const stepIndex = parseInt(parts[1]);
                 const currentDigitIndex = parseInt(parts[2]);
 
@@ -621,17 +610,17 @@
 
                 if (nextInputId) {
                     const nextInput = document.getElementById(nextInputId);
-                    if (nextInput) { 
-                        nextInput.disabled = false; // Enable the next input
+                    if (nextInput && nextInput.disabled) { 
+                        nextInput.disabled = false; 
                         try {
                             nextInput.focus();
                         } catch (e) {
                             console.warn("Auto-focus to next input failed:", e);
                         }
+                    } else if (nextInput && !nextInput.disabled) { 
+                         try { nextInput.focus(); } catch (e) {}
                     }
                 } else if (isLastDigitOfSequence) {
-                    // Optional: Focus the check button if it's the last digit of the sequence
-                    // checkStepButton.focus(); 
                 }
             }
         }
@@ -639,19 +628,18 @@
         function updateOperandHighlights() {
             document.querySelectorAll('.grid-cell.operand-highlight-cell').forEach(cell => cell.classList.remove('operand-highlight-cell'));
 
-            if (currentStepIndex >= task.steps.length && !(task.steps.length === 0 && task.quotientDigits.length > 0 && task.quotientDigits[0] === 0)) return; // Adjusted condition
+            if (currentStepIndex >= task.steps.length && !(task.steps.length === 0 && task.quotientDigits.length > 0 && task.quotientDigits[0] === 0)) return; 
             
             let currentStepData;
             if (task.steps.length === 0 && task.quotientDigits.length > 0 && task.quotientDigits[0] === 0 && currentStepIndex === 0) {
-                // Special handling for initial 0 quotient case for highlighting
-                currentStepData = { // Mock step data for highlighting dividend and divisor
+                currentStepData = { 
                     currentDividendPartNumForStep: task.dividend,
                     baseDigitIndexOfOriginalPartEnd: String(task.dividend).length -1
                 };
             } else if (currentStepIndex < task.steps.length) {
                 currentStepData = task.steps[currentStepIndex];
             } else {
-                return; // No step data to highlight
+                return; 
             }
             
             if (!currentStepData) return;
@@ -660,7 +648,7 @@
             const divisorCells = Array.from(mainDivisionGrid.querySelectorAll('.divisor-digit-cell'));
 
             if (currentSubStep === 'estimate') {
-                if (currentStepIndex === 0 || (task.steps.length === 0 && task.quotientDigits.length > 0 && task.quotientDigits[0] === 0) ) { // Highlighting for first step or initial 0 quotient
+                if (currentStepIndex === 0 || (task.steps.length === 0 && task.quotientDigits.length > 0 && task.quotientDigits[0] === 0) ) { 
                     const dividendStr = String(task.dividend);
                     const partStrLength = String(currentStepData.currentDividendPartNumForStep).length;
                     let highlightStartIndex = currentStepData.baseDigitIndexOfOriginalPartEnd - partStrLength + 1;
@@ -672,12 +660,11 @@
                         const dividendCell = mainDivisionGrid.querySelector(`.grid-cell.dividend-digit[data-original-dividend-index="${i}"]`);
                         if (dividendCell) dividendCell.classList.add('operand-highlight-cell');
                     }
-                } else { // Highlighting for subsequent estimate steps (remainder + brought down digit)
+                } else { 
                     const prevStepData = task.steps[currentStepIndex - 1];
                     if (!prevStepData) return;
                     const subtractResultStrPrev = String(prevStepData.subtractResult);
                     
-                    // Highlight previous subtraction result digits
                     for (let i = 0; i < subtractResultStrPrev.length; i++) {
                         const inputId = `s-${currentStepIndex - 1}-${i}`;
                         const inputElement = document.getElementById(inputId);
@@ -685,7 +672,6 @@
                             inputElement.parentElement.classList.add('operand-highlight-cell');
                         }
                     }
-                    // Highlight brought down digit
                     if (prevStepData.nextDigitToBringDown !== null) {
                         const broughtDownCell = mainDivisionGrid.querySelector(`.grid-cell.brought-down-digit[data-step-context="${currentStepIndex - 1}"]`);
                         if (broughtDownCell) broughtDownCell.classList.add('operand-highlight-cell');
@@ -795,7 +781,7 @@
             if (currentSubStep === 'estimate') { 
                 if (quotientDigitInput) {
                     quotientDigitInput.disabled = false; 
-                    if (currentSettings.helpLevel === 'guided') { 
+                    if (currentSettings.helpLevel === 'guided' && currentStepData) { // Added check for currentStepData
                         quotientDigitInput.value = currentStepData.quotientDigit;
                     } else {
                         quotientDigitInput.value = ''; 
@@ -807,6 +793,10 @@
                     console.error("Quotient input #" + quotientInputId + " not found! (estimate sub-step)"); 
                 }
             } else { 
+                 if (!currentStepData) { // Safety check if currentStepData is not available for multiply/subtract
+                    console.error("prepareCurrentStepInputs: currentStepData is undefined for multiply/subtract. Step:", currentStepIndex);
+                    return;
+                }
                 if (quotientDigitInput) { 
                     if (!quotientDigitInput.value && currentSettings.helpLevel === 'guided') {
                         quotientDigitInput.value = currentStepData.quotientDigit;
@@ -891,22 +881,16 @@
 
                     const broughtDownCellCol = subtractActualStartCol + subtractResultStr.length; 
                     const broughtDownCellRow = currentRowForSubtract;
-                    let broughtDownCellExists = false;
-                    const children = mainDivisionGrid.children;
-                     for (let k = 0; k < children.length; k++) {
-                        const child = children[k];
-                        if (child.style.gridRow == String(broughtDownCellRow) &&
-                            child.style.gridColumn && child.style.gridColumn.startsWith(String(broughtDownCellCol) + " /") &&
-                            child.classList.contains('brought-down-digit') &&
-                            child.dataset.stepContext == currentStepIndex) {
-                            broughtDownCellExists = true;
-                            break;
-                        }
-                    }
-                    if (!broughtDownCellExists) {
-                        const cellForBroughtDown = createGridCell(null, broughtDownCellRow, broughtDownCellCol, ['brought-down-digit']);
+                    // Use a more specific selector to find or create the brought-down digit cell
+                    let cellForBroughtDown = mainDivisionGrid.querySelector(`.grid-cell.brought-down-digit[data-step-context="${currentStepIndex}"][style*="grid-row: ${broughtDownCellRow}"][style*="grid-column: ${broughtDownCellCol}"]`);
+
+                    if (!cellForBroughtDown) {
+                        console.log(`Creating brought-down-digit cell for step ${currentStepIndex} at row ${broughtDownCellRow}, col ${broughtDownCellCol}`);
+                        cellForBroughtDown = createGridCell(null, broughtDownCellRow, broughtDownCellCol, ['brought-down-digit']);
                         cellForBroughtDown.dataset.stepContext = currentStepIndex; 
                         mainDivisionGrid.appendChild(cellForBroughtDown);
+                    } else {
+                        console.log(`Found existing brought-down-digit cell for step ${currentStepIndex}`);
                     }
                 }
             }
@@ -917,7 +901,7 @@
             if (task.steps.length === 0 && task.quotientDigits.length > 0 && task.quotientDigits[0] === 0 && currentStepIndex === 0 && currentSubStep === 'estimate') {
                 const quotientInputId = `q-0`;
                 const quotientDigitInput = document.getElementById(quotientInputId);
-                const currentStepDataForZeroQ = { quotientDigit: 0 }; // Mock for this specific check
+                const currentStepDataForZeroQ = { quotientDigit: 0 }; 
 
                 if (quotientDigitInput && (quotientDigitInput.value === "0" || (currentSettings.helpLevel === 'guided' && currentStepDataForZeroQ.quotientDigit === 0 ))) {
                     quotientDigitInput.disabled = true;
@@ -926,7 +910,7 @@
                     feedbackArea.className = 'feedback correct mt-4';
                     taskInstructions.textContent = `Az osztás véget ért. A végső maradék: ${task.finalRemainder}.`;
                     checkStepButton.textContent = "Új feladat";
-                    currentStepIndex = task.steps.length; // Mark as effectively complete
+                    currentStepIndex = task.steps.length; 
                     finalRemainderValueEl.textContent = task.finalRemainder;
                      updateOperandHighlights(); 
                     return;
@@ -1022,7 +1006,10 @@
                     if (currentStepData.nextDigitToBringDown !== null) {
                         const broughtDownCell = mainDivisionGrid.querySelector(`.grid-cell.brought-down-digit[data-step-context="${currentStepIndex}"]`);
                         if (broughtDownCell) {
+                            console.log(`Setting textContent of broughtDownCell (context ${currentStepIndex}) to: ${currentStepData.nextDigitToBringDown}`);
                             broughtDownCell.textContent = currentStepData.nextDigitToBringDown;
+                        } else {
+                             console.error(`Brought down cell not found in handleCheck for context ${currentStepIndex}`);
                         }
                     }
                 }
