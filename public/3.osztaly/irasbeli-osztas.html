@@ -240,6 +240,20 @@
             border-radius: 4px;
             margin-left: 5px;
         }
+
+        /* Új: Művelettörténet cellák stílusa */
+        .grid-cell.operation-history-cell {
+            width: auto !important; /* Felülírja a 30px-et, hogy dinamikusan igazodjon a tartalomhoz */
+            font-size: 0.85em; /* Kisebb betűméret */
+            justify-content: flex-start; /* Balra igazítás */
+            padding-left: 5px; /* Kis belső margó */
+            white-space: nowrap; /* Megakadályozza a tördelést */
+            overflow: hidden; /* Elrejti a túlcsorduló szöveget */
+            text-overflow: ellipsis; /* Elipszist ad, ha a szöveg túlcsordul */
+            background-color: #f0f0f0; /* Világosszürke háttér */
+            border: 1px solid #e0e0e0; /* Világos szegély */
+            color: #555;
+        }
         
         /* Alapértelmezett téma stílusok */
         .setting-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
@@ -277,11 +291,11 @@
 
         /* Input mezők hátterének átlátszóvá tétele, ha a szülő cellának van lépés-specifikus háttere */
         .multiply-result-bg-0 input.styled-input, .multiply-result-bg-0 input.styled-input:disabled,
-        .subtract-result-bg-0 input.styled-input, .subtract-result-bg-0 input.styled-input:disabled,
+        .subtract-result-bg-0 input.styled-input, .subtract-result-0 input.styled-input:disabled,
         .multiply-result-bg-1 input.styled-input, .multiply-result-bg-1 input.styled-input:disabled,
-        .subtract-result-bg-1 input.styled-input, .subtract-result-bg-1 input.styled-input:disabled,
+        .subtract-result-bg-1 input.styled-input, .subtract-result-1 input.styled-input:disabled,
         .multiply-result-bg-2 input.styled-input, .multiply-result-bg-2 input.styled-input:disabled,
-        .subtract-result-bg-2 input.styled-input, .subtract-result-bg-2 input.styled-input:disabled,
+        .subtract-result-bg-2 input.styled-input, .subtract-result-2 input.styled-input:disabled,
         .quotient-cell-bg-0 input.styled-input, .quotient-cell-bg-0 input.styled-input:disabled, 
         .quotient-cell-bg-1 input.styled-input, .quotient-cell-bg-1 input.styled-input:disabled, 
         .quotient-cell-bg-2 input.styled-input, .quotient-cell-bg-2 input.styled-input:disabled,
@@ -325,6 +339,7 @@
         body.theme-candy .grid-cell.cell-with-line-below { border-bottom-color: #ffb6c1; }
         body.theme-candy .final-remainder-display { color: #9932cc; }
         body.theme-candy .grid-cell.op-symbol { color: #9932cc; }
+        body.theme-candy .grid-cell.operation-history-cell { background-color: #ffe0e6; border-color: #ffc0cb; color: #a0522d; }
 
         /* Candy Téma Lépésenkénti Színei */
         body.theme-candy .quotient-cell-bg-0 { background-color: #ffc0cb !important; } 
@@ -365,6 +380,7 @@
         body.theme-space .grid-cell.cell-with-line-below { border-bottom-color: #475569; }
         body.theme-space .final-remainder-display { color: #e2e8f0; }
         body.theme-space .grid-cell.op-symbol { color: #e2e8f0; }
+        body.theme-space .grid-cell.operation-history-cell { background-color: #1a202c; border-color: #2d3748; color: #a0aec0; }
 
         /* Space Téma Lépésenkénti Színei */
         body.theme-space .quotient-cell-bg-0 { background-color: #60a5fa !important; }
@@ -404,6 +420,7 @@
         body.theme-jungle .grid-cell.cell-with-line-below { border-bottom-color: #81c784; }
         body.theme-jungle .final-remainder-display { color: #1b5e20; }
         body.theme-jungle .grid-cell.op-symbol { color: #1b5e20; }
+        body.theme-jungle .grid-cell.operation-history-cell { background-color: #e0ffe0; border-color: #c0e0c0; color: #33691e; }
 
         /* Jungle Téma Lépésenkénti Színei */
         body.theme-jungle .quotient-cell-bg-0 { background-color: #a5d6a7 !important; }
@@ -443,6 +460,7 @@
         body.theme-magicforest .grid-cell.cell-with-line-below { border-bottom-color: #ba55d3; }
         body.theme-magicforest .final-remainder-display { color: #483d8b; }
         body.theme-magicforest .grid-cell.op-symbol { color: #483d8b; }
+        body.theme-magicforest .grid-cell.operation-history-cell { background-color: #f0e6fa; border-color: #e6d8f0; color: #6a5acd; }
 
         /* Magic Forest Téma Lépésenkénti Színei */
         body.theme-magicforest .quotient-cell-bg-0 { background-color: #dda0dd !important; }
@@ -482,20 +500,21 @@
         body.theme-tech .grid-cell.cell-with-line-below { border-bottom-color: #78909c; }
         body.theme-tech .final-remainder-display { color: #eceff1; }
         body.theme-tech .grid-cell.op-symbol { color: #eceff1; }
+        body.theme-tech .grid-cell.operation-history-cell { background-color: #303e46; border-color: #4f606b; color: #cfd8dc; }
 
         /* Tech Téma Lépésenkénti Színei */
         body.theme-tech .quotient-cell-bg-0 { background-color: #26c6da !important; }
         body.theme-tech .quotient-cell-bg-0 input.styled-input { color: #263238 !important; }
         body.theme-tech .multiply-result-bg-0 { background-color: #37474f !important; }
-        body.theme-tech .subtract-result-bg-0 { background-color: #546e7a !important; }
+        body.theme-tech .subtract-result-0 { background-color: #546e7a !important; }
         body.theme-tech .quotient-cell-bg-1 { background-color: #00acc1 !important; }
         body.theme-tech .quotient-cell-bg-1 input.styled-input { color: #263238 !important; }
         body.theme-tech .multiply-result-bg-1 { background-color: #0097a7 !important; }
-        body.theme-tech .subtract-result-bg-1 { background-color: #00838f !important; }
+        body.theme-tech .subtract-result-1 { background-color: #00838f !important; }
         body.theme-tech .quotient-cell-bg-2 { background-color: #e0f7fa !important; }
         body.theme-tech .quotient-cell-bg-2 input.styled-input { color: #263238 !important; }
         body.theme-tech .multiply-result-bg-2 { background-color: #263238 !important; }
-        body.theme-tech .subtract-result-bg-2 { background-color: #455a64 !important; }
+        body.theme-tech .subtract-result-2 { background-color: #455a64 !important; }
 
 
         /* 6. Ocean Theme (Girlish) */
@@ -521,20 +540,21 @@
         body.theme-ocean .grid-cell.cell-with-line-below { border-bottom-color: #80deea; }
         body.theme-ocean .final-remainder-display { color: #00796b; }
         body.theme-ocean .grid-cell.op-symbol { color: #00796b; }
+        body.theme-ocean .grid-cell.operation-history-cell { background-color: #e0f7fa; border-color: #a7e9f0; color: #004d40; }
 
         /* Ocean Téma Lépésenkénti Színei */
         body.theme-ocean .quotient-cell-bg-0 { background-color: #4dd0e1 !important; }
         body.theme-ocean .quotient-cell-bg-0 input.styled-input { color: #00796b !important; }
         body.theme-ocean .multiply-result-bg-0 { background-color: #e0f7fa !important; }
-        body.theme-ocean .subtract-result-bg-0 { background-color: #b2ebf2 !important; }
+        body.theme-ocean .subtract-result-0 { background-color: #b2ebf2 !important; }
         body.theme-ocean .quotient-cell-bg-1 { background-color: #00acc1 !important; }
         body.theme-ocean .quotient-cell-bg-1 input.styled-input { color: #00796b !important; }
         body.theme-ocean .multiply-result-bg-1 { background-color: #26a69a !important; }
-        body.theme-ocean .subtract-result-bg-1 { background-color: #00897b !important; }
+        body.theme-ocean .subtract-result-1 { background-color: #00897b !important; }
         body.theme-ocean .quotient-cell-bg-2 { background-color: #e0f2f1 !important; }
         body.theme-ocean .quotient-cell-bg-2 input.styled-input { color: #00796b !important; }
-        body.theme-ocean .multiply-result-bg-2 { background-color: #00796b !important; }
-        body.theme-ocean .subtract-result-bg-2 { background-color: #004d40 !important; }
+        body.theme-ocean .multiply-result-2 { background-color: #00796b !important; }
+        body.theme-ocean .subtract-result-2 { background-color: #004d40 !important; }
 
 
         /* 7. Sport Theme (Boyish) */
@@ -560,20 +580,21 @@
         body.theme-sport .grid-cell.cell-with-line-below { border-bottom-color: #42a5f5; }
         body.theme-sport .final-remainder-display { color: #0d47a1; }
         body.theme-sport .grid-cell.op-symbol { color: #0d47a1; }
+        body.theme-sport .grid-cell.operation-history-cell { background-color: #e3f2fd; border-color: #bbdefb; color: #0d47a1; }
 
         /* Sport Téma Lépésenkénti Színei */
         body.theme-sport .quotient-cell-bg-0 { background-color: #64b5f6 !important; }
         body.theme-sport .quotient-cell-bg-0 input.styled-input { color: #0d47a1 !important; }
         body.theme-sport .multiply-result-bg-0 { background-color: #e3f2fd !important; }
-        body.theme-sport .subtract-result-bg-0 { background-color: #bbdefb !important; }
+        body.theme-sport .subtract-result-0 { background-color: #bbdefb !important; }
         body.theme-sport .quotient-cell-bg-1 { background-color: #2196f3 !important; }
         body.theme-sport .quotient-cell-bg-1 input.styled-input { color: #0d47a1 !important; }
         body.theme-sport .multiply-result-bg-1 { background-color: #1976d2 !important; }
-        body.theme-sport .subtract-result-bg-1 { background-color: #1565c0 !important; }
+        body.theme-sport .subtract-result-1 { background-color: #1565c0 !important; }
         body.theme-sport .quotient-cell-bg-2 { background-color: #e3f2fd !important; }
         body.theme-sport .quotient-cell-bg-2 input.styled-input { color: #0d47a1 !important; }
-        body.theme-sport .multiply-result-bg-2 { background-color: #0d47a1 !important; }
-        body.theme-sport .subtract-result-bg-2 { background-color: #01579b !important; }
+        body.theme-sport .multiply-result-2 { background-color: #0d47a1 !important; }
+        body.theme-sport .subtract-result-2 { background-color: #01579b !important; }
 
 
         /* 8. Flower Garden Theme (Girlish) */
@@ -599,20 +620,21 @@
         body.theme-flowergarden .grid-cell.cell-with-line-below { border-bottom-color: #ffdab9; }
         body.theme-flowergarden .final-remainder-display { color: #556b2f; }
         body.theme-flowergarden .grid-cell.op-symbol { color: #556b2f; }
+        body.theme-flowergarden .grid-cell.operation-history-cell { background-color: #fff8eb; border-color: #ffe9cc; color: #8b4513; }
 
         /* Flower Garden Téma Lépésenkénti Színei */
         body.theme-flowergarden .quotient-cell-bg-0 { background-color: #ffdab9 !important; }
         body.theme-flowergarden .quotient-cell-bg-0 input.styled-input { color: #556b2f !important; }
         body.theme-flowergarden .multiply-result-bg-0 { background-color: #fffaf0 !important; }
-        body.theme-flowergarden .subtract-result-bg-0 { background-color: #fff5ee !important; }
+        body.theme-flowergarden .subtract-result-0 { background-color: #fff5ee !important; }
         body.theme-flowergarden .quotient-cell-bg-1 { background-color: #ffa07a !important; }
         body.theme-flowergarden .quotient-cell-bg-1 input.styled-input { color: #556b2f !important; }
-        body.theme-flowergarden .multiply-result-bg-1 { background-color: #ff7f50 !important; }
-        body.theme-flowergarden .subtract-result-bg-1 { background-color: #ff6347 !important; }
+        body.theme-flowergarden .multiply-result-1 { background-color: #ff7f50 !important; }
+        body.theme-flowergarden .subtract-result-1 { background-color: #ff6347 !important; }
         body.theme-flowergarden .quotient-cell-bg-2 { background-color: #ffe4b5 !important; }
         body.theme-flowergarden .quotient-cell-bg-2 input.styled-input { color: #556b2f !important; }
-        body.theme-flowergarden .multiply-result-bg-2 { background-color: #8b4513 !important; }
-        body.theme-flowergarden .subtract-result-bg-2 { background-color: #a0522d !important; }
+        body.theme-flowergarden .multiply-result-2 { background-color: #8b4513 !important; }
+        body.theme-flowergarden .subtract-result-2 { background-color: #a0522d !important; }
 
 
         /* 9. Adventure Theme (Boyish) */
@@ -638,20 +660,21 @@
         body.theme-adventure .grid-cell.cell-with-line-below { border-bottom-color: #8d6e63; }
         body.theme-adventure .final-remainder-display { color: #5d4037; }
         body.theme-adventure .grid-cell.op-symbol { color: #5d4037; }
+        body.theme-adventure .grid-cell.operation-history-cell { background-color: #f5f5dc; border-color: #d7ccc8; color: #4e342e; }
 
         /* Adventure Téma Lépésenkénti Színei */
         body.theme-adventure .quotient-cell-bg-0 { background-color: #a1887f !important; }
         body.theme-adventure .quotient-cell-bg-0 input.styled-input { color: #5d4037 !important; }
         body.theme-adventure .multiply-result-bg-0 { background-color: #f5f5dc !important; }
-        body.theme-adventure .subtract-result-bg-0 { background-color: #efebe9 !important; }
+        body.theme-adventure .subtract-result-0 { background-color: #efebe9 !important; }
         body.theme-adventure .quotient-cell-bg-1 { background-color: #795548 !important; }
         body.theme-adventure .quotient-cell-bg-1 input.styled-input { color: #5d4037 !important; }
-        body.theme-adventure .multiply-result-bg-1 { background-color: #6d4c41 !important; }
-        body.theme-adventure .subtract-result-bg-1 { background-color: #5d4037 !important; }
+        body.theme-adventure .multiply-result-1 { background-color: #6d4c41 !important; }
+        body.theme-adventure .subtract-result-1 { background-color: #5d4037 !important; }
         body.theme-adventure .quotient-cell-bg-2 { background-color: #d7ccc8 !important; }
         body.theme-adventure .quotient-cell-bg-2 input.styled-input { color: #5d4037 !important; }
-        body.theme-adventure .multiply-result-bg-2 { background-color: #4e342e !important; }
-        body.theme-adventure .subtract-result-bg-2 { background-color: #3e2723 !important; }
+        body.theme-adventure .multiply-result-2 { background-color: #4e342e !important; }
+        body.theme-adventure .subtract-result-2 { background-color: #3e2723 !important; }
 
 
         /* 10. Sky Theme (Girlish) */
@@ -677,20 +700,21 @@
         body.theme-sky .grid-cell.cell-with-line-below { border-bottom-color: #b0e0e6; }
         body.theme-sky .final-remainder-display { color: #4682b4; }
         body.theme-sky .grid-cell.op-symbol { color: #4682b4; }
+        body.theme-sky .grid-cell.operation-history-cell { background-color: #f0f8ff; border-color: #e0f0ff; color: #4682b4; }
 
         /* Sky Téma Lépésenkénti Színei */
         body.theme-sky .quotient-cell-bg-0 { background-color: #add8e6 !important; }
         body.theme-sky .quotient-cell-bg-0 input.styled-input { color: #4682b4 !important; }
         body.theme-sky .multiply-result-bg-0 { background-color: #f0f8ff !important; }
-        body.theme-sky .subtract-result-bg-0 { background-color: #e6f7ff !important; }
+        body.theme-sky .subtract-result-0 { background-color: #e6f7ff !important; }
         body.theme-sky .quotient-cell-bg-1 { background-color: #87cefa !important; }
         body.theme-sky .quotient-cell-bg-1 input.styled-input { color: #4682b4 !important; }
-        body.theme-sky .multiply-result-bg-1 { background-color: #6495ed !important; }
-        body.theme-sky .subtract-result-bg-1 { background-color: #4682b4 !important; }
+        body.theme-sky .multiply-result-1 { background-color: #6495ed !important; }
+        body.theme-sky .subtract-result-1 { background-color: #4682b4 !important; }
         body.theme-sky .quotient-cell-bg-2 { background-color: #f5faff !important; }
         body.theme-sky .quotient-cell-bg-2 input.styled-input { color: #4682b4 !important; }
-        body.theme-sky .multiply-result-bg-2 { background-color: #1e90ff !important; }
-        body.theme-sky .subtract-result-bg-2 { background-color: #5f9ea0 !important; }
+        body.theme-sky .multiply-result-2 { background-color: #1e90ff !important; }
+        body.theme-sky .subtract-result-2 { background-color: #5f9ea0 !important; }
 
     </style>
 </head>
@@ -745,7 +769,7 @@
         <h2>3. Osztály</h2>
 
         <div class="task">
-             <div class="task-header">
+            <div class="task-header">
                 <h3>Feladat:</h3>
                 <button id="newTaskButton" class="task-button new-task-button">Új feladat</button>
             </div>
@@ -778,6 +802,10 @@
         const finalRemainderValueEl = document.getElementById('finalRemainderValue'); 
         const bodyEl = document.body;
 
+        // Új: Az művelettörténet oszlop szélessége (grid egységekben)
+        // Megnövelve a szélességet, hogy elférjenek a szorzások (pl. 9 x 9 = 81)
+        const operationColumnSpan = 8; 
+
         // Aktuális beállítások és feladat állapotát tároló objektumok
         let currentSettings = {
             theme: 'theme-candy', 
@@ -788,14 +816,14 @@
 
         let task = {
             dividend: 0,           
-            divisor: 0,           
+            divisor: 0,            
             quotientDigits: [],
             finalRemainder: 0,   
-            steps: []             
+            steps: []              
         };
         
         // Az osztási folyamat állapotát követő változók
-        let currentStepIndex = 0;        
+        let currentStepIndex = 0;      
         let currentSubStep = 'estimate'; 
 
         // Eseménykezelők a beállító gombokhoz
@@ -896,7 +924,7 @@
                         firstPartToDivide = parseInt(dividendStr.substring(0,2));
                     }
                     if (firstPartToDivide < task.divisor) { 
-                           if (dividendStr.length === currentSettings.dividendLength) foundSuitableDividend = false; 
+                            if (dividendStr.length === currentSettings.dividendLength) foundSuitableDividend = false; 
                     }
                 }
                 attempts++;
@@ -932,7 +960,7 @@
             if (currentDividendPartNum >= task.divisor || task.quotientDigits.length > 0 || i === dividendStr.length - 1) {
                 let quotientDigit = Math.floor(currentDividendPartNum / task.divisor); 
                 let multiplyResult = quotientDigit * task.divisor;                     
-                let subtractResult = currentDividendPartNum - multiplyResult;          
+                let subtractResult = currentDividendPartNum - multiplyResult;           
 
                 task.quotientDigits.push(quotientDigit); 
                 task.steps.push({ 
@@ -975,7 +1003,7 @@
             const dividendStr = String(task.dividend);
             const divisorStr = String(task.divisor);
             let quotientLength = task.quotientDigits.length;
-            
+
             if (task.steps.length === 0 && quotientLength === 1 && task.quotientDigits[0] === 0) {
             } else if (quotientLength === 0) {
                  console.error("renderTaskDisplay: quotientLength is 0 unexpectedly. Dividend:", task.dividend, "Divisor:", task.divisor, "Steps:", task.steps);
@@ -986,45 +1014,84 @@
 
 
             const firstRow = 1; 
-            const numCols = 1 + dividendStr.length + 1 + divisorStr.length + 1 + Math.max(1, quotientLength); 
-            mainDivisionGrid.style.gridTemplateColumns = `repeat(${numCols}, 30px)`;
+            
+            // Calculate the number of fixed 30px columns for the main division part
+            // This includes: 1 (initial empty) + dividend length + 1 (colon) + divisor length + 1 (equals) + max(1, quotient length)
+            const mainDivisionFixedCols = 1 + dividendStr.length + 1 + divisorStr.length + 1 + Math.max(1, quotientLength);
 
-            let currentCol = 1; 
-            mainDivisionGrid.appendChild(createGridCell(null, firstRow, currentCol++)); 
+            let gridTemplateColumnsDefinition = '';
+            let currentGridColumnStart = 1;
+
+            if (currentSettings.helpLevel === 'step-by-step') {
+                // Add auto-width columns for operation history
+                gridTemplateColumnsDefinition += `repeat(${operationColumnSpan}, auto) `;
+                currentGridColumnStart += operationColumnSpan; // Shift start column for main division
+
+                // Add one 30px spacing column
+                gridTemplateColumnsDefinition += `30px `;
+                currentGridColumnStart += 1; // Shift start column for main division again
+            }
+
+            // Add the fixed 30px columns for the main division
+            gridTemplateColumnsDefinition += `repeat(${mainDivisionFixedCols}, 30px)`;
+
+            mainDivisionGrid.style.gridTemplateColumns = gridTemplateColumnsDefinition;
+
+            let currentGridColumn = currentGridColumnStart; // This will track the actual grid column index for placing elements
+
+            // The operation history cells are created first in renderTaskDisplay and placed at column 1.
+            // Their content is filled in prepareCurrentStepInputs.
+            /*if (currentSettings.helpLevel === 'step-by-step') {
+                task.steps.forEach((step, stepIdx) => {
+                    const currentRowForMultiply = 1 + stepIdx * 2 + 1;
+                    const currentRowForSubtract = 1 + stepIdx * 2 + 2;
+
+                    const multiplyOperationCell = createGridCell('', currentRowForMultiply, 1, ['operation-history-cell', `multiply-op-step-${stepIdx}`]);
+                    multiplyOperationCell.style.gridColumn = `1 / span ${operationColumnSpan}`;
+                    //mainDivisionGrid.appendChild(multiplyOperationCell);
+
+                    const subtractOperationCell = createGridCell('', currentRowForSubtract, 1, ['operation-history-cell', `subtract-op-step-${stepIdx}`]);
+                    subtractOperationCell.style.gridColumn = `1 / span ${operationColumnSpan}`;
+                    //mainDivisionGrid.appendChild(subtractOperationCell);
+                });
+            }*/
+
+            // Add the initial empty cell before the dividend
+            mainDivisionGrid.appendChild(createGridCell(null, firstRow, currentGridColumn++)); 
 
             for (let i = 0; i < dividendStr.length; i++) {
-                const cell = createGridCell(dividendStr[i], firstRow, currentCol, ['dividend-digit']);
+                const cell = createGridCell(dividendStr[i], firstRow, currentGridColumn, ['dividend-digit']);
                 cell.dataset.originalDividendIndex = i; 
-                cell.dataset.gridColumnActual = currentCol; 
+                cell.dataset.gridColumnActual = currentGridColumn; 
                 mainDivisionGrid.appendChild(cell);
-                currentCol++;
+                currentGridColumn++;
             }
             
-            mainDivisionGrid.appendChild(createGridCell(':', firstRow, currentCol++, ['op-symbol', 'divisor-operator-cell']));
+            mainDivisionGrid.appendChild(createGridCell(':', firstRow, currentGridColumn++, ['op-symbol', 'divisor-operator-cell']));
             
             for (let i = 0; i < divisorStr.length; i++) {
-                mainDivisionGrid.appendChild(createGridCell(divisorStr[i], firstRow, currentCol++, ['divisor-digit-cell']));
+                mainDivisionGrid.appendChild(createGridCell(divisorStr[i], firstRow, currentGridColumn++, ['divisor-digit-cell']));
             }
 
-            mainDivisionGrid.appendChild(createGridCell('=', firstRow, currentCol++, ['op-symbol']));
+            mainDivisionGrid.appendChild(createGridCell('=', firstRow, currentGridColumn++, ['op-symbol']));
 
             // Hányados beviteli mezőinek létrehozása
             for (let i = 0; i < quotientLength; i++) {
                 const inputId = `q-${i}`;
                 const input = createStyledInput(currentSettings.helpLevel !== 'independent', inputId, 'quotient'); 
                 const colorIndex = i % 3; 
-                const cell = createGridCell(null, firstRow, currentCol++);
+                const cell = createGridCell(null, firstRow, currentGridColumn++);
                 cell.classList.add(`quotient-cell-bg-${colorIndex}`); 
                 cell.appendChild(input);
                 mainDivisionGrid.appendChild(cell);
             }
-             if (quotientLength === 0) { 
-                 const inputId = `q-0`;
-                 const input = createStyledInput(currentSettings.helpLevel !== 'independent', inputId, 'quotient');
-                 const cell = createGridCell(null, firstRow, currentCol++);
-                 cell.classList.add(`quotient-cell-bg-0`); 
-                 cell.appendChild(input);
-                 mainDivisionGrid.appendChild(cell);
+            if (quotientLength === 0) { 
+                const inputId = `q-0`;
+                const input = createStyledInput(currentSettings.helpLevel !== 'independent', inputId, 'quotient');
+                const cell = createGridCell(null, firstRow, currentGridColumn++);
+                cell.classList.add(`quotient-cell-bg-0`); 
+                cell.appendChild(input);
+                mainDivisionGrid.appendChild(cell);
             }
 
             // "Önálló" mód: A teljes számítási terület létrehozása input mezőkkel
@@ -1166,10 +1233,10 @@
                             }
                         }
                     } else if (type === 'bd') { // Lehozott számjegy után
-                           if (stepIndex + 1 < task.steps.length) { // Van következő lépés
-                                targetInput = document.getElementById(`q-${stepIndex + 1}`); // Következő hányados
+                             if (stepIndex + 1 < task.steps.length) { // Van következő lépés
+                                 targetInput = document.getElementById(`q-${stepIndex + 1}`); // Következő hányados
                             } else {
-                                targetInput = document.getElementById('final-remainder-input'); // Végső maradék
+                                 targetInput = document.getElementById('final-remainder-input'); // Végső maradék
                             }
                     }
                 } else { // Lépésenkénti mód
@@ -1317,20 +1384,42 @@
                 }
             });
             
-            if (currentSettings.helpLevel !== 'independent') {
-                if (currentStepIndex < task.steps.length || (task.steps.length === 0 && task.quotientDigits.length > 0 && task.quotientDigits[0] === 0 && currentStepIndex === 0) ) {
-                    const currentRowMultiply = 1 + currentStepIndex * 2 + 1;
-                    const currentRowSubtract = 1 + currentStepIndex * 2 + 2;
-                    const cellsToClear = mainDivisionGrid.querySelectorAll(
-                        `.grid-cell[style*="grid-row: ${currentRowMultiply}"], 
-                         .grid-cell[style*="grid-row: ${currentRowSubtract}"]`
-                    );
-                    cellsToClear.forEach(cell => {
-                        for (let i = 0; i < 3; i++) { 
-                            cell.classList.remove(`multiply-result-bg-${i}`);
-                            cell.classList.remove(`subtract-result-bg-${i}`);
+            // Új: Művelettörténet cellák tartalmának előkészítése
+            if (currentSettings.helpLevel === 'step-by-step') {
+                const stepData = task.steps[currentStepIndex];
+                if (stepData) {
+				
+                    if (currentSubStep === 'estimate') {
+                        // Clear previous step's operation history if moving to a new step
+                        if (currentStepIndex > 0) {
+                            const prevMultiplyOpCell = document.querySelector(`.multiply-op-step-${currentStepIndex - 1}`);
+                            const prevSubtractOpCell = document.querySelector(`.subtract-op-step-${currentStepIndex - 1}`);
+                            if (prevMultiplyOpCell) prevMultiplyOpCell.textContent = `${task.steps[currentStepIndex-1].quotientDigit} × ${task.divisor} = ${task.steps[currentStepIndex-1].multiplyResult}`;
+                            if (prevSubtractOpCell) prevSubtractOpCell.textContent = `${task.steps[currentStepIndex-1].currentDividendPartNumForStep} - ${task.steps[currentStepIndex-1].multiplyResult} = ${task.steps[currentStepIndex-1].subtractResult}`;
                         }
-                    });
+                        // Clear current step's operation history initially
+                        //if (multiplyOpCell) multiplyOpCell.textContent = '';
+                        //if (subtractOpCell) subtractOpCell.textContent = '';
+
+                    } else if (currentSubStep === 'multiply') {					
+						const currentRowForMultiply = 1 + currentStepIndex * 2 + 1;
+						const multiplyOperationCell = createGridCell('', currentRowForMultiply, 1, ['operation-history-cell', `multiply-op-step-${currentStepIndex}`]);
+						multiplyOperationCell.style.gridColumn = `1 / span ${operationColumnSpan}`;
+						mainDivisionGrid.appendChild(multiplyOperationCell);
+						//const multiplyOpCell = document.querySelector(`.multiply-op-step-${currentStepIndex}`);			
+                        if (multiplyOperationCell) {
+                            multiplyOperationCell.textContent = `${stepData.quotientDigit} × ${task.divisor} = ?`;
+                        }
+                    } else if (currentSubStep === 'subtract') {
+						const currentRowForSubtract = 1 + currentStepIndex * 2 + 2;
+						const subtractOperationCell = createGridCell('', currentRowForSubtract, 1, ['operation-history-cell', `subtract-op-step-${currentStepIndex}`]);
+						subtractOperationCell.style.gridColumn = `1 / span ${operationColumnSpan}`;
+						mainDivisionGrid.appendChild(subtractOperationCell);					
+						//const subtractOpCell = document.querySelector(`.subtract-op-step-${currentStepIndex}`);					
+                        if (subtractOperationCell) {
+                            subtractOperationCell.textContent = `${stepData.currentDividendPartNumForStep} - ${stepData.multiplyResult} = ?`;
+                        }
+                    }
                 }
             }
 
@@ -1490,7 +1579,7 @@
                         }
                         existingInput.disabled = (currentSettings.helpLevel === 'guided');
                          if (i === 0 && currentSettings.helpLevel !== 'guided' && !existingInput.disabled) {
-                           try { existingInput.focus(); } catch (e) {}
+                            try { existingInput.focus(); } catch (e) {}
                         }
                     }
                 } else if (currentSubStep === 'subtract') { 
@@ -1519,7 +1608,7 @@
                         }
                         existingInput.disabled = (currentSettings.helpLevel === 'guided');
                          if (i === 0 && currentSettings.helpLevel !== 'guided' && !existingInput.disabled) {
-                           try { existingInput.focus(); } catch (e) {}
+                            try { existingInput.focus(); } catch (e) {}
                         }
                     }
 
@@ -1611,7 +1700,7 @@
 
             if (task.steps.length === 0 && task.quotientDigits.length > 0 && task.quotientDigits[0] === 0 && currentStepIndex === 0 && currentSubStep === 'estimate') {
                 const quotientInputId = `q-0`;
-                const quotientDigitInput = document.getElementById(quotientInputId);
+                const quotientDigitInput = document.getElementById(quotientInputId); 
                 const currentStepDataForZeroQ = { quotientDigit: 0 }; 
 
                 if (quotientDigitInput && (quotientDigitInput.value === "0" || (currentSettings.helpLevel === 'guided' && currentStepDataForZeroQ.quotientDigit === 0 ))) {
@@ -1713,7 +1802,23 @@
                 feedbackArea.className = 'feedback correct mt-4';
                 activeInputs.forEach(inp => { if(inp) inp.disabled = true }); 
 
-                if (currentSubStep === 'subtract' && parseInt(userInputStr) === currentStepData.subtractResult) { 
+                if (currentSubStep === 'multiply') { 
+                    // Új: Szorzási művelet megjelenítése a történet oszlopban
+                    if (currentSettings.helpLevel === 'step-by-step') {
+                        const multiplyOpCell = document.querySelector(`.multiply-op-step-${currentStepIndex}`);
+                        if (multiplyOpCell) {
+                            multiplyOpCell.textContent = `${currentStepData.quotientDigit} × ${task.divisor} = ${currentStepData.multiplyResult}`;
+                        }
+                    }
+                } else if (currentSubStep === 'subtract' && parseInt(userInputStr) === currentStepData.subtractResult) { 
+                    // Új: Kivonási művelet megjelenítése a történet oszlopban
+                    if (currentSettings.helpLevel === 'step-by-step') {
+                        const subtractOpCell = document.querySelector(`.subtract-op-step-${currentStepIndex}`);
+                        if (subtractOpCell) {
+                            subtractOpCell.textContent = `${currentStepData.currentDividendPartNumForStep} - ${currentStepData.multiplyResult} = ${currentStepData.subtractResult}`;
+                        }
+                    }
+
                     if (currentStepData.nextDigitToBringDown !== null) {
                         const broughtDownCellContainer = mainDivisionGrid.querySelector(`.grid-cell.brought-down-digit-cell[data-step-context="${currentStepIndex}"]`);
                         if (broughtDownCellContainer) {
@@ -1777,7 +1882,7 @@
                 } else if (currentSettings.helpLevel !== 'guided' && activeInputs.length > 0) {
                     activeInputs.forEach(inp => { if(inp) inp.disabled = false; });
                     if (activeInputs[0]) { 
-                         try { activeInputs[0].focus(); } catch (e) { console.warn("Focus failed on retry for multiply/subtract", e); }
+                           try { activeInputs[0].focus(); } catch (e) { console.warn("Focus failed on retry for multiply/subtract", e); }
                     }
                 }
             }
