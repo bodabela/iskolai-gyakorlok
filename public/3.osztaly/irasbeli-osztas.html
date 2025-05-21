@@ -1387,39 +1387,48 @@
             // Új: Művelettörténet cellák tartalmának előkészítése
             if (currentSettings.helpLevel === 'step-by-step') {
                 const stepData = task.steps[currentStepIndex];
+				console.log('currentStepIndex', currentStepIndex);
+				console.log('currentSubStep', currentSubStep);
+				console.log('stepData', stepData);
                 if (stepData) {
 				
                     if (currentSubStep === 'estimate') {
-                        // Clear previous step's operation history if moving to a new step
-                        if (currentStepIndex > 0) {
-                            const prevMultiplyOpCell = document.querySelector(`.multiply-op-step-${currentStepIndex - 1}`);
-                            const prevSubtractOpCell = document.querySelector(`.subtract-op-step-${currentStepIndex - 1}`);
-                            if (prevMultiplyOpCell) prevMultiplyOpCell.textContent = `${task.steps[currentStepIndex-1].quotientDigit} × ${task.divisor} = ${task.steps[currentStepIndex-1].multiplyResult}`;
-                            if (prevSubtractOpCell) prevSubtractOpCell.textContent = `${task.steps[currentStepIndex-1].currentDividendPartNumForStep} - ${task.steps[currentStepIndex-1].multiplyResult} = ${task.steps[currentStepIndex-1].subtractResult}`;
-                        }
-                        // Clear current step's operation history initially
-                        //if (multiplyOpCell) multiplyOpCell.textContent = '';
-                        //if (subtractOpCell) subtractOpCell.textContent = '';
 
+						const prevSubtractOpCell = document.querySelector(`.subtract-op-step-${currentStepIndex-1}`);
+						console.log('prevSubtractOpCell', prevSubtractOpCell);
+						console.log('task.steps[currentStepIndex-1]', task.steps[currentStepIndex-1]);
+						if (prevSubtractOpCell) prevSubtractOpCell.textContent = `${task.steps[currentStepIndex-1].currentDividendPartNumForStep} - ${task.steps[currentStepIndex-1].multiplyResult} = ${task.steps[currentStepIndex-1].subtractResult}`;
+						if (prevSubtractOpCell) console.log('prevSubtractOpCell.textContent', prevSubtractOpCell.textContent);
+										
                     } else if (currentSubStep === 'multiply') {					
+					
 						const currentRowForMultiply = 1 + currentStepIndex * 2 + 1;
-						const multiplyOperationCell = createGridCell('', currentRowForMultiply, 1, ['operation-history-cell', `multiply-op-step-${currentStepIndex}`]);
-						multiplyOperationCell.style.gridColumn = `1 / span ${operationColumnSpan}`;
-						mainDivisionGrid.appendChild(multiplyOperationCell);
-						//const multiplyOpCell = document.querySelector(`.multiply-op-step-${currentStepIndex}`);			
+						var multiplyOperationCell = document.querySelector(`.multiply-op-step-${currentStepIndex}`);
+						if(!multiplyOperationCell) {
+							multiplyOperationCell = createGridCell('', currentRowForMultiply, 1, ['operation-history-cell', `multiply-op-step-${currentStepIndex}`]);
+							multiplyOperationCell.style.gridColumn = `1 / span ${operationColumnSpan}`;
+							mainDivisionGrid.appendChild(multiplyOperationCell);						
+						}
                         if (multiplyOperationCell) {
                             multiplyOperationCell.textContent = `${stepData.quotientDigit} × ${task.divisor} = ?`;
                         }
                     } else if (currentSubStep === 'subtract') {
+					
+						const prevMultiplyOpCell = document.querySelector(`.multiply-op-step-${currentStepIndex}`);
+						console.log('prevMultiplyOpCell', prevMultiplyOpCell);
+						if (prevMultiplyOpCell) prevMultiplyOpCell.textContent = `${task.steps[currentStepIndex].quotientDigit} × ${task.divisor} = ${task.steps[currentStepIndex].multiplyResult}`;
+
 						const currentRowForSubtract = 1 + currentStepIndex * 2 + 2;
-						const subtractOperationCell = createGridCell('', currentRowForSubtract, 1, ['operation-history-cell', `subtract-op-step-${currentStepIndex}`]);
-						subtractOperationCell.style.gridColumn = `1 / span ${operationColumnSpan}`;
-						mainDivisionGrid.appendChild(subtractOperationCell);					
-						//const subtractOpCell = document.querySelector(`.subtract-op-step-${currentStepIndex}`);					
+						var subtractOperationCell = document.querySelector(`.subtract-op-step-${currentStepIndex}`);
+						if(!subtractOperationCell) {
+							subtractOperationCell = createGridCell('', currentRowForSubtract, 1, ['operation-history-cell', `subtract-op-step-${currentStepIndex}`]);
+							subtractOperationCell.style.gridColumn = `1 / span ${operationColumnSpan}`;
+							mainDivisionGrid.appendChild(subtractOperationCell);						
+						}
                         if (subtractOperationCell) {
                             subtractOperationCell.textContent = `${stepData.currentDividendPartNumForStep} - ${stepData.multiplyResult} = ?`;
                         }
-                    }
+                    }										
                 }
             }
 
