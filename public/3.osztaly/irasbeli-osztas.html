@@ -293,11 +293,18 @@
         }
 
 
-        /* --- Candy (Cukorka) Téma --- */
+        /* --- THEME DEFINITIONS --- */
+        /* Default styles for theme/range buttons if no theme is active (fallback) */
+        .theme-button, .range-button {
+            background-color: #e0e0e0;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        
+        /* 1. Candy Theme (Girlish) */
         body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
         body.theme-candy .control-label { color: #c71585; }
-        body.theme-candy .setting-button { background-color: #ffc0cb; color: #800080; border-color: #ffb6c1;}
-        body.theme-candy .setting-button.active { background-color: #ffb6c1; color: #7c3c60; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #da70d6); }
+        body.theme-candy .setting-button.active { background-color: #ffb6c1; color: #7c3c60; }
         body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
         body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
         body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
@@ -335,21 +342,355 @@
         body.theme-candy .multiply-result-bg-2 { background-color: #e0ffff !important; } 
         body.theme-candy .subtract-result-bg-2 { background-color: #b0e0e6 !important; } 
 
-        body.theme-candy .multiply-result-bg-0 input.styled-input, body.theme-candy .multiply-result-bg-0 input.styled-input:disabled,
-        body.theme-candy .subtract-result-bg-0 input.styled-input, body.theme-candy .subtract-result-bg-0 input.styled-input:disabled,
-        body.theme-candy .multiply-result-bg-1 input.styled-input, body.theme-candy .multiply-result-bg-1 input.styled-input:disabled,
-        body.theme-candy .subtract-result-bg-1 input.styled-input, body.theme-candy .subtract-result-bg-1 input.styled-input:disabled,
-        body.theme-candy .multiply-result-bg-2 input.styled-input, body.theme-candy .multiply-result-bg-2 input.styled-input:disabled,
-        body.theme-candy .subtract-result-bg-2 input.styled-input, body.theme-candy .subtract-result-bg-2 input.styled-input:disabled,
-        body.theme-candy .quotient-cell-bg-0 input.styled-input, body.theme-candy .quotient-cell-bg-0 input.styled-input:disabled,
-        body.theme-candy .quotient-cell-bg-1 input.styled-input, body.theme-candy .quotient-cell-bg-1 input.styled-input:disabled,
-        body.theme-candy .quotient-cell-bg-2 input.styled-input, body.theme-candy .quotient-cell-bg-2 input.styled-input:disabled,
-        body.theme-candy .brought-down-digit-cell.subtract-result-bg-0 input.styled-input, 
-        body.theme-candy .brought-down-digit-cell.subtract-result-bg-1 input.styled-input,
-        body.theme-candy .brought-down-digit-cell.subtract-result-bg-2 input.styled-input
-         {
-            background-color: transparent !important;
+        /* 2. Space Theme (Boyish) */
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;}
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .setting-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
+        body.theme-space .task-header h3 { color: #93c5fd; }
+        body.theme-space .task p { color: #cbd5e1; }
+        body.theme-space .grid-cell.dividend-digit { color: #e2e8f0; }
+        body.theme-space .grid-cell.brought-down-digit-cell input.styled-input { color: #e2e8f0 !important; }
+        body.theme-space .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #e2e8f0 !important; }
+        
+        body.theme-space .grid-cell.operand-highlight-cell { 
+            box-shadow: 0 0 0 1.5px #60a5fa !important; 
         }
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space button.task-button:hover { background-color: #1d4ed8; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+        body.theme-space .grid-cell.cell-with-line-below { border-bottom-color: #475569; }
+        body.theme-space .final-remainder-display { color: #e2e8f0; }
+        body.theme-space .grid-cell.op-symbol { color: #e2e8f0; }
+
+        /* Space Téma Lépésenkénti Színei */
+        body.theme-space .quotient-cell-bg-0 { background-color: #60a5fa !important; }
+        body.theme-space .quotient-cell-bg-0 input.styled-input { color: #1e293b !important; }
+        body.theme-space .multiply-result-bg-0 { background-color: #1e3a8a !important; }
+        body.theme-space .subtract-result-bg-0 { background-color: #334155 !important; }
+        body.theme-space .quotient-cell-bg-1 { background-color: #93c5fd !important; }
+        body.theme-space .quotient-cell-bg-1 input.styled-input { color: #1e293b !important; }
+        body.theme-space .multiply-result-bg-1 { background-color: #2563eb !important; }
+        body.theme-space .subtract-result-bg-1 { background-color: #475569 !important; }
+        body.theme-space .quotient-cell-bg-2 { background-color: #e0f2fe !important; }
+        body.theme-space .quotient-cell-bg-2 input.styled-input { color: #1e293b !important; }
+        body.theme-space .multiply-result-bg-2 { background-color: #1d4ed8 !important; }
+        body.theme-space .subtract-result-bg-2 { background-color: #64748b !important; }
+
+
+        /* 3. Jungle Theme (Boyish) */
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;}
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .setting-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
+        body.theme-jungle .task-header h3 { color: #558b2f; }
+        body.theme-jungle .task p { color: #2e7d32; }
+        body.theme-jungle .grid-cell.dividend-digit { color: #1b5e20; }
+        body.theme-jungle .grid-cell.brought-down-digit-cell input.styled-input { color: #1b5e20 !important; }
+        body.theme-jungle .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #1b5e20 !important; }
+        
+        body.theme-jungle .grid-cell.operand-highlight-cell { 
+            box-shadow: 0 0 0 1.5px #558b2f !important; 
+        }
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle button.task-button:hover { background-color: #689f38; }
+        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-jungle .grid-cell.cell-with-line-below { border-bottom-color: #81c784; }
+        body.theme-jungle .final-remainder-display { color: #1b5e20; }
+        body.theme-jungle .grid-cell.op-symbol { color: #1b5e20; }
+
+        /* Jungle Téma Lépésenkénti Színei */
+        body.theme-jungle .quotient-cell-bg-0 { background-color: #a5d6a7 !important; }
+        body.theme-jungle .quotient-cell-bg-0 input.styled-input { color: #1b5e20 !important; }
+        body.theme-jungle .multiply-result-bg-0 { background-color: #e8f5e9 !important; }
+        body.theme-jungle .subtract-result-bg-0 { background-color: #dcedc8 !important; }
+        body.theme-jungle .quotient-cell-bg-1 { background-color: #81c784 !important; }
+        body.theme-jungle .quotient-cell-bg-1 input.styled-input { color: #1b5e20 !important; }
+        body.theme-jungle .multiply-result-bg-1 { background-color: #689f38 !important; }
+        body.theme-jungle .subtract-result-bg-1 { background-color: #7cb342 !important; }
+        body.theme-jungle .quotient-cell-bg-2 { background-color: #c8e6c9 !important; }
+        body.theme-jungle .quotient-cell-bg-2 input.styled-input { color: #1b5e20 !important; }
+        body.theme-jungle .multiply-result-bg-2 { background-color: #558b2f !important; }
+        body.theme-jungle .subtract-result-bg-2 { background-color: #388e3c !important; }
+
+
+        /* 4. Magic Forest Theme (Girlish) */
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;}
+        body.theme-magicforest .control-label { color: #9932cc; }
+        body.theme-magicforest .setting-button.active { background-color: #9370db; color: #f8f0ff; }
+        body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
+        body.theme-magicforest h1, body.theme-magicforest h2 { color: #8a2be2; }
+        body.theme-magicforest .task { background-color: #f5f5f5; border: 2px dashed #ba55d3; }
+        body.theme-magicforest .task-header h3 { color: #9932cc; }
+        body.theme-magicforest .task p { color: #4b0082; }
+        body.theme-magicforest .grid-cell.dividend-digit { color: #483d8b; }
+        body.theme-magicforest .grid-cell.brought-down-digit-cell input.styled-input { color: #483d8b !important; }
+        body.theme-magicforest .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #483d8b !important; }
+        
+        body.theme-magicforest .grid-cell.operand-highlight-cell { 
+            box-shadow: 0 0 0 1.5px #8a2be2 !important; 
+        }
+        body.theme-magicforest button.task-button { background-color: #9370db; }
+        body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
+        body.theme-magicforest .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-magicforest .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-magicforest .grid-cell.cell-with-line-below { border-bottom-color: #ba55d3; }
+        body.theme-magicforest .final-remainder-display { color: #483d8b; }
+        body.theme-magicforest .grid-cell.op-symbol { color: #483d8b; }
+
+        /* Magic Forest Téma Lépésenkénti Színei */
+        body.theme-magicforest .quotient-cell-bg-0 { background-color: #dda0dd !important; }
+        body.theme-magicforest .quotient-cell-bg-0 input.styled-input { color: #483d8b !important; }
+        body.theme-magicforest .multiply-result-bg-0 { background-color: #e6e6fa !important; }
+        body.theme-magicforest .subtract-result-bg-0 { background-color: #d8bfd8 !important; }
+        body.theme-magicforest .quotient-cell-bg-1 { background-color: #ba55d3 !important; }
+        body.theme-magicforest .quotient-cell-bg-1 input.styled-input { color: #483d8b !important; }
+        body.theme-magicforest .multiply-result-bg-1 { background-color: #9370db !important; }
+        body.theme-magicforest .subtract-result-bg-1 { background-color: #8a2be2 !important; }
+        body.theme-magicforest .quotient-cell-bg-2 { background-color: #f8f0ff !important; }
+        body.theme-magicforest .quotient-cell-bg-2 input.styled-input { color: #483d8b !important; }
+        body.theme-magicforest .multiply-result-bg-2 { background-color: #9932cc !important; }
+        body.theme-magicforest .subtract-result-bg-2 { background-color: #4b0082 !important; }
+
+
+        /* 5. Robo/Tech Theme (Boyish) */
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;}
+        body.theme-tech .control-label { color: #26c6da; }
+        body.theme-tech .setting-button.active { background-color: #00838f; color: #e0f7fa; }
+        body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
+        body.theme-tech h1, body.theme-tech h2 { color: #00acc1; }
+        body.theme-tech .task { background-color: #455a64; border: 2px dashed #78909c; }
+        body.theme-tech .task-header h3 { color: #26c6da; }
+        body.theme-tech .task p { color: #b0bec5; }
+        body.theme-tech .grid-cell.dividend-digit { color: #eceff1; }
+        body.theme-tech .grid-cell.brought-down-digit-cell input.styled-input { color: #eceff1 !important; }
+        body.theme-tech .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #eceff1 !important; }
+        
+        body.theme-tech .grid-cell.operand-highlight-cell { 
+            box-shadow: 0 0 0 1.5px #00acc1 !important; 
+        }
+        body.theme-tech button.task-button { background-color: #0097a7; }
+        body.theme-tech button.task-button:hover { background-color: #00838f; }
+        body.theme-tech .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-tech .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-tech .grid-cell.cell-with-line-below { border-bottom-color: #78909c; }
+        body.theme-tech .final-remainder-display { color: #eceff1; }
+        body.theme-tech .grid-cell.op-symbol { color: #eceff1; }
+
+        /* Tech Téma Lépésenkénti Színei */
+        body.theme-tech .quotient-cell-bg-0 { background-color: #26c6da !important; }
+        body.theme-tech .quotient-cell-bg-0 input.styled-input { color: #263238 !important; }
+        body.theme-tech .multiply-result-bg-0 { background-color: #37474f !important; }
+        body.theme-tech .subtract-result-bg-0 { background-color: #546e7a !important; }
+        body.theme-tech .quotient-cell-bg-1 { background-color: #00acc1 !important; }
+        body.theme-tech .quotient-cell-bg-1 input.styled-input { color: #263238 !important; }
+        body.theme-tech .multiply-result-bg-1 { background-color: #0097a7 !important; }
+        body.theme-tech .subtract-result-bg-1 { background-color: #00838f !important; }
+        body.theme-tech .quotient-cell-bg-2 { background-color: #e0f7fa !important; }
+        body.theme-tech .quotient-cell-bg-2 input.styled-input { color: #263238 !important; }
+        body.theme-tech .multiply-result-bg-2 { background-color: #263238 !important; }
+        body.theme-tech .subtract-result-bg-2 { background-color: #455a64 !important; }
+
+
+        /* 6. Ocean Theme (Girlish) */
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;}
+        body.theme-ocean .control-label { color: #00acc1; }
+        body.theme-ocean .setting-button.active { background-color: #4db6ac; color: #e0f2f1; }
+        body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
+        body.theme-ocean h1, body.theme-ocean h2 { color: #00897b; }
+        body.theme-ocean .task { background-color: #e0f7fa; border: 2px dashed #80deea; }
+        body.theme-ocean .task-header h3 { color: #00acc1; }
+        body.theme-ocean .task p { color: #00695c; }
+        body.theme-ocean .grid-cell.dividend-digit { color: #00796b; }
+        body.theme-ocean .grid-cell.brought-down-digit-cell input.styled-input { color: #00796b !important; }
+        body.theme-ocean .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #00796b !important; }
+        
+        body.theme-ocean .grid-cell.operand-highlight-cell { 
+            box-shadow: 0 0 0 1.5px #20b2aa !important; 
+        }
+        body.theme-ocean button.task-button { background-color: #26a69a; }
+        body.theme-ocean button.task-button:hover { background-color: #00897b; }
+        body.theme-ocean .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-ocean .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-ocean .grid-cell.cell-with-line-below { border-bottom-color: #80deea; }
+        body.theme-ocean .final-remainder-display { color: #00796b; }
+        body.theme-ocean .grid-cell.op-symbol { color: #00796b; }
+
+        /* Ocean Téma Lépésenkénti Színei */
+        body.theme-ocean .quotient-cell-bg-0 { background-color: #4dd0e1 !important; }
+        body.theme-ocean .quotient-cell-bg-0 input.styled-input { color: #00796b !important; }
+        body.theme-ocean .multiply-result-bg-0 { background-color: #e0f7fa !important; }
+        body.theme-ocean .subtract-result-bg-0 { background-color: #b2ebf2 !important; }
+        body.theme-ocean .quotient-cell-bg-1 { background-color: #00acc1 !important; }
+        body.theme-ocean .quotient-cell-bg-1 input.styled-input { color: #00796b !important; }
+        body.theme-ocean .multiply-result-bg-1 { background-color: #26a69a !important; }
+        body.theme-ocean .subtract-result-bg-1 { background-color: #00897b !important; }
+        body.theme-ocean .quotient-cell-bg-2 { background-color: #e0f2f1 !important; }
+        body.theme-ocean .quotient-cell-bg-2 input.styled-input { color: #00796b !important; }
+        body.theme-ocean .multiply-result-bg-2 { background-color: #00796b !important; }
+        body.theme-ocean .subtract-result-bg-2 { background-color: #004d40 !important; }
+
+
+        /* 7. Sport Theme (Boyish) */
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;}
+        body.theme-sport .control-label { color: #1976d2; }
+        body.theme-sport .setting-button.active { background-color: #1976d2; color: #e3f2fd; }
+        body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
+        body.theme-sport h1, body.theme-sport h2 { color: #d32f2f; }
+        body.theme-sport .task { background-color: #e3f2fd; border: 2px dashed #42a5f5; }
+        body.theme-sport .task-header h3 { color: #1976d2; }
+        body.theme-sport .task p { color: #0d47a1; }
+        body.theme-sport .grid-cell.dividend-digit { color: #0d47a1; }
+        body.theme-sport .grid-cell.brought-down-digit-cell input.styled-input { color: #0d47a1 !important; }
+        body.theme-sport .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #0d47a1 !important; }
+        
+        body.theme-sport .grid-cell.operand-highlight-cell { 
+            box-shadow: 0 0 0 1.5px #d32f2f !important; 
+        }
+        body.theme-sport button.task-button { background-color: #2196f3; }
+        body.theme-sport button.task-button:hover { background-color: #1976d2; }
+        body.theme-sport .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sport .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-sport .grid-cell.cell-with-line-below { border-bottom-color: #42a5f5; }
+        body.theme-sport .final-remainder-display { color: #0d47a1; }
+        body.theme-sport .grid-cell.op-symbol { color: #0d47a1; }
+
+        /* Sport Téma Lépésenkénti Színei */
+        body.theme-sport .quotient-cell-bg-0 { background-color: #64b5f6 !important; }
+        body.theme-sport .quotient-cell-bg-0 input.styled-input { color: #0d47a1 !important; }
+        body.theme-sport .multiply-result-bg-0 { background-color: #e3f2fd !important; }
+        body.theme-sport .subtract-result-bg-0 { background-color: #bbdefb !important; }
+        body.theme-sport .quotient-cell-bg-1 { background-color: #2196f3 !important; }
+        body.theme-sport .quotient-cell-bg-1 input.styled-input { color: #0d47a1 !important; }
+        body.theme-sport .multiply-result-bg-1 { background-color: #1976d2 !important; }
+        body.theme-sport .subtract-result-bg-1 { background-color: #1565c0 !important; }
+        body.theme-sport .quotient-cell-bg-2 { background-color: #e3f2fd !important; }
+        body.theme-sport .quotient-cell-bg-2 input.styled-input { color: #0d47a1 !important; }
+        body.theme-sport .multiply-result-bg-2 { background-color: #0d47a1 !important; }
+        body.theme-sport .subtract-result-bg-2 { background-color: #01579b !important; }
+
+
+        /* 8. Flower Garden Theme (Girlish) */
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;}
+        body.theme-flowergarden .control-label { color: #ff7f50; }
+        body.theme-flowergarden .setting-button.active { background-color: #ffdab9; color: #8b4513; }
+        body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
+        body.theme-flowergarden h1, body.theme-flowergarden h2 { color: #ff6347; }
+        body.theme-flowergarden .task { background-color: #fffafa; border: 2px dashed #ffe4b5; }
+        body.theme-flowergarden .task-header h3 { color: #ff7f50; }
+        body.theme-flowergarden .task p { color: #8b4513; }
+        body.theme-flowergarden .grid-cell.dividend-digit { color: #556b2f; }
+        body.theme-flowergarden .grid-cell.brought-down-digit-cell input.styled-input { color: #556b2f !important; }
+        body.theme-flowergarden .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #556b2f !important; }
+        
+        body.theme-flowergarden .grid-cell.operand-highlight-cell { 
+            box-shadow: 0 0 0 1.5px #ff6347 !important; 
+        }
+        body.theme-flowergarden button.task-button { background-color: #ffa07a; }
+        body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
+        body.theme-flowergarden .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-flowergarden .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-flowergarden .grid-cell.cell-with-line-below { border-bottom-color: #ffdab9; }
+        body.theme-flowergarden .final-remainder-display { color: #556b2f; }
+        body.theme-flowergarden .grid-cell.op-symbol { color: #556b2f; }
+
+        /* Flower Garden Téma Lépésenkénti Színei */
+        body.theme-flowergarden .quotient-cell-bg-0 { background-color: #ffdab9 !important; }
+        body.theme-flowergarden .quotient-cell-bg-0 input.styled-input { color: #556b2f !important; }
+        body.theme-flowergarden .multiply-result-bg-0 { background-color: #fffaf0 !important; }
+        body.theme-flowergarden .subtract-result-bg-0 { background-color: #fff5ee !important; }
+        body.theme-flowergarden .quotient-cell-bg-1 { background-color: #ffa07a !important; }
+        body.theme-flowergarden .quotient-cell-bg-1 input.styled-input { color: #556b2f !important; }
+        body.theme-flowergarden .multiply-result-bg-1 { background-color: #ff7f50 !important; }
+        body.theme-flowergarden .subtract-result-bg-1 { background-color: #ff6347 !important; }
+        body.theme-flowergarden .quotient-cell-bg-2 { background-color: #ffe4b5 !important; }
+        body.theme-flowergarden .quotient-cell-bg-2 input.styled-input { color: #556b2f !important; }
+        body.theme-flowergarden .multiply-result-bg-2 { background-color: #8b4513 !important; }
+        body.theme-flowergarden .subtract-result-bg-2 { background-color: #a0522d !important; }
+
+
+        /* 9. Adventure Theme (Boyish) */
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;}
+        body.theme-adventure .control-label { color: #6d4c41; }
+        body.theme-adventure .setting-button.active { background-color: #a1887f; color: #efebe9; }
+        body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
+        body.theme-adventure h1, body.theme-adventure h2 { color: #bf360c; }
+        body.theme-adventure .task { background-color: #d7ccc8; border: 2px dashed #8d6e63; }
+        body.theme-adventure .task-header h3 { color: #6d4c41; }
+        body.theme-adventure .task p { color: #4e342e; }
+        body.theme-adventure .grid-cell.dividend-digit { color: #5d4037; }
+        body.theme-adventure .grid-cell.brought-down-digit-cell input.styled-input { color: #5d4037 !important; }
+        body.theme-adventure .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #5d4037 !important; }
+        
+        body.theme-adventure .grid-cell.operand-highlight-cell { 
+            box-shadow: 0 0 0 1.5px #bf360c !important; 
+        }
+        body.theme-adventure button.task-button { background-color: #795548; }
+        body.theme-adventure button.task-button:hover { background-color: #5d4037; }
+        body.theme-adventure .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-adventure .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-adventure .grid-cell.cell-with-line-below { border-bottom-color: #8d6e63; }
+        body.theme-adventure .final-remainder-display { color: #5d4037; }
+        body.theme-adventure .grid-cell.op-symbol { color: #5d4037; }
+
+        /* Adventure Téma Lépésenkénti Színei */
+        body.theme-adventure .quotient-cell-bg-0 { background-color: #a1887f !important; }
+        body.theme-adventure .quotient-cell-bg-0 input.styled-input { color: #5d4037 !important; }
+        body.theme-adventure .multiply-result-bg-0 { background-color: #f5f5dc !important; }
+        body.theme-adventure .subtract-result-bg-0 { background-color: #efebe9 !important; }
+        body.theme-adventure .quotient-cell-bg-1 { background-color: #795548 !important; }
+        body.theme-adventure .quotient-cell-bg-1 input.styled-input { color: #5d4037 !important; }
+        body.theme-adventure .multiply-result-bg-1 { background-color: #6d4c41 !important; }
+        body.theme-adventure .subtract-result-bg-1 { background-color: #5d4037 !important; }
+        body.theme-adventure .quotient-cell-bg-2 { background-color: #d7ccc8 !important; }
+        body.theme-adventure .quotient-cell-bg-2 input.styled-input { color: #5d4037 !important; }
+        body.theme-adventure .multiply-result-bg-2 { background-color: #4e342e !important; }
+        body.theme-adventure .subtract-result-bg-2 { background-color: #3e2723 !important; }
+
+
+        /* 10. Sky Theme (Girlish) */
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;}
+        body.theme-sky .control-label { color: #00bfff; }
+        body.theme-sky .setting-button.active { background-color: #add8e6; color: #005a9c; }
+        body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
+        body.theme-sky h1, body.theme-sky h2 { color: #1e90ff; }
+        body.theme-sky .task { background-color: #f5faff; border: 2px dashed #add8e6; }
+        body.theme-sky .task-header h3 { color: #00bfff; }
+        body.theme-sky .task p { color: #5f9ea0; }
+        body.theme-sky .grid-cell.dividend-digit { color: #4682b4; }
+        body.theme-sky .grid-cell.brought-down-digit-cell input.styled-input { color: #4682b4 !important; }
+        body.theme-sky .grid-cell.brought-down-digit-cell:not(:has(input)) { color: #4682b4 !important; }
+        
+        body.theme-sky .grid-cell.operand-highlight-cell { 
+            box-shadow: 0 0 0 1.5px #1e90ff !important; 
+        }
+        body.theme-sky button.task-button { background-color: #87cefa; }
+        body.theme-sky button.task-button:hover { background-color: #6495ed; }
+        body.theme-sky .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sky .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-sky .grid-cell.cell-with-line-below { border-bottom-color: #b0e0e6; }
+        body.theme-sky .final-remainder-display { color: #4682b4; }
+        body.theme-sky .grid-cell.op-symbol { color: #4682b4; }
+
+        /* Sky Téma Lépésenkénti Színei */
+        body.theme-sky .quotient-cell-bg-0 { background-color: #add8e6 !important; }
+        body.theme-sky .quotient-cell-bg-0 input.styled-input { color: #4682b4 !important; }
+        body.theme-sky .multiply-result-bg-0 { background-color: #f0f8ff !important; }
+        body.theme-sky .subtract-result-bg-0 { background-color: #e6f7ff !important; }
+        body.theme-sky .quotient-cell-bg-1 { background-color: #87cefa !important; }
+        body.theme-sky .quotient-cell-bg-1 input.styled-input { color: #4682b4 !important; }
+        body.theme-sky .multiply-result-bg-1 { background-color: #6495ed !important; }
+        body.theme-sky .subtract-result-bg-1 { background-color: #4682b4 !important; }
+        body.theme-sky .quotient-cell-bg-2 { background-color: #f5faff !important; }
+        body.theme-sky .quotient-cell-bg-2 input.styled-input { color: #4682b4 !important; }
+        body.theme-sky .multiply-result-bg-2 { background-color: #1e90ff !important; }
+        body.theme-sky .subtract-result-bg-2 { background-color: #5f9ea0 !important; }
 
     </style>
 </head>
@@ -357,6 +698,21 @@
     <div class="controls-container">
         <div class="w-full mt-4">
             <div class="settings-row">
+                <div class="settings-group">
+                    <p class="control-label">Téma választó:</p>
+                    <div id="themeSelector" class="flex flex-wrap justify-center gap-2">
+                        <button class="setting-button theme-button" data-theme="theme-candy">Cukorka</button>
+                        <button class="setting-button theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                        <button class="setting-button theme-button" data-theme="theme-ocean">Óceán</button>
+                        <button class="setting-button theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                        <button class="setting-button theme-button" data-theme="theme-sky">Égbolt</button>
+                        <button class="setting-button theme-button" data-theme="theme-space">Űr</button>
+                        <button class="setting-button theme-button" data-theme="theme-jungle">Őserdő</button>
+                        <button class="setting-button theme-button" data-theme="theme-tech">Techno</button>
+                        <button class="setting-button theme-button" data-theme="theme-sport">Sport</button>
+                        <button class="setting-button theme-button" data-theme="theme-adventure">Kaland</button>
+                    </div>
+                </div>
                 <div class="settings-group">
                     <p class="control-label">Osztandó:</p>
                     <div id="dividendLengthSelector" class="flex flex-wrap justify-center gap-2">
@@ -377,7 +733,7 @@
                     <div id="helpLevelSelector" class="flex flex-wrap justify-center gap-2">
                         <button class="setting-button" data-help="independent">Önálló</button>
                         <button class="setting-button" data-help="step-by-step">Lépésenként</button>
-                        <button class="setting-button" data-help="guided">Vezetett</button>
+                        <button class="setting-button" data-help="guided" disabled>Vezetett</button>
                     </div>
                 </div>
             </div>
@@ -411,6 +767,7 @@
 
     <script>
         // Globális DOM Elemek Referenciái
+        const themeSelector = document.getElementById('themeSelector');
         const dividendLengthSelector = document.getElementById('dividendLengthSelector');
         const remainderTypeSelector = document.getElementById('remainderTypeSelector');
         const helpLevelSelector = document.getElementById('helpLevelSelector');
@@ -430,18 +787,24 @@
         };
 
         let task = {
-            dividend: 0,         
-            divisor: 0,          
-            quotientDigits: [], 
+            dividend: 0,           
+            divisor: 0,           
+            quotientDigits: [],
             finalRemainder: 0,   
-            steps: []            
+            steps: []             
         };
         
         // Az osztási folyamat állapotát követő változók
-        let currentStepIndex = 0;       
+        let currentStepIndex = 0;        
         let currentSubStep = 'estimate'; 
 
         // Eseménykezelők a beállító gombokhoz
+        themeSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('setting-button')) {
+                currentSettings.theme = e.target.dataset.theme;
+                applyTheme(currentSettings.theme);
+            }
+        });
         dividendLengthSelector.addEventListener('click', (e) => {
             if (e.target.classList.contains('setting-button')) {
                 currentSettings.dividendLength = parseInt(e.target.dataset.length);
@@ -471,9 +834,14 @@
         /**
          * Alkalmazza az aktuálisan kiválasztott témát és frissíti a gombok aktív állapotát.
          */
-        function applyTheme() {
+        function applyTheme(themeClass) {
             bodyEl.className = ''; 
-            bodyEl.classList.add(currentSettings.theme); 
+            bodyEl.classList.add(themeClass); 
+            // Update active theme button
+            themeSelector.querySelectorAll('button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeClass);
+            });
+            // Update other active buttons (dividend length, remainder type, help level)
             updateActiveButtonVisuals(dividendLengthSelector, dividendLengthSelector.querySelector(`[data-length="${currentSettings.dividendLength}"]`));
             updateActiveButtonVisuals(remainderTypeSelector, remainderTypeSelector.querySelector(`[data-remainder="${currentSettings.remainderType}"]`));
             updateActiveButtonVisuals(helpLevelSelector, helpLevelSelector.querySelector(`[data-help="${currentSettings.helpLevel}"]`));
@@ -528,7 +896,7 @@
                         firstPartToDivide = parseInt(dividendStr.substring(0,2));
                     }
                     if (firstPartToDivide < task.divisor) { 
-                         if (dividendStr.length === currentSettings.dividendLength) foundSuitableDividend = false; 
+                           if (dividendStr.length === currentSettings.dividendLength) foundSuitableDividend = false; 
                     }
                 }
                 attempts++;
@@ -542,8 +910,8 @@
                 if (task.dividend < minDividend) task.dividend = minDividend + (task.dividend % task.divisor === 0 ? 0 : task.divisor - (task.dividend % task.divisor));
             }
 
-            calculateCorrectSteps();   
-            renderTaskDisplay();       
+            calculateCorrectSteps();    
+            renderTaskDisplay();        
             prepareCurrentStepInputs(); 
             updateTaskInstructions();   
         }
@@ -563,7 +931,7 @@
             
             if (currentDividendPartNum >= task.divisor || task.quotientDigits.length > 0 || i === dividendStr.length - 1) {
                 let quotientDigit = Math.floor(currentDividendPartNum / task.divisor); 
-                let multiplyResult = quotientDigit * task.divisor;                      
+                let multiplyResult = quotientDigit * task.divisor;                     
                 let subtractResult = currentDividendPartNum - multiplyResult;          
 
                 task.quotientDigits.push(quotientDigit); 
@@ -668,26 +1036,6 @@
                     if (!alignToDividendCell) return;
                     const targetAlignColumn = parseInt(alignToDividendCell.dataset.gridColumnActual);
 
-                    // Szorzás eredményének input mezői
-					/*
-                    currentRowDynamic++;
-                    const multiplyResultStr = String(step.multiplyResult);
-                    const multiplyActualStartCol = targetAlignColumn - multiplyResultStr.length + 1;
-                    
-                    const opSymbolMultiplyCell = createGridCell('-', currentRowDynamic, multiplyActualStartCol -1, ['op-symbol']);
-                    opSymbolMultiplyCell.classList.add(`multiply-result-bg-${colorIndex}`);
-                    mainDivisionGrid.appendChild(opSymbolMultiplyCell);
-
-                    for (let i = 0; i < multiplyResultStr.length; i++) {
-                        const inputId = `m-${stepIdx}-${i}`;
-                        const input = createStyledInput(false, inputId, 'multiply'); 
-                        const cell = createGridCell(null, currentRowDynamic, multiplyActualStartCol + i, ['cell-with-line-below']);
-                        cell.classList.add(`multiply-result-bg-${colorIndex}`);
-                        cell.appendChild(input);
-                        mainDivisionGrid.appendChild(cell);
-                    }
-					*/
-
                     // Kivonás eredményének (részmaradék) input mezői
                     currentRowDynamic++;
                     const subtractResultStr = String(step.subtractResult);
@@ -721,7 +1069,7 @@
                     remainderInputContainer.appendChild(input);
                 }
             } else { // Lépésenkénti vagy vezetett mód: a maradék csak egy span
-                 document.getElementById('finalRemainderArea').innerHTML = 'Maradék: <span id="finalRemainderValueInputContainer">-</span>';
+                document.getElementById('finalRemainderArea').innerHTML = 'Maradék: <span id="finalRemainderValueInputContainer">-</span>';
             }
         }
         
@@ -801,8 +1149,8 @@
                             targetInput = document.getElementById(`m-${stepIndex}-${currentDigitIndex + 1}`);
                         } else { // Szorzás utolsó számjegye után
                             targetInput = document.getElementById(`s-${stepIndex}-0`) || // Kivonás első számjegye
-                                         (task.steps[stepIndex].nextDigitToBringDown !== null ? document.getElementById(`bd-${stepIndex}`) : null) || // Vagy lehozott számjegy
-                                         (stepIndex + 1 < task.steps.length ? document.getElementById(`q-${stepIndex + 1}`) : document.getElementById('final-remainder-input')); // Vagy következő hányados, vagy végső maradék
+                                           (task.steps[stepIndex].nextDigitToBringDown !== null ? document.getElementById(`bd-${stepIndex}`) : null) || // Vagy lehozott számjegy
+                                           (stepIndex + 1 < task.steps.length ? document.getElementById(`q-${stepIndex + 1}`) : document.getElementById('final-remainder-input')); // Vagy következő hányados, vagy végső maradék
                         }
                     } else if (type === 's') { // Kivonás
                         const subtractResultStr = String(task.steps[stepIndex].subtractResult);
@@ -818,11 +1166,11 @@
                             }
                         }
                     } else if (type === 'bd') { // Lehozott számjegy után
-                         if (stepIndex + 1 < task.steps.length) { // Van következő lépés
-                            targetInput = document.getElementById(`q-${stepIndex + 1}`); // Következő hányados
-                        } else {
-                            targetInput = document.getElementById('final-remainder-input'); // Végső maradék
-                        }
+                           if (stepIndex + 1 < task.steps.length) { // Van következő lépés
+                                targetInput = document.getElementById(`q-${stepIndex + 1}`); // Következő hányados
+                            } else {
+                                targetInput = document.getElementById('final-remainder-input'); // Végső maradék
+                            }
                     }
                 } else { // Lépésenkénti mód
                      if (type === 'm') {
@@ -1010,7 +1358,7 @@
                     updateOperandHighlights();
                     updateTaskInstructions();
                     return;
-                 } 
+                } 
             } else if (currentStepIndex >= task.steps.length) { 
                 checkStepButton.textContent = "Új feladat";
                  if (currentSettings.helpLevel !== 'independent') {
@@ -1141,7 +1489,7 @@
                             console.error("Parent cell not found for multiply input:", inputId);
                         }
                         existingInput.disabled = (currentSettings.helpLevel === 'guided');
-                        if (i === 0 && currentSettings.helpLevel !== 'guided' && !existingInput.disabled) {
+                         if (i === 0 && currentSettings.helpLevel !== 'guided' && !existingInput.disabled) {
                            try { existingInput.focus(); } catch (e) {}
                         }
                     }
@@ -1387,12 +1735,12 @@
                              const subtractResultStr = String(task.steps[currentStepIndex].subtractResult); 
                              const alignToDividendCell = mainDivisionGrid.querySelector(`.grid-cell.dividend-digit[data-original-dividend-index="${task.steps[currentStepIndex].baseDigitIndexOfOriginalPartEnd}"]`);
                              if (alignToDividendCell) {
-                                const targetAlignColumn = parseInt(alignToDividendCell.dataset.gridColumnActual);
-                                const subtractActualStartCol = targetAlignColumn - subtractResultStr.length + 1;
-                                const broughtDownCell = mainDivisionGrid.querySelector(`.grid-cell.brought-down-digit-cell[data-step-context="${currentStepIndex}"]`);
-                                if (broughtDownCell) {
-                                     broughtDownCell.innerHTML = currentStepData.nextDigitToBringDown; 
-                                }
+                                 const targetAlignColumn = parseInt(alignToDividendCell.dataset.gridColumnActual);
+                                 const subtractActualStartCol = targetAlignColumn - subtractResultStr.length + 1;
+                                 const broughtDownCell = mainDivisionGrid.querySelector(`.grid-cell.brought-down-digit-cell[data-step-context="${currentStepIndex}"]`);
+                                 if (broughtDownCell) {
+                                      broughtDownCell.innerHTML = currentStepData.nextDigitToBringDown; 
+                                 }
                              }
                         }
                         handleStepCompletion();     
@@ -1400,7 +1748,7 @@
                          if (currentStepData.nextDigitToBringDown !== null) {
                              const broughtDownCell = mainDivisionGrid.querySelector(`.grid-cell.brought-down-digit-cell[data-step-context="${currentStepIndex}"]`);
                              if (broughtDownCell) {
-                                 broughtDownCell.innerHTML = currentStepData.nextDigitToBringDown; 
+                                  broughtDownCell.innerHTML = currentStepData.nextDigitToBringDown; 
                              }
                         }
                         handleStepCompletion();
@@ -1510,10 +1858,7 @@
 
         // On page load
         document.addEventListener('DOMContentLoaded', () => {
-            applyTheme(); 
-            updateActiveButtonVisuals(dividendLengthSelector, dividendLengthSelector.querySelector(`[data-length="${currentSettings.dividendLength}"]`));
-            updateActiveButtonVisuals(remainderTypeSelector, remainderTypeSelector.querySelector(`[data-remainder="${currentSettings.remainderType}"]`));
-            updateActiveButtonVisuals(helpLevelSelector, helpLevelSelector.querySelector(`[data-help="${currentSettings.helpLevel}"]`));
+            applyTheme(currentSettings.theme); 
             generateNewTask();
         });
 
