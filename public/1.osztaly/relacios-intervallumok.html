@@ -775,58 +775,68 @@
                     }
                 }
             });
+            // Remove duplicates and sort for consistent comparison
             userEnteredSolutions = [...new Set(userEnteredSolutions)].sort((a, b) => a - b);
 
-            let allVarValuesCorrect = true; // Renamed for clarity
+
+            let allVarValuesCorrectBasedOnUserCalc = true;
             let hasVarValues = userEnteredSolutions.length > 0;
             let varFeedbackMessages = [];
             
-            let correctSolutionsSet = [];
-            if (taskIndex === 0) { 
+            // Determine the set of correct solutions based on user's calculated expression results
+            let correctSolutionsSetBasedOnUserCalc = [];
+            if (taskIndex === 0) { // X: userRes1 < X < userRes2
                 for (let i = userRes1 + 1; i < userRes2; i++) {
-                    correctSolutionsSet.push(i);
+                    correctSolutionsSetBasedOnUserCalc.push(i);
                 }
-            } else if (taskIndex === 1) { 
+            } else if (taskIndex === 1) { // Y: userRes1 > Y > userRes2
                 for (let i = userRes2 + 1; i < userRes1; i++) {
-                    correctSolutionsSet.push(i);
+                    correctSolutionsSetBasedOnUserCalc.push(i);
                 }
             }
+            // For tasks Z and W, we check each entered value individually, not a full set match.
 
-            if (taskIndex === 0 || taskIndex === 1) { 
-                if (!hasVarValues && correctSolutionsSet.length > 0) {
-                    allVarValuesCorrect = false;
-                    varFeedbackMessages.push(`<li>Nem adtál meg ${currentTask.variableName} értéket.</li>`);
-                } else if (hasVarValues || correctSolutionsSet.length === 0) { 
-                    if (userEnteredSolutions.length !== correctSolutionsSet.length) {
-                        allVarValuesCorrect = false;
+            if (taskIndex === 0 || taskIndex === 1) { // Strict checking for X and Y
+                if (!hasVarValues && correctSolutionsSetBasedOnUserCalc.length > 0) {
+                    allVarValuesCorrectBasedOnUserCalc = false;
+                    varFeedbackMessages.push(`<li>Nem adtál meg ${currentTask.variableName} értéket, pedig lettek volna megoldások.</li>`);
+                } else if (hasVarValues || correctSolutionsSetBasedOnUserCalc.length === 0) { // Only proceed if user entered something or if no solutions were expected
+                    // Compare user's solutions with the correct set
+                    if (userEnteredSolutions.length !== correctSolutionsSetBasedOnUserCalc.length) {
+                        allVarValuesCorrectBasedOnUserCalc = false;
                     } else {
                         for (let i = 0; i < userEnteredSolutions.length; i++) {
-                            if (userEnteredSolutions[i] !== correctSolutionsSet[i]) {
-                                allVarValuesCorrect = false;
+                            if (userEnteredSolutions[i] !== correctSolutionsSetBasedOnUserCalc[i]) {
+                                allVarValuesCorrectBasedOnUserCalc = false;
                                 break;
                             }
                         }
                     }
                 }
 
-                if (allVarValuesCorrect && (hasVarValues || correctSolutionsSet.length === 0) ) { // Also correct if no values entered and none expected
-                     varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek (${userEnteredSolutions.join(', ') || 'nincs'}) mind helyesek.</li>`);
+
+                if (allVarValuesCorrectBasedOnUserCalc && hasVarValues) {
+                     varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek (${userEnteredSolutions.join(', ')}) mind helyesek a te számításaid alapján.</li>`);
                      varValueInputs.forEach(inputEl => { if(inputEl.value.trim() !== '') inputEl.style.borderColor = 'green';});
                 } else if (hasVarValues) {
-                    varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek nem tökéletesek.</li>`);
-                    varFeedbackMessages.push(`<li>A(z) ${userRes1} és ${userRes2} határok alapján a helyes ${currentTask.variableName} értékek: ${correctSolutionsSet.length > 0 ? correctSolutionsSet.join(', ') : 'nincs megoldás'}.</li>`);
+                    varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek nem mind tökéletesek a te számításaid alapján.</li>`);
+                    varFeedbackMessages.push(`<li>A helyes ${currentTask.variableName} értékek a te számításaid (${userRes1} és ${userRes2}) alapján: ${correctSolutionsSetBasedOnUserCalc.length > 0 ? correctSolutionsSetBasedOnUserCalc.join(', ') : 'nincs megoldás'}.</li>`);
+                    // Mark individual inputs based on whether they are in the correct set
                      varValueInputs.forEach(inputEl => {
                         if (inputEl.value.trim() !== '') {
                             const val = parseInt(inputEl.value);
-                            if (correctSolutionsSet.includes(val) && userEnteredSolutions.length === correctSolutionsSet.length && userEnteredSolutions.every((v,i) => v === correctSolutionsSet[i])) {
+                            if (correctSolutionsSetBasedOnUserCalc.includes(val) && userEnteredSolutions.length === correctSolutionsSetBasedOnUserCalc.length && userEnteredSolutions.every((v,i) => v === correctSolutionsSetBasedOnUserCalc[i])) { // Extra check for full set match
                                 inputEl.style.borderColor = 'green';
                             } else {
                                 inputEl.style.borderColor = 'red';
                             }
                         }
                     });
-                } else if (!hasVarValues && correctSolutionsSet.length > 0) {
-                     varFeedbackMessages.push(`<li>A(z) ${userRes1} és ${userRes2} határok alapján a helyes ${currentTask.variableName} értékek: ${correctSolutionsSet.join(', ')}.</li>`);
+                } else if (!hasVarValues && correctSolutionsSetBasedOnUserCalc.length > 0) {
+                     varFeedbackMessages.push(`<li>A helyes ${currentTask.variableName} értékek a te számításaid (${userRes1} és ${userRes2}) alapján: ${correctSolutionsSetBasedOnUserCalc.join(', ')}.</li>`);
+                } else if (!hasVarValues && correctSolutionsSetBasedOnUserCalc.length === 0){
+                     varFeedbackMessages.push(`<li>Helyes, nincsenek ${currentTask.variableName} értékek a te számításaid alapján.</li>`);
+                     allVarValuesCorrectBasedOnUserCalc = true; // No values entered, none expected = correct
                 }
 
 
@@ -835,12 +845,12 @@
                     inputEl.style.borderColor = ''; 
                     if (inputEl.value.trim() === '') return; 
                     
-                    hasVarValues = true; // Set here as well for Z and W
+                    hasVarValues = true;
                     const varValue = parseInt(inputEl.value);
                     if (isNaN(varValue)) {
                         varFeedbackMessages.push(`<li>Egyik ${currentTask.variableName} érték érvénytelen.</li>`);
                         inputEl.style.borderColor = 'red';
-                        allVarValuesCorrect = false;
+                        allVarValuesCorrectBasedOnUserCalc = false;
                         return;
                     }
 
@@ -848,17 +858,17 @@
                     let cond2Met = evaluateSingleCondition(varValue, currentTask.relation2, userRes2);
 
                     if (cond1Met && cond2Met) {
-                        varFeedbackMessages.push(`<li>${currentTask.variableName} = ${varValue}: Helyes.</li>`);
+                        varFeedbackMessages.push(`<li>${currentTask.variableName} = ${varValue}: Helyes a te számításaid alapján.</li>`);
                         inputEl.style.borderColor = 'green';
                     } else {
-                        varFeedbackMessages.push(`<li>${currentTask.variableName} = ${varValue}: Helytelen.</li>`);
+                        varFeedbackMessages.push(`<li>${currentTask.variableName} = ${varValue}: Helytelen a te számításaid alapján.</li>`);
                         inputEl.style.borderColor = 'red';
-                        allVarValuesCorrect = false;
+                        allVarValuesCorrectBasedOnUserCalc = false;
                     }
                 });
-                 if (!hasVarValues) { // If no values entered for Z or W
+                 if (!hasVarValues) {
                      feedbackMessages.push(`<li>Nem adtál meg ${currentTask.variableName} értéket.</li>`);
-                     allVarValuesCorrect = false; 
+                     allVarValuesCorrectBasedOnUserCalc = false; 
                  }
             }
 
@@ -868,31 +878,29 @@
                  feedbackMessages.push(`<ul>${varFeedbackMessages.join('')}</ul>`);
             }
             
-            // Final overall feedback
-            if (allCalculationsCorrect && allVarValuesCorrect && hasVarValues) {
+            if (allCalculationsCorrect && allVarValuesCorrectBasedOnUserCalc && hasVarValues) {
                 feedbackEl.classList.add('correct');
                 feedbackMessages.unshift('<li>Minden helyes! Ügyes vagy!</li>');
-            } else if (allCalculationsCorrect && (taskIndex === 0 || taskIndex === 1) && !hasVarValues && correctSolutionsSet.length === 0) {
-                // Special case for X, Y: if no values were expected and none were given, it's correct.
-                feedbackEl.classList.add('correct');
-                feedbackMessages.unshift('<li>Minden helyes! Ügyes vagy! (Nem voltak ${currentTask.variableName} értékek, és te sem adtál meg.)</li>');
+            } else if (allCalculationsCorrect && taskIndex >=2 && !hasVarValues) { // For Z, W if no values are entered, it's incorrect
+                feedbackEl.classList.add('incorrect');
             }
             else {
                 feedbackEl.classList.add('incorrect');
                 if (!allCalculationsCorrect) {
-                    let trueCorrectSolutionsGlobal = [];
-                    if (taskIndex === 0) { 
+                     // Determine correct solutions with TRUE expression results for user info
+                    let trueCorrectSolutions = [];
+                    if (taskIndex === 0) { // X: trueRes1 < X < trueRes2
                         for (let i = currentTask.expr1.trueResult + 1; i < currentTask.expr2.trueResult; i++) {
-                            trueCorrectSolutionsGlobal.push(i);
+                            trueCorrectSolutions.push(i);
                         }
-                    } else if (taskIndex === 1) { 
+                    } else if (taskIndex === 1) { // Y: trueRes1 > Y > trueRes2
                         for (let i = currentTask.expr2.trueResult + 1; i < currentTask.expr1.trueResult; i++) {
-                            trueCorrectSolutionsGlobal.push(i);
+                            trueCorrectSolutions.push(i);
                         }
                     }
-                    if (taskIndex <= 1 && trueCorrectSolutionsGlobal.length > 0) {
-                        feedbackMessages.push(`<li>A helyes kifejezés eredményekkel (${currentTask.expr1.trueResult} és ${currentTask.expr2.trueResult}) a ${currentTask.variableName} helyes értékei a következők lettek volna: ${trueCorrectSolutionsGlobal.join(', ')}.</li>`);
-                    } else if (taskIndex <= 1 && trueCorrectSolutionsGlobal.length === 0) {
+                    if (taskIndex <= 1 && trueCorrectSolutions.length > 0) {
+                        feedbackMessages.push(`<li>A helyes kifejezés eredményekkel (${currentTask.expr1.trueResult} és ${currentTask.expr2.trueResult}) a ${currentTask.variableName} helyes értékei a következők lettek volna: ${trueCorrectSolutions.join(', ')}.</li>`);
+                    } else if (taskIndex <= 1 && trueCorrectSolutions.length === 0) {
                          feedbackMessages.push(`<li>A helyes kifejezés eredményekkel (${currentTask.expr1.trueResult} és ${currentTask.expr2.trueResult}) nem lett volna megoldása a ${currentTask.variableName} változónak.</li>`);
                     }
                 }
