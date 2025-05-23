@@ -288,15 +288,14 @@
         .number-line-relational .interval-endpoint.closed.secondary { 
             fill: var(--numberline-interval-secondary-color, darkorange);
         }
-        .number-line-relational .arrow-head polygon { 
+        .number-line-relational .arrow-head polygon { /* General style for interval arrowheads */
             stroke: none; 
-            fill: var(--numberline-axis-color, #333); 
         }
         .number-line-relational .arrow-head.primary polygon {
-             fill: var(--numberline-axis-color, #333); 
+             fill: var(--numberline-interval-color, blue); /* Use interval color for primary interval arrows */
         }
          .number-line-relational .arrow-head.secondary polygon {
-             fill: var(--numberline-axis-color, #333); 
+             fill: var(--numberline-interval-secondary-color, darkorange); /* Use secondary interval color */
         }
         .number-line-relational .value-label {
             fill: var(--numberline-text-color, #333);
@@ -886,7 +885,7 @@
                 marker.setAttribute('refY', intervalArrowHeadSize);   
                 marker.setAttribute('markerWidth', intervalArrowHeadSize); 
                 marker.setAttribute('markerHeight', intervalArrowHeadSize); 
-                marker.setAttribute('orient', "auto-start-reverse"); // Key change for correct arrow direction
+                marker.setAttribute('orient', "auto-start-reverse");
                 const path = document.createElementNS(SVG_NS, 'path');
                 path.setAttribute('d', `M 0 0 L ${intervalArrowHeadSize*2} ${intervalArrowHeadSize} L 0 ${intervalArrowHeadSize*2} z`); 
                 path.classList.add('arrow-head', typeClass); 
@@ -960,17 +959,17 @@
                 intervalLine.setAttribute('y2', yPos);
                 intervalLine.classList.add('interval-line', typeClass);
 
-                if (relationIsLess) { // VAR < boundaryValue. Ray from boundaryValue to the left.
+                if (relationIsLess) { 
                     if (boundaryValue <= 0) return; 
-                    lineX1 = padding; // Line starts at the left edge
-                    lineX2 = endpointX; // Line ends at the boundary value
+                    lineX1 = padding; 
+                    lineX2 = endpointX; 
                     intervalLine.setAttribute('x1', lineX1);
                     intervalLine.setAttribute('x2', lineX2);
                     intervalLine.setAttribute('marker-start', `url(#${markerId})`);
-                } else { // VAR > boundaryValue. Ray from boundaryValue to the right.
+                } else { 
                     if (boundaryValue >= currentNumberRangeMax) return; 
-                    lineX1 = endpointX; // Line starts at the boundary value
-                    lineX2 = viewBoxWidth - padding; // Line ends at the right edge
+                    lineX1 = endpointX; 
+                    lineX2 = viewBoxWidth - padding; 
                     intervalLine.setAttribute('x1', lineX1);
                     intervalLine.setAttribute('x2', lineX2);
                     intervalLine.setAttribute('marker-end', `url(#${markerId})`);
