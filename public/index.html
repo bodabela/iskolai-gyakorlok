@@ -39,8 +39,6 @@
         .section-toggle-button svg.chevron-icon { /* Specific class for the chevron */
             transition: transform 0.3s ease;
         }
-        /* No need for the .section-content.hidden + .section-toggle-button svg rule, 
-           JS will directly toggle the rotate class on the chevron */
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 font-inter min-h-screen flex flex-col items-center p-4 sm:p-8 text-gray-800">
@@ -155,6 +153,49 @@
                         </div>
                         <h3 class="text-lg font-semibold text-gray-700 group-hover:text-orange-600 transition-colors">Írásbeli osztás</h3>
                     </a>
+                    
+                    <a href="/3.osztaly/tortek-sorba-rendezese.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
+                        <div class="task-card-icon w-28 h-28 mb-4 text-cyan-500 group-hover:text-cyan-600 transition-colors flex items-center justify-center"> 
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <style>
+                                        .icon-frac-outline { stroke: currentColor; stroke-width: 2.5px; fill: none; }
+                                        .icon-frac-division { stroke: currentColor; stroke-width: 1.5px; }
+                                        .icon-frac-fill { fill: currentColor; }
+                                        .icon-frac-text { font-family: Inter, sans-serif; font-size: 12px; fill: currentColor; text-anchor: middle; font-weight:normal; }
+                                        .icon-arrow-line { stroke: currentColor; stroke-width: 3px;}
+                                        .icon-arrow-head { stroke: currentColor; stroke-width: 3px; fill:none;}
+                                        .icon-main-text { font-family: Inter, sans-serif; font-size: 13px; font-weight: bold; fill: currentColor; text-anchor: middle; }
+                                    </style>
+                                </defs>
+                            
+                                <g transform="translate(28, 35)"> <circle r="15" class="icon-frac-outline"/>
+                                    <line x1="0" y1="0" x2="0" y2="-15" class="icon-frac-division"/>
+                                    <line x1="0" y1="0" x2="10.606" y2="-10.606" class="icon-frac-division"/> <line x1="0" y1="0" x2="15" y2="0" class="icon-frac-division"/> <line x1="0" y1="0" x2="10.606" y2="10.606" class="icon-frac-division"/> <line x1="0" y1="0" x2="0" y2="15" class="icon-frac-division"/> <line x1="0" y1="0" x2="-10.606" y2="10.606" class="icon-frac-division"/> <line x1="0" y1="0" x2="-15" y2="0" class="icon-frac-division"/> <line x1="0" y1="0" x2="-10.606" y2="-10.606" class="icon-frac-division"/> <path d="M 0,0 L 0,-15 A 15,15 0 0,1 10.606,-10.606 Z" class="icon-frac-fill" opacity="0.5"/>
+                                    <text y="28" class="icon-frac-text">1/8</text>
+                                </g>
+                            
+                                <g transform="translate(72, 35)"> <circle r="15" class="icon-frac-outline"/>
+                                     <line x1="0" y1="0" x2="0" y2="-15" class="icon-frac-division"/>
+                                    <line x1="0" y1="0" x2="10.606" y2="-10.606" class="icon-frac-division"/>
+                                    <line x1="0" y1="0" x2="15" y2="0" class="icon-frac-division"/>
+                                    <line x1="0" y1="0" x2="10.606" y2="10.606" class="icon-frac-division"/>
+                                    <line x1="0" y1="0" x2="0" y2="15" class="icon-frac-division"/>
+                                    <line x1="0" y1="0" x2="-10.606" y2="10.606" class="icon-frac-division"/>
+                                    <line x1="0" y1="0" x2="-15" y2="0" class="icon-frac-division"/>
+                                    <line x1="0" y1="0" x2="-10.606" y2="-10.606" class="icon-frac-division"/>
+                                    <path d="M 0,0 L 0,-15 A 15,15 0 0,1 10.606,10.606 Z" class="icon-frac-fill" opacity="0.7"/>
+                                    <text y="28" class="icon-frac-text">3/8</text>
+                                </g>
+                                
+                                <line x1="20" y1="75" x2="80" y2="75" class="icon-arrow-line" />
+                                <polyline points="72,70 80,75 72,80" class="icon-arrow-head" />
+                                <text x="50" y="92" class="icon-main-text">Sorrend</text>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-cyan-600 transition-colors">Törtek sorba rendezése</h3>
+                    </a>
+
                 </div>
             </section>
         </main>
@@ -167,14 +208,13 @@
         toggleButtons.forEach(button => {
             const targetId = button.dataset.target;
             const targetContent = document.getElementById(targetId);
-            const chevron = button.querySelector('svg.chevron-icon'); // More specific selector for chevron
+            const chevron = button.querySelector('svg.chevron-icon'); 
 
-            // Start with sections closed
-            if (targetContent) { // Check if targetContent exists
+            if (targetContent) { 
                 targetContent.classList.add('hidden');
             }
-            if (chevron) { // Check if chevron exists
-                 chevron.classList.add('rotate-[-90deg]'); // Pointing right/up for closed state
+            if (chevron) { 
+                 chevron.classList.add('rotate-[-90deg]'); 
             }
 
 

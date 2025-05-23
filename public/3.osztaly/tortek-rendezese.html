@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Törtek Sorba Rendezése - Gyakorló</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            gap: 15px; 
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+        }
+        
+        .control-group { 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px; 
+            width: 100%;
+        }
+
+        .theme-selector, .subtype-selector { 
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 0; 
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+
+        .theme-button, .subtype-button { 
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-button:hover, .subtype-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .theme-button.active, .subtype-button.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
+            transform: translateY(1px);
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em);
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em);
+            margin-bottom: 25px;
+        }
+        .task {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: clamp(1.1em, 3.5vw, 1.3em);
+            transition: color 0.5s ease;
+        }
+        .new-task-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .task p.instructions {
+            line-height: 1.6;
+            font-size: clamp(1em, 3vw, 1.1em);
+            margin-bottom: 15px;
+            transition: color 0.5s ease;
+        }
+
+        .fraction-display-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 20px;
+            min-height: 120px;
+        }
+        .fraction-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .fraction-item svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 5px;
+        }
+        .fraction-item .fraction-label {
+            font-size: 1em;
+            font-weight: bold;
+            transition: color 0.5s ease;
+        }
+
+        /* SVG Stílusok a Törtekhez */
+        .fraction-circle-base-fill { 
+            fill: var(--fraction-base-fill-color, #fdfdfd);
+            stroke: none;
+        }
+        .fraction-circle-fill { 
+            stroke: none; 
+        }
+        .fraction-division-line { 
+            stroke: var(--fraction-outline-color, #666); /* Ugyanazt a színt és vastagságot használja, mint a körvonal */
+            stroke-width: 1.5; 
+        }
+        .fraction-circle-outline { 
+            fill: none;
+            stroke: var(--fraction-outline-color, #666); 
+            stroke-width: 1.5; 
+        }
+
+
+        .answer-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            font-size: clamp(1.1em, 3.5vw, 1.3em);
+            font-weight: bold;
+            transition: color 0.5s ease;
+        }
+        .answer-area input[type="text"] {
+            width: 60px;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.9em;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            transition: border-color 0.5s ease;
+        }
+
+        button.task-button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em);
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+            min-height: 1.5em;
+            line-height: 1.4;
+        }
+
+        /* --- THEME DEFINITIONS --- */
+        .theme-button, .subtype-button {
+            background-color: #e0e0e0;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+
+        /* 1. Candy Theme (Girlish) */
+        body.theme-candy { 
+            background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;
+            --fraction-base-fill-color: #fffafa;
+            --fraction-outline-color: #8A2BE2; /* Kontrasztos lila */
+        }
+        body.theme-candy .control-label { color: #c71585; }
+        body.theme-candy .theme-button.active, body.theme-candy .subtype-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
+        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
+        body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
+        body.theme-candy .task-header h3 { color: #ff69b4; }
+        body.theme-candy .task p.instructions { color: #8a2be2; }
+        body.theme-candy .fraction-item .fraction-label { color: #9932cc; }
+        body.theme-candy .answer-area { color: #9932cc; }
+        body.theme-candy .answer-area input[type="text"] { border: 2px solid #ffb6c1; }
+        body.theme-candy button.task-button { background-color: #ff69b4; }
+        body.theme-candy button.task-button:hover { background-color: #ff1493; }
+        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border: 1px solid #90ee90; }
+        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border: 1px solid #ffb6c1; }
+        body.theme-candy .fraction-circle-fill { fill: #ff85a2; }
+
+
+        /* 2. Space Theme (Boyish) */
+        body.theme-space { 
+            background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;
+            --fraction-base-fill-color: #1e293b; 
+            --fraction-outline-color: #facc15; /* Kontrasztos sárga */
+        }
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .theme-button.active, body.theme-space .subtype-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
+        body.theme-space .task-header h3 { color: #93c5fd; }
+        body.theme-space .task p.instructions { color: #cbd5e1; }
+        body.theme-space .fraction-item .fraction-label { color: #e2e8f0; }
+        body.theme-space .answer-area { color: #e2e8f0; }
+        body.theme-space .answer-area input[type="text"] { border: 2px solid #475569; background-color: #1e293b; color: #e2e8f0;}
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space button.task-button:hover { background-color: #1d4ed8; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+        body.theme-space .fraction-circle-fill { fill: #3b82f6; }
+
+
+        /* 3. Jungle Theme (Boyish) */
+        body.theme-jungle { 
+            background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;
+            --fraction-base-fill-color: #e8f5e9;
+            --fraction-outline-color: #A0522D; /* Kontrasztos barna (Sienna) */
+        }
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .theme-button.active, body.theme-jungle .subtype-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
+        body.theme-jungle .task-header h3 { color: #558b2f; }
+        body.theme-jungle .task p.instructions { color: #2e7d32; }
+        body.theme-jungle .fraction-item .fraction-label { color: #1b5e20; }
+        body.theme-jungle .answer-area { color: #1b5e20; }
+        body.theme-jungle .answer-area input[type="text"] { border: 2px solid #81c784; }
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle button.task-button:hover { background-color: #689f38; }
+        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-jungle .fraction-circle-fill { fill: #8bc34a; }
+        
+
+        /* 4. Magic Forest Theme (Girlish) */
+        body.theme-magicforest { 
+            background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;
+            --fraction-base-fill-color: #f5f5f5;
+            --fraction-outline-color: #483D8B; /* Kontrasztos sötétlila (DarkSlateBlue) */
+        }
+        body.theme-magicforest .control-label { color: #9932cc; }
+        body.theme-magicforest .theme-button.active, body.theme-magicforest .subtype-button.active { background-color: #9370db; color: #f8f0ff; }
+        body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
+        body.theme-magicforest h1, body.theme-magicforest h2 { color: #8a2be2; }
+        body.theme-magicforest .task { background-color: #f5f5f5; border: 2px dashed #ba55d3; }
+        body.theme-magicforest .task-header h3 { color: #9932cc; }
+        body.theme-magicforest .task p.instructions { color: #4b0082; }
+        body.theme-magicforest .fraction-item .fraction-label { color: #483d8b; }
+        body.theme-magicforest .answer-area { color: #483d8b; }
+        body.theme-magicforest .answer-area input[type="text"] { border: 2px solid #ba55d3; }
+        body.theme-magicforest button.task-button { background-color: #9370db; }
+        body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
+        body.theme-magicforest .fraction-circle-fill { fill: #c9a0dc; }
+
+
+        /* 5. Robo/Tech Theme (Boyish) */
+        body.theme-tech { 
+            background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;
+            --fraction-base-fill-color: #37474f;
+            --fraction-outline-color: #FFAB00; /* Kontrasztos narancs */
+        }
+        body.theme-tech .control-label { color: #26c6da; }
+        body.theme-tech .theme-button.active, body.theme-tech .subtype-button.active { background-color: #00838f; color: #e0f7fa; }
+        body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
+        body.theme-tech h1, body.theme-tech h2 { color: #00acc1; }
+        body.theme-tech .task { background-color: #455a64; border: 2px dashed #78909c; }
+        body.theme-tech .task-header h3 { color: #26c6da; }
+        body.theme-tech .task p.instructions { color: #b0bec5; }
+        body.theme-tech .fraction-item .fraction-label { color: #eceff1; }
+        body.theme-tech .answer-area { color: #eceff1; }
+        body.theme-tech .answer-area input[type="text"] { border: 2px solid #78909c; background-color: #37474f; color: #eceff1; }
+        body.theme-tech button.task-button { background-color: #0097a7; }
+        body.theme-tech button.task-button:hover { background-color: #00838f; }
+        body.theme-tech .fraction-circle-fill { fill: #00bcd4; }
+        
+
+        /* 6. Ocean Theme (Girlish) */
+        body.theme-ocean { 
+            background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;
+            --fraction-base-fill-color: #e0f7fa;
+            --fraction-outline-color: #FF7F50; /* Kontrasztos korall */
+        }
+        body.theme-ocean .control-label { color: #00acc1; }
+        body.theme-ocean .theme-button.active, body.theme-ocean .subtype-button.active { background-color: #4db6ac; color: #e0f2f1; }
+        body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
+        body.theme-ocean h1, body.theme-ocean h2 { color: #00897b; }
+        body.theme-ocean .task { background-color: #e0f7fa; border: 2px dashed #80deea; }
+        body.theme-ocean .task-header h3 { color: #00acc1; }
+        body.theme-ocean .task p.instructions { color: #00695c; }
+        body.theme-ocean .fraction-item .fraction-label { color: #004d40; }
+        body.theme-ocean .answer-area { color: #004d40; }
+        body.theme-ocean .answer-area input[type="text"] { border: 2px solid #80deea; }
+        body.theme-ocean button.task-button { background-color: #26a69a; }
+        body.theme-ocean button.task-button:hover { background-color: #00897b; }
+        body.theme-ocean .fraction-circle-fill { fill: #4dd0e1;}
+        
+
+        /* 7. Sport Theme (Boyish) */
+        body.theme-sport { 
+            background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;
+            --fraction-base-fill-color: #e3f2fd;
+            --fraction-outline-color: #d32f2f; /* Meglévő kontrasztos piros */
+        }
+        body.theme-sport .control-label { color: #1976d2; }
+        body.theme-sport .theme-button.active, body.theme-sport .subtype-button.active { background-color: #1976d2; color: #e3f2fd; }
+        body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
+        body.theme-sport h1, body.theme-sport h2 { color: #d32f2f; }
+        body.theme-sport .task { background-color: #e3f2fd; border: 2px dashed #42a5f5; }
+        body.theme-sport .task-header h3 { color: #1976d2; }
+        body.theme-sport .task p.instructions { color: #0d47a1; }
+        body.theme-sport .fraction-item .fraction-label { color: #01579b; }
+        body.theme-sport .answer-area { color: #01579b; }
+        body.theme-sport .answer-area input[type="text"] { border: 2px solid #42a5f5; }
+        body.theme-sport button.task-button { background-color: #2196f3; }
+        body.theme-sport button.task-button:hover { background-color: #1976d2; }
+        body.theme-sport .fraction-circle-fill { fill: #42a5f5; }
+        
+
+        /* 8. Flower Garden Theme (Girlish) */
+        body.theme-flowergarden { 
+            background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;
+            --fraction-base-fill-color: #fffafa;
+            --fraction-outline-color: #ff6347; /* Meglévő kontrasztos paradicsompiros */
+        }
+        body.theme-flowergarden .control-label { color: #ff7f50; }
+        body.theme-flowergarden .theme-button.active, body.theme-flowergarden .subtype-button.active { background-color: #ffdab9; color: #8b4513; }
+        body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
+        body.theme-flowergarden h1, body.theme-flowergarden h2 { color: #ff6347; }
+        body.theme-flowergarden .task { background-color: #fffafa; border: 2px dashed #ffe4b5; }
+        body.theme-flowergarden .task-header h3 { color: #ff7f50; }
+        body.theme-flowergarden .task p.instructions { color: #8b4513; }
+        body.theme-flowergarden .fraction-item .fraction-label { color: #a0522d; }
+        body.theme-flowergarden .answer-area { color: #a0522d; }
+        body.theme-flowergarden .answer-area input[type="text"] { border: 2px solid #ffdab9; }
+        body.theme-flowergarden button.task-button { background-color: #ffa07a; }
+        body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
+        body.theme-flowergarden .fraction-circle-fill { fill: #ffb380; }
+        
+
+        /* 9. Adventure Theme (Boyish) */
+        body.theme-adventure { 
+            background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;
+            --fraction-base-fill-color: #efebe9;
+            --fraction-outline-color: #5D4037; /* Kontrasztos sötétbarna */
+        }
+        body.theme-adventure .control-label { color: #6d4c41; }
+        body.theme-adventure .theme-button.active, body.theme-adventure .subtype-button.active { background-color: #a1887f; color: #efebe9; }
+        body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
+        body.theme-adventure h1, body.theme-adventure h2 { color: #bf360c; }
+        body.theme-adventure .task { background-color: #d7ccc8; border: 2px dashed #8d6e63; }
+        body.theme-adventure .task-header h3 { color: #6d4c41; }
+        body.theme-adventure .task p.instructions { color: #4e342e; }
+        body.theme-adventure .fraction-item .fraction-label { color: #3e2723; }
+        body.theme-adventure .answer-area { color: #3e2723; }
+        body.theme-adventure .answer-area input[type="text"] { border: 2px solid #8d6e63; }
+        body.theme-adventure button.task-button { background-color: #795548; }
+        body.theme-adventure button.task-button:hover { background-color: #5d4037; }
+        body.theme-adventure .fraction-circle-fill { fill: #bcaaa4; }
+        
+
+        /* 10. Sky Theme (Girlish) */
+        body.theme-sky { 
+            background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;
+            --fraction-base-fill-color: #f5faff;
+            --fraction-outline-color: #4682B4; /* Kontrasztos SteelBlue */
+        }
+        body.theme-sky .control-label { color: #00bfff; }
+        body.theme-sky .theme-button.active, body.theme-sky .subtype-button.active { background-color: #add8e6; color: #005a9c; }
+        body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
+        body.theme-sky h1, body.theme-sky h2 { color: #1e90ff; }
+        body.theme-sky .task { background-color: #f5faff; border: 2px dashed #add8e6; }
+        body.theme-sky .task-header h3 { color: #00bfff; }
+        body.theme-sky .task p.instructions { color: #5f9ea0; }
+        body.theme-sky .fraction-item .fraction-label { color: #4682b4; }
+        body.theme-sky .answer-area { color: #4682b4; }
+        body.theme-sky .answer-area input[type="text"] { border: 2px solid #b0e0e6; }
+        body.theme-sky button.task-button { background-color: #87cefa; }
+        body.theme-sky button.task-button:hover { background-color: #6495ed; }
+        body.theme-sky .fraction-circle-fill { fill: #b0e0e6; }
+        
+    </style>
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="control-group">
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                <button class="theme-button" data-theme="theme-sky">Égbolt</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+        <div class="control-group">
+            <p class="control-label">Feladat Típusa:</p>
+            <div id="subtypeSelectorContainer" class="subtype-selector">
+                <button class="subtype-button" data-subtype="sameDenominator">Azonos Nevezőjű</button>
+                <button class="subtype-button" data-subtype="unitFractions">Egységtörtek</button>
+                <button class="subtype-button active" data-subtype="mixedFractions">Vegyes Törtek</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Törtek Sorba Rendezése</h1>
+        <h2>3. Osztály</h2>
+
+        <div id="taskAscending" class="task">
+            <div class="task-header">
+                <h3>1. Feladat: Növekvő sorrend</h3>
+                <button class="task-button new-task-button" onclick="generateTask('ascending')">Új feladat</button>
+            </div>
+            <p id="instructionsAscending" class="instructions">Figyeld meg a kördiagramokat! Írd a törteket növekvő sorrendbe (a legkisebbtől a legnagyobbig) a megfelelő helyre!</p>
+            <div id="fractionDisplayAscending" class="fraction-display-area">
+                </div>
+            <div class="answer-area">
+                Sorrend:
+                <input type="text" id="asc_ans_1" maxlength="5">
+                <span>&lt;</span>
+                <input type="text" id="asc_ans_2" maxlength="5">
+                <span>&lt;</span>
+                <input type="text" id="asc_ans_3" maxlength="5">
+                <span>&lt;</span>
+                <input type="text" id="asc_ans_4" maxlength="5">
+                <span>&lt;</span>
+                <input type="text" id="asc_ans_5" maxlength="5">
+            </div>
+            <button class="task-button" onclick="checkAnswer('ascending')">Ellenőrzés</button>
+            <p id="feedbackAscending" class="feedback"></p>
+        </div>
+
+        <hr style="margin: 40px 0; border-top: 2px solid #ccc;">
+
+        <div id="taskDescending" class="task">
+            <div class="task-header">
+                <h3>2. Feladat: Csökkenő sorrend</h3>
+                <button class="task-button new-task-button" onclick="generateTask('descending')">Új feladat</button>
+            </div>
+            <p id="instructionsDescending" class="instructions">Figyeld meg a kördiagramokat! Írd a törteket csökkenő sorrendbe (a legnagyobbtól a legkisebbig) a megfelelő helyre!</p>
+            <div id="fractionDisplayDescending" class="fraction-display-area">
+                </div>
+            <div class="answer-area">
+                Sorrend:
+                <input type="text" id="desc_ans_1" maxlength="5">
+                <span>&gt;</span>
+                <input type="text" id="desc_ans_2" maxlength="5">
+                <span>&gt;</span>
+                <input type="text" id="desc_ans_3" maxlength="5">
+                <span>&gt;</span>
+                <input type="text" id="desc_ans_4" maxlength="5">
+                <span>&gt;</span>
+                <input type="text" id="desc_ans_5" maxlength="5">
+            </div>
+            <button class="task-button" onclick="checkAnswer('descending')">Ellenőrzés</button>
+            <p id="feedbackDescending" class="feedback"></p>
+        </div>
+    </div>
+
+    <script>
+        const SVG_NS = "http://www.w3.org/2000/svg";
+        let currentTasksData = {
+            ascending: { fractions: [], solution: [] },
+            descending: { fractions: [], solution: [] }
+        };
+        let currentSelectedFractionSubtype = 'mixedFractions'; // ALAPÉRTELMEZETT: Vegyes Törtek
+
+        const bodyEl = document.body;
+        const themeButtons = document.querySelectorAll('.theme-button');
+        const subtypeButtons = document.querySelectorAll('.subtype-button');
+
+
+        function applyTheme(themeClass) {
+            bodyEl.className = '';
+            bodyEl.classList.add(themeClass);
+            themeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeClass);
+            });
+            subtypeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.subtype === currentSelectedFractionSubtype);
+            });
+        }
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                applyTheme(button.dataset.theme);
+            });
+        });
+
+        subtypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentSelectedFractionSubtype = button.dataset.subtype;
+                subtypeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                generateTask('ascending');
+                generateTask('descending');
+            });
+        });
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateFractionObjects(subType) {
+            let fractions = [];
+            const numFractions = 5;
+            const usedFractionStrings = new Set(); 
+
+            if (subType === 'sameDenominator') {
+                const MIN_NUMERATORS_NEEDED = numFractions;
+                const possibleDenominators = [6, 7, 8, 9, 10, 12]; 
+                let D = possibleDenominators[Math.floor(Math.random() * possibleDenominators.length)];
+                
+                let availableNumerators = [];
+                for (let i = 1; i < D; i++) { 
+                    availableNumerators.push(i);
+                }
+                shuffleArray(availableNumerators);
+
+                for (let i = 0; i < numFractions; i++) {
+                    const N = availableNumerators[i]; 
+                    const newFraction = { numerator: N, denominator: D, stringValue: `${N}/${D}`, numericValue: N / D };
+                    fractions.push(newFraction);
+                }
+            } else { 
+                let attempts = 0;
+                const maxAttempts = 200; 
+
+                while (fractions.length < numFractions && attempts < maxAttempts) {
+                    let N, D, currentFractionString;
+                    if (subType === 'unitFractions') {
+                        const availableDenominators = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                        D = availableDenominators[Math.floor(Math.random() * availableDenominators.length)];
+                        N = 1;
+                        currentFractionString = `1/${D}`;
+                    } else { // mixedFractions
+                        const vegyesDenominators = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12];
+                        D = vegyesDenominators[Math.floor(Math.random() * vegyesDenominators.length)];
+                        N = Math.floor(Math.random() * (D - 1)) + 1; 
+                        currentFractionString = `${N}/${D}`;
+                    }
+
+                    if (!usedFractionStrings.has(currentFractionString)) {
+                        usedFractionStrings.add(currentFractionString);
+                        fractions.push({ numerator: N, denominator: D, stringValue: currentFractionString, numericValue: N / D });
+                    }
+                    attempts++;
+                }
+                
+                while (fractions.length < numFractions) { 
+                    let D_fallback = Math.floor(Math.random() * 10) + 2; 
+                    let N_fallback = (subType === 'unitFractions') ? 1 : Math.floor(Math.random() * (D_fallback -1)) + 1;
+                    let fallbackString = `${N_fallback}/${D_fallback}`;
+                    
+                    let uniqueFallbackAttempts = 0;
+                    while(usedFractionStrings.has(fallbackString) && uniqueFallbackAttempts < 50) {
+                        D_fallback = Math.floor(Math.random() * 10) + 3; 
+                         N_fallback = (subType === 'unitFractions') ? 1 : Math.floor(Math.random() * (D_fallback -1)) + 1;
+                        fallbackString = `${N_fallback}/${D_fallback}`;
+                        uniqueFallbackAttempts++;
+                    }
+                    if(!usedFractionStrings.has(fallbackString)){
+                        usedFractionStrings.add(fallbackString);
+                        fractions.push({numerator: N_fallback, denominator: D_fallback, stringValue: fallbackString, numericValue: N_fallback/D_fallback });
+                    } else { 
+                        const veryUniqueD = 13 + fractions.length + attempts + uniqueFallbackAttempts;
+                        const veryUniqueN = 1;
+                        const veryUniqueString = `${veryUniqueN}/${veryUniqueD}`;
+                        usedFractionStrings.add(veryUniqueString);
+                        fractions.push({numerator: veryUniqueN, denominator: veryUniqueD, stringValue: veryUniqueString, numericValue: veryUniqueN / veryUniqueD});
+                    }
+                }
+            }
+            return fractions.slice(0, numFractions);
+        }
+
+
+        function getArcPath(cx, cy, radius, startAngleRad, endAngleRad) {
+            const startX = cx + radius * Math.cos(startAngleRad);
+            const startY = cy + radius * Math.sin(startAngleRad);
+            const endX = cx + radius * Math.cos(endAngleRad);
+            const endY = cy + radius * Math.sin(endAngleRad);
+            
+            let angleDiff = endAngleRad - startAngleRad;
+            while (angleDiff < 0) angleDiff += 2 * Math.PI;
+            while (angleDiff > 2 * Math.PI) angleDiff -= 2 * Math.PI;
+
+            const largeArcFlag = angleDiff <= Math.PI ? "0" : "1";
+
+            return `M ${cx},${cy} L ${startX},${startY} A ${radius},${radius} 0 ${largeArcFlag} 1 ${endX},${endY} Z`;
+        }
+
+        function drawFractionSVG(fraction, svgSize = 80) {
+            const svg = document.createElementNS(SVG_NS, "svg");
+            svg.setAttribute("viewBox", `0 0 ${svgSize} ${svgSize}`);
+            svg.setAttribute("width", svgSize);
+            svg.setAttribute("height", svgSize);
+
+            const cx = svgSize / 2;
+            const cy = svgSize / 2;
+            const radius = svgSize / 2 - 5;
+
+            const baseFillCircle = document.createElementNS(SVG_NS, "circle");
+            baseFillCircle.setAttribute("cx", cx);
+            baseFillCircle.setAttribute("cy", cy);
+            baseFillCircle.setAttribute("r", radius);
+            baseFillCircle.setAttribute("class", "fraction-circle-base-fill");
+            svg.appendChild(baseFillCircle);
+
+            const D_fill = fraction.denominator;
+            if (fraction.numerator > 0 && D_fill > 0 && Number.isFinite(D_fill)) {
+                const angle = (fraction.numerator / D_fill) * 2 * Math.PI;
+                const fillElement = document.createElementNS(SVG_NS, "path");
+                if (fraction.numerator >= D_fill) { 
+                    fillElement.setAttribute("d", getArcPath(cx, cy, radius, -Math.PI / 2, (2*Math.PI) - (Math.PI/2) - 0.0001 ));
+                } else {
+                    fillElement.setAttribute("d", getArcPath(cx, cy, radius, -Math.PI / 2, angle - Math.PI / 2));
+                }
+                fillElement.setAttribute("class", "fraction-circle-fill");
+                svg.appendChild(fillElement);
+            }
+
+            const D_lines = fraction.denominator;
+            if (D_lines > 1 && Number.isFinite(D_lines)) { 
+                for (let k = 0; k < D_lines; k++) { 
+                    const lineAngle = (k / D_lines) * 2 * Math.PI - (Math.PI / 2);
+                    const x2_line = cx + radius * Math.cos(lineAngle);
+                    const y2_line = cy + radius * Math.sin(lineAngle);
+
+                    const divisionLine = document.createElementNS(SVG_NS, "line");
+                    divisionLine.setAttribute("x1", cx);
+                    divisionLine.setAttribute("y1", cy);
+                    divisionLine.setAttribute("x2", x2_line);
+                    divisionLine.setAttribute("y2", y2_line);
+                    divisionLine.setAttribute("class", "fraction-division-line");
+                    svg.appendChild(divisionLine);
+                }
+            }
+            
+            const outlineCircle = document.createElementNS(SVG_NS, "circle");
+            outlineCircle.setAttribute("cx", cx);
+            outlineCircle.setAttribute("cy", cy);
+            outlineCircle.setAttribute("r", radius);
+            outlineCircle.setAttribute("class", "fraction-circle-outline");
+            svg.appendChild(outlineCircle);
+            
+            return svg;
+        }
+
+
+        function renderTask(taskType) {
+            const taskData = currentTasksData[taskType];
+            const displayAreaId = taskType === 'ascending' ? 'fractionDisplayAscending' : 'fractionDisplayDescending';
+            const displayArea = document.getElementById(displayAreaId);
+            if (!displayArea) {
+                console.error("Display area not found:", displayAreaId);
+                return;
+            }
+            displayArea.innerHTML = '';
+
+            let fractionsToDisplay = [...taskData.fractions];
+            shuffleArray(fractionsToDisplay);
+
+            fractionsToDisplay.forEach(fraction => {
+                const itemDiv = document.createElement('div');
+                itemDiv.classList.add('fraction-item');
+
+                const svgElement = drawFractionSVG(fraction);
+                itemDiv.appendChild(svgElement);
+
+                const label = document.createElement('span');
+                label.classList.add('fraction-label');
+                label.innerHTML = `<sup>${fraction.numerator}</sup>&frasl;<sub>${fraction.denominator}</sub>`;
+                itemDiv.appendChild(label);
+
+                displayArea.appendChild(itemDiv);
+            });
+
+            const prefix = taskType === 'ascending' ? 'asc' : 'desc';
+            for (let i = 1; i <= 5; i++) {
+                const inputEl = document.getElementById(`${prefix}_ans_${i}`);
+                if (inputEl) {
+                    inputEl.value = '';
+                }
+            }
+            const feedbackEl = document.getElementById(`feedback${taskType.charAt(0).toUpperCase() + taskType.slice(1)}`);
+            if(feedbackEl){
+                feedbackEl.textContent = '';
+                feedbackEl.className = 'feedback';
+            }
+        }
+
+        function generateTask(taskType) {
+            const currentTaskConfig = currentTasksData[taskType];
+            
+            currentTaskConfig.fractions = generateFractionObjects(currentSelectedFractionSubtype);
+            
+            let sortedFractions = [...currentTaskConfig.fractions].sort((a, b) => {
+                if (a.numericValue === b.numericValue) return 0; 
+                return taskType === 'ascending' ? a.numericValue - b.numericValue : b.numericValue - a.numericValue;
+            });
+            currentTaskConfig.solution = sortedFractions.map(f => f.stringValue);
+
+            renderTask(taskType);
+            const instructionsElId = taskType === 'ascending' ? 'instructionsAscending' : 'instructionsDescending';
+            const instructionsEl = document.getElementById(instructionsElId);
+            if(instructionsEl) {
+                let subTypeInstructionText = "";
+                switch(currentSelectedFractionSubtype) {
+                    case 'sameDenominator':
+                        subTypeInstructionText = "azonos nevezőjű törteket";
+                        break;
+                    case 'unitFractions':
+                        subTypeInstructionText = "egységtörteket";
+                        break;
+                    case 'mixedFractions':
+                        subTypeInstructionText = "vegyes törteket";
+                        break;
+                    default:
+                        subTypeInstructionText = "törteket";
+                }
+                const orderText = taskType === 'ascending' ? "növekvő sorrendbe (a legkisebbtől a legnagyobbig)" : "csökkenő sorrendbe (a legnagyobbtól a legkisebbig)";
+                instructionsEl.textContent = `Figyeld meg a kördiagramokat! Írd ${subTypeInstructionText} ${orderText} a megfelelő helyre!`;
+            }
+        }
+
+        function checkAnswer(taskType) {
+            const userAnswers = [];
+            const prefix = taskType === 'ascending' ? 'asc' : 'desc';
+            let allInputsFound = true;
+
+            for (let i = 1; i <= 5; i++) {
+                const inputEl = document.getElementById(`${prefix}_ans_${i}`);
+                if (inputEl) {
+                    userAnswers.push(inputEl.value.trim().replace(/\s/g, ''));
+                } else {
+                    allInputsFound = false;
+                    break;
+                }
+            }
+
+            if (!allInputsFound) {
+                const feedbackEl = document.getElementById(`feedback${taskType.charAt(0).toUpperCase() + taskType.slice(1)}`);
+                if (feedbackEl) {
+                    feedbackEl.textContent = 'Hiba történt az ellenőrzés során (input mező nem található).';
+                    feedbackEl.className = 'feedback incorrect';
+                }
+                return;
+            }
+
+            const solution = currentTasksData[taskType].solution;
+            let isCorrect = true;
+            if (userAnswers.length !== solution.length || solution.length === 0) { 
+                isCorrect = false;
+            } else {
+                for (let i = 0; i < solution.length; i++) {
+                    if (userAnswers[i] !== solution[i]) {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+            }
+
+            const feedbackEl = document.getElementById(`feedback${taskType.charAt(0).toUpperCase() + taskType.slice(1)}`);
+            if (isCorrect) {
+                feedbackEl.textContent = 'Helyes! Ügyes vagy! ✨';
+                feedbackEl.className = 'feedback correct';
+            } else {
+                const missingInputs = userAnswers.some(ans => ans === "");
+                if (solution.length === 0) {
+                     feedbackEl.textContent = 'Hiba történt a feladat generálásakor. Kérlek, kattints az "Új feladat" gombra. 🔄';
+                } else if (missingInputs) {
+                    feedbackEl.textContent = 'Nem adtál meg minden értéket a sorrendhez. Kérlek, pótold a hiányzó törteket! ✏️';
+                } else {
+                    feedbackEl.textContent = 'Nem jó a sorrend. Próbáld újra! 🤔';
+                }
+                feedbackEl.className = 'feedback incorrect';
+            }
+            clearFeedback(feedbackEl);
+        }
+
+        function clearFeedback(feedbackEl) {
+            setTimeout(() => {
+                if (feedbackEl) {
+                    feedbackEl.textContent = '';
+                    feedbackEl.className = 'feedback';
+                }
+            }, 10000);
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Az alapértelmezett feladattípus beállítása és a gombok frissítése
+            const defaultSubtype = 'mixedFractions';
+            currentSelectedFractionSubtype = defaultSubtype;
+            subtypeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.subtype === defaultSubtype);
+            });
+            
+            applyTheme('theme-candy'); // Alkalmazza az alapértelmezett témát és frissíti a gombokat
+            generateTask('ascending');
+            generateTask('descending');
+        });
+    </script>
+</body>
+</html>
