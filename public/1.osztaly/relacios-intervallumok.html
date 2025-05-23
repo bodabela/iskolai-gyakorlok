@@ -288,14 +288,14 @@
         .number-line-relational .interval-endpoint.closed.secondary { 
             fill: var(--numberline-interval-secondary-color, darkorange);
         }
-        .number-line-relational .arrow-head polygon { /* General style for interval arrowheads */
+        .number-line-relational path.arrow-head { 
             stroke: none; 
         }
-        .number-line-relational .arrow-head.primary polygon {
-             fill: var(--numberline-interval-color, blue); /* Use interval color for primary interval arrows */
+        .number-line-relational path.arrow-head.primary {
+             fill: var(--numberline-arrowhead-fill-primary, var(--numberline-axis-color, #333)); 
         }
-         .number-line-relational .arrow-head.secondary polygon {
-             fill: var(--numberline-interval-secondary-color, darkorange); /* Use secondary interval color */
+         .number-line-relational path.arrow-head.secondary {
+             fill: var(--numberline-arrowhead-fill-secondary, var(--numberline-axis-color, #333)); 
         }
         .number-line-relational .value-label {
             fill: var(--numberline-text-color, #333);
@@ -316,6 +316,8 @@
             --numberline-axis-color: #E089B5; --numberline-tick-color: #F0A8CE; --numberline-text-color: #8a2be2;
             --numberline-interval-color: #ff69b4; --numberline-endpoint-open-fill: #fff0f5;
             --numberline-interval-secondary-color: #da70d6; 
+            --numberline-arrowhead-fill-primary: #c71585; /* Kontrasztosabb rózsaszín */
+            --numberline-arrowhead-fill-secondary: #9932cc; /* Sötétebb lila */
         }
         body.theme-candy .control-label { color: #c71585; }
         body.theme-candy .theme-button.active, body.theme-candy .range-button.active { background-color: #ffb6c1; color: #7c3c60; }
@@ -337,6 +339,8 @@
             --numberline-axis-color: #60a5fa; --numberline-tick-color: #475569; --numberline-text-color: #e2e8f0;
             --numberline-interval-color: #facc15; --numberline-endpoint-open-fill: #0f172a; 
             --numberline-interval-secondary-color: #fb923c;
+            --numberline-arrowhead-fill-primary: #93c5fd; /* Világoskék */
+            --numberline-arrowhead-fill-secondary: #fde047; /* Világosabb sárga */
         }
         body.theme-space .control-label { color: #93c5fd; }
         body.theme-space .theme-button.active, body.theme-space .range-button.active { background-color: #1e3a8a; color: #93c5fd; }
@@ -357,6 +361,8 @@
             --numberline-axis-color: #558b2f; --numberline-tick-color: #81c784; --numberline-text-color: #1b5e20;
             --numberline-interval-color: #ff8f00; --numberline-endpoint-open-fill: #f0fff0;
             --numberline-interval-secondary-color: #f4511e;
+            --numberline-arrowhead-fill-primary: #388e3c; /* Sötétebb zöld */
+            --numberline-arrowhead-fill-secondary: #bf360c; /* Sötétebb pirosas */
         }
         body.theme-jungle .control-label { color: #558b2f; }
         body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active { background-color: #689f38; color: #dcedc8; }
@@ -377,6 +383,8 @@
             --numberline-axis-color: #8a2be2; --numberline-tick-color: #ba55d3; --numberline-text-color: #483d8b;
             --numberline-interval-color: #9932cc; --numberline-endpoint-open-fill: #e6e6fa;
             --numberline-interval-secondary-color: #dda0dd;
+            --numberline-arrowhead-fill-primary: #4b0082; /* Indigó */
+            --numberline-arrowhead-fill-secondary: #800080; /* Lila */
         }
         body.theme-magicforest .control-label { color: #9932cc; }
         body.theme-magicforest .theme-button.active, body.theme-magicforest .range-button.active { background-color: #9370db; color: #f8f0ff; }
@@ -395,6 +403,8 @@
             --numberline-axis-color: #00acc1; --numberline-tick-color: #78909c; --numberline-text-color: #eceff1;
             --numberline-interval-color: #ffab00; --numberline-endpoint-open-fill: #263238;
             --numberline-interval-secondary-color: #00e676;
+            --numberline-arrowhead-fill-primary: #00838f; /* Sötétebb cián */
+            --numberline-arrowhead-fill-secondary: #00bfa5; /* Sötétebb zöldescián */
         }
         body.theme-tech .control-label { color: #26c6da; }
         body.theme-tech .theme-button.active, body.theme-tech .range-button.active { background-color: #00838f; color: #e0f7fa; }
@@ -413,6 +423,8 @@
             --numberline-axis-color: #20b2aa; --numberline-tick-color: #80deea; --numberline-text-color: #00796b;
             --numberline-interval-color: #ff7f50; --numberline-endpoint-open-fill: #e0f7fa;
             --numberline-interval-secondary-color: #f0e68c;
+            --numberline-arrowhead-fill-primary: #00897b; /* Sötétebb türkiz */
+            --numberline-arrowhead-fill-secondary: #b0e0e6; /* Világosabb kék */
         }
         body.theme-ocean .control-label { color: #00acc1; }
         body.theme-ocean .theme-button.active, body.theme-ocean .range-button.active { background-color: #4db6ac; color: #e0f2f1; }
@@ -431,6 +443,8 @@
             --numberline-axis-color: #d32f2f; --numberline-tick-color: #42a5f5; --numberline-text-color: #0d47a1;
             --numberline-interval-color: #fbc02d; --numberline-endpoint-open-fill: #e3f2fd;
             --numberline-interval-secondary-color: #ff7043;
+            --numberline-arrowhead-fill-primary: #1976d2; /* Sötétkék */
+            --numberline-arrowhead-fill-secondary: #bf360c; /* Sötétpiros */
         }
         body.theme-sport .control-label { color: #1976d2; }
         body.theme-sport .theme-button.active, body.theme-sport .range-button.active { background-color: #1976d2; color: #e3f2fd; }
@@ -449,6 +463,8 @@
             --numberline-axis-color: #ff6347; --numberline-tick-color: #ffe4b5; --numberline-text-color: #556b2f;
             --numberline-interval-color: #ffd700; --numberline-endpoint-open-fill: #fffaf0;
             --numberline-interval-secondary-color: #adff2f;
+            --numberline-arrowhead-fill-primary: #ff7f50; /* Korall */
+            --numberline-arrowhead-fill-secondary: #8fbc8f; /* Sötét tengerzöld */
         }
         body.theme-flowergarden .control-label { color: #ff7f50; }
         body.theme-flowergarden .theme-button.active, body.theme-flowergarden .range-button.active { background-color: #ffdab9; color: #8b4513; }
@@ -467,6 +483,8 @@
             --numberline-axis-color: #bf360c; --numberline-tick-color: #8d6e63; --numberline-text-color: #5d4037;
             --numberline-interval-color: #ffab40; --numberline-endpoint-open-fill: #f5f5dc;
             --numberline-interval-secondary-color: #8bc34a;
+            --numberline-arrowhead-fill-primary: #795548; /* Barna */
+            --numberline-arrowhead-fill-secondary: #558b2f; /* Olíva */
         }
         body.theme-adventure .control-label { color: #6d4c41; }
         body.theme-adventure .theme-button.active, body.theme-adventure .range-button.active { background-color: #a1887f; color: #efebe9; }
@@ -485,6 +503,8 @@
             --numberline-axis-color: #1e90ff; --numberline-tick-color: #add8e6; --numberline-text-color: #4682b4;
             --numberline-interval-color: #ffd700; --numberline-endpoint-open-fill: #f0f8ff;
             --numberline-interval-secondary-color: #b0c4de;
+            --numberline-arrowhead-fill-primary: #87ceeb; /* Égszínkék */
+            --numberline-arrowhead-fill-secondary: #778899; /* Világos pala szürke */
         }
         body.theme-sky .control-label { color: #00bfff; }
         body.theme-sky .theme-button.active, body.theme-sky .range-button.active { background-color: #add8e6; color: #005a9c; }
@@ -965,14 +985,18 @@
                     lineX2 = endpointX; 
                     intervalLine.setAttribute('x1', lineX1);
                     intervalLine.setAttribute('x2', lineX2);
-                    intervalLine.setAttribute('marker-start', `url(#${markerId})`);
+                    if (boundaryValue > 0) { 
+                        intervalLine.setAttribute('marker-start', `url(#${markerId})`);
+                    }
                 } else { 
                     if (boundaryValue >= currentNumberRangeMax) return; 
                     lineX1 = endpointX; 
                     lineX2 = viewBoxWidth - padding; 
                     intervalLine.setAttribute('x1', lineX1);
                     intervalLine.setAttribute('x2', lineX2);
-                    intervalLine.setAttribute('marker-end', `url(#${markerId})`);
+                     if (boundaryValue < currentNumberRangeMax) { 
+                        intervalLine.setAttribute('marker-end', `url(#${markerId})`);
+                    }
                 }
                 
                 svg.appendChild(intervalLine);
