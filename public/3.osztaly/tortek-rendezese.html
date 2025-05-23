@@ -145,7 +145,7 @@
             margin-bottom: 5px;
         }
         .fraction-item .fraction-label {
-            font-size: 1.2em; /* NÖVELVE */
+            font-size: 1.2em; 
             font-weight: bold;
             transition: color 0.5s ease;
         }
@@ -169,7 +169,7 @@
         }
         .slice-number-text { 
             font-family: 'Arial', sans-serif;
-            font-size: 12px; /* NÖVELVE */
+            font-size: 12px; 
             font-weight: bold;
             fill: var(--slice-number-text-color, #333333);
             text-anchor: middle;
@@ -226,6 +226,113 @@
             min-height: 1.5em;
             line-height: 1.4;
         }
+
+        /* Reszponzív stílusok */
+        @media (max-width: 768px) { /* Kisebb tabletek, nagyobb telefonok */
+            .fraction-item svg {
+                width: 90px;
+                height: 90px;
+            }
+            .fraction-item .fraction-label {
+                font-size: 1em;
+            }
+            .slice-number-text {
+                font-size: 10px;
+            }
+            .answer-area input[type="text"] {
+                width: 50px;
+                padding: 6px;
+            }
+             .answer-area span { /* ≤ és ≥ jelek */
+                font-size: 0.95em;
+            }
+            .fraction-display-area {
+                gap: 10px;
+                min-height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) { /* Kisebb telefonok */
+            body {
+                padding: 10px;
+            }
+            .controls-container, .container {
+                padding: 10px;
+            }
+            h1 { font-size: clamp(1.5em, 6vw, 1.8em); }
+            h2 { font-size: clamp(1.1em, 4.5vw, 1.3em); }
+            .task-header h3 { font-size: clamp(1em, 4vw, 1.15em); }
+            .task { padding: 15px; }
+
+
+            .fraction-item svg {
+                width: 60px; 
+                height: 60px;
+            }
+            .fraction-item .fraction-label {
+                font-size: 0.85em; 
+            }
+            .slice-number-text {
+                font-size: 8px;  
+            }
+            .fraction-display-area {
+                gap: 5px; 
+                min-height: 100px; 
+            }
+
+            .answer-area {
+                font-size: clamp(0.8em, 3.8vw, 0.9em); 
+                gap: 3px;
+            }
+            .answer-area input[type="text"] {
+                width: 35px; 
+                padding: 5px;
+                font-size: 0.8em;
+            }
+             .answer-area span { 
+                font-size: 0.85em;
+                padding: 0 1px;
+            }
+
+            .theme-button, .subtype-button {
+                font-size: 0.75em;
+                padding: 5px 8px;
+            }
+            .control-label {
+                font-size: 0.9em;
+            }
+            .task p.instructions {
+                font-size: clamp(0.85em, 3vw, 0.95em);
+                margin-bottom: 10px;
+            }
+            button.task-button {
+                font-size: clamp(0.85em, 3.5vw, 0.95em);
+                padding: 7px 14px;
+            }
+            .feedback {
+                font-size: clamp(0.8em, 2.8vw, 0.9em);
+            }
+        }
+         @media (max-width: 360px) { /* Nagyon keskeny képernyők */
+            .fraction-item svg {
+                width: 50px; 
+                height: 50px;
+            }
+             .fraction-item .fraction-label {
+                font-size: 0.75em;
+            }
+            .slice-number-text {
+                font-size: 7px;
+            }
+            .fraction-display-area {
+                gap: 3px;
+            }
+             .answer-area input[type="text"] {
+                width: 30px;
+                padding: 4px;
+            }
+        }
+
 
         /* --- THEME DEFINITIONS --- */
         .theme-button, .subtype-button {
@@ -736,9 +843,9 @@
             if (D_lines > 0 && Number.isFinite(D_lines)) {
                 const sliceAngle = (2 * Math.PI) / D_lines;
                 let sorszamCounter = 1;
-                const textRadiusFactor = D_lines > 8 ? 0.7 : 0.65; // Kicsit kijjebb a számok, ha sok cikkely van
+                const textRadiusFactor = D_lines > 8 ? 0.7 : 0.65; 
 
-                for (let k = 0; k < fraction.numerator; k++) { // Kitöltött cikkelyek
+                for (let k = 0; k < fraction.numerator; k++) { 
                     if (sorszamCounter > D_lines) break;
                     const midpointAngle = (k + 0.5) * sliceAngle - (Math.PI / 2);
                     const textX = cx + (radius * textRadiusFactor) * Math.cos(midpointAngle);
@@ -752,7 +859,7 @@
                     svg.appendChild(sorszamText);
                 }
 
-                for (let k = fraction.numerator; k < D_lines; k++) { // Üres cikkelyek
+                for (let k = fraction.numerator; k < D_lines; k++) { 
                     if (sorszamCounter > D_lines) break;
                     const midpointAngle = (k + 0.5) * sliceAngle - (Math.PI / 2);
                     const textX = cx + (radius * textRadiusFactor) * Math.cos(midpointAngle);
