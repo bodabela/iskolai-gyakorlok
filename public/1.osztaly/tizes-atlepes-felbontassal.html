@@ -72,7 +72,7 @@
             max-width: 900px;
             text-align: center;
             transition: background-color 0.5s ease, border-color 0.5s ease;
-            position: relative; /* Needed for absolute positioning of SVG */
+            position: relative; /* Needed for absolute positioning of SVG if SVGs were direct children */
         }
 
         h1, h2 {
@@ -128,8 +128,8 @@
             flex-wrap: wrap;
             transition: color 0.5s ease;
             min-height: 40px;
-            position: relative; /* Needed for relative positioning context for SVG */
-            z-index: 1; /* Ensure content is above SVG */
+            position: relative; 
+            z-index: 1; 
         }
 
         .task-number-display {
@@ -145,7 +145,6 @@
             color: #000000;
         }
 
-        /* Az input mezők stílusa az .operation-display-en belül */
         .operation-display input[type="number"] {
             width: 45px;
             padding: 8px;
@@ -159,11 +158,10 @@
             width: 35px;
             height: 35px;
         }
-         /* Style for the question mark placeholder */
         .operation-display .placeholder-question {
-            font-size: clamp(1.4em, 4vw, 1.7em); /* Match operation-display font size */
+            font-size: clamp(1.4em, 4vw, 1.7em); 
             font-weight: bold;
-            width: 60px; /* Match input width */
+            width: 60px; 
             text-align: center;
             margin: 5px;
             display: inline-flex;
@@ -172,7 +170,7 @@
          }
 
 
-        input[type="number"] { /* Általános input stílus, a feladvány fő inputjára is érvényes */
+        input[type="number"] { 
             padding: 10px;
             margin: 5px;
             border-radius: 8px;
@@ -216,7 +214,6 @@
             transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
         }
 
-         /* Number Line Styles */
         .number-line-container {
             margin-top: 20px;
             margin-bottom: 15px;
@@ -247,41 +244,36 @@
         .number-line .question-mark-text { font-size: 15px; font-weight: bold; text-anchor: middle; transition: fill 0.5s ease; }
         .number-line .result-marker { transition: fill 0.5s ease; }
         .number-line .label-bg-rect { transition: fill 0.5s ease; rx:3; ry:3; }
-         .number-line .dot-marker { fill: currentColor; } /* Style for the dot */
+         .number-line .dot-marker { fill: currentColor; } 
 
-
-        /* SVG container for lines (original decomposition lines) */
         .svg-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Allow clicks to pass through */
-            z-index: 0; /* Ensure SVG is behind content */
-            /* Removed display: none; */
+            pointer-events: none; 
+            z-index: 0; 
         }
 
         /* --- THEME DEFINITIONS --- */
-        /* Default styles for theme buttons if no theme is active (fallback) */
         .theme-button {
             background-color: #e0e0e0;
             color: #333;
             border: 1px solid #ccc;
         }
 
-         /* Shared Number Line Base Styles (will be overridden by themes) */
         .number-line .axis { stroke: #333; }
         .number-line .tick { stroke: #555; }
         .number-line .number-text { fill: #333; }
-        .number-line .operation-arrow { stroke: #007bff; } /* Blue */
-        .number-line .helper-arrow-green { stroke: #28a745; } /* Green */
-        .number-line .unknown-arrow { stroke: #ff9800; } /* Orange */
+        .number-line .operation-arrow { stroke: #007bff; } 
+        .number-line .helper-arrow-green { stroke: #28a745; } 
+        .number-line .unknown-arrow { stroke: #ff9800; } 
         .number-line .arrow-head { fill: currentColor; }
         .number-line .label-text-num, .number-line .label-text-op { fill: #000; }
-        .number-line .question-mark-text { fill: #e53935; } /* Red */
-        .number-line .result-marker { fill: #4caf50; } /* Green circle */
-        .number-line .dot-marker { fill: #333; } /* Default dot color */
+        .number-line .question-mark-text { fill: #e53935; } 
+        .number-line .result-marker { fill: #4caf50; } 
+        .number-line .dot-marker { fill: #333; } 
 
 
         /* 1. Candy Theme (Girlish) */
@@ -302,13 +294,13 @@
         body.theme-candy .number-line .axis { stroke: #ba55d3; }
         body.theme-candy .number-line .tick { stroke: #dda0dd; }
         body.theme-candy .number-line .number-text { fill: #8a2be2; }
-        body.theme-candy .number-line .operation-arrow { stroke: #ff69b4; } /* Hot Pink */
-        body.theme-candy .number-line .helper-arrow-green { stroke: #98fb98; } /* Pale Green */
-        body.theme-candy .number-line .unknown-arrow { stroke: #afeeee; } /* Pale Turquoise */
+        body.theme-candy .number-line .operation-arrow { stroke: #ff69b4; } 
+        body.theme-candy .number-line .helper-arrow-green { stroke: #98fb98; } 
+        body.theme-candy .number-line .unknown-arrow { stroke: #afeeee; } 
         body.theme-candy .label-text-num, body.theme-candy .label-text-op { fill: #9932cc; }
-        body.theme-candy .question-mark-text { fill: #ff1493; } /* Deep Pink */
-        body.theme-candy .result-marker { fill: #da70d6; } /* Orchid */
-        body.theme-candy .number-line .dot-marker { fill: #c71585; } /* Medium Violet Red */
+        body.theme-candy .question-mark-text { fill: #ff1493; } 
+        body.theme-candy .result-marker { fill: #da70d6; } 
+        body.theme-candy .number-line .dot-marker { fill: #c71585; } 
 
 
         /* 2. Space Theme (Boyish) */
@@ -329,13 +321,13 @@
         body.theme-space .number-line .axis { stroke: #94a3b8; }
         body.theme-space .number-line .tick { stroke: #64748b; }
         body.theme-space .number-line .number-text { fill: #e2e8f0; }
-        body.theme-space .number-line .operation-arrow { stroke: #facc15; } /* Yellow */
-        body.theme-space .helper-arrow-green { stroke: #4ade80; } /* Green */
-        body.theme-space .unknown-arrow { stroke: #fb923c; } /* Orange */
+        body.theme-space .number-line .operation-arrow { stroke: #facc15; } 
+        body.theme-space .number-line .helper-arrow-green { stroke: #4ade80; } 
+        body.theme-space .number-line .unknown-arrow { stroke: #fb923c; } 
         body.theme-space .label-text-num, body.theme-space .label-text-op { fill: #93c5fd; }
-        body.theme-space .question-mark-text { fill: #f87171; } /* Red */
-        body.theme-space .result-marker { fill: #60a5fa; } /* Blue */
-        body.theme-space .number-line .dot-marker { fill: #93c5fd; } /* Light Blue */
+        body.theme-space .question-mark-text { fill: #f87171; } 
+        body.theme-space .result-marker { fill: #60a5fa; } 
+        body.theme-space .number-line .dot-marker { fill: #93c5fd; } 
 
         /* 3. Jungle Theme (Boyish) */
         body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;}
@@ -355,13 +347,13 @@
         body.theme-jungle .number-line .axis { stroke: #558b2f; }
         body.theme-jungle .number-line .tick { stroke: #81c784; }
         body.theme-jungle .number-line .number-text { fill: #1b5e20; }
-        body.theme-jungle .number-line .operation-arrow { stroke: #ff8f00; } /* Dark Orange */
-        body.theme-jungle .helper-arrow-green { stroke: #7cb342; } /* Light Green */
-        body.theme-jungle .unknown-arrow { stroke: #f4511e; } /* Red Orange */
+        body.theme-jungle .number-line .operation-arrow { stroke: #ff8f00; } 
+        body.theme-jungle .number-line .helper-arrow-green { stroke: #7cb342; } 
+        body.theme-jungle .number-line .unknown-arrow { stroke: #f4511e; } 
         body.theme-jungle .label-text-num, body.theme-jungle .label-text-op { fill: #388e3c; }
-        body.theme-jungle .question-mark-text { fill: #d84315; } /* Orange Red */
-        body.theme-jungle .result-marker { fill: #558b2f; } /* Dark Olive Green */
-        body.theme-jungle .number-line .dot-marker { fill: #388e3c; } /* Dark Green */
+        body.theme-jungle .question-mark-text { fill: #d84315; } 
+        body.theme-jungle .result-marker { fill: #558b2f; } 
+        body.theme-jungle .number-line .dot-marker { fill: #388e3c; } 
 
         /* 4. Magic Forest Theme (Girlish) */
         body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;}
@@ -378,16 +370,16 @@
         body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
         body.theme-magicforest .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
         body.theme-magicforest .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
-        body.theme-magicforest .number-line .axis { stroke: #800080; } /* Purple */
-        body.theme-magicforest .number-line .tick { stroke: #da70d6; } /* Orchid */
-        body.theme-magicforest .number-line .number-text { fill: #483d8b; } /* Dark Slate Blue */
-        body.theme-magicforest .number-line .operation-arrow { stroke: #9932cc; } /* Dark Orchid */
-        body.theme-magicforest .helper-arrow-green { stroke: #3cb371; } /* Medium Sea Green */
-        body.theme-magicforest .unknown-arrow { stroke: #ffd700; } /* Gold */
-        body.theme-magicforest .label-text-num, body.theme-magicforest .label-text-op { fill: #8a2be2; } /* Blue Violet */
-        body.theme-magicforest .question-mark-text { fill: #9400d3; } /* Dark Violet */
-        body.theme-magicforest .result-marker { fill: #8a2be2; } /* Blue Violet */
-        body.theme-magicforest .number-line .dot-marker { fill: #9932cc; } /* Dark Orchid */
+        body.theme-magicforest .number-line .axis { stroke: #800080; } 
+        body.theme-magicforest .number-line .tick { stroke: #da70d6; } 
+        body.theme-magicforest .number-line .number-text { fill: #483d8b; } 
+        body.theme-magicforest .number-line .operation-arrow { stroke: #9932cc; } 
+        body.theme-magicforest .number-line .helper-arrow-green { stroke: #3cb371; } 
+        body.theme-magicforest .number-line .unknown-arrow { stroke: #ffd700; } 
+        body.theme-magicforest .label-text-num, body.theme-magicforest .label-text-op { fill: #8a2be2; } 
+        body.theme-magicforest .question-mark-text { fill: #9400d3; } 
+        body.theme-magicforest .result-marker { fill: #8a2be2; } 
+        body.theme-magicforest .number-line .dot-marker { fill: #9932cc; } 
 
 
         /* 5. Robo/Tech Theme (Boyish) */
@@ -405,16 +397,16 @@
         body.theme-tech button.task-button:hover { background-color: #00838f; }
         body.theme-tech .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
         body.theme-tech .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
-        body.theme-tech .number-line .axis { stroke: #90a4ae; } /* Blue Grey */
-        body.theme-tech .number-line .tick { stroke: #b0bec5; } /* Light Blue Grey */
-        body.theme-tech .number-line .number-text { fill: #eceff1; } /* Blue Grey 50 */
-        body.theme-tech .number-line .operation-arrow { stroke: #ffab00; } /* Amber */
-        body.theme-tech .helper-arrow-green { stroke: #00e676; } /* Green Accent 3 */
-        body.theme-tech .unknown-arrow { stroke: #76ff03; } /* Light Green Accent 4 */
-        body.theme-tech .label-text-num, body.theme-tech .label-text-op { fill: #26c6da; } /* Cyan 400 */
-        body.theme-tech .question-mark-text { fill: #00e676; } /* Green Accent 3 */
-        body.theme-tech .result-marker { fill: #00acc1; } /* Cyan 600 */
-        body.theme-tech .number-line .dot-marker { fill: #00838f; } /* Cyan 800 */
+        body.theme-tech .number-line .axis { stroke: #90a4ae; } 
+        body.theme-tech .number-line .tick { stroke: #b0bec5; } 
+        body.theme-tech .number-line .number-text { fill: #eceff1; } 
+        body.theme-tech .number-line .operation-arrow { stroke: #ffab00; } 
+        body.theme-tech .number-line .helper-arrow-green { stroke: #00e676; } 
+        body.theme-tech .number-line .unknown-arrow { stroke: #76ff03; } 
+        body.theme-tech .label-text-num, body.theme-tech .label-text-op { fill: #26c6da; } 
+        body.theme-tech .question-mark-text { fill: #00e676; } 
+        body.theme-tech .result-marker { fill: #00acc1; } 
+        body.theme-tech .number-line .dot-marker { fill: #00838f; } 
 
 
         /* 6. Ocean Theme (Girlish) */
@@ -432,16 +424,16 @@
         body.theme-ocean button.task-button:hover { background-color: #00897b; }
         body.theme-ocean .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
         body.theme-ocean .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
-        body.theme-ocean .number-line .axis { stroke: #00796b; } /* Teal 600 */
-        body.theme-ocean .number-line .tick { stroke: #4db6ac; } /* Teal 300 */
-        body.theme-ocean .number-line .number-text { fill: #004d40; } /* Teal 900 */
-        body.theme-ocean .operation-arrow { stroke: #ff7f50; } /* Coral */
-        body.theme-ocean .helper-arrow-green { stroke: #98fb98; } /* Pale Green */
-        body.theme-ocean .unknown-arrow { stroke: #f0e68c; } /* Khaki */
-        body.theme-ocean .label-text-num, body.theme-ocean .label-text-op { fill: #00897b; } /* Teal 500 */
-        body.theme-ocean .question-mark-text { fill: #ff7f50; } /* Coral */
-        body.theme-ocean .result-marker { fill: #00acc1; } /* Cyan 600 */
-        body.theme-ocean .dot-marker { fill: #00796b; } /* Teal 600 */
+        body.theme-ocean .number-line .axis { stroke: #00796b; } 
+        body.theme-ocean .number-line .tick { stroke: #4db6ac; } 
+        body.theme-ocean .number-line .number-text { fill: #004d40; } 
+        body.theme-ocean .number-line .operation-arrow { stroke: #ff7f50; } 
+        body.theme-ocean .number-line .helper-arrow-green { stroke: #98fb98; } 
+        body.theme-ocean .number-line .unknown-arrow { stroke: #f0e68c; } 
+        body.theme-ocean .label-text-num, body.theme-ocean .label-text-op { fill: #00897b; } 
+        body.theme-ocean .question-mark-text { fill: #ff7f50; } 
+        body.theme-ocean .result-marker { fill: #00acc1; } 
+        body.theme-ocean .number-line .dot-marker { fill: #00796b; } 
 
         /* 7. Sport Theme (Boyish) */
         body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;}
@@ -458,16 +450,16 @@
         body.theme-sport button.task-button:hover { background-color: #1976d2; }
         body.theme-sport .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
         body.theme-sport .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
-        body.theme-sport .number-line .axis { stroke: #1565c0; } /* Blue 800 */
-        body.theme-sport .number-line .tick { stroke: #42a5f5; } /* Blue 400 */
-        body.theme-sport .number-line .number-text { fill: #0d47a1; } /* Blue 900 */
-        body.theme-sport .operation-arrow { stroke: #fbc02d; } /* Amber 700 */
-        body.theme-sport .helper-arrow-green { stroke: #66bb6a; } /* Green 400 */
-        body.theme-sport .unknown-arrow { stroke: #ff7043; } /* Deep Orange 400 */
-        body.theme-sport .label-text-num, body.theme-sport .label-text-op { fill: #1976d2; } /* Blue 700 */
-        body.theme-sport .question-mark-text { fill: #d32f2f; } /* Red 800 */
-        body.theme-sport .result-marker { fill: #1e88e5; } /* Blue 600 */
-        body.theme-sport .number-line .dot-marker { fill: #1565c0; } /* Blue 800 */
+        body.theme-sport .number-line .axis { stroke: #1565c0; } 
+        body.theme-sport .number-line .tick { stroke: #42a5f5; } 
+        body.theme-sport .number-line .number-text { fill: #0d47a1; } 
+        body.theme-sport .number-line .operation-arrow { stroke: #fbc02d; } 
+        body.theme-sport .number-line .helper-arrow-green { stroke: #66bb6a; } 
+        body.theme-sport .number-line .unknown-arrow { stroke: #ff7043; } 
+        body.theme-sport .label-text-num, body.theme-sport .label-text-op { fill: #1976d2; } 
+        body.theme-sport .question-mark-text { fill: #d32f2f; } 
+        body.theme-sport .result-marker { fill: #1e88e5; } 
+        body.theme-sport .number-line .dot-marker { fill: #1565c0; } 
 
         /* 8. Flower Garden Theme (Girlish) */
         body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;}
@@ -484,16 +476,16 @@
         body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
         body.theme-flowergarden .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
         body.theme-flowergarden .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
-        body.theme-flowergarden .number-line .axis { stroke: #cd853f; } /* Peru */
-        body.theme-flowergarden .number-line .tick { stroke: #f4a460; } /* Sandy Brown */
-        body.theme-flowergarden .number-line .number-text { fill: #556b2f; } /* Dark Olive Green */
-        body.theme-flowergarden .operation-arrow { stroke: #ffd700; } /* Gold */
-        body.theme-flowergarden .helper-arrow-green { stroke: #90ee90; } /* Light Green */
-        body.theme-flowergarden .unknown-arrow { stroke: #adff2f; } /* Green Yellow */
-        body.theme-flowergarden .label-text-num, body.theme-flowergarden .label-text-op { fill: #ff7f50; } /* Coral */
-        body.theme-flowergarden .question-mark-text { fill: #ff6347; } /* Tomato */
-        body.theme-flowergarden .result-marker { fill: #ff8c00; } /* Dark Orange */
-        body.theme-flowergarden .number-line .dot-marker { fill: #a0522d; } /* Sienna */
+        body.theme-flowergarden .number-line .axis { stroke: #cd853f; } 
+        body.theme-flowergarden .number-line .tick { stroke: #f4a460; } 
+        body.theme-flowergarden .number-line .number-text { fill: #556b2f; } 
+        body.theme-flowergarden .number-line .operation-arrow { stroke: #ffd700; } 
+        body.theme-flowergarden .number-line .helper-arrow-green { stroke: #90ee90; } 
+        body.theme-flowergarden .number-line .unknown-arrow { stroke: #adff2f; } 
+        body.theme-flowergarden .label-text-num, body.theme-flowergarden .label-text-op { fill: #ff7f50; } 
+        body.theme-flowergarden .question-mark-text { fill: #ff6347; } 
+        body.theme-flowergarden .result-marker { fill: #ff8c00; } 
+        body.theme-flowergarden .number-line .dot-marker { fill: #a0522d; } 
 
         /* 9. Adventure Theme (Boyish) */
         body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;}
@@ -510,16 +502,16 @@
         body.theme-adventure button.task-button:hover { background-color: #5d4037; }
         body.theme-adventure .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
         body.theme-adventure .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
-        body.theme-adventure .number-line .axis { stroke: #6d4c41; } /* Brown 600 */
-        body.theme-adventure .number-line .tick { stroke: #8d6e63; } /* Brown 500 */
-        body.theme-adventure .number-line .number-text { fill: #3e2723; } /* Brown 900 */
-        body.theme-adventure .operation-arrow { stroke: #ffab40; } /* Orange 400 */
-        body.theme-adventure .helper-arrow-green { stroke: #43a047; } /* Green 600 */
-        body.theme-adventure .unknown-arrow { stroke: #8bc34a; } /* Light Green 500 */
-        body.theme-adventure .label-text-num, body.theme-adventure .label-text-op { fill: #bf360c; } /* Deep Orange 800 */
-        body.theme-adventure .question-mark-text { fill: #d84315; } /* Deep Orange 900 */
-        body.theme-adventure .result-marker { fill: #795548; } /* Brown 500 */
-        body.theme-adventure .number-line .dot-marker { fill: #6d4c41; } /* Brown 600 */
+        body.theme-adventure .number-line .axis { stroke: #6d4c41; } 
+        body.theme-adventure .number-line .tick { stroke: #8d6e63; } 
+        body.theme-adventure .number-line .number-text { fill: #3e2723; } 
+        body.theme-adventure .number-line .operation-arrow { stroke: #ffab40; } 
+        body.theme-adventure .number-line .helper-arrow-green { stroke: #43a047; } 
+        body.theme-adventure .number-line .unknown-arrow { stroke: #8bc34a; } 
+        body.theme-adventure .label-text-num, body.theme-adventure .label-text-op { fill: #bf360c; } 
+        body.theme-adventure .question-mark-text { fill: #d84315; } 
+        body.theme-adventure .result-marker { fill: #795548; } 
+        body.theme-adventure .number-line .dot-marker { fill: #6d4c41; } 
 
         /* 10. Sky Theme (Girlish) */
         body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;}
@@ -536,17 +528,17 @@
         body.theme-sky button.task-button:hover { background-color: #6495ed; }
         body.theme-sky .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
         body.theme-sky .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
-        body.theme-sky .number-line .axis { stroke: #708090; } /* Slate Gray */
-        body.theme-sky .number-line .tick { stroke: #b0c4de; } /* Light Steel Blue */
-        body.theme-sky .number-line .number-text { fill: #4682b4; } /* Steel Blue */
-        body.theme-sky .operation-arrow { stroke: #ffd700; } /* Gold */
-        body.theme-sky .helper-arrow-green { stroke: #f0e68c; } /* Khaki */
-        body.theme-sky .unknown-arrow { stroke: #d3d3d3; } /* Light Grey */
+        body.theme-sky .number-line .axis { stroke: #708090; } 
+        body.theme-sky .number-line .tick { stroke: #b0c4de; } 
+        body.theme-sky .number-line .number-text { fill: #4682b4; } 
+        body.theme-sky .number-line .operation-arrow { stroke: #ffd700; } 
+        body.theme-sky .number-line .helper-arrow-green { stroke: #f0e68c; } 
+        body.theme-sky .number-line .unknown-arrow { stroke: #d3d3d3; } 
         body.theme-sky .arrow-head { fill: currentColor; }
-        body.theme-sky .label-text-num, body.theme-sky .label-text-op { fill: #1e90ff; } /* Dodger Blue */
-        body.theme-sky .question-mark-text { fill: #00bfff; } /* Deep Sky Blue */
-        body.theme-sky .result-marker { fill: #87ceeb; } /* Sky Blue */
-        body.theme-sky .number-line .dot-marker { fill: #4682b4; } /* Steel Blue */
+        body.theme-sky .label-text-num, body.theme-sky .label-text-op { fill: #1e90ff; } 
+        body.theme-sky .question-mark-text { fill: #00bfff; } 
+        body.theme-sky .result-marker { fill: #87ceeb; } 
+        body.theme-sky .number-line .dot-marker { fill: #4682b4; } 
 
     </style>
 </head>
@@ -621,8 +613,8 @@
 
             <button class="task-button" onclick="checkAdditionTask()">Ellenőrzés</button>
             <p id="task1_feedback" class="feedback"></p>
-        </div>
-        <svg class="svg-container" id="addition-svg"></svg>
+            <svg class="svg-container" id="addition-svg"></svg> </div>
+        
 
         <div id="taskContainerSubtraction" class="task">
             <div class="task-header">
@@ -648,8 +640,7 @@
                          <marker id="arrowhead-axis-left-sub" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
                             <polygon points="8 0, 0 3, 8 6" class="axis"/>
                         </marker>
-                        <marker id="op-arrowhead-sub" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="0">
-                            <polygon points="8 0, 0 3, 8 6" class="arrow-head" />
+                        <marker id="op-arrowhead-sub" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="0"> <polygon points="8 0, 0 3, 8 6" class="arrow-head" />
                         </marker>
                          <circle id="dot-marker-sub" r="3.5" class="dot-marker"/>
                     </defs>
@@ -672,8 +663,8 @@
 
             <button class="task-button" onclick="checkSubtractionTask()">Ellenőrzés</button>
             <p id="task2_feedback" class="feedback"></p>
-        </div>
-         <svg class="svg-container" id="subtraction-svg"></svg>
+            <svg class="svg-container" id="subtraction-svg"></svg> </div>
+         
 
         </div>
 
@@ -700,25 +691,21 @@
 
         // Téma alkalmazása
         function applyTheme(themeClass) {
-            bodyEl.className = ''; // Összes előző téma osztály eltávolítása
-            bodyEl.classList.add(themeClass); // Új téma osztály hozzáadása
+            bodyEl.className = ''; 
+            bodyEl.classList.add(themeClass); 
             currentTheme = themeClass;
 
-            // Aktív téma gomb kiemelése
             themeButtons.forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.theme === themeClass);
             });
         }
 
-        // Téma gombok eseménykezelői
         themeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 applyTheme(button.dataset.theme);
             });
         });
 
-
-        // Szám megjelenítő div frissítése
         function updateNumberDisplayDiv(divId, number, backgroundColorHex = "87CEEB") {
             const divElement = document.getElementById(divId);
             if (divElement) {
@@ -726,62 +713,56 @@
             }
         }
 
-        // Segédfüggvény a számegyenes rajzolásához (ticks és számok)
          function drawTicksAndNumbers(svgElement, groupClass, startX, spacing, maxNum, yAxis, highlightedNumbers = []) {
             const g = svgElement.querySelector(groupClass);
             if (!g) return;
-            g.innerHTML = ''; // Clear previous ticks and numbers
+            g.innerHTML = ''; 
 
-            const textYPosition = yAxis + 15; // Position for numbers below the line
-            const dotRadius = 3.5; // Radius for the dot marker
+            const textYPosition = yAxis + 15; 
+            const dotRadius = 3.5; 
 
             for (let i = 0; i <= maxNum; i++) {
                 const x = startX + i * spacing;
                 const tick = document.createElementNS(SVG_NS, "line");
                 tick.setAttribute("class", "tick");
                 tick.setAttribute("x1", x);
-                tick.setAttribute("y1", yAxis - 5); // Shorter ticks
+                tick.setAttribute("y1", yAxis - 5); 
                 tick.setAttribute("x2", x);
-                tick.setAttribute("y2", yAxis + 5); // Shorter ticks
+                tick.setAttribute("y2", yAxis + 5); 
                 g.appendChild(tick);
 
-                // Check if the current number should be highlighted (dot or background)
                 const currentHighlight = highlightedNumbers.find(h => h.value === i);
 
                 if (currentHighlight) {
                     if (currentHighlight.value === 10) {
-                        // Draw a dot for the number 10
                         const dot = document.createElementNS(SVG_NS, "circle");
                         dot.setAttribute("cx", x);
                         dot.setAttribute("cy", yAxis);
                         dot.setAttribute("r", dotRadius);
-                        dot.setAttribute("class", "dot-marker"); // Apply dot style
+                        dot.setAttribute("class", "dot-marker"); 
                         g.appendChild(dot);
                     } else {
-                        // Draw background rectangle for other highlighted numbers
                         const rect = document.createElementNS(SVG_NS, "rect");
-                        // Measure text width to size the background rectangle
                         const tempTextForWidth = document.createElementNS(SVG_NS, "text");
-                        tempTextForWidth.setAttribute("class", "number-text"); // Use the same class for measurement
+                        tempTextForWidth.setAttribute("class", "number-text"); 
                         tempTextForWidth.style.visibility = "hidden";
                         tempTextForWidth.textContent = i;
                         g.appendChild(tempTextForWidth);
                         const textWidth = tempTextForWidth.getComputedTextLength();
-                        g.removeChild(tempTextForWidth); // Remove temporary element
+                        g.removeChild(tempTextForWidth); 
 
-                        const rectWidth = textWidth + 8; // Add some padding
+                        const rectWidth = textWidth + 8; 
                         const rectHeight = 18;
                         rect.setAttribute("x", x - rectWidth / 2);
                         rect.setAttribute("y", textYPosition - rectHeight / 2);
                         rect.setAttribute("width", rectWidth);
                         rect.setAttribute("height", rectHeight);
-                        rect.setAttribute("fill", currentHighlight.color); // Use the specified color
-                        rect.setAttribute("rx", 4); // Rounded corners
+                        rect.setAttribute("fill", currentHighlight.color); 
+                        rect.setAttribute("rx", 4); 
                         rect.setAttribute("ry", 4);
                         g.appendChild(rect);
                     }
                 }
-
 
                 const text = document.createElementNS(SVG_NS, "text");
                 text.setAttribute("class", "number-text");
@@ -789,54 +770,41 @@
                 text.setAttribute("y", textYPosition);
                 text.setAttribute("dominant-baseline", "middle");
                 text.textContent = i;
-                 if (currentHighlight && currentHighlight.value !== 10) {
-                     // Optional: Change text color for highlighted numbers if needed (except for 10)
-                     // text.style.fill = "white"; // Example: white text on colored background
-                 }
                 g.appendChild(text);
             }
         }
 
          function calculateSpacing(svgWidth, startX, maxNum) {
-            const usableWidth = svgWidth - startX - 20; // Subtract start margin and end buffer
+            const usableWidth = svgWidth - startX - 20; 
             return maxNum > 0 ? usableWidth / maxNum : usableWidth;
         }
 
-
-        // Vonalak rajzolása az összeadás feladathoz
         function drawAdditionNumberLine() {
             const svg = additionNumberLineSvg;
             const axis = document.getElementById("additionAxis");
-            const startX = 40; // Starting X position for the number line
-            const svgWidth = parseInt(svg.getAttribute("viewBox").split(" ")[2]); // Get SVG width from viewBox
-            const maxNumOnLine = currentNumberRange; // Draw up to the current number range
+            const startX = 40; 
+            const svgWidth = parseInt(svg.getAttribute("viewBox").split(" ")[2]); 
+            const maxNumOnLine = currentNumberRange; 
             const spacing = calculateSpacing(svgWidth, startX, maxNumOnLine);
 
-            const yAxis = 80; // Y position for the number line axis
-            const yArrows = yAxis - 30; // Y position for the arrows (above the axis)
-            const yText = yArrows - 7; // Y position for text labels above arrows
-            const yQuestionMark = yAxis + 30; // Y position for the question mark (below the axis)
+            const yAxis = 80; 
+            const yArrows = yAxis - 30; 
+            const yText = yArrows - 7; 
+            const yQuestionMark = yAxis + 30; 
 
-
-            // Draw the main axis
             axis.setAttribute("x1", startX);
             axis.setAttribute("y1", yAxis);
-            axis.setAttribute("x2", startX + maxNumOnLine * spacing + 10); // Extend slightly beyond max number
+            axis.setAttribute("x2", startX + maxNumOnLine * spacing + 10); 
             axis.setAttribute("y2", yAxis);
-             // Add arrowheads to the axis (optional, but good practice for number lines)
             axis.setAttribute('marker-end', 'url(#arrowhead-axis)');
             axis.setAttribute('marker-start', 'url(#arrowhead-axis-left)');
 
-
-            // Highlight numbers: starting number, 10, and the sum
             const highlightedNumbers = [
-                { value: task1Data.num1, color: '#FFD700' }, // Gold color for starting number
-                { value: 10, color: '#ADD8E6' }, // Light Blue color for 10 (will be a dot)
-                // The sum will be marked by the result marker and question mark text
+                { value: task1Data.num1, color: '#FFD700' }, 
+                { value: 10, color: '#ADD8E6' }, 
             ];
             drawTicksAndNumbers(svg, ".addition-ticks", startX, spacing, maxNumOnLine, yAxis, highlightedNumbers);
 
-            // Draw the first arrow: from num1 to 10
             const arrow1 = document.getElementById("additionArrow1");
             const x1_arrow1 = startX + task1Data.num1 * spacing;
             const x2_arrow1 = startX + 10 * spacing;
@@ -844,20 +812,17 @@
             arrow1.setAttribute("y1", yArrows);
             arrow1.setAttribute("x2", x2_arrow1);
             arrow1.setAttribute("y2", yArrows);
-            arrow1.setAttribute("class", "arrow-shaft operation-arrow"); // Apply theme color class
+            arrow1.setAttribute("class", "arrow-shaft operation-arrow"); 
 
-            // Label for the first arrow (amount added to reach 10)
             const label1Num = document.getElementById("additionLabel1Num");
             const label1Op = document.getElementById("additionLabel1Op");
-            label1Num.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 + 6); // Position label text
+            label1Num.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 + 6); 
             label1Num.setAttribute("y", yText);
             label1Num.textContent = task1Data.dec_to_make_ten.toString();
-             label1Op.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 - 6); // Position label text
+            label1Op.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 - 6); 
             label1Op.setAttribute("y", yText);
             label1Op.textContent = "+";
 
-
-            // Draw the second arrow: from 10 to sum
             const arrow2 = document.getElementById("additionArrow2");
             const x1_arrow2 = startX + 10 * spacing;
             const x2_arrow2 = startX + task1Data.sum * spacing;
@@ -865,127 +830,120 @@
             arrow2.setAttribute("y1", yArrows);
             arrow2.setAttribute("x2", x2_arrow2);
             arrow2.setAttribute("y2", yArrows);
-             arrow2.setAttribute("class", "arrow-shaft helper-arrow-green"); // Apply theme color class (e.g., green for helper step)
+            arrow2.setAttribute("class", "arrow-shaft helper-arrow-green"); 
 
-
-            // Label for the second arrow (remaining amount added)
             const label2Num = document.getElementById("additionLabel2Num");
             const label2Op = document.getElementById("additionLabel2Op");
-            label2Num.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 + 6); // Position label text
+            label2Num.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 + 6); 
             label2Num.setAttribute("y", yText);
             label2Num.textContent = task1Data.dec_remaining.toString();
-             label2Op.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 - 6); // Position label text
+            label2Op.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 - 6); 
             label2Op.setAttribute("y", yText);
             label2Op.textContent = "+";
 
-
-            // Position the result marker (circle)
             const resultMarker = document.getElementById("additionResultMarker");
             resultMarker.setAttribute("cx", startX + task1Data.sum * spacing);
             resultMarker.setAttribute("cy", yAxis);
-             resultMarker.setAttribute("class", "result-marker"); // Apply theme color class
+            resultMarker.setAttribute("class", "result-marker"); 
 
-            // Position the question mark text below the result marker
             const resultQuestion = document.getElementById("additionResultQuestion");
             resultQuestion.setAttribute("x", startX + task1Data.sum * spacing);
-            resultQuestion.setAttribute("y", yQuestionMark); // Position below the axis
-             resultQuestion.setAttribute("class", "question-mark-text"); // Apply theme color class
-             resultQuestion.textContent = "?"; // Ensure it's a question mark
+            resultQuestion.setAttribute("y", yQuestionMark); 
+            resultQuestion.setAttribute("class", "question-mark-text"); 
+            resultQuestion.textContent = "?"; 
         }
 
-         // Vonalak rajzolása a felbontás lépéseihez (eredeti SVG)
-         function drawAdditionLines() {
-            const svgEl = document.getElementById('addition-svg');
-             if (!svgEl) return; // Exit if the SVG container doesn't exist
+         function drawDecompositionLines(svgId, taskContainerEl, num2DisplayId, decInput1Id, decInput2Id) {
+            const svgEl = document.getElementById(svgId);
+            if (!svgEl) {
+                console.error(`SVG element with id ${svgId} not found.`);
+                return;
+            }
+            svgEl.innerHTML = ''; // Clear previous lines
 
-            // SVG tartalom törlése
-            svgEl.innerHTML = '';
+            const num2Display = document.getElementById(num2DisplayId);
+            const decInput1 = document.getElementById(decInput1Id);
+            const decInput2 = document.getElementById(decInput2Id);
 
-            const num2Display = document.getElementById('task1_num2_display');
-            const decInput1 = document.getElementById('task1_dec_input1');
-            const decInput2 = document.getElementById('task1_dec_input2');
-
-            // Ellenőrizzük, hogy az elemek léteznek-e
-            if (!num2Display || !decInput1 || !decInput2) {
-                console.error("Nem találhatóak az elemek a vonalak rajzolásához.");
+            if (!taskContainerEl || !num2Display || !decInput1 || !decInput2) {
+                console.error("One or more elements for drawing decomposition lines are missing for", svgId);
                 return;
             }
 
-            // Elemek pozícióinak lekérése a viewport-hoz képest
+            const containerRect = taskContainerEl.getBoundingClientRect();
             const num2Rect = num2Display.getBoundingClientRect();
             const input1Rect = decInput1.getBoundingClientRect();
             const input2Rect = decInput2.getBoundingClientRect();
-            const containerRect = taskContainerAdditionEl.getBoundingClientRect(); // A container pozíciója
 
-            // SVG koordináták kiszámítása (a container bal felső sarkához képest)
-            // Y koordinátákhoz hozzáadunk 100px-et a lejjebb tolásért
-            const svgX1 = num2Rect.left + num2Rect.width / 2 - containerRect.left + 20; // num2 aljának közepe
-            const svgY1 = num2Rect.bottom - containerRect.top + 160; // num2 alja + 100px lejjebb
+            // Calculate coordinates relative to the task container (SVG's offset parent)
+            const lineStartX = (num2Rect.left - containerRect.left) + (num2Rect.width / 2);
+            const lineStartY = (num2Rect.bottom - containerRect.top) + 2; // Start slightly below num2Display
 
-            const svgX2_1 = input1Rect.left + input1Rect.width / 2 - containerRect.left + 20; // input1 tetejének közepe
-            const svgY2_1 = input1Rect.top - containerRect.top + 160; // input1 teteje + 100px lejjebb
+            const input1CenterX = (input1Rect.left - containerRect.left) + (input1Rect.width / 2);
+            const input1TopY = (input1Rect.top - containerRect.top) - 2; // End slightly above decInput1
 
-            const svgX2_2 = input2Rect.left + input2Rect.width / 2 - containerRect.left + 20; // input2 tetejének közepe
-            const svgY2_2 = input2Rect.top - containerRect.top + 160; // input2 teteje + 100px lejjebb
+            const input2CenterX = (input2Rect.left - containerRect.left) + (input2Rect.width / 2);
+            const input2TopY = (input2Rect.top - containerRect.top) - 2; // End slightly above decInput2
 
-            // Első vonal (num2 -> input1)
-            const line1 = document.createElementNS(SVG_NS, 'line');
-            line1.setAttribute('x1', svgX1);
-            line1.setAttribute('y1', svgY1);
-            line1.setAttribute('x2', svgX2_1);
-            line1.setAttribute('y2', svgY2_1);
-            line1.setAttribute('stroke', 'gray'); // Vonal színe
-            line1.setAttribute('stroke-width', 2); // Vonal vastagsága
-            line1.setAttribute('marker-end', 'url(#arrowhead)'); // Nyíl a végére (ha van arrowhead definíció)
-
-            // Második vonal (num2 -> input2)
-            const line2 = document.createElementNS(SVG_NS, 'line');
-            line2.setAttribute('x1', svgX1);
-            line2.setAttribute('y1', svgY1);
-            line2.setAttribute('x2', svgX2_2);
-            line2.setAttribute('y2', svgY2_2);
-            line2.setAttribute('stroke', 'gray'); // Vonal színe
-            line2.setAttribute('stroke-width', 2); // Vonal vastagsága
-            line2.setAttribute('marker-end', 'url(#arrowhead)'); // Nyíl a végére
-
-            // Nyílhegy definíció (opcionális, de jól mutat) - Ezt lehetne közösíteni a számegyenes SVG-vel, de most a gyors megoldás kedvéért itt is definiáljuk
+            // Define arrowhead (unique ID within this SVG)
             const defs = document.createElementNS(SVG_NS, 'defs');
             const arrowhead = document.createElementNS(SVG_NS, 'marker');
-            arrowhead.setAttribute('id', 'arrowhead');
+            const arrowheadId = `arrowhead-${svgId}`;
+            arrowhead.setAttribute('id', arrowheadId);
             arrowhead.setAttribute('markerWidth', '10');
             arrowhead.setAttribute('markerHeight', '7');
-            arrowhead.setAttribute('refX', '10');
+            arrowhead.setAttribute('refX', '8'); // Adjusted for better arrow appearance
             arrowhead.setAttribute('refY', '3.5');
             arrowhead.setAttribute('orient', 'auto');
             arrowhead.setAttribute('markerUnits', 'strokeWidth');
             const polygon = document.createElementNS(SVG_NS, 'polygon');
-            polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
-            polygon.setAttribute('fill', 'gray'); // Nyílhegy színe
+            polygon.setAttribute('points', '0 0, 8 3.5, 0 7'); // Adjusted points
+            polygon.setAttribute('fill', 'gray');
             arrowhead.appendChild(polygon);
             defs.appendChild(arrowhead);
             svgEl.appendChild(defs);
 
-
-            // Vonalak hozzáadása az SVG-hez
+            // Line 1 (num2 -> input1)
+            const line1 = document.createElementNS(SVG_NS, 'line');
+            line1.setAttribute('x1', lineStartX);
+            line1.setAttribute('y1', lineStartY);
+            line1.setAttribute('x2', input1CenterX);
+            line1.setAttribute('y2', input1TopY);
+            line1.setAttribute('stroke', 'gray');
+            line1.setAttribute('stroke-width', 2);
+            line1.setAttribute('marker-end', `url(#${arrowheadId})`);
             svgEl.appendChild(line1);
+
+            // Line 2 (num2 -> input2)
+            const line2 = document.createElementNS(SVG_NS, 'line');
+            line2.setAttribute('x1', lineStartX);
+            line2.setAttribute('y1', lineStartY);
+            line2.setAttribute('x2', input2CenterX);
+            line2.setAttribute('y2', input2TopY);
+            line2.setAttribute('stroke', 'gray');
+            line2.setAttribute('stroke-width', 2);
+            line2.setAttribute('marker-end', `url(#${arrowheadId})`);
             svgEl.appendChild(line2);
         }
 
+        function drawAdditionLines() {
+            drawDecompositionLines('addition-svg', taskContainerAdditionEl, 'task1_num2_display', 'task1_dec_input1', 'task1_dec_input2');
+        }
+        
+        function drawSubtractionLines() {
+            drawDecompositionLines('subtraction-svg', taskContainerSubtractionEl, 'task2_num2_display', 'task2_dec_input1', 'task2_dec_input2');
+        }
 
-        // Összeadás feladat generálása
         function generateAdditionTask() {
             const feedbackEl = document.getElementById('task1_feedback');
-            feedbackEl.textContent = ''; // Visszajelzés törlése
-            feedbackEl.className = 'feedback'; // Visszajelzés stílusának visszaállítása
+            feedbackEl.textContent = ''; 
+            feedbackEl.className = 'feedback'; 
 
-            // Számok generálása tízesátlépéshez (pl. 6+?, 7+?, 8+?, 9+?)
-            task1Data.num1 = Math.floor(Math.random() * 4) + 6; // Első szám 6 és 9 között
-            // Második szám generálása úgy, hogy tízesátlépés legyen és a summa <= currentNumberRange (20)
-            let minNum2 = 10 - task1Data.num1 + 1; // Minimum 2. szám, hogy átlépje a tízest
-            let maxNum2PossibleByRange = currentNumberRange - task1Data.num1; // Maximum 2. szám a számkör alapján
-            let maxNum2 = Math.min(9, maxNum2PossibleByRange); // Maximum 2. szám (egyjegyű és a számkörön belül)
+            task1Data.num1 = Math.floor(Math.random() * 4) + 6; 
+            let minNum2 = 10 - task1Data.num1 + 1; 
+            let maxNum2PossibleByRange = currentNumberRange - task1Data.num1; 
+            let maxNum2 = Math.min(9, maxNum2PossibleByRange); 
 
-            // Ha a generálható tartomány érvénytelen, próbáljuk újra
             if (minNum2 > maxNum2 || maxNum2 < 1) {
                  generateAdditionTask();
                  return;
@@ -993,17 +951,14 @@
 
             task1Data.num2 = Math.floor(Math.random() * (maxNum2 - minNum2 + 1)) + minNum2;
             task1Data.sum = task1Data.num1 + task1Data.num2;
-            task1Data.dec_to_make_ten = 10 - task1Data.num1; // Mennyi kell 10-hez az első számból
-            task1Data.dec_remaining = task1Data.num2 - task1Data.dec_to_make_ten; // Mennyi marad a második számból
+            task1Data.dec_to_make_ten = 10 - task1Data.num1; 
+            task1Data.dec_remaining = task1Data.num2 - task1Data.dec_to_make_ten; 
 
-            // Feladat szövegének frissítése
             document.getElementById('task1_description_p').textContent = `Mennyit kell adni ${task1Data.num1}-hez, hogy ${task1Data.sum} legyen? Bontsd fel a második számot!`;
 
-            // Számok megjelenítése a div-ekben
-            updateNumberDisplayDiv("task1_num1_display", task1Data.num1, "FFD700"); // Arany szín
-            updateNumberDisplayDiv("task1_num2_display", task1Data.num2, "87CEEB"); // Világoskék szín
+            updateNumberDisplayDiv("task1_num1_display", task1Data.num1, "FFD700"); 
+            updateNumberDisplayDiv("task1_num2_display", task1Data.num2, "87CEEB"); 
 
-            // Felbontás lépéseinek HTML struktúrájának generálása
             const stepsEl = document.getElementById('task1_decomposition_steps');
             stepsEl.innerHTML = `
                 <div class="task-number-display" id="task1_num1_recomposed_step" style="background-color: #FFD700">${task1Data.num1}</div>
@@ -1014,98 +969,66 @@
                 <span style="margin: 0 5px;">=</span>
                 <input type="number" id="task1_final_answer_dec" style="width:60px;" min="0" max="${currentNumberRange}" placeholder="?">
             `;
-            // Max érték beállítása a végső válaszmezőre (task1_final_answer_dec)
             document.getElementById('task1_final_answer_dec').max = currentNumberRange;
 
-
-            // Vonalak és számegyenes rajzolása a DOM frissülése után
-            // Kis késleltetés, hogy a böngző renderelje az elemeket
             setTimeout(() => {
-                drawAdditionLines(); // Draw the original decomposition lines
-                drawAdditionNumberLine(); // Draw the new number line
+                drawAdditionLines(); 
+                drawAdditionNumberLine(); 
             }, 50);
         }
 
-        // Összeadás feladat ellenőrzése
         function checkAdditionTask() {
-            // Értékek beolvasása az input mezőkből
             const decInput1Val = parseInt(document.getElementById('task1_dec_input1').value);
             const decInput2Val = parseInt(document.getElementById('task1_dec_input2').value);
-            // Check only the task1_final_answer_dec for the final answer
             const finalAnswerDecVal = parseInt(document.getElementById('task1_final_answer_dec').value);
 
+            const feedbackEl = document.getElementById('task1_feedback'); 
 
-            const feedbackEl = document.getElementById('task1_feedback'); // Visszajelzés elem
-
-            // Ellenőrzések
-            // 1. A második szám első része helyes? (annyit bontottunk le, amennyi 10-hez kell)
             let correctDecompositionPart1 = (decInput1Val === task1Data.dec_to_make_ten);
-            // 2. A két felbontott rész összege kiadja az eredeti második számot?
             let correctDecompositionSum = (decInput1Val + decInput2Val === task1Data.num2);
-            // 3. A végeredmény helyes? (csak a felbontás utáni mezőt ellenőrizzük)
             let correctFinalAnswer = (finalAnswerDecVal === task1Data.sum);
 
-
-            // Visszajelzés logikája
             if (isNaN(decInput1Val) || isNaN(decInput2Val) || isNaN(finalAnswerDecVal)) {
-                // Ha valamelyik mező üres vagy nem szám
                 feedbackEl.textContent = 'Kérlek, tölts ki minden mezőt!';
                 feedbackEl.className = 'feedback incorrect';
             } else if (correctDecompositionPart1 && correctDecompositionSum && correctFinalAnswer) {
-                // Minden helyes
                 feedbackEl.textContent = 'Ügyes vagy! A felbontás és a végeredmény is helyes.';
                 feedbackEl.className = 'feedback correct';
             } else if (!(correctDecompositionPart1 && correctDecompositionSum) && correctFinalAnswer) {
-                // Végeredmény jó, de a felbontás nem
                 feedbackEl.textContent = 'A végeredmény jó, de a felbontás nem tökéletes. Próbáld újra a felbontást!';
                 feedbackEl.className = 'feedback incorrect';
             } else if ((correctDecompositionPart1 && correctDecompositionSum) && !correctFinalAnswer) {
-                // Felbontás jó, de a végeredmény nem
                 feedbackEl.textContent = 'A felbontás jó, de a végeredmény nem. Számold újra!';
                 feedbackEl.className = 'feedback incorrect';
             } else {
-                // Semmi sem jó
                 feedbackEl.textContent = 'Sajnos sem a felbontás, sem a végeredmény nem jó. Próbáld újra!';
                 feedbackEl.className = 'feedback incorrect';
             }
-            // Visszajelzés eltüntetése 10 másodperc után
             clearFeedback(feedbackEl);
         }
 
-
-        // Kivonás feladat generálása
         function generateSubtractionTask() {
-             const feedbackEl = document.getElementById('task2_feedback');
-            feedbackEl.textContent = ''; // Visszajelzés törlése
-            feedbackEl.className = 'feedback'; // Visszajelzés stílusának visszaállítása
+            const feedbackEl = document.getElementById('task2_feedback');
+            feedbackEl.textContent = ''; 
+            feedbackEl.className = 'feedback'; 
 
-            // Számok generálása tízesátlépéshez kivonásnál
-            // Első szám (kisebbítendő): 11 és currentNumberRange (20) között
             task2Data.num1 = Math.floor(Math.random() * (currentNumberRange - 11 + 1)) + 11;
-            // Második szám (kivonandó): úgy, hogy a tízes átlépés megtörténjen
-            // A kivonandó első része annyi, amennyit vissza kell lépni 10-ig
             task2Data.dec_to_ten = task2Data.num1 - 10;
-            // A kivonandó második része (ami 10-ből vonódik ki) 1 és 9 között lehet
             task2Data.dec_remaining = Math.floor(Math.random() * 9) + 1;
-            // A kivonandó teljes értéke
             task2Data.num2 = task2Data.dec_to_ten + task2Data.dec_remaining;
 
-             // Ellenőrizzük, hogy a kivonandó nem nagyobb, mint a kisebbítendő
-            if (task2Data.num2 >= task2Data.num1) {
-                generateSubtractionTask(); // Újrageneráljuk, ha nem érvényes
+            if (task2Data.num2 >= task2Data.num1 || task2Data.num1 - task2Data.num2 < 0) { // ensure difference is not negative
+                generateSubtractionTask(); 
                 return;
             }
 
             task2Data.difference = task2Data.num1 - task2Data.num2;
 
-            // Feladat szövegének frissítése
             document.getElementById('task2_description_p').textContent = `Mennyit vonjunk ki ${task2Data.num1}-ből, hogy ${task2Data.difference} legyen? Bontsd fel a kivonandó számot!`;
 
-            // Számok megjelenítése a div-ekben
-            updateNumberDisplayDiv("task2_num1_display", task2Data.num1, "FFD700"); // Arany szín
-            updateNumberDisplayDiv("task2_num2_display", task2Data.num2, "87CEEB"); // Világoskék szín
+            updateNumberDisplayDiv("task2_num1_display", task2Data.num1, "FFD700"); 
+            updateNumberDisplayDiv("task2_num2_display", task2Data.num2, "87CEEB"); 
 
-            // Felbontás lépéseinek HTML struktúrájának generálása
             const stepsEl = document.getElementById('task2_decomposition_steps');
             stepsEl.innerHTML = `
                 <div class="task-number-display" id="task2_num1_recomposed_step" style="background-color: #FFD700">${task2Data.num1}</div>
@@ -1116,135 +1039,40 @@
                 <span style="margin: 0 5px;">=</span>
                 <input type="number" id="task2_final_answer_dec" style="width:60px;" min="0" max="${currentNumberRange}" placeholder="?">
             `;
-            // Max érték beállítása a végső válaszmezőre (task2_final_answer_dec)
             document.getElementById('task2_final_answer_dec').max = currentNumberRange;
 
-
-            // Vonalak és számegyenes rajzolása a DOM frissülése után
-            // Kis késleltetés, hogy a böngző renderelje az elemeket
             setTimeout(() => {
-                drawSubtractionLines(); // Draw the original decomposition lines for subtraction
-                drawSubtractionNumberLine(); // Draw the new number line for subtraction
+                drawSubtractionLines(); 
+                drawSubtractionNumberLine(); 
             }, 50);
         }
-
-         // Vonalak rajzolása a kivonás feladathoz (eredeti SVG)
-         function drawSubtractionLines() {
-            const svgEl = document.getElementById('subtraction-svg');
-             if (!svgEl) return; // Exit if the SVG container doesn't exist
-
-            // SVG tartalom törlése
-            svgEl.innerHTML = '';
-
-            const num2Display = document.getElementById('task2_num2_display');
-            const decInput1 = document.getElementById('task2_dec_input1');
-            const decInput2 = document.getElementById('task2_dec_input2');
-
-            // Ellenőrizzük, hogy az elemek léteznek-e
-            if (!num2Display || !decInput1 || !decInput2) {
-                console.error("Nem találhatóak az elemek a vonalak rajzolásához (kivonás).");
-                return;
-            }
-
-            // Elemek pozícióinak lekérése a viewport-hoz képest
-            const num2Rect = num2Display.getBoundingClientRect();
-            const input1Rect = decInput1.getBoundingClientRect();
-            const input2Rect = decInput2.getBoundingClientRect();
-            const containerRect = taskContainerSubtractionEl.getBoundingClientRect(); // A container pozíciója
-
-            // SVG koordináták kiszámítása (a container bal felső sarkához képest)
-            // Y koordinátákhoz hozzáadunk 100px-et a lejjebb tolásért
-            const svgX1 = num2Rect.left + num2Rect.width / 2 - containerRect.left + 20; // num2 aljának közepe
-            const svgY1 = num2Rect.bottom - containerRect.top + 160; // num2 alja + 100px lejjebb
-
-            const svgX2_1 = input1Rect.left + input1Rect.width / 2 - containerRect.left + 20; // input1 tetejének közepe
-            const svgY2_1 = input1Rect.top - containerRect.top + 160; // input1 teteje + 100px lejjebb
-
-            const svgX2_2 = input2Rect.left + input2Rect.width / 2 - containerRect.left + 20; // input2 tetejének közepe
-            const svgY2_2 = input2Rect.top - containerRect.top + 160; // input2 teteje + 100px lejjebb
-
-            // Első vonal (num2 -> input1)
-            const line1 = document.createElementNS(SVG_NS, 'line');
-            line1.setAttribute('x1', svgX1);
-            line1.setAttribute('y1', svgY1);
-            line1.setAttribute('x2', svgX2_1);
-            line1.setAttribute('y2', svgY2_1);
-            line1.setAttribute('stroke', 'gray'); // Vonal színe
-            line1.setAttribute('stroke-width', 2); // Vonal vastagsága
-            line1.setAttribute('marker-end', 'url(#arrowhead)'); // Nyíl a végére (ha van arrowhead definíció)
-
-            // Második vonal (num2 -> input2)
-            const line2 = document.createElementNS(SVG_NS, 'line');
-            line2.setAttribute('x1', svgX1);
-            line2.setAttribute('y1', svgY1);
-            line2.setAttribute('x2', svgX2_2);
-            line2.setAttribute('y2', svgY2_2);
-            line2.setAttribute('stroke', 'gray'); // Vonal színe
-            line2.setAttribute('stroke-width', 2); // Vonal vastagsága
-            line2.setAttribute('marker-end', 'url(#arrowhead)'); // Nyíl a végére
-
-            // Nyílhegy definíció (opcionális, de jól mutat) - Ezt lehetne közösíteni a számegyenes SVG-vel, de most a gyors megoldás kedvéért itt is definiáljuk
-            // Már definiálva van az összeadásnál, de ha külön SVG-ben van, akkor újra kell definiálni vagy hivatkozni rá.
-            // Most újra definiáljuk itt is, ha az SVG-k külön vannak. Ha egy SVG-ben lennének, elég lenne egyszer.
-             const defs = svgEl.querySelector('defs') || document.createElementNS(SVG_NS, 'defs');
-             if (!svgEl.querySelector('defs')) svgEl.appendChild(defs);
-
-             if (!defs.querySelector('#arrowhead')) {
-                 const arrowhead = document.createElementNS(SVG_NS, 'marker');
-                 arrowhead.setAttribute('id', 'arrowhead');
-                 arrowhead.setAttribute('markerWidth', '10');
-                 arrowhead.setAttribute('markerHeight', '7');
-                 arrowhead.setAttribute('refX', '10');
-                 arrowhead.setAttribute('refY', '3.5');
-                 arrowhead.setAttribute('orient', 'auto');
-                 arrowhead.setAttribute('markerUnits', 'strokeWidth');
-                 const polygon = document.createElementNS(SVG_NS, 'polygon');
-                 polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
-                 polygon.setAttribute('fill', 'gray'); // Nyílhegy színe
-                 arrowhead.appendChild(polygon);
-                 defs.appendChild(arrowhead);
-             }
-
-
-            // Vonalak hozzáadása az SVG-hez
-            svgEl.appendChild(line1);
-            svgEl.appendChild(line2);
-        }
-
-        // Vonalak rajzolása a kivonás feladathoz (számegyenes)
+        
         function drawSubtractionNumberLine() {
             const svg = subtractionNumberLineSvg;
             const axis = document.getElementById("subtractionAxis");
-            const startX = 40; // Starting X position for the number line
-            const svgWidth = parseInt(svg.getAttribute("viewBox").split(" ")[2]); // Get SVG width from viewBox
-            const maxNumOnLine = currentNumberRange; // Draw up to the current number range
+            const startX = 40; 
+            const svgWidth = parseInt(svg.getAttribute("viewBox").split(" ")[2]); 
+            const maxNumOnLine = currentNumberRange; 
             const spacing = calculateSpacing(svgWidth, startX, maxNumOnLine);
 
-            const yAxis = 80; // Y position for the number line axis
-            const yArrows = yAxis - 30; // Y position for the arrows (above the axis)
-            const yText = yArrows - 7; // Y position for text labels above arrows
-            const yQuestionMark = yAxis + 30; // Y position for the question mark (below the axis)
+            const yAxis = 80; 
+            const yArrows = yAxis - 30; 
+            const yText = yArrows - 7; 
+            const yQuestionMark = yAxis + 30; 
 
-
-            // Draw the main axis
             axis.setAttribute("x1", startX);
             axis.setAttribute("y1", yAxis);
-            axis.setAttribute("x2", startX + maxNumOnLine * spacing + 10); // Extend slightly beyond max number
+            axis.setAttribute("x2", startX + maxNumOnLine * spacing + 10); 
             axis.setAttribute("y2", yAxis);
-            // Add arrowheads to the axis (optional, but good practice for number lines)
             axis.setAttribute('marker-end', 'url(#arrowhead-axis-sub)');
             axis.setAttribute('marker-start', 'url(#arrowhead-axis-left-sub)');
 
-
-            // Highlight numbers: starting number, 10, and the difference
             const highlightedNumbers = [
-                { value: task2Data.num1, color: '#FFD700' }, // Gold color for starting number
-                { value: 10, color: '#ADD8E6' }, // Light Blue color for 10 (will be a dot)
-                // The difference will be marked by the result marker and question mark text
+                { value: task2Data.num1, color: '#FFD700' }, 
+                { value: 10, color: '#ADD8E6' }, 
             ];
             drawTicksAndNumbers(svg, ".subtraction-ticks", startX, spacing, maxNumOnLine, yAxis, highlightedNumbers);
 
-            // Draw the first arrow: from num1 back to 10
             const arrow1 = document.getElementById("subtractionArrow1");
             const x1_arrow1 = startX + task2Data.num1 * spacing;
             const x2_arrow1 = startX + 10 * spacing;
@@ -1252,21 +1080,18 @@
             arrow1.setAttribute("y1", yArrows);
             arrow1.setAttribute("x2", x2_arrow1);
             arrow1.setAttribute("y2", yArrows);
-            arrow1.setAttribute("class", "arrow-shaft operation-arrow"); // Apply theme color class
-            arrow1.setAttribute("marker-end", "url(#op-arrowhead-sub)"); // Arrow points left
+            arrow1.setAttribute("class", "arrow-shaft operation-arrow"); 
+            arrow1.setAttribute("marker-end", "url(#op-arrowhead-sub)"); 
 
-            // Label for the first arrow (amount subtracted to reach 10)
             const label1Num = document.getElementById("subtractionLabel1Num");
             const label1Op = document.getElementById("subtractionLabel1Op");
-            label1Num.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 + 6); // Position label text
+            label1Num.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 + 6); 
             label1Num.setAttribute("y", yText);
             label1Num.textContent = task2Data.dec_to_ten.toString();
-             label1Op.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 - 6); // Position label text
+            label1Op.setAttribute("x", (x1_arrow1 + x2_arrow1) / 2 - 6); 
             label1Op.setAttribute("y", yText);
             label1Op.textContent = "-";
 
-
-            // Draw the second arrow: from 10 back to difference
             const arrow2 = document.getElementById("subtractionArrow2");
             const x1_arrow2 = startX + 10 * spacing;
             const x2_arrow2 = startX + task2Data.difference * spacing;
@@ -1274,110 +1099,80 @@
             arrow2.setAttribute("y1", yArrows);
             arrow2.setAttribute("x2", x2_arrow2);
             arrow2.setAttribute("y2", yArrows);
-             arrow2.setAttribute("class", "arrow-shaft helper-arrow-green"); // Apply theme color class (e.g., green for helper step)
-             arrow2.setAttribute("marker-end", "url(#op-arrowhead-sub)"); // Arrow points left
+            arrow2.setAttribute("class", "arrow-shaft helper-arrow-green"); 
+            arrow2.setAttribute("marker-end", "url(#op-arrowhead-sub)"); 
 
-
-            // Label for the second arrow (remaining amount subtracted)
             const label2Num = document.getElementById("subtractionLabel2Num");
             const label2Op = document.getElementById("subtractionLabel2Op");
-            label2Num.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 + 6); // Position label text
+            label2Num.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 + 6); 
             label2Num.setAttribute("y", yText);
             label2Num.textContent = task2Data.dec_remaining.toString();
-             label2Op.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 - 6); // Position label text
+            label2Op.setAttribute("x", (x1_arrow2 + x2_arrow2) / 2 - 6); 
             label2Op.setAttribute("y", yText);
             label2Op.textContent = "-";
 
-
-            // Position the result marker (circle)
             const resultMarker = document.getElementById("subtractionResultMarker");
             resultMarker.setAttribute("cx", startX + task2Data.difference * spacing);
             resultMarker.setAttribute("cy", yAxis);
-             resultMarker.setAttribute("class", "result-marker"); // Apply theme color class
+            resultMarker.setAttribute("class", "result-marker"); 
 
-            // Position the question mark text below the result marker
             const resultQuestion = document.getElementById("subtractionResultQuestion");
             resultQuestion.setAttribute("x", startX + task2Data.difference * spacing);
-            resultQuestion.setAttribute("y", yQuestionMark); // Position below the axis
-             resultQuestion.setAttribute("class", "question-mark-text"); // Apply theme color class
-             resultQuestion.textContent = "?"; // Ensure it's a question mark
+            resultQuestion.setAttribute("y", yQuestionMark); 
+            resultQuestion.setAttribute("class", "question-mark-text"); 
+            resultQuestion.textContent = "?"; 
         }
 
-
-        // Kivonás feladat ellenőrzése
         function checkSubtractionTask() {
-             // Értékek beolvasása az input mezőkből
             const decInput1Val = parseInt(document.getElementById('task2_dec_input1').value);
             const decInput2Val = parseInt(document.getElementById('task2_dec_input2').value);
-            // Check only the task2_final_answer_dec for the final answer
             const finalAnswerDecVal = parseInt(document.getElementById('task2_final_answer_dec').value);
 
+            const feedbackEl = document.getElementById('task2_feedback'); 
 
-            const feedbackEl = document.getElementById('task2_feedback'); // Visszajelzés elem
-
-            // Ellenőrzések
-            // 1. A kivonandó első része helyes? (annyit bontottunk le, amennyi 10-ig kell)
             let correctDecompositionPart1 = (decInput1Val === task2Data.dec_to_ten);
-            // 2. A két felbontott rész összege kiadja az eredeti kivonandó számot?
             let correctDecompositionSum = (decInput1Val + decInput2Val === task2Data.num2);
-            // 3. A végeredmény helyes? (csak a felbontás utáni mezőt ellenőrizzük)
             let correctFinalAnswer = (finalAnswerDecVal === task2Data.difference);
 
-
-            // Visszajelzés logikája
             if (isNaN(decInput1Val) || isNaN(decInput2Val) || isNaN(finalAnswerDecVal)) {
-                // Ha valamelyik mező üres vagy nem szám
                 feedbackEl.textContent = 'Kérlek, tölts ki minden mezőt!';
                 feedbackEl.className = 'feedback incorrect';
             } else if (correctDecompositionPart1 && correctDecompositionSum && correctFinalAnswer) {
-                // Minden helyes
                 feedbackEl.textContent = 'Ügyes vagy! A felbontás és a végeredmény is helyes.';
                 feedbackEl.className = 'feedback correct';
             } else if (!(correctDecompositionPart1 && correctDecompositionSum) && correctFinalAnswer) {
-                // Végeredmény jó, de a felbontás nem
                 feedbackEl.textContent = 'A végeredmény jó, de a felbontás nem tökéletes. Próbáld újra a felbontást!';
                 feedbackEl.className = 'feedback incorrect';
             } else if ((correctDecompositionPart1 && correctDecompositionSum) && !correctFinalAnswer) {
-                // Felbontás jó, de a végeredmény nem
                 feedbackEl.textContent = 'A felbontás jó, de a végeredmény nem. Számold újra!';
                 feedbackEl.className = 'feedback incorrect';
             } else {
-                // Semmi sem jó
                 feedbackEl.textContent = 'Sajnos sem a felbontás, sem a végeredmény nem jó. Próbáld újra!';
                 feedbackEl.className = 'feedback incorrect';
             }
-            // Visszajelzés eltüntetése 10 másodperc után
             clearFeedback(feedbackEl);
         }
 
-
-        // Visszajelzés törlése idő után
         function clearFeedback(feedbackEl) {
             setTimeout(() => {
                 feedbackEl.textContent = '';
-                feedbackEl.className = 'feedback'; // Visszajelzés stílusának visszaállítása
-            }, 10000); // 10 másodperc
+                feedbackEl.className = 'feedback'; 
+            }, 10000); 
         }
 
-        // Oldal betöltésekor fut le
         document.addEventListener('DOMContentLoaded', function() {
-            // Összeadás feladat generálása induláskor
             generateAdditionTask();
-            // Kivonás feladat generálása induláskor
             generateSubtractionTask();
 
-            // Alapértelmezett téma alkalmazása és a hozzá tartozó gomb kiemelése
             const defaultTheme = 'theme-candy';
             applyTheme(defaultTheme);
 
-            // Vonalak és számegyenes újrarajzolása ablak átméretezésekor
             window.addEventListener('resize', () => {
-                 // Kis késleltetés az átméretezés befejezéséhez
                 setTimeout(() => {
-                    drawAdditionLines(); // Draw the original decomposition lines
-                    drawAdditionNumberLine(); // Draw the new number line
-                    drawSubtractionLines(); // Draw the original decomposition lines for subtraction
-                    drawSubtractionNumberLine(); // Draw the new number line for subtraction
+                    drawAdditionLines(); 
+                    drawAdditionNumberLine(); 
+                    drawSubtractionLines(); 
+                    drawSubtractionNumberLine(); 
                 }, 100);
             });
         });
