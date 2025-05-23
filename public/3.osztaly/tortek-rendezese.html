@@ -145,7 +145,7 @@
             margin-bottom: 5px;
         }
         .fraction-item .fraction-label {
-            font-size: 1.1em; 
+            font-size: 1.2em; /* NÖVELVE */
             font-weight: bold;
             transition: color 0.5s ease;
         }
@@ -160,12 +160,21 @@
         }
         .fraction-division-line { 
             stroke: var(--fraction-outline-color, #666); 
-            stroke-width: 1px; /* Változtatva 1.2-ről 1px-re */
+            stroke-width: 1px; 
         }
         .fraction-circle-outline { 
             fill: none;
             stroke: var(--fraction-outline-color, #666); 
-            stroke-width: 1px; /* Változtatva 1.2-ről 1px-re */
+            stroke-width: 1px; 
+        }
+        .slice-number-text { 
+            font-family: 'Arial', sans-serif;
+            font-size: 12px; /* NÖVELVE */
+            font-weight: bold;
+            fill: var(--slice-number-text-color, #333333);
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
         }
 
 
@@ -231,6 +240,7 @@
             background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;
             --fraction-base-fill-color: #fffafa;
             --fraction-outline-color: #8A2BE2; 
+            --slice-number-text-color: #7c3c60; 
         }
         body.theme-candy .control-label { color: #c71585; }
         body.theme-candy .theme-button.active, body.theme-candy .subtype-button.active { background-color: #ffb6c1; color: #7c3c60; }
@@ -254,6 +264,7 @@
             background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;
             --fraction-base-fill-color: #1e293b; 
             --fraction-outline-color: #facc15; 
+            --slice-number-text-color: #e2e8f0; 
         }
         body.theme-space .control-label { color: #93c5fd; }
         body.theme-space .theme-button.active, body.theme-space .subtype-button.active { background-color: #1e3a8a; color: #93c5fd; }
@@ -271,12 +282,12 @@
         body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
         body.theme-space .fraction-circle-fill { fill: #3b82f6; }
 
-
         /* 3. Jungle Theme (Boyish) */
         body.theme-jungle { 
             background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;
             --fraction-base-fill-color: #e8f5e9;
             --fraction-outline-color: #A0522D; 
+            --slice-number-text-color: #1b5e20; 
         }
         body.theme-jungle .control-label { color: #558b2f; }
         body.theme-jungle .theme-button.active, body.theme-jungle .subtype-button.active { background-color: #689f38; color: #dcedc8; }
@@ -300,6 +311,7 @@
             background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;
             --fraction-base-fill-color: #f5f5f5;
             --fraction-outline-color: #483D8B; 
+            --slice-number-text-color: #2c2454; 
         }
         body.theme-magicforest .control-label { color: #9932cc; }
         body.theme-magicforest .theme-button.active, body.theme-magicforest .subtype-button.active { background-color: #9370db; color: #f8f0ff; }
@@ -321,6 +333,7 @@
             background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;
             --fraction-base-fill-color: #37474f;
             --fraction-outline-color: #FFAB00; 
+            --slice-number-text-color: #1a1f22; 
         }
         body.theme-tech .control-label { color: #26c6da; }
         body.theme-tech .theme-button.active, body.theme-tech .subtype-button.active { background-color: #00838f; color: #e0f7fa; }
@@ -342,6 +355,7 @@
             background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;
             --fraction-base-fill-color: #e0f7fa;
             --fraction-outline-color: #FF7F50; 
+            --slice-number-text-color: #004d40; 
         }
         body.theme-ocean .control-label { color: #00acc1; }
         body.theme-ocean .theme-button.active, body.theme-ocean .subtype-button.active { background-color: #4db6ac; color: #e0f2f1; }
@@ -363,6 +377,7 @@
             background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;
             --fraction-base-fill-color: #e3f2fd;
             --fraction-outline-color: #d32f2f; 
+            --slice-number-text-color: #0a3069; 
         }
         body.theme-sport .control-label { color: #1976d2; }
         body.theme-sport .theme-button.active, body.theme-sport .subtype-button.active { background-color: #1976d2; color: #e3f2fd; }
@@ -384,6 +399,7 @@
             background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;
             --fraction-base-fill-color: #fffafa;
             --fraction-outline-color: #ff6347; 
+            --slice-number-text-color: #556b2f; 
         }
         body.theme-flowergarden .control-label { color: #ff7f50; }
         body.theme-flowergarden .theme-button.active, body.theme-flowergarden .subtype-button.active { background-color: #ffdab9; color: #8b4513; }
@@ -405,6 +421,7 @@
             background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;
             --fraction-base-fill-color: #efebe9;
             --fraction-outline-color: #5D4037; 
+            --slice-number-text-color: #3e2723; 
         }
         body.theme-adventure .control-label { color: #6d4c41; }
         body.theme-adventure .theme-button.active, body.theme-adventure .subtype-button.active { background-color: #a1887f; color: #efebe9; }
@@ -426,6 +443,7 @@
             background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;
             --fraction-base-fill-color: #f5faff;
             --fraction-outline-color: #4682B4; 
+            --slice-number-text-color: #2a4a67; 
         }
         body.theme-sky .control-label { color: #00bfff; }
         body.theme-sky .theme-button.active, body.theme-sky .subtype-button.active { background-color: #add8e6; color: #005a9c; }
@@ -715,6 +733,39 @@
             outlineCircle.setAttribute("class", "fraction-circle-outline");
             svg.appendChild(outlineCircle);
             
+            if (D_lines > 0 && Number.isFinite(D_lines)) {
+                const sliceAngle = (2 * Math.PI) / D_lines;
+                let sorszamCounter = 1;
+                const textRadiusFactor = D_lines > 8 ? 0.7 : 0.65; // Kicsit kijjebb a számok, ha sok cikkely van
+
+                for (let k = 0; k < fraction.numerator; k++) { // Kitöltött cikkelyek
+                    if (sorszamCounter > D_lines) break;
+                    const midpointAngle = (k + 0.5) * sliceAngle - (Math.PI / 2);
+                    const textX = cx + (radius * textRadiusFactor) * Math.cos(midpointAngle);
+                    const textY = cy + (radius * textRadiusFactor) * Math.sin(midpointAngle);
+                    
+                    const sorszamText = document.createElementNS(SVG_NS, "text");
+                    sorszamText.setAttribute("x", textX);
+                    sorszamText.setAttribute("y", textY);
+                    sorszamText.setAttribute("class", "slice-number-text");
+                    sorszamText.textContent = sorszamCounter++;
+                    svg.appendChild(sorszamText);
+                }
+
+                for (let k = fraction.numerator; k < D_lines; k++) { // Üres cikkelyek
+                    if (sorszamCounter > D_lines) break;
+                    const midpointAngle = (k + 0.5) * sliceAngle - (Math.PI / 2);
+                    const textX = cx + (radius * textRadiusFactor) * Math.cos(midpointAngle);
+                    const textY = cy + (radius * textRadiusFactor) * Math.sin(midpointAngle);
+                    
+                    const sorszamText = document.createElementNS(SVG_NS, "text");
+                    sorszamText.setAttribute("x", textX);
+                    sorszamText.setAttribute("y", textY);
+                    sorszamText.setAttribute("class", "slice-number-text");
+                    sorszamText.textContent = sorszamCounter++;
+                    svg.appendChild(sorszamText);
+                }
+            }
             return svg;
         }
 
