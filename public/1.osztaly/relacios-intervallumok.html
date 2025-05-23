@@ -44,7 +44,7 @@
             font-size: 0.95em;
             transition: color 0.5s ease;
         }
-       
+        
         .theme-button, .range-button {
             padding: 8px 12px;
             border: 1px solid transparent;
@@ -230,6 +230,80 @@
         .feedback li {
             margin-bottom: 3px;
         }
+
+        /* Number Line Styles - Updated for consistency */
+        .number-line-relational-container {
+            margin-top: 20px;
+            margin-bottom: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto; 
+        }
+        .number-line-relational {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+        .number-line-relational .axis { 
+            stroke: var(--numberline-axis-color, #333);
+            stroke-width: 2.5; 
+        }
+        .number-line-relational .tick { 
+            stroke: var(--numberline-tick-color, #888);
+            stroke-width: 1.5; 
+        }
+        .number-line-relational .number-text { 
+            fill: var(--numberline-text-color, #333);
+            font-size: 11px; 
+            font-weight: bold; 
+            text-anchor: middle; 
+            dominant-baseline: hanging; 
+        }
+        .number-line-relational .interval-line { 
+            stroke-width: 4; 
+            stroke-linecap: round;
+        }
+        .number-line-relational .interval-line.primary {
+            stroke: var(--numberline-interval-color, blue);
+        }
+         .number-line-relational .interval-line.secondary {
+            stroke: var(--numberline-interval-secondary-color, darkorange);
+        }
+        .number-line-relational .interval-endpoint { 
+            stroke-width: 2; 
+        }
+        .number-line-relational .interval-endpoint.primary {
+            stroke: var(--numberline-interval-color, blue);
+        }
+        .number-line-relational .interval-endpoint.secondary {
+             stroke: var(--numberline-interval-secondary-color, darkorange);
+        }
+        .number-line-relational .interval-endpoint.open { 
+            fill: var(--numberline-endpoint-open-fill, white); 
+        }
+        .number-line-relational .interval-endpoint.closed.primary { 
+            fill: var(--numberline-interval-color, blue); 
+        }
+        .number-line-relational .interval-endpoint.closed.secondary { 
+            fill: var(--numberline-interval-secondary-color, darkorange);
+        }
+        .number-line-relational .arrow-head polygon { 
+            stroke: none; 
+            fill: var(--numberline-axis-color, #333); 
+        }
+        .number-line-relational .arrow-head.primary polygon {
+             fill: var(--numberline-axis-color, #333); 
+        }
+         .number-line-relational .arrow-head.secondary polygon {
+             fill: var(--numberline-axis-color, #333); 
+        }
+        .number-line-relational .value-label {
+            fill: var(--numberline-text-color, #333);
+            font-size: 10px;
+            font-weight: bold;
+            text-anchor: middle;
+        }
         
         /* --- THEME DEFINITIONS --- */
         .theme-button, .range-button {
@@ -239,7 +313,11 @@
         }
         
         /* 1. Candy Theme (Girlish) */
-        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;
+            --numberline-axis-color: #E089B5; --numberline-tick-color: #F0A8CE; --numberline-text-color: #8a2be2;
+            --numberline-interval-color: #ff69b4; --numberline-endpoint-open-fill: #fff0f5;
+            --numberline-interval-secondary-color: #da70d6; 
+        }
         body.theme-candy .control-label { color: #c71585; }
         body.theme-candy .theme-button.active, body.theme-candy .range-button.active { background-color: #ffb6c1; color: #7c3c60; }
         body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
@@ -256,7 +334,11 @@
 
 
         /* 2. Space Theme (Boyish) */
-        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;}
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;
+            --numberline-axis-color: #60a5fa; --numberline-tick-color: #475569; --numberline-text-color: #e2e8f0;
+            --numberline-interval-color: #facc15; --numberline-endpoint-open-fill: #0f172a; 
+            --numberline-interval-secondary-color: #fb923c;
+        }
         body.theme-space .control-label { color: #93c5fd; }
         body.theme-space .theme-button.active, body.theme-space .range-button.active { background-color: #1e3a8a; color: #93c5fd; }
         body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
@@ -272,7 +354,11 @@
         body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
 
         /* 3. Jungle Theme (Boyish) */
-        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;}
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;
+            --numberline-axis-color: #558b2f; --numberline-tick-color: #81c784; --numberline-text-color: #1b5e20;
+            --numberline-interval-color: #ff8f00; --numberline-endpoint-open-fill: #f0fff0;
+            --numberline-interval-secondary-color: #f4511e;
+        }
         body.theme-jungle .control-label { color: #558b2f; }
         body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active { background-color: #689f38; color: #dcedc8; }
         body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
@@ -288,7 +374,11 @@
         body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
 
         /* 4. Magic Forest Theme (Girlish) */
-        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;}
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;
+            --numberline-axis-color: #8a2be2; --numberline-tick-color: #ba55d3; --numberline-text-color: #483d8b;
+            --numberline-interval-color: #9932cc; --numberline-endpoint-open-fill: #e6e6fa;
+            --numberline-interval-secondary-color: #dda0dd;
+        }
         body.theme-magicforest .control-label { color: #9932cc; }
         body.theme-magicforest .theme-button.active, body.theme-magicforest .range-button.active { background-color: #9370db; color: #f8f0ff; }
         body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
@@ -302,7 +392,11 @@
         body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
 
         /* 5. Robo/Tech Theme (Boyish) */
-        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;}
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;
+            --numberline-axis-color: #00acc1; --numberline-tick-color: #78909c; --numberline-text-color: #eceff1;
+            --numberline-interval-color: #ffab00; --numberline-endpoint-open-fill: #263238;
+            --numberline-interval-secondary-color: #00e676;
+        }
         body.theme-tech .control-label { color: #26c6da; }
         body.theme-tech .theme-button.active, body.theme-tech .range-button.active { background-color: #00838f; color: #e0f7fa; }
         body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
@@ -316,7 +410,11 @@
         body.theme-tech button.task-button:hover { background-color: #00838f; }
 
         /* 6. Ocean Theme (Girlish) */
-        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;}
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;
+            --numberline-axis-color: #20b2aa; --numberline-tick-color: #80deea; --numberline-text-color: #00796b;
+            --numberline-interval-color: #ff7f50; --numberline-endpoint-open-fill: #e0f7fa;
+            --numberline-interval-secondary-color: #f0e68c;
+        }
         body.theme-ocean .control-label { color: #00acc1; }
         body.theme-ocean .theme-button.active, body.theme-ocean .range-button.active { background-color: #4db6ac; color: #e0f2f1; }
         body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
@@ -330,7 +428,11 @@
         body.theme-ocean button.task-button:hover { background-color: #00897b; }
 
         /* 7. Sport Theme (Boyish) */
-        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;}
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;
+            --numberline-axis-color: #d32f2f; --numberline-tick-color: #42a5f5; --numberline-text-color: #0d47a1;
+            --numberline-interval-color: #fbc02d; --numberline-endpoint-open-fill: #e3f2fd;
+            --numberline-interval-secondary-color: #ff7043;
+        }
         body.theme-sport .control-label { color: #1976d2; }
         body.theme-sport .theme-button.active, body.theme-sport .range-button.active { background-color: #1976d2; color: #e3f2fd; }
         body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
@@ -344,7 +446,11 @@
         body.theme-sport button.task-button:hover { background-color: #1976d2; }
 
         /* 8. Flower Garden Theme (Girlish) */
-        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;}
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;
+            --numberline-axis-color: #ff6347; --numberline-tick-color: #ffe4b5; --numberline-text-color: #556b2f;
+            --numberline-interval-color: #ffd700; --numberline-endpoint-open-fill: #fffaf0;
+            --numberline-interval-secondary-color: #adff2f;
+        }
         body.theme-flowergarden .control-label { color: #ff7f50; }
         body.theme-flowergarden .theme-button.active, body.theme-flowergarden .range-button.active { background-color: #ffdab9; color: #8b4513; }
         body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
@@ -358,7 +464,11 @@
         body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
 
         /* 9. Adventure Theme (Boyish) */
-        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;}
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;
+            --numberline-axis-color: #bf360c; --numberline-tick-color: #8d6e63; --numberline-text-color: #5d4037;
+            --numberline-interval-color: #ffab40; --numberline-endpoint-open-fill: #f5f5dc;
+            --numberline-interval-secondary-color: #8bc34a;
+        }
         body.theme-adventure .control-label { color: #6d4c41; }
         body.theme-adventure .theme-button.active, body.theme-adventure .range-button.active { background-color: #a1887f; color: #efebe9; }
         body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
@@ -372,7 +482,11 @@
         body.theme-adventure button.task-button:hover { background-color: #5d4037; }
 
         /* 10. Sky Theme (Girlish) */
-        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;}
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;
+            --numberline-axis-color: #1e90ff; --numberline-tick-color: #add8e6; --numberline-text-color: #4682b4;
+            --numberline-interval-color: #ffd700; --numberline-endpoint-open-fill: #f0f8ff;
+            --numberline-interval-secondary-color: #b0c4de;
+        }
         body.theme-sky .control-label { color: #00bfff; }
         body.theme-sky .theme-button.active, body.theme-sky .range-button.active { background-color: #add8e6; color: #005a9c; }
         body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
@@ -444,6 +558,9 @@
             </div>
             <button class="task-button check-button" onclick="checkTask(0)">Ellenőrzés</button>
             <p id="task_0_feedback" class="feedback"></p>
+            <div class="number-line-relational-container">
+                <svg id="numberLine_task_0" class="number-line-relational" viewBox="0 0 500 100"></svg>
+            </div>
         </div>
 
         <div class="task" id="task_1_container">
@@ -473,6 +590,9 @@
             </div>
             <button class="task-button check-button" onclick="checkTask(1)">Ellenőrzés</button>
             <p id="task_1_feedback" class="feedback"></p>
+            <div class="number-line-relational-container">
+                <svg id="numberLine_task_1" class="number-line-relational" viewBox="0 0 500 100"></svg>
+            </div>
         </div>
 
         <div class="task" id="task_2_container">
@@ -502,6 +622,9 @@
             </div>
             <button class="task-button check-button" onclick="checkTask(2)">Ellenőrzés</button>
             <p id="task_2_feedback" class="feedback"></p>
+            <div class="number-line-relational-container">
+                <svg id="numberLine_task_2" class="number-line-relational" viewBox="0 0 500 120"></svg> 
+            </div>
         </div>
 
         <div class="task" id="task_3_container">
@@ -531,12 +654,16 @@
             </div>
             <button class="task-button check-button" onclick="checkTask(3)">Ellenőrzés</button>
             <p id="task_3_feedback" class="feedback"></p>
+            <div class="number-line-relational-container">
+                <svg id="numberLine_task_3" class="number-line-relational" viewBox="0 0 500 120"></svg>
+            </div>
         </div>
 
     </div>
 
     <script>
         let currentNumberRangeMax = 20; 
+        const SVG_NS = "http://www.w3.org/2000/svg";
         
         const tasks = [
             {
@@ -630,7 +757,7 @@
                 exprObj.num2 = Math.floor(Math.random() * exprObj.num1 ) + 0; 
                 if (exprObj.num1 - exprObj.num2 < 0) { 
                     exprObj.num2 = exprObj.num1; 
-                 }
+                }
             }
             exprObj.text = `${exprObj.num1} ${exprObj.operator} ${exprObj.num2}`;
             exprObj.trueResult = evaluateExpression(exprObj.num1, exprObj.operator, exprObj.num2);
@@ -649,21 +776,21 @@
                 const res2 = currentTask.expr2.trueResult;
                 let solvable = false;
                 
-                if (taskIndex === 0) { // E1 < X < E2
+                if (taskIndex === 0) { 
                     solvable = (res2 - res1 > 1) && res1 >=0 && res2 >=0 && res1 < currentNumberRangeMax && res2 <= currentNumberRangeMax;
-                } else if (taskIndex === 1) { // E1 > Y > E2
+                } else if (taskIndex === 1) { 
                     solvable = (res1 - res2 > 1) && res1 >=0 && res2 >=0 && res1 <= currentNumberRangeMax && res2 < currentNumberRangeMax;
-                } else if (taskIndex === 2) { // E1 < Z > E2
-                    solvable = res1 >=0 && res2 >=0 && res1 < currentNumberRangeMax && res2 < currentNumberRangeMax && Math.max(res1, res2) < currentNumberRangeMax ; 
-                } else if (taskIndex === 3) { // E1 > W < E2
-                    solvable = res1 > 0 && res2 > 0 && res1 <= currentNumberRangeMax && res2 <= currentNumberRangeMax && Math.min(res1, res2) > 0; 
+                } else if (taskIndex === 2) { 
+                    solvable = Math.max(res1, res2) < currentNumberRangeMax -1 && res1 !== res2 ; 
+                } else if (taskIndex === 3) { 
+                     solvable = Math.min(res1, res2) > 0 && res1 !== res2; 
                 }
                 
                 if (solvable) break;
                 attempts++;
             }
             if (attempts === MAX_ATTEMPTS) {
-                console.warn(`Could not generate a solvable task ${taskIndex} after ${MAX_ATTEMPTS} attempts. Using last attempt or fixed values.`);
+                console.warn(`Could not generate a perfectly solvable task ${taskIndex} for number line after ${MAX_ATTEMPTS} attempts. Using last attempt.`);
                 currentTask.expr1.trueResult = Math.max(0, Math.min(currentTask.expr1.trueResult, currentNumberRangeMax));
                 currentTask.expr2.trueResult = Math.max(0, Math.min(currentTask.expr2.trueResult, currentNumberRangeMax));
             }
@@ -685,6 +812,8 @@
             document.getElementById(`task_${taskIndex}_user_res1`).style.borderColor = '';
             document.getElementById(`task_${taskIndex}_user_res2`).style.borderColor = '';
             varInputsContainer.querySelectorAll('.variable-value-input').forEach(input => input.style.borderColor = '');
+            
+            drawRelationNumberLine(taskIndex, currentTask.expr1.trueResult, currentTask.expr2.trueResult, currentTask.relation1, currentTask.relation2);
         }
 
         function generateAllTasks() {
@@ -717,6 +846,182 @@
                 default: return false;
             }
         }
+
+        function drawRelationNumberLine(taskIndex, val1, val2, rel1, rel2) {
+            const svgId = `numberLine_task_${taskIndex}`;
+            const svg = document.getElementById(svgId);
+            if (!svg) return;
+
+            svg.innerHTML = ''; 
+
+            const verticalElementSpacing = 20; 
+            let viewBoxHeight = 100; 
+            let yAxis = viewBoxHeight / 2 + 10; 
+            let yIntervalSingle = yAxis - verticalElementSpacing; 
+            let yIntervalBottom, yIntervalTop; 
+
+            if (taskIndex === 2 || taskIndex === 3) {
+                viewBoxHeight = 120; 
+                yAxis = viewBoxHeight / 2; 
+                yIntervalBottom = yAxis - verticalElementSpacing;
+                yIntervalTop = yIntervalBottom - verticalElementSpacing; 
+            }
+            svg.setAttribute('viewBox', `0 0 500 ${viewBoxHeight}`);
+
+
+            const viewBoxWidth = 500;
+            const padding = 35; 
+            const yNumbers = yAxis + 18; 
+            const tickHeight = 6; 
+            const endpointRadius = 5; 
+            const intervalArrowHeadSize = 3; 
+
+            const defs = document.createElementNS(SVG_NS, 'defs');
+            
+            function createIntervalMarker(idSuffix, typeClass) {
+                const marker = document.createElementNS(SVG_NS, 'marker');
+                marker.setAttribute('id', `interval_arrow_${taskIndex}_${idSuffix}`);
+                marker.setAttribute('viewBox', `0 0 ${intervalArrowHeadSize*2} ${intervalArrowHeadSize*2}`); 
+                marker.setAttribute('refX', intervalArrowHeadSize*2); 
+                marker.setAttribute('refY', intervalArrowHeadSize);   
+                marker.setAttribute('markerWidth', intervalArrowHeadSize); 
+                marker.setAttribute('markerHeight', intervalArrowHeadSize); 
+                marker.setAttribute('orient', "auto-start-reverse"); // Key change for correct arrow direction
+                const path = document.createElementNS(SVG_NS, 'path');
+                path.setAttribute('d', `M 0 0 L ${intervalArrowHeadSize*2} ${intervalArrowHeadSize} L 0 ${intervalArrowHeadSize*2} z`); 
+                path.classList.add('arrow-head', typeClass); 
+                marker.appendChild(path);
+                defs.appendChild(marker);
+            }
+            createIntervalMarker('primary', 'primary');
+            if (taskIndex === 2 || taskIndex === 3) {
+                 createIntervalMarker('secondary', 'secondary');
+            }
+            svg.appendChild(defs);
+            
+            const usableWidth = viewBoxWidth - 2 * padding;
+            const spacing = currentNumberRangeMax > 0 ? usableWidth / currentNumberRangeMax : usableWidth;
+
+            const axisLine = document.createElementNS(SVG_NS, 'line');
+            axisLine.setAttribute('x1', padding); 
+            axisLine.setAttribute('y1', yAxis);
+            axisLine.setAttribute('x2', viewBoxWidth - padding); 
+            axisLine.setAttribute('y2', yAxis);
+            axisLine.setAttribute('class', 'axis');
+            svg.appendChild(axisLine);
+
+            for (let i = 0; i <= currentNumberRangeMax; i++) {
+                const x = padding + i * spacing;
+                const tick = document.createElementNS(SVG_NS, 'line');
+                tick.setAttribute('x1', x);
+                tick.setAttribute('y1', yAxis - tickHeight / 2);
+                tick.setAttribute('x2', x);
+                tick.setAttribute('y2', yAxis + tickHeight / 2);
+                tick.setAttribute('class', 'tick');
+                svg.appendChild(tick);
+
+                const numText = document.createElementNS(SVG_NS, 'text');
+                numText.setAttribute('x', x);
+                numText.setAttribute('y', yNumbers); 
+                numText.textContent = i;
+                numText.setAttribute('class', 'number-text');
+                svg.appendChild(numText);
+            }
+            
+            function createEndpoint(cx, yPos, isOpen, typeClass) {
+                const circle = document.createElementNS(SVG_NS, 'circle');
+                circle.setAttribute('cx', cx);
+                circle.setAttribute('cy', yPos);
+                circle.setAttribute('r', endpointRadius);
+                circle.classList.add('interval-endpoint', typeClass);
+                circle.classList.add(isOpen ? 'open' : 'closed');
+                return circle;
+            }
+
+            function createValueLabel(x, yPos, value) {
+                const label = document.createElementNS(SVG_NS, 'text');
+                label.setAttribute('x', x);
+                label.setAttribute('y', yPos - endpointRadius - 5); 
+                label.textContent = value;
+                label.setAttribute('class', 'value-label');
+                return label;
+            }
+
+            function drawSingleIntervalRay(yPos, boundaryValue, relationIsLess, isPrimaryInterval) {
+                let lineX1, lineX2, endpointX, endpointIsOpen;
+                const typeClass = isPrimaryInterval ? 'primary' : 'secondary';
+                const markerId = `interval_arrow_${taskIndex}_${typeClass}`;
+
+                endpointX = padding + boundaryValue * spacing;
+                endpointIsOpen = true; 
+
+                const intervalLine = document.createElementNS(SVG_NS, 'line');
+                intervalLine.setAttribute('y1', yPos);
+                intervalLine.setAttribute('y2', yPos);
+                intervalLine.classList.add('interval-line', typeClass);
+
+                if (relationIsLess) { // VAR < boundaryValue. Ray from boundaryValue to the left.
+                    if (boundaryValue <= 0) return; 
+                    lineX1 = padding; // Line starts at the left edge
+                    lineX2 = endpointX; // Line ends at the boundary value
+                    intervalLine.setAttribute('x1', lineX1);
+                    intervalLine.setAttribute('x2', lineX2);
+                    intervalLine.setAttribute('marker-start', `url(#${markerId})`);
+                } else { // VAR > boundaryValue. Ray from boundaryValue to the right.
+                    if (boundaryValue >= currentNumberRangeMax) return; 
+                    lineX1 = endpointX; // Line starts at the boundary value
+                    lineX2 = viewBoxWidth - padding; // Line ends at the right edge
+                    intervalLine.setAttribute('x1', lineX1);
+                    intervalLine.setAttribute('x2', lineX2);
+                    intervalLine.setAttribute('marker-end', `url(#${markerId})`);
+                }
+                
+                svg.appendChild(intervalLine);
+                svg.appendChild(createEndpoint(endpointX, yPos, endpointIsOpen, typeClass));
+                svg.appendChild(createValueLabel(endpointX, yPos, boundaryValue));
+            }
+
+
+            if (taskIndex === 0 || taskIndex === 1) { 
+                let lowerBound, upperBound, lowerOpen, upperOpen;
+                
+                if (taskIndex === 0) { 
+                    lowerBound = val1; upperBound = val2;
+                    lowerOpen = true; upperOpen = true;
+                    if (lowerBound >= upperBound -1 ) return; 
+                } else { 
+                    lowerBound = val2; upperBound = val1;
+                    lowerOpen = true; upperOpen = true;
+                    if (lowerBound >= upperBound -1) return;
+                }
+
+                let intervalLineX1 = padding + lowerBound * spacing;
+                let intervalLineX2 = padding + upperBound * spacing;
+
+                const intervalLine = document.createElementNS(SVG_NS, 'line');
+                intervalLine.setAttribute('x1', intervalLineX1);
+                intervalLine.setAttribute('y1', yIntervalSingle);
+                intervalLine.setAttribute('x2', intervalLineX2);
+                intervalLine.setAttribute('y2', yIntervalSingle);
+                intervalLine.classList.add('interval-line', 'primary');
+                svg.appendChild(intervalLine);
+
+                svg.appendChild(createEndpoint(intervalLineX1, yIntervalSingle, lowerOpen, 'primary'));
+                svg.appendChild(createValueLabel(intervalLineX1, yIntervalSingle, lowerBound));
+                
+                svg.appendChild(createEndpoint(intervalLineX2, yIntervalSingle, upperOpen, 'primary'));
+                svg.appendChild(createValueLabel(intervalLineX2, yIntervalSingle, upperBound));
+
+            } else if (taskIndex === 2) { // val1 < Z > val2  (Z > val1 AND Z > val2)
+                drawSingleIntervalRay(yIntervalTop, val1, false, true); 
+                drawSingleIntervalRay(yIntervalBottom, val2, false, false);
+
+            } else if (taskIndex === 3) { // val1 > W < val2 (W < val1 AND W < val2)
+                drawSingleIntervalRay(yIntervalTop, val1, true, true); 
+                drawSingleIntervalRay(yIntervalBottom, val2, true, false);
+            }
+        }
+
 
         function checkTask(taskIndex) {
             const currentTask = tasks[taskIndex];
@@ -777,89 +1082,69 @@
             });
             userEnteredSolutions = [...new Set(userEnteredSolutions)].sort((a, b) => a - b);
 
-            let allVarValuesCorrect = true; // Renamed for clarity
+            let allVarValuesCorrect = true; 
             let hasVarValues = userEnteredSolutions.length > 0;
             let varFeedbackMessages = [];
             
             let correctSolutionsSet = [];
+            const trueRes1 = currentTask.expr1.trueResult;
+            const trueRes2 = currentTask.expr2.trueResult;
+
             if (taskIndex === 0) { 
-                for (let i = userRes1 + 1; i < userRes2; i++) {
+                for (let i = trueRes1 + 1; i < trueRes2; i++) {
                     correctSolutionsSet.push(i);
                 }
             } else if (taskIndex === 1) { 
-                for (let i = userRes2 + 1; i < userRes1; i++) {
+                for (let i = trueRes2 + 1; i < trueRes1; i++) {
                     correctSolutionsSet.push(i);
+                }
+            } else if (taskIndex === 2) { 
+                const lowerLimit = Math.max(trueRes1, trueRes2);
+                for (let i = lowerLimit + 1; i <= currentNumberRangeMax; i++) {
+                     if (i > trueRes1 && i > trueRes2) { 
+                        correctSolutionsSet.push(i);
+                    }
+                }
+            } else if (taskIndex === 3) { 
+                const upperLimit = Math.min(trueRes1, trueRes2);
+                for (let i = 0; i < upperLimit; i++) {
+                     if (i < trueRes1 && i < trueRes2) { 
+                        correctSolutionsSet.push(i);
+                    }
                 }
             }
 
-            if (taskIndex === 0 || taskIndex === 1) { 
-                if (!hasVarValues && correctSolutionsSet.length > 0) {
+
+            if (!hasVarValues && correctSolutionsSet.length > 0) {
+                allVarValuesCorrect = false;
+                varFeedbackMessages.push(`<li>Nem adtál meg ${currentTask.variableName} értéket.</li>`);
+            } else if (hasVarValues || correctSolutionsSet.length === 0) { 
+                if (userEnteredSolutions.length !== correctSolutionsSet.length) {
                     allVarValuesCorrect = false;
-                    varFeedbackMessages.push(`<li>Nem adtál meg ${currentTask.variableName} értéket.</li>`);
-                } else if (hasVarValues || correctSolutionsSet.length === 0) { 
-                    if (userEnteredSolutions.length !== correctSolutionsSet.length) {
-                        allVarValuesCorrect = false;
-                    } else {
-                        for (let i = 0; i < userEnteredSolutions.length; i++) {
-                            if (userEnteredSolutions[i] !== correctSolutionsSet[i]) {
-                                allVarValuesCorrect = false;
-                                break;
-                            }
+                } else {
+                    for (let i = 0; i < userEnteredSolutions.length; i++) {
+                        if (userEnteredSolutions[i] !== correctSolutionsSet[i]) {
+                            allVarValuesCorrect = false;
+                            break;
                         }
                     }
                 }
+            }
 
-                if (allVarValuesCorrect && (hasVarValues || correctSolutionsSet.length === 0) ) { // Also correct if no values entered and none expected
-                     varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek (${userEnteredSolutions.join(', ') || 'nincs'}) mind helyesek.</li>`);
-                     varValueInputs.forEach(inputEl => { if(inputEl.value.trim() !== '') inputEl.style.borderColor = 'green';});
-                } else if (hasVarValues) {
-                    varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek nem tökéletesek.</li>`);
-                    varFeedbackMessages.push(`<li>A(z) ${userRes1} és ${userRes2} határok alapján a helyes ${currentTask.variableName} értékek: ${correctSolutionsSet.length > 0 ? correctSolutionsSet.join(', ') : 'nincs megoldás'}.</li>`);
-                     varValueInputs.forEach(inputEl => {
-                        if (inputEl.value.trim() !== '') {
-                            const val = parseInt(inputEl.value);
-                            if (correctSolutionsSet.includes(val) && userEnteredSolutions.length === correctSolutionsSet.length && userEnteredSolutions.every((v,i) => v === correctSolutionsSet[i])) {
-                                inputEl.style.borderColor = 'green';
-                            } else {
-                                inputEl.style.borderColor = 'red';
-                            }
-                        }
-                    });
-                } else if (!hasVarValues && correctSolutionsSet.length > 0) {
-                     varFeedbackMessages.push(`<li>A(z) ${userRes1} és ${userRes2} határok alapján a helyes ${currentTask.variableName} értékek: ${correctSolutionsSet.join(', ')}.</li>`);
-                }
-
-
-            } else { // For Z and W (tasks 2 and 3) - individual checking
-                varValueInputs.forEach(inputEl => {
-                    inputEl.style.borderColor = ''; 
-                    if (inputEl.value.trim() === '') return; 
-                    
-                    hasVarValues = true; // Set here as well for Z and W
-                    const varValue = parseInt(inputEl.value);
-                    if (isNaN(varValue)) {
-                        varFeedbackMessages.push(`<li>Egyik ${currentTask.variableName} érték érvénytelen.</li>`);
-                        inputEl.style.borderColor = 'red';
-                        allVarValuesCorrect = false;
-                        return;
-                    }
-
-                    let cond1Met = evaluateSingleCondition(userRes1, currentTask.relation1, varValue);
-                    let cond2Met = evaluateSingleCondition(varValue, currentTask.relation2, userRes2);
-
-                    if (cond1Met && cond2Met) {
-                        varFeedbackMessages.push(`<li>${currentTask.variableName} = ${varValue}: Helyes.</li>`);
-                        inputEl.style.borderColor = 'green';
-                    } else {
-                        varFeedbackMessages.push(`<li>${currentTask.variableName} = ${varValue}: Helytelen.</li>`);
-                        inputEl.style.borderColor = 'red';
-                        allVarValuesCorrect = false;
-                    }
-                });
-                 if (!hasVarValues) { // If no values entered for Z or W
-                     feedbackMessages.push(`<li>Nem adtál meg ${currentTask.variableName} értéket.</li>`);
-                     allVarValuesCorrect = false; 
-                 }
+            if (allVarValuesCorrect && (hasVarValues || correctSolutionsSet.length === 0) ) { 
+                 varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek (${userEnteredSolutions.join(', ') || 'nincs'}) mind helyesek.</li>`);
+                 varValueInputs.forEach(inputEl => { if(inputEl.value.trim() !== '') inputEl.style.borderColor = 'green';});
+            } else if (hasVarValues) { 
+                varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek nem tökéletesek.</li>`);
+                varFeedbackMessages.push(`<li>A helyes ${currentTask.variableName} értékek (a feladatban szereplő ${trueRes1} és ${trueRes2} alapján): ${correctSolutionsSet.length > 0 ? correctSolutionsSet.join(', ') : 'nincs megoldás az adott számkörben'}.</li>`);
+                 varValueInputs.forEach(inputEl => {
+                     if (inputEl.value.trim() !== '') {
+                         const val = parseInt(inputEl.value);
+                         inputEl.style.borderColor = 'red';
+                     }
+                 });
+            } else if (!hasVarValues && correctSolutionsSet.length > 0) { 
+                 varFeedbackMessages.push(`<li>A helyes ${currentTask.variableName} értékek (a feladatban szereplő ${trueRes1} és ${trueRes2} alapján): ${correctSolutionsSet.join(', ')}.</li>`);
             }
 
 
@@ -868,32 +1153,23 @@
                  feedbackMessages.push(`<ul>${varFeedbackMessages.join('')}</ul>`);
             }
             
-            // Final overall feedback
-            if (allCalculationsCorrect && allVarValuesCorrect && hasVarValues) {
+            if (allCalculationsCorrect && allVarValuesCorrect && (hasVarValues || correctSolutionsSet.length === 0) ) {
                 feedbackEl.classList.add('correct');
                 feedbackMessages.unshift('<li>Minden helyes! Ügyes vagy!</li>');
-            } else if (allCalculationsCorrect && (taskIndex === 0 || taskIndex === 1) && !hasVarValues && correctSolutionsSet.length === 0) {
-                // Special case for X, Y: if no values were expected and none were given, it's correct.
-                feedbackEl.classList.add('correct');
-                feedbackMessages.unshift('<li>Minden helyes! Ügyes vagy! (Nem voltak ${currentTask.variableName} értékek, és te sem adtál meg.)</li>');
             }
             else {
                 feedbackEl.classList.add('incorrect');
                 if (!allCalculationsCorrect) {
-                    let trueCorrectSolutionsGlobal = [];
-                    if (taskIndex === 0) { 
-                        for (let i = currentTask.expr1.trueResult + 1; i < currentTask.expr2.trueResult; i++) {
-                            trueCorrectSolutionsGlobal.push(i);
-                        }
-                    } else if (taskIndex === 1) { 
-                        for (let i = currentTask.expr2.trueResult + 1; i < currentTask.expr1.trueResult; i++) {
-                            trueCorrectSolutionsGlobal.push(i);
-                        }
-                    }
-                    if (taskIndex <= 1 && trueCorrectSolutionsGlobal.length > 0) {
-                        feedbackMessages.push(`<li>A helyes kifejezés eredményekkel (${currentTask.expr1.trueResult} és ${currentTask.expr2.trueResult}) a ${currentTask.variableName} helyes értékei a következők lettek volna: ${trueCorrectSolutionsGlobal.join(', ')}.</li>`);
-                    } else if (taskIndex <= 1 && trueCorrectSolutionsGlobal.length === 0) {
-                         feedbackMessages.push(`<li>A helyes kifejezés eredményekkel (${currentTask.expr1.trueResult} és ${currentTask.expr2.trueResult}) nem lett volna megoldása a ${currentTask.variableName} változónak.</li>`);
+                    let hintSolutions = [];
+                     if (taskIndex === 0) { for (let i = trueRes1 + 1; i < trueRes2; i++) hintSolutions.push(i); }
+                     else if (taskIndex === 1) { for (let i = trueRes2 + 1; i < trueRes1; i++) hintSolutions.push(i); }
+                     else if (taskIndex === 2) { const l = Math.max(trueRes1, trueRes2); for (let i = l + 1; i <= currentNumberRangeMax; i++) hintSolutions.push(i); }
+                     else if (taskIndex === 3) { const u = Math.min(trueRes1, trueRes2); for (let i = 0; i < u; i++) hintSolutions.push(i); }
+
+                    if (hintSolutions.length > 0) {
+                        feedbackMessages.push(`<li>Tipp: Ha a kifejezések eredményei ${trueRes1} és ${trueRes2} lennének, a ${currentTask.variableName} helyes értékei: ${hintSolutions.join(', ')}.</li>`);
+                    } else {
+                         feedbackMessages.push(`<li>Tipp: Ha a kifejezések eredményei ${trueRes1} és ${trueRes2} lennének, nem lenne megoldás az adott számkörben.</li>`);
                     }
                 }
             }
