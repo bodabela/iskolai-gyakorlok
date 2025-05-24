@@ -751,7 +751,8 @@
             }
             currentRow++;
 
-            for (let i = 0; i < numPartialProducts; i++) {
+            //for (let i = 0; i < numPartialProducts; i++) {
+            for (let i = numPartialProducts-1; i >= 0; i--) {
                 const partialProductStrArray = task.partialProducts[i].split('');
                 const ppLen = partialProductStrArray.length;
                 const shift = i; // Ennyi placeholder nulla kerül a részszorzat JOBB oldalára
