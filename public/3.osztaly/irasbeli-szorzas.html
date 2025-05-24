@@ -822,7 +822,7 @@
                     mainMultiplicationGrid.appendChild(createGridCell('', currentRow, k));
                 }
                 if (finalProductLength < gridCols && lineActualStartCol > 1) { // Csak akkor, ha van hely a + jelnek az összeg előtt
-                    mainMultiplicationGrid.appendChild(createGridCell('+', currentRow, lineActualStartCol -1 , ['op-symbol']));
+                    mainMultiplicationGrid.appendChild(createGridCell('+', currentRow, 1 , ['op-symbol']));
                 }
 
                 for (let j = lineActualStartCol; j <= gridCols; j++) {
