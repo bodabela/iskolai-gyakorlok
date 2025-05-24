@@ -807,7 +807,9 @@
             if (currentSettings.helpLevel === 'independent') {
                 mainMultiplicationGrid.querySelectorAll('input.styled-input').forEach(inp => inp.disabled = false);
                 try {
-                    const firstFocusableInput = mainMultiplicationGrid.querySelector('input[id^="pp-0-"], input[id^="fp-"]');
+					const focuInputId = `input[id="pp-0-${task.partialProducts[0].length-1}"]`;
+					console.log('focuInputId', focuInputId);
+                    const firstFocusableInput = mainMultiplicationGrid.querySelector(focuInputId);
                     if (firstFocusableInput) {
                         firstFocusableInput.focus();
                     } else { // Ha nincs részszorzat (pl. 1 jegyű szorzó)
