@@ -101,6 +101,17 @@
                         </div>
                         <h3 class="text-lg font-semibold text-gray-700 group-hover:text-teal-600 transition-colors">Tízes átlépés</h3>
                     </a>
+                     <a href="/3.osztaly/romai-szamok.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
+                        <div class="task-card-icon w-28 h-28 mb-4 text-amber-500 group-hover:text-amber-600 transition-colors flex items-center justify-center">
+                            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                <text x="5" y="25" font-family="Inter, sans-serif" font-weight="bold" font-size="14" fill="currentColor">X</text>
+                                <text x="15" y="25" font-family="Inter, sans-serif" font-weight="bold" font-size="14" fill="currentColor">V</text>
+                                <text x="25" y="25" font-family="Inter, sans-serif" font-weight="bold" font-size="14" fill="currentColor">I</text>
+                                <path d="M8 12 L12 8 L16 12 M12 8 L12 32 M24 12 L28 8 L32 12 M28 8 L28 32" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-amber-600 transition-colors">Római számok (Alap)</h3>
+                    </a>
                 </div>
             </section>
 
@@ -171,7 +182,7 @@
                                 <text x="60" y="45" font-family="Inter, sans-serif" font-size="12" font-weight="bold" class="fill-current" text-anchor="end">45</text>
                                 <text x="20" y="45" font-family="Inter, sans-serif" font-size="12" font-weight="bold" class="fill-current" text-anchor="middle">×</text>
                                 <line x1="25" y1="52" x2="70" y2="52" stroke-width="2"/>
-                        
+
                                 <text x="70" y="65" font-family="Inter, sans-serif" font-size="10" class="fill-current" text-anchor="end">615</text>
                                 <text x="70" y="78" font-family="Inter, sans-serif" font-size="10" class="fill-current" text-anchor="end">492</text>
                                 <line x1="25" y1="82" x2="80" y2="82" stroke-width="2"/>
@@ -247,7 +258,17 @@
                         </div>
                         <h3 class="text-lg font-semibold text-gray-700 group-hover:text-cyan-600 transition-colors">Törtek sorba rendezése</h3>
                     </a>
-
+                    <a href="/3.osztaly/romai-szamok.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
+                        <div class="task-card-icon w-28 h-28 mb-4 text-amber-500 group-hover:text-amber-600 transition-colors flex items-center justify-center">
+                            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                <text x="5" y="25" font-family="Inter, sans-serif" font-weight="bold" font-size="14" fill="currentColor">C</text>
+                                <text x="15" y="25" font-family="Inter, sans-serif" font-weight="bold" font-size="14" fill="currentColor">L</text>
+                                <text x="25" y="25" font-family="Inter, sans-serif" font-weight="bold" font-size="14" fill="currentColor">X</text>
+                                <path d="M8 12 L12 8 L16 12 M12 8 L12 32 M24 12 L28 8 L32 12 M28 8 L28 32" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-amber-600 transition-colors">Római számok</h3>
+                    </a>
                 </div>
             </section>
         </main>
@@ -255,31 +276,39 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        // Accordion logic
         const toggleButtons = document.querySelectorAll('.section-toggle-button');
         toggleButtons.forEach(button => {
             const targetId = button.dataset.target;
             const targetContent = document.getElementById(targetId);
             const chevron = button.querySelector('svg.chevron-icon');
 
+            let sectionOpen = sessionStorage.getItem(targetId + '_open') === 'true';
+
             if (targetContent) {
-                targetContent.classList.add('hidden');
+                 if (!sectionOpen) {
+                    targetContent.classList.add('hidden');
+                 }
             }
             if (chevron) {
-                 chevron.classList.add('rotate-[-90deg]');
+                 if(!sectionOpen) {
+                    chevron.classList.add('rotate-[-90deg]');
+                 } else {
+                    chevron.classList.remove('rotate-[-90deg]'); // Ensure it's not rotated if open
+                 }
             }
 
-
             button.addEventListener('click', () => {
+                let isOpen = false;
                 if (targetContent) {
                     targetContent.classList.toggle('hidden');
+                    isOpen = !targetContent.classList.contains('hidden');
+                    sessionStorage.setItem(targetId + '_open', isOpen);
                 }
                 if (chevron) {
                     chevron.classList.toggle('rotate-[-90deg]');
                 }
             });
         });
-
       });
     </script>
 </body>
