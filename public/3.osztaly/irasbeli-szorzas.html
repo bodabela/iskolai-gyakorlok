@@ -737,7 +737,7 @@
 
             if (numPartialProducts > 1) {
                 const lineUnderPartialProductsStartCol = gridCols - finalProductLength + (finalProductLength < task.partialProducts[numPartialProducts-1].length + numPartialProducts -1 ? 0 : 1) ;
-                 const plusSignCol = 1; //gridCols - finalProductLength;
+                 const plusSignCol = 1;
 
 
                 for (let k = 1; k < plusSignCol; k++) {
@@ -756,7 +756,7 @@
                 currentRow++;
             }
 
-            const finalProductRenderStartCol = sMultiplicand.length - finalProductLength + 3 ; //gridCols - finalProductLength + 1;
+            const finalProductRenderStartCol = sMultiplicand.length - finalProductLength + 3;
             for(let k=1; k < finalProductRenderStartCol; k++){
                  mainMultiplicationGrid.appendChild(createGridCell('',currentRow, k));
             }
