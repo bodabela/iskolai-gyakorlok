@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Írásbeli Összeadás Gyakorló</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Általános test stílusok */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Vezérlőelemek konténerének stílusai */
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Beállítások sorának stílusai */
+        .settings-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px; 
+            width:100%;
+        }
+        /* Beállítás csoportok stílusai */
+        .settings-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 10px;
+        }
+
+        /* Vezérlőelemek címkéinek stílusai */
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+
+        /* Beállító gombok általános stílusai */
+        .setting-button {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .setting-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .setting-button.active { /* Aktív beállító gomb stílusa */
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
+            transform: translateY(1px);
+        }
+
+        /* Fő konténer stílusai (feladat és címek) */
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        /* Címek stílusai */
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em);
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em);
+            margin-bottom: 25px;
+        }
+        /* Feladat konténer stílusai */
+        .task {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+            position: relative; 
+        }
+        /* Feladat fejlécének stílusai */
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: clamp(1.1em, 3.5vw, 1.3em);
+            transition: color 0.5s ease;
+        }
+        .new-task-button { 
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px; 
+        }
+
+        /* Feladat szövegének stílusai */
+        .task p {
+            line-height: 1.6;
+            font-size: clamp(1em, 3vw, 1.1em);
+            margin-bottom: 10px;
+            transition: color 0.5s ease;
+        }
+        
+        /* Feladat gombok általános stílusai */
+        button.task-button { 
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+
+        /* Visszajelzés területének stílusai */
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em);
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        /* Összeadási rács stílusai */
+        .main-addition-grid {
+            display: grid;
+            gap: 1px; 
+            justify-content: center; 
+            margin: 1rem auto; 
+            font-size: 1.5em; 
+            position: relative; 
+        }
+
+        /* Rács celláinak általános stílusai */
+        .grid-cell {
+            width: 30px; /* Alap cellaméret */
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px; 
+            line-height: 30px; 
+            border-radius: 4px; 
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            background-color: transparent; 
+        }
+        .grid-cell.operand-digit { /* Összeadandó számjegyek cellái */ }
+        .grid-cell.op-symbol { /* Műveleti jelek cellái */
+            font-weight: bold;
+        }
+        .grid-cell.carry-digit-cell { /* Átvitt számjegy cella */
+            font-size: 0.7em; 
+            height: 22px; 
+            width: 22px;  
+            position: relative;
+            top: -10px; 
+            left: 4px; 
+            justify-content: center;
+            align-items: center;
+            opacity: 0.9;
+            color: var(--theme-carry-text-color, #0d6efd); /* Témafüggő szín */
+        }
+        .grid-cell.carry-digit-cell input.styled-input {
+            font-size: 1em; 
+            width: 100%;
+            height: 100%;
+        }
+        .grid-cell.cell-with-line-below { /* Aláhúzandó cellák */
+            border-bottom-width: 2px;
+            border-bottom-style: solid;
+        }
+        .grid-cell.sum-digit-cell { /* Összeg számjegyeinek cellái */
+        }
+        .grid-cell.highlight-target { /* Kiemelt cella (lépésenkénti mód) */
+            box-shadow: 0 0 0 2px var(--theme-highlight-color, #0d6efd);
+            border-radius: 4px;
+        }
+         .grid-cell.highlight-carry-text { /* Kiemelt átvitel (lépésenkénti mód) */
+            font-weight: bold;
+            transform: scale(1.1);
+            color: var(--theme-highlight-color, #0d6efd) !important;
+        }
+
+
+        /* Rács celláiban lévő input mezők stílusai */
+        .grid-cell input.styled-input {
+            width: 100%;
+            height: 100%;
+            font-size: inherit; 
+            padding: 0;
+            margin: 0;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid #d1d5db; 
+            background-color: #fff; 
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+            box-sizing: border-box;
+            color: #333; 
+        }
+        .grid-cell input.styled-input:disabled { /* Letiltott input mezők stílusa */
+             font-weight: bold;
+             background-color: #e9ecef; 
+             color: #495057;
+        }
+        
+        /* Alapértelmezett téma stílusok */
+        .setting-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
+        .task-button { background-color: #007bff; color: white; }
+        .container { background-color: #ffffff; border: 1px solid #e5e7eb; }
+        .task { background-color: #f9fafb; border: 1px dashed #d1d5db; }
+        .feedback.correct { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .feedback.incorrect { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
+        .control-label { color: #333; }
+        h1, h2 { color: #007bff; }
+        .grid-cell.operand-digit { color: #212529; }
+        .grid-cell.op-symbol { color: #212529; }
+        .grid-cell.cell-with-line-below { border-bottom-color: #6c757d; }
+        .grid-cell.sum-digit-cell { color: #212529; }
+        .grid-cell.carry-digit-cell { --theme-carry-text-color: #0d6efd; }
+        
+        /* --- THEME DEFINITIONS --- */
+        /* 1. Candy Theme (Girlish) */
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6; --theme-highlight-color: #ff69b4; --theme-carry-text-color: #c71585;}
+        body.theme-candy .control-label { color: #c71585; }
+        body.theme-candy .setting-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
+        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
+        body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
+        body.theme-candy .task-header h3 { color: #ff69b4; }
+        body.theme-candy .task p { color: #8a2be2; }
+        body.theme-candy button.task-button { background-color: #ff69b4; color: white; }
+        body.theme-candy button.task-button:hover { background-color: #ff1493; }
+        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border: 1px solid #90ee90; }
+        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border: 1px solid #ffb6c1; }
+        body.theme-candy .grid-cell.operand-digit, body.theme-candy .grid-cell.op-symbol { color: #9932cc; }
+        body.theme-candy .grid-cell.cell-with-line-below { border-bottom-color: #ffb6c1; }
+        body.theme-candy .grid-cell.sum-digit-cell { color: #9932cc; }
+        body.theme-candy input.styled-input { border-color: #ffb6c1; }
+        body.theme-candy input.styled-input:disabled { background-color: #ffe4e1; color: #da70d6; }
+
+
+        /* 2. Space Theme (Boyish) */
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa; --theme-highlight-color: #facc15; --theme-carry-text-color: #facc15;}
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .setting-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
+        body.theme-space .task-header h3 { color: #93c5fd; }
+        body.theme-space .task p { color: #cbd5e1; }
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space button.task-button:hover { background-color: #1d4ed8; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+        body.theme-space .grid-cell.operand-digit, body.theme-space .grid-cell.op-symbol { color: #e2e8f0; }
+        body.theme-space .grid-cell.cell-with-line-below { border-bottom-color: #475569; }
+        body.theme-space .grid-cell.sum-digit-cell { color: #e2e8f0; }
+        body.theme-space input.styled-input { background-color: #1e293b; color: #e2e8f0; border-color: #475569;}
+        body.theme-space input.styled-input:disabled { background-color: #334155; color: #94a3b8; }
+
+
+        /* 3. Jungle Theme (Boyish) */
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f; --theme-highlight-color: #8bc34a; --theme-carry-text-color: #388e3c;}
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .setting-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
+        body.theme-jungle .task-header h3 { color: #558b2f; }
+        body.theme-jungle .task p { color: #2e7d32; }
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle button.task-button:hover { background-color: #689f38; }
+        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-jungle .grid-cell.operand-digit, body.theme-jungle .grid-cell.op-symbol { color: #1b5e20; }
+        body.theme-jungle .grid-cell.cell-with-line-below { border-bottom-color: #81c784; }
+        body.theme-jungle .grid-cell.sum-digit-cell { color: #1b5e20; }
+        body.theme-jungle input.styled-input { border-color: #81c784; }
+        body.theme-jungle input.styled-input:disabled { background-color: #dcedc8; color: #558b2f; }
+
+
+        /* 4. Magic Forest Theme (Girlish) */
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2; --theme-highlight-color: #9932cc; --theme-carry-text-color: #8a2be2;}
+        body.theme-magicforest .control-label { color: #9932cc; }
+        body.theme-magicforest .setting-button.active { background-color: #9370db; color: #f8f0ff; }
+        body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
+        body.theme-magicforest h1, body.theme-magicforest h2 { color: #8a2be2; }
+        body.theme-magicforest .task { background-color: #f5f5f5; border: 2px dashed #ba55d3; }
+        body.theme-magicforest .task-header h3 { color: #9932cc; }
+        body.theme-magicforest .task p { color: #4b0082; }
+        body.theme-magicforest button.task-button { background-color: #9370db; }
+        body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
+        body.theme-magicforest .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-magicforest .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-magicforest .grid-cell.operand-digit, body.theme-magicforest .grid-cell.op-symbol { color: #483d8b; }
+        body.theme-magicforest .grid-cell.cell-with-line-below { border-bottom-color: #ba55d3; }
+        body.theme-magicforest .grid-cell.sum-digit-cell { color: #483d8b; }
+        body.theme-magicforest input.styled-input { border-color: #ba55d3;}
+        body.theme-magicforest input.styled-input:disabled { background-color: #e6e6fa; color: #9370db; }
+
+
+        /* 5. Robo/Tech Theme (Boyish) */
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1; --theme-highlight-color: #00e676; --theme-carry-text-color: #26c6da;}
+        body.theme-tech .control-label { color: #26c6da; }
+        body.theme-tech .setting-button.active { background-color: #00838f; color: #e0f7fa; }
+        body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
+        body.theme-tech h1, body.theme-tech h2 { color: #00acc1; }
+        body.theme-tech .task { background-color: #455a64; border: 2px dashed #78909c; }
+        body.theme-tech .task-header h3 { color: #26c6da; }
+        body.theme-tech .task p { color: #b0bec5; }
+        body.theme-tech button.task-button { background-color: #0097a7; }
+        body.theme-tech button.task-button:hover { background-color: #00838f; }
+        body.theme-tech .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-tech .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+        body.theme-tech .grid-cell.operand-digit, body.theme-tech .grid-cell.op-symbol { color: #eceff1; }
+        body.theme-tech .grid-cell.cell-with-line-below { border-bottom-color: #78909c; }
+        body.theme-tech .grid-cell.sum-digit-cell { color: #eceff1; }
+        body.theme-tech input.styled-input { background-color: #37474f; color: #eceff1; border-color: #78909c; }
+        body.theme-tech input.styled-input:disabled { background-color: #455a64; color: #b0bec5; }
+
+
+        /* 6. Ocean Theme (Girlish) */
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa; --theme-highlight-color: #4dd0e1; --theme-carry-text-color: #00897b;}
+        body.theme-ocean .control-label { color: #00acc1; }
+        body.theme-ocean .setting-button.active { background-color: #4db6ac; color: #e0f2f1; }
+        body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
+        body.theme-ocean h1, body.theme-ocean h2 { color: #00897b; }
+        body.theme-ocean .task { background-color: #e0f7fa; border: 2px dashed #80deea; }
+        body.theme-ocean .task-header h3 { color: #00acc1; }
+        body.theme-ocean .task p { color: #00695c; }
+        body.theme-ocean button.task-button { background-color: #26a69a; }
+        body.theme-ocean button.task-button:hover { background-color: #00897b; }
+        body.theme-ocean .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-ocean .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-ocean .grid-cell.operand-digit, body.theme-ocean .grid-cell.op-symbol { color: #004d40; }
+        body.theme-ocean .grid-cell.cell-with-line-below { border-bottom-color: #80deea; }
+        body.theme-ocean .grid-cell.sum-digit-cell { color: #004d40; }
+        body.theme-ocean input.styled-input { border-color: #80deea;}
+        body.theme-ocean input.styled-input:disabled { background-color: #b2ebf2; color: #26a69a; }
+
+
+        /* 7. Sport Theme (Boyish) */
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f; --theme-highlight-color: #2196f3; --theme-carry-text-color: #1565c0;}
+        body.theme-sport .control-label { color: #1976d2; }
+        body.theme-sport .setting-button.active { background-color: #1976d2; color: #e3f2fd; }
+        body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
+        body.theme-sport h1, body.theme-sport h2 { color: #d32f2f; }
+        body.theme-sport .task { background-color: #e3f2fd; border: 2px dashed #42a5f5; }
+        body.theme-sport .task-header h3 { color: #1976d2; }
+        body.theme-sport .task p { color: #0d47a1; }
+        body.theme-sport button.task-button { background-color: #2196f3; }
+        body.theme-sport button.task-button:hover { background-color: #1976d2; }
+        body.theme-sport .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sport .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-sport .grid-cell.operand-digit, body.theme-sport .grid-cell.op-symbol { color: #01579b; }
+        body.theme-sport .grid-cell.cell-with-line-below { border-bottom-color: #42a5f5; }
+        body.theme-sport .grid-cell.sum-digit-cell { color: #01579b; }
+        body.theme-sport input.styled-input { border-color: #42a5f5;}
+        body.theme-sport input.styled-input:disabled { background-color: #bbdefb; color: #1976d2; }
+
+
+        /* 8. Flower Garden Theme (Girlish) */
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347; --theme-highlight-color: #ffa07a; --theme-carry-text-color: #ff7f50;}
+        body.theme-flowergarden .control-label { color: #ff7f50; }
+        body.theme-flowergarden .setting-button.active { background-color: #ffdab9; color: #8b4513; }
+        body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
+        body.theme-flowergarden h1, body.theme-flowergarden h2 { color: #ff6347; }
+        body.theme-flowergarden .task { background-color: #fffafa; border: 2px dashed #ffe4b5; }
+        body.theme-flowergarden .task-header h3 { color: #ff7f50; }
+        body.theme-flowergarden .task p { color: #8b4513; }
+        body.theme-flowergarden button.task-button { background-color: #ffa07a; }
+        body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
+        body.theme-flowergarden .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-flowergarden .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-flowergarden .grid-cell.operand-digit, body.theme-flowergarden .grid-cell.op-symbol { color: #a0522d; }
+        body.theme-flowergarden .grid-cell.cell-with-line-below { border-bottom-color: #ffdab9; }
+        body.theme-flowergarden .grid-cell.sum-digit-cell { color: #a0522d; }
+        body.theme-flowergarden input.styled-input { border-color: #ffdab9;}
+        body.theme-flowergarden input.styled-input:disabled { background-color: #fff5ee; color: #d2691e; }
+
+
+        /* 9. Adventure Theme (Boyish) */
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c; --theme-highlight-color: #795548; --theme-carry-text-color: #6d4c41;}
+        body.theme-adventure .control-label { color: #6d4c41; }
+        body.theme-adventure .setting-button.active { background-color: #a1887f; color: #efebe9; }
+        body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
+        body.theme-adventure h1, body.theme-adventure h2 { color: #bf360c; }
+        body.theme-adventure .task { background-color: #d7ccc8; border: 2px dashed #8d6e63; }
+        body.theme-adventure .task-header h3 { color: #6d4c41; }
+        body.theme-adventure .task p { color: #4e342e; }
+        body.theme-adventure button.task-button { background-color: #795548; }
+        body.theme-adventure button.task-button:hover { background-color: #5d4037; }
+        body.theme-adventure .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-adventure .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-adventure .grid-cell.operand-digit, body.theme-adventure .grid-cell.op-symbol { color: #3e2723; }
+        body.theme-adventure .grid-cell.cell-with-line-below { border-bottom-color: #8d6e63; }
+        body.theme-adventure .grid-cell.sum-digit-cell { color: #3e2723; }
+        body.theme-adventure input.styled-input { border-color: #8d6e63;}
+        body.theme-adventure input.styled-input:disabled { background-color: #d7ccc8; color: #5d4037; }
+
+
+        /* 10. Sky Theme (Girlish) */
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff; --theme-highlight-color: #87ceeb; --theme-carry-text-color: #1e90ff;}
+        body.theme-sky .control-label { color: #00bfff; }
+        body.theme-sky .setting-button.active { background-color: #add8e6; color: #005a9c; }
+        body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
+        body.theme-sky h1, body.theme-sky h2 { color: #1e90ff; }
+        body.theme-sky .task { background-color: #f5faff; border: 2px dashed #add8e6; }
+        body.theme-sky .task-header h3 { color: #00bfff; }
+        body.theme-sky .task p { color: #5f9ea0; }
+        body.theme-sky button.task-button { background-color: #87cefa; }
+        body.theme-sky button.task-button:hover { background-color: #6495ed; }
+        body.theme-sky .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sky .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-sky .grid-cell.operand-digit, body.theme-sky .grid-cell.op-symbol { color: #4682b4; }
+        body.theme-sky .grid-cell.cell-with-line-below { border-bottom-color: #b0e0e6; }
+        body.theme-sky .grid-cell.sum-digit-cell { color: #4682b4; }
+        body.theme-sky input.styled-input { border-color: #b0e0e6;}
+        body.theme-sky input.styled-input:disabled { background-color: #e6f7ff; color: #6495ed; }
+
+    </style>
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="w-full mt-4">
+            <div class="settings-row">
+                <div class="settings-group">
+                    <p class="control-label">Téma választó:</p>
+                    <div id="themeSelector" class="flex flex-wrap justify-center gap-2">
+                        <button class="setting-button theme-button" data-theme="theme-candy">Cukorka</button>
+                        <button class="setting-button theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                        <button class="setting-button theme-button" data-theme="theme-ocean">Óceán</button>
+                        <button class="setting-button theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                        <button class="setting-button theme-button" data-theme="theme-sky">Égbolt</button>
+                        <button class="setting-button theme-button" data-theme="theme-space">Űr</button>
+                        <button class="setting-button theme-button" data-theme="theme-jungle">Őserdő</button>
+                        <button class="setting-button theme-button" data-theme="theme-tech">Techno</button>
+                        <button class="setting-button theme-button" data-theme="theme-sport">Sport</button>
+                        <button class="setting-button theme-button" data-theme="theme-adventure">Kaland</button>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <p class="control-label">Számjegyek száma (összeadandó):</p>
+                    <div id="digitCountSelector" class="flex flex-wrap justify-center gap-2">
+                        <button class="setting-button" data-digits="2">2-jegyű</button>
+                        <button class="setting-button active" data-digits="3">3-jegyű</button>
+                        <button class="setting-button" data-digits="4">4-jegyű</button>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <p class="control-label">Segítség:</p>
+                    <div id="helpLevelSelector" class="flex flex-wrap justify-center gap-2">
+                        <button class="setting-button active" data-help="independent">Önálló</button>
+                        <button class="setting-button" data-help="step-by-step">Lépésenként</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Írásbeli Összeadás Gyakorló</h1>
+        <h2>3. Osztály</h2>
+
+        <div class="task">
+            <div class="task-header">
+                <h3>Feladat:</h3>
+                <button id="newTaskButton" class="task-button new-task-button">Új feladat</button>
+            </div>
+            <p id="taskInstructions">Végezd el az összeadást!</p>
+
+            <div id="mainAdditionGrid" class="main-addition-grid">
+                </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="checkButton" class="task-button">Ellenőrzés</button>
+            </div>
+            <p id="feedbackArea" class="feedback" style="margin-top: 15px;">&nbsp;</p>
+        </div>
+    </div>
+
+    <script>
+        const themeSelector = document.getElementById('themeSelector');
+        const digitCountSelector = document.getElementById('digitCountSelector');
+        const helpLevelSelector = document.getElementById('helpLevelSelector');
+        const newTaskButton = document.getElementById('newTaskButton');
+        const checkButton = document.getElementById('checkButton');
+        const taskInstructions = document.getElementById('taskInstructions');
+        const mainAdditionGrid = document.getElementById('mainAdditionGrid'); 
+        const feedbackArea = document.getElementById('feedbackArea');
+        const bodyEl = document.body;
+
+        let currentSettings = {
+            theme: 'theme-candy', 
+            digitCount: 3,   
+            helpLevel: 'independent' 
+        };
+
+        let task = {
+            num1: 0,           
+            num2: 0,           
+            calculatedSumDigits: [], 
+            calculatedCarries: []    
+        };
+        
+        let currentStepColumnFromRight = 0; 
+        let currentSubStep = 'sum_digit'; 
+
+        themeSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('setting-button')) {
+                currentSettings.theme = e.target.dataset.theme;
+                applyTheme(currentSettings.theme);
+            }
+        });
+        digitCountSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('setting-button')) {
+                currentSettings.digitCount = parseInt(e.target.dataset.digits);
+                updateActiveButtonVisuals(digitCountSelector, e.target);
+                generateNewTask(); 
+            }
+        });
+        helpLevelSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('setting-button')) {
+                currentSettings.helpLevel = e.target.dataset.help;
+                updateActiveButtonVisuals(helpLevelSelector, e.target);
+                generateNewTask(); 
+            }
+        });
+
+        newTaskButton.addEventListener('click', generateNewTask);
+        checkButton.addEventListener('click', handleCheck);
+
+        function applyTheme(themeClass) {
+            bodyEl.className = ''; 
+            bodyEl.classList.add(themeClass); 
+            themeSelector.querySelectorAll('button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeClass);
+            });
+            updateActiveButtonVisuals(digitCountSelector, digitCountSelector.querySelector(`[data-digits="${currentSettings.digitCount}"]`));
+            updateActiveButtonVisuals(helpLevelSelector, helpLevelSelector.querySelector(`[data-help="${currentSettings.helpLevel}"]`));
+        }
+        
+        function updateActiveButtonVisuals(container, activeButton) {
+            if (!container || !activeButton) return;
+            container.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            activeButton.classList.add('active');
+        }
+
+        function generateNewTask() {
+            feedbackArea.textContent = '\u00A0'; 
+            feedbackArea.className = 'feedback mt-4'; 
+            currentStepColumnFromRight = 0; 
+            currentSubStep = 'sum_digit';
+            checkButton.textContent = "Ellenőrzés";
+            
+            const minVal = Math.pow(10, currentSettings.digitCount - 1);
+            const maxVal = Math.pow(10, currentSettings.digitCount) - 1;
+
+            let attempts = 0;
+            const MAX_ATTEMPTS_FOR_CARRY = 100;
+            let foundSuitable = false;
+
+            while(attempts < MAX_ATTEMPTS_FOR_CARRY && !foundSuitable) {
+                task.num1 = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+                task.num2 = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+                
+                let tempN1 = task.num1;
+                let tempN2 = task.num2;
+                let carryCheck = 0;
+                let hasCarryAtLeastOnce = false;
+                for (let i = 0; i < currentSettings.digitCount; i++) {
+                    const d1 = tempN1 % 10;
+                    const d2 = tempN2 % 10;
+                    if (d1 + d2 + carryCheck >= 10) {
+                        hasCarryAtLeastOnce = true;
+                        break;
+                    }
+                    carryCheck = Math.floor((d1 + d2 + carryCheck) / 10);
+                    tempN1 = Math.floor(tempN1 / 10);
+                    tempN2 = Math.floor(tempN2 / 10);
+                }
+                if (hasCarryAtLeastOnce) {
+                    foundSuitable = true;
+                }
+                attempts++;
+            }
+             if (!foundSuitable) { 
+                if (currentSettings.digitCount > 0) {
+                    let n1Str = "";
+                    let n2Str = "";
+                    for(let k=0; k < currentSettings.digitCount; k++) {
+                        n1Str += (k === 0 && currentSettings.digitCount > 1 ? '5' : '1'); 
+                        n2Str += (k < currentSettings.digitCount -1 ? '5' : (currentSettings.digitCount === 1 ? '5' : '4')); // Utolsó jegy kisebb, hogy biztos legyen átvitel
+                        if(currentSettings.digitCount === 1) {n1Str='5'; n2Str='5';}
+                    }
+                    task.num1 = parseInt(n1Str);
+                    task.num2 = parseInt(n2Str);
+                     if(task.num1 > maxVal) task.num1 = maxVal - (maxVal % 10) + (currentSettings.digitCount > 1 ? 5 : 1) ; // Ensure it's within bounds and allows carry
+                     if(task.num2 > maxVal) task.num2 = maxVal - (maxVal % 10) + 5;
+                     if (task.num1 + task.num2 < Math.pow(10, currentSettings.digitCount) && currentSettings.digitCount > 1) { // Ha még mindig nincs átvitel a legmagasabb helyiértéken
+                         task.num2 = parseInt(Array(currentSettings.digitCount).fill('9').join('')) - task.num1 +1;
+                         if (task.num2 > maxVal) task.num2 = maxVal;
+                         if (task.num2 < minVal && minVal > 0) task.num2 = minVal;
+                     }
+                }
+            }
+
+            calculateCorrectSteps();    
+            renderTaskDisplay();        
+            prepareCurrentStepInputs(); 
+            updateTaskInstructions();   
+        }
+
+        function calculateCorrectSteps() {
+            const sNum1Reversed = String(task.num1).split('').reverse();
+            const sNum2Reversed = String(task.num2).split('').reverse();
+            const maxLength = Math.max(sNum1Reversed.length, sNum2Reversed.length);
+            
+            task.calculatedSumDigits = []; 
+            task.calculatedCarries = [];  
+            let carryVal = 0;
+
+            for (let i = 0; i < maxLength; i++) {
+                const d1 = parseInt(sNum1Reversed[i] || '0');
+                const d2 = parseInt(sNum2Reversed[i] || '0');
+                const currentSum = d1 + d2 + carryVal;
+                task.calculatedSumDigits.push(currentSum % 10);
+                carryVal = Math.floor(currentSum / 10);
+                task.calculatedCarries.push(carryVal);
+            }
+            if (carryVal > 0) {
+                task.calculatedSumDigits.push(carryVal);
+                // Az utolsó carry-t (ami az összeg új számjegye) nem kell külön a calculatedCarries-be,
+                // mert a calculatedCarries[i] az i. oszlop *utáni* átvitelt jelenti.
+                // Ha az összeg hosszabb, a calculatedSumDigits már tartalmazza.
+            }
+        }
+
+        function renderTaskDisplay() {
+            mainAdditionGrid.innerHTML = ''; 
+            const sNum1 = String(task.num1);
+            const sNum2 = String(task.num2);
+            const resultLength = task.calculatedSumDigits.length;
+            const gridCols = Math.max(sNum1.length, sNum2.length, resultLength) + 1; 
+
+            mainAdditionGrid.style.gridTemplateColumns = `repeat(${gridCols}, 30px)`;
+
+            // 1. sor: Átvitelek
+            for (let i = 0; i < gridCols; i++) {
+                const cell = createGridCell(null, 1, i + 1, ['carry-digit-cell']);
+                const colFromRightThisCarryIsFor = gridCols -1 - (i+1) ; // Az oszlop indexe (jobbról), AMELYIKBŐL ez az átvitel származik
+                
+                // Csak a tényleges számjegyek fölé kerüljön átvitel input, és ne az operátor fölé, vagy azon túl
+                if (colFromRightThisCarryIsFor >= 0 && colFromRightThisCarryIsFor < task.calculatedCarries.length) {
+                    const carryInputId = `carry-input-${colFromRightThisCarryIsFor}`;
+                    const input = createStyledInput(true, carryInputId, 'carry');
+                    input.dataset.colFromRight = colFromRightThisCarryIsFor; 
+                    cell.appendChild(input);
+                }
+                mainAdditionGrid.appendChild(cell);
+            }
+            
+            // 2. sor: Első összeadandó
+            for (let i = 0; i < sNum1.length; i++) {
+                const colPosInGrid = gridCols - sNum1.length + i;
+                const cell = createGridCell(sNum1[i], 2, colPosInGrid + 1, ['operand-digit']);
+                cell.dataset.colFromRight = sNum1.length - 1 - i;
+                cell.dataset.rowType = "operand1";
+                mainAdditionGrid.appendChild(cell);
+            }
+
+            // 3. sor: Plusz jel és Második összeadandó
+            const operatorColumn = gridCols - Math.max(sNum1.length, sNum2.length, resultLength) -1;
+            if (operatorColumn >= 0 && operatorColumn < gridCols -1 ) { 
+                mainAdditionGrid.appendChild(createGridCell('+', 3, operatorColumn + 1, ['op-symbol']));
+            } else if (gridCols -1 >=0 && Math.max(sNum1.length, sNum2.length, resultLength) > 0) { // Ha csak egy oszlop van a számoknak
+                 const opCell = createGridCell('+', 3, 1, ['op-symbol']); // Tedd az első oszlopba
+                 if (gridCols === 1) opCell.style.display = 'none'; // Ha tényleg csak 1 oszlop van az eredménynek, ne látszódjon.
+                 mainAdditionGrid.appendChild(opCell);
+            }
+
+
+            for (let i = 0; i < sNum2.length; i++) {
+                const colPosInGrid = gridCols - sNum2.length + i;
+                 const cell = createGridCell(sNum2[i], 3, colPosInGrid + 1, ['operand-digit']);
+                 cell.dataset.colFromRight = sNum2.length - 1 - i;
+                 cell.dataset.rowType = "operand2";
+                 mainAdditionGrid.appendChild(cell);
+            }
+
+            // 4. sor: Vonal
+            for (let i = 0; i < gridCols; i++) {
+                 if (i >= gridCols - resultLength ) { 
+                     mainAdditionGrid.appendChild(createGridCell(null, 4, i + 1, ['cell-with-line-below']));
+                 } else if (i === operatorColumn && operatorColumn >=0) { 
+                     mainAdditionGrid.appendChild(createGridCell(null, 4, i + 1, ['cell-with-line-below']));
+                 }
+                 else {
+                      mainAdditionGrid.appendChild(createGridCell(null, 4, i + 1, []));
+                 }
+            }
+            
+            // 5. sor: Eredmény inputok
+            for (let i = 0; i < resultLength; i++) { 
+                const colPosInGrid = gridCols - resultLength + i;
+                const sumDigitInputId = `sum-digit-${resultLength - 1 - i}`; 
+                const input = createStyledInput(true, sumDigitInputId, 'sum');
+                input.dataset.colFromRight = resultLength - 1 - i; 
+                const cell = createGridCell(null, 5, colPosInGrid + 1, ['sum-digit-cell']);
+                cell.appendChild(input);
+                mainAdditionGrid.appendChild(cell);
+            }
+        }
+        
+        function createGridCell(content, row, col, classList = []) {
+            const cell = document.createElement('div');
+            cell.classList.add('grid-cell', ...classList);
+            if (content !== null && typeof content !== 'undefined') cell.textContent = content;
+            cell.style.gridRow = String(row); 
+            cell.style.gridColumn = String(col); 
+            return cell;
+        }
+
+        function createStyledInput(disabled, id, type = null) { 
+            const input = document.createElement('input');
+            input.type = 'text'; 
+            input.inputMode = 'numeric'; 
+            input.pattern = "[0-9]*"; 
+            input.classList.add('styled-input');
+            input.id = id; 
+            input.maxLength = 1;
+            
+            input.addEventListener('input', (e) => { 
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                handleInputAndFocusNext(e); 
+            });
+
+            if (type === 'sum') input.classList.add('sum-digit-input');
+            else if (type === 'carry') input.classList.add('carry-digit-input');
+            
+            input.disabled = disabled;
+            return input;
+        }
+
+        function handleInputAndFocusNext(event) {
+            const currentInput = event.target;
+            if (currentInput.value.length >= currentInput.maxLength && currentSettings.helpLevel === 'independent') {
+                 const allInputsInGrid = Array.from(mainAdditionGrid.querySelectorAll('input.styled-input:not([disabled])'));
+                const currentInputIndexInArray = allInputsInGrid.indexOf(currentInput);
+                
+                if (currentInputIndexInArray !== -1 && currentInputIndexInArray < allInputsInGrid.length - 1) {
+                    try { allInputsInGrid[currentInputIndexInArray + 1].focus(); } catch (e) {}
+                }
+            }
+            // Lépésenkénti módban a fókuszváltást a prepareCurrentStepInputs és a handleCheck kezeli
+        }
+        
+        function prepareCurrentStepInputs() {
+            mainAdditionGrid.querySelectorAll('input.styled-input').forEach(inp => { 
+                inp.style.borderColor = ''; 
+                if(currentSettings.helpLevel === 'step-by-step') inp.disabled = true; 
+            });
+            mainAdditionGrid.querySelectorAll('.grid-cell').forEach(cell => cell.classList.remove('highlight-target', 'highlight-carry-text'));
+            
+            const sNum1 = String(task.num1);
+            const sNum2 = String(task.num2);
+            const resultTotalDigits = task.calculatedSumDigits.length;
+            const gridCols = Math.max(sNum1.length, sNum2.length, resultTotalDigits) + 1;
+
+            if (currentSettings.helpLevel === 'independent') {
+                mainAdditionGrid.querySelectorAll('input.styled-input').forEach(inp => inp.disabled = false);
+                try {
+                    const firstSumInput = document.getElementById(`sum-digit-0`); 
+                    if (firstSumInput) firstSumInput.focus(); else {
+                        const firstCarryInput = document.getElementById(`carry-input-0`);
+                        if(firstCarryInput) firstCarryInput.focus();
+                    }
+                } catch (e) {}
+            } else { // step-by-step
+                if (currentStepColumnFromRight >= resultTotalDigits && currentSubStep === 'sum_digit') { 
+                    taskInstructions.textContent = "Kész vagy! Az összeadás véget ért.";
+                    checkButton.textContent = "Új feladat";
+                    return;
+                }
+
+                const sNum1Reversed = sNum1.split('').reverse();
+                const sNum2Reversed = sNum2.split('').reverse();
+
+                // Operandusok kiemelése az aktuális oszlopban
+                const operand1GridCol = gridCols - (currentStepColumnFromRight + 1);
+                if (currentStepColumnFromRight < sNum1.length) {
+                    const num1Cell = mainAdditionGrid.querySelector(`.grid-cell.operand-digit[data-row-type="operand1"][data-col-from-right="${currentStepColumnFromRight}"]`);
+                    if(num1Cell) num1Cell.classList.add('highlight-target');
+                }
+                if (currentStepColumnFromRight < sNum2.length) {
+                     const num2Cell = mainAdditionGrid.querySelector(`.grid-cell.operand-digit[data-row-type="operand2"][data-col-from-right="${currentStepColumnFromRight}"]`);
+                    if(num2Cell) num2Cell.classList.add('highlight-target');
+                }
+                
+                // Előző átvitel (az aktuális oszlop FÖLÖTT) megjelenítése és kiemelése
+                const carryInValue = currentStepColumnFromRight > 0 ? task.calculatedCarries[currentStepColumnFromRight - 1] : 0;
+                const carryDisplayInputForSumStep = document.getElementById(`carry-input-${currentStepColumnFromRight - 1}`); // Az előző oszlopból származó átvitel inputja
+                if (carryDisplayInputForSumStep && carryDisplayInputForSumStep.parentElement.classList.contains('carry-digit-cell')) {
+                    const displayCell = carryDisplayInputForSumStep.parentElement;
+                     if (!carryDisplayInputForSumStep.disabled) carryDisplayInputForSumStep.disabled = true; // Biztosítjuk, hogy le van tiltva
+                    displayCell.innerHTML = (carryInValue > 0) ? carryInValue : ''; // Csak akkor írjuk ki, ha nem 0
+                    if (carryInValue > 0) displayCell.classList.add('highlight-carry-text');
+                }
+
+
+                if (currentSubStep === 'sum_digit') {
+                    const sumInput = document.getElementById(`sum-digit-${currentStepColumnFromRight}`);
+                    if (sumInput) {
+                        sumInput.disabled = false;
+                        sumInput.value = ''; // Töröljük az esetleges korábbi próbálkozást
+                        try { sumInput.focus(); } catch (e) {}
+                    }
+                } else if (currentSubStep === 'carry_digit') {
+                    // Az átvitelt az aktuális oszlopból (currentStepColumnFromRight) származó 
+                    // carryInput-${currentStepColumnFromRight} inputba kell írni.
+                    const carryInputToEnable = document.getElementById(`carry-input-${currentStepColumnFromRight}`);
+                     if (currentStepColumnFromRight < task.calculatedCarries.length ) { 
+                        if (carryInputToEnable) {
+                            carryInputToEnable.disabled = false;
+                            carryInputToEnable.value = ''; // Töröljük az esetleges korábbi próbálkozást
+                            try { carryInputToEnable.focus(); } catch (e) {}
+                            // Kiemelhetjük az előzőleg beírt összeget is
+                            const prevSumInput = document.getElementById(`sum-digit-${currentStepColumnFromRight}`);
+                            if (prevSumInput && prevSumInput.parentElement) prevSumInput.parentElement.classList.add('highlight-target');
+                        }
+                    } else { 
+                        currentStepColumnFromRight++; 
+                        currentSubStep = 'sum_digit';
+                        prepareCurrentStepInputs(); // Ez fogja a "Kész vagy" üzenetet kiírni
+                    }
+                }
+            }
+            updateTaskInstructions(); 
+        }
+        
+        function handleCheck() {
+            const resultTotalDigits = task.calculatedSumDigits.length;
+
+            if (currentSettings.helpLevel === 'independent') {
+                let allCorrect = true;
+                let allFilled = true;
+
+                for (let i = 0; i < resultTotalDigits; i++) { 
+                    const sumInputEl = document.getElementById(`sum-digit-${i}`);
+                    if (!sumInputEl) { allCorrect = false; continue; }
+                    if (sumInputEl.value.trim() === "") allFilled = false;
+                    const userSumDigit = parseInt(sumInputEl.value);
+                    if (isNaN(userSumDigit) || userSumDigit !== task.calculatedSumDigits[i]) {
+                        updateInputFieldFeedback(sumInputEl, false);
+                        allCorrect = false;
+                    } else {
+                        updateInputFieldFeedback(sumInputEl, true);
+                    }
+                }
+                for (let i = 0; i < task.calculatedCarries.length ; i++) { 
+                    const carryInputEl = document.getElementById(`carry-input-${i}`);
+                    if (!carryInputEl) continue; 
+                    
+                    const correctCarry = task.calculatedCarries[i] || 0;
+                    // Ha az utolsó carry 0 és az összeg nem lett hosszabb, az input mező nem biztos, hogy létezik
+                    // vagy ha létezik is, lehet, hogy üresen kell hagyni.
+                    // Csak akkor ellenőrizzük az ürességet, ha a correctCarry nem 0.
+                    if (carryInputEl.value.trim() === "" && correctCarry !== 0 && i < resultTotalDigits -1 ) allFilled = false;
+                     const userCarry = carryInputEl.value.trim() === "" ? 0 : parseInt(carryInputEl.value);
+                     
+                    if (i < resultTotalDigits || (i === resultTotalDigits -1 && task.calculatedSumDigits.length > Math.max(String(task.num1).length, String(task.num2).length) )) { // Csak a releváns átviteleket
+                        if (isNaN(userCarry) || userCarry !== correctCarry) {
+                             updateInputFieldFeedback(carryInputEl, false);
+                             allCorrect = false;
+                         } else {
+                             updateInputFieldFeedback(carryInputEl, true);
+                         }
+                    } else if (userCarry !== 0) { // Ha felesleges helyre írt átvitelt
+                        updateInputFieldFeedback(carryInputEl, false);
+                        allCorrect = false;
+                    } else {
+                         updateInputFieldFeedback(carryInputEl, true); // Ha 0-t írt oda, ahova nem kellett, az jó
+                    }
+                }
+
+                if (!allFilled) {
+                    feedbackArea.textContent = "Kérlek, tölts ki minden szükséges mezőt (összeg és átvitelek)!";
+                    feedbackArea.className = 'feedback incorrect mt-4';
+                    return;
+                }
+                
+                if (allCorrect) {
+                    feedbackArea.textContent = "Gratulálok, sikeresen elvégezted az összeadást!";
+                    feedbackArea.className = 'feedback correct mt-4';
+                    checkButton.textContent = "Új feladat";
+                    mainAdditionGrid.querySelectorAll('input.styled-input').forEach(inp => inp.disabled = true);
+                } else {
+                    feedbackArea.textContent = "Nem minden számjegy vagy átvitel helyes. Kérlek, ellenőrizd!";
+                    feedbackArea.className = 'feedback incorrect mt-4';
+                }
+            } else { // step-by-step
+                if (currentStepColumnFromRight >= resultTotalDigits && currentSubStep === 'sum_digit') { 
+                    generateNewTask();
+                    return;
+                }
+
+                if (currentSubStep === 'sum_digit') {
+                    const sumInput = document.getElementById(`sum-digit-${currentStepColumnFromRight}`);
+                    if (!sumInput) return;
+                    const userInput = parseInt(sumInput.value);
+                    const correctValue = task.calculatedSumDigits[currentStepColumnFromRight];
+
+                    if (isNaN(userInput)) {
+                        feedbackArea.textContent = 'Kérlek, írj be egy számot az összeghez!';
+                        feedbackArea.className = 'feedback incorrect mt-4';
+                        updateInputFieldFeedback(sumInput, false);
+                        try { sumInput.focus(); } catch(e){}
+                        return;
+                    }
+
+                    if (userInput === correctValue) {
+                        updateInputFieldFeedback(sumInput, true);
+                        sumInput.disabled = true;
+                        
+                        // Ha az utolsó összegjegyet írtuk be, és nincs több átvitel, akkor kész.
+                        if (currentStepColumnFromRight === resultTotalDigits - 1 && task.calculatedCarries[currentStepColumnFromRight] === 0) {
+                             feedbackArea.textContent = 'Helyes! Az összeadás véget ért.';
+                             feedbackArea.className = 'feedback correct mt-4';
+                             currentStepColumnFromRight++; // Hogy a következő feltétel igaz legyen a befejezéshez
+                             currentSubStep = 'sum_digit'; // Visszaállítjuk a következő feladathoz/befejezéshez
+                             prepareCurrentStepInputs();
+                        } else {
+                            feedbackArea.textContent = 'Helyes az összegjegy! Most add meg az átvitelt (0, ha nincs).';
+                            currentSubStep = 'carry_digit';
+                            prepareCurrentStepInputs();
+                        }
+                    } else {
+                        feedbackArea.textContent = 'Az összeg ebben az oszlopban nem pontos. Próbáld újra!';
+                        feedbackArea.className = 'feedback incorrect mt-4';
+                        updateInputFieldFeedback(sumInput, false);
+                        try { sumInput.focus(); } catch(e){}
+                    }
+                } else if (currentSubStep === 'carry_digit') {
+                    const carryInputToVerify = document.getElementById(`carry-input-${currentStepColumnFromRight}`);
+                    if (!carryInputToVerify) { 
+                        // Ha nincs ilyen carry input (pl. az utolsó oszlop utáni carry már az összeg része lett),
+                        // akkor lépjünk tovább. Ez a helyzet akkor állhat elő, ha az összeg hosszabb, mint az operandusok.
+                        currentStepColumnFromRight++;
+                        currentSubStep = 'sum_digit';
+                        prepareCurrentStepInputs();
+                        return;
+                    }
+
+                    const userCarry = carryInputToVerify.value.trim() === "" ? 0 : parseInt(carryInputToVerify.value); // Üres string 0-nak számít
+                    const correctCarry = task.calculatedCarries[currentStepColumnFromRight];
+                    
+                    if (userCarry === correctCarry) {
+                        updateInputFieldFeedback(carryInputToVerify, true);
+                        carryInputToVerify.disabled = true;
+                        const displayCell = carryInputToVerify.parentElement;
+                        if (displayCell) { // Kiírjuk a helyes átvitelt fixen
+                            displayCell.innerHTML = (correctCarry > 0) ? correctCarry : ''; 
+                            if(correctCarry > 0) displayCell.classList.add('highlight-carry-text');
+                        }
+
+                        feedbackArea.textContent = 'Az átvitel helyes! Folytasd a következő oszloppal.';
+                        feedbackArea.className = 'feedback correct mt-4';
+                        currentStepColumnFromRight++;
+                        currentSubStep = 'sum_digit';
+                        prepareCurrentStepInputs();
+                    } else {
+                        feedbackArea.textContent = 'Az átvitel nem helyes. Próbáld újra!';
+                        feedbackArea.className = 'feedback incorrect mt-4';
+                        updateInputFieldFeedback(carryInputToVerify, false);
+                        try { carryInputToVerify.focus(); } catch(e){}
+                    }
+                }
+            }
+        }
+        
+        function updateInputFieldFeedback(inputElement, isCorrect) {
+            if (!inputElement) return;
+            inputElement.style.borderColor = isCorrect ? 'green' : 'red';
+        }
+
+        function updateTaskInstructions() {
+            const sNum1Rev = String(task.num1).split('').reverse();
+            const sNum2Rev = String(task.num2).split('').reverse();
+            const resultTotalDigits = task.calculatedSumDigits.length;
+
+            if (currentSettings.helpLevel === 'independent') {
+                taskInstructions.textContent = `Végezd el az összeadást: ${task.num1} + ${task.num2}. Írd be az átviteleket is!`;
+                checkButton.textContent = "Ellenőrzés";
+            } else { // step-by-step
+                if (currentStepColumnFromRight >= resultTotalDigits && currentSubStep === 'sum_digit') {
+                     taskInstructions.textContent = "Kész vagy! Az összeadás véget ért.";
+                     checkButton.textContent = "Új feladat";
+                     return;
+                }
+                
+                let placeValueText = "";
+                if (currentStepColumnFromRight === 0) placeValueText = "egyeseket";
+                else if (currentStepColumnFromRight === 1) placeValueText = "tízeseket";
+                else if (currentStepColumnFromRight === 2) placeValueText = "százasokat";
+                else if (currentStepColumnFromRight === 3) placeValueText = "ezreseket";
+                else placeValueText = `${currentStepColumnFromRight+1}. helyiértéken lévő számjegyeket (jobbról)`;
+
+                const d1 = parseInt(sNum1Rev[currentStepColumnFromRight] || '0');
+                const d2 = parseInt(sNum2Rev[currentStepColumnFromRight] || '0');
+                const carryIn = currentStepColumnFromRight > 0 ? task.calculatedCarries[currentStepColumnFromRight - 1] : 0;
+
+                if (currentSubStep === 'sum_digit') {
+                    taskInstructions.textContent = `Add össze a ${placeValueText}: ${d1} + ${d2}` + (carryIn > 0 ? ` + ${carryIn} (átvitel)` : '') + `. Írd be az eredmény számjegyét!`;
+                } else { // carry_digit
+                     let nextPlaceValueText = "";
+                     if (currentStepColumnFromRight + 1 === 1) nextPlaceValueText = "tízesekhez";
+                     else if (currentStepColumnFromRight + 1 === 2) nextPlaceValueText = "százasokhoz";
+                     else if (currentStepColumnFromRight + 1 === 3) nextPlaceValueText = "ezresekhez";
+                     else if (currentStepColumnFromRight + 1 < resultTotalDigits ) nextPlaceValueText = `${currentStepColumnFromRight + 2}. helyiértékhez (jobbról)`;
+                     else nextPlaceValueText = "következő (magasabb) helyiértékre";
+                     
+                     // Csak akkor kérünk átvitelt, ha van értelme (azaz nem az utolsó oszlop után vagyunk, hacsak nem lesz hosszabb az eredmény)
+                     if (currentStepColumnFromRight < task.calculatedCarries.length && document.getElementById(`carry-input-${currentStepColumnFromRight}`)) {
+                         taskInstructions.textContent = `Mennyi az átvitel a ${nextPlaceValueText}? (Írj 0-t, ha nincs.)`;
+                     } else { // Ha nincs hova átvitelt írni (pl. utolsó oszlopból nincs átvitel vagy az összeg nem hosszabb)
+                        taskInstructions.textContent = "Folytasd a következő oszloppal."; // Ezt a handleCheck már kezeli és továbbléptet
+                        // Itt lehetne egy auto-továbblépés, ha a helyes átvitel 0, de most a felhasználóra bízzuk
+                     }
+                }
+                checkButton.textContent = "Ellenőrzés";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTheme(currentSettings.theme); 
+            generateNewTask();
+        });
+
+    </script>
+</body>
+</html>

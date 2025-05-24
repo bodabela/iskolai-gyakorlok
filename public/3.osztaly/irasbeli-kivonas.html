@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Írásbeli Kivonás Gyakorló</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Általános test stílusok */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Vezérlőelemek konténerének stílusai */
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Beállítások sorának stílusai */
+        .settings-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px; 
+            width:100%;
+        }
+        /* Beállítás csoportok stílusai */
+        .settings-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+			padding: 10px;
+        }
+
+        /* Vezérlőelemek címkéinek stílusai */
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+
+        /* Beállító gombok általános stílusai */
+        .setting-button {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .setting-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .setting-button.active { /* Aktív beállító gomb stílusa */
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
+            transform: translateY(1px);
+        }
+
+        /* Fő konténer stílusai (feladat és címek) */
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        /* Címek stílusai */
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em);
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em);
+            margin-bottom: 25px;
+        }
+        /* Feladat konténer stílusai */
+        .task {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+            position: relative; 
+        }
+        /* Feladat fejlécének stílusai */
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: clamp(1.1em, 3.5vw, 1.3em);
+            transition: color 0.5s ease;
+        }
+        .new-task-button { 
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px; 
+        }
+
+        /* Feladat szövegének stílusai */
+        .task p {
+            line-height: 1.6;
+            font-size: clamp(1em, 3vw, 1.1em);
+            margin-bottom: 10px;
+            transition: color 0.5s ease;
+        }
+        
+        /* Feladat gombok általános stílusai */
+        button.task-button { 
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+
+        /* Visszajelzés területének stílusai */
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em);
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        /* Kivonási rács stílusai */
+        .main-subtraction-grid {
+            display: grid;
+            gap: 1px; 
+            justify-content: center; 
+            margin: 1rem auto; 
+            font-size: 1.5em; 
+            position: relative; 
+        }
+
+        /* Rács celláinak általános stílusai */
+        .grid-cell {
+            width: 30px; 
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px; 
+            line-height: 30px; 
+            border-radius: 4px; 
+            box-sizing: border-box;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            background-color: transparent; 
+        }
+        .grid-cell.operand-digit { /* Kisebbítendő/kivonandó számjegyek cellái */ }
+        .grid-cell.op-symbol { 
+            font-weight: bold;
+        }
+         .grid-cell.borrow-input-cell { 
+            height: 25px; 
+            padding-top: 2px; 
+            /* A pótlás inputot a cellán belül jobbra toljuk kissé, a képhez hasonlóan */
+            justify-content: flex-end; /* Jobbra igazítás */
+            padding-right: 5px; /* Kis térköz jobbról */
+        }
+        .grid-cell.borrow-input-cell input.styled-input {
+            font-size: 0.65em; 
+            height: 20px;
+            width: 20px;
+            padding: 0px; 
+            color: var(--theme-carry-text-color, blue); 
+            border: 1px dashed var(--theme-carry-text-color, blue);
+            background-color: transparent; 
+            border-radius: 3px;
+        }
+        .grid-cell.borrow-input-cell input.styled-input:focus {
+            background-color: rgba(255,255,255,0.5); 
+        }
+        .grid-cell.borrow-input-cell input.styled-input:disabled {
+            background-color: transparent;
+            border: 1px solid transparent;
+            font-weight: bold; 
+            color: var(--theme-carry-text-color, blue); 
+        }
+        /* Üres borrow cella (pl. egyesek alatt) */
+        .grid-cell.borrow-input-cell.empty-borrow {
+            border: none; /* Ne legyen látható keret, ha üres */
+        }
+
+
+        .grid-cell.cell-with-line-below { 
+            border-bottom-width: 2px; 
+            border-bottom-style: solid;
+        }
+        .grid-cell.difference-digit-cell { /* Különbség számjegyeinek cellái */
+        }
+        .grid-cell.highlight-target { 
+            box-shadow: 0 0 0 2px var(--theme-highlight-color, #0d6efd);
+            border-radius: 4px;
+            background-color: var(--theme-highlight-bg-color, rgba(13, 110, 253, 0.05)); /* Nagyon enyhe háttér */
+        }
+        .grid-cell.highlight-group { 
+            background-color: var(--theme-highlight-group-bg-color, rgba(13, 110, 253, 0.1));
+            border-radius: 0px; /* A szomszédos cellákkal együtt alkosson téglalapot */
+        }
+         .grid-cell.highlight-group.top-member {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+        .grid-cell.highlight-group.bottom-member {
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        .grid-cell.borrow-input-cell.highlight-group input.styled-input:disabled {
+             color: var(--theme-highlight-color, #0d6efd); 
+             font-weight: bold;
+             border: 1px dashed var(--theme-highlight-color, #0d6efd); /* Kiemelt pótléknak is legyen kerete */
+        }
+
+
+        /* Rács celláiban lévő input mezők stílusai */
+        .grid-cell input.styled-input {
+            width: 100%;
+            height: 100%;
+            font-size: inherit; 
+            padding: 0;
+            margin: 0;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid #d1d5db; 
+            background-color: #fff; 
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+            box-sizing: border-box;
+            color: #333; 
+        }
+        .grid-cell input.styled-input:disabled:not(.borrow-digit-input) { 
+             font-weight: bold;
+             background-color: #e9ecef; 
+             color: #495057;
+        }
+        
+        /* Alapértelmezett téma stílusok */
+        .setting-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
+        .task-button { background-color: #007bff; color: white; }
+        .container { background-color: #ffffff; border: 1px solid #e5e7eb; }
+        .task { background-color: #f9fafb; border: 1px dashed #d1d5db; }
+        .feedback.correct { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .feedback.incorrect { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
+        .control-label { color: #333; }
+        h1, h2 { color: #007bff; }
+        .grid-cell.operand-digit { color: #212529; }
+        .grid-cell.op-symbol { color: #212529; }
+        .grid-cell.cell-with-line-below { border-bottom-color: #6c757d; }
+        .grid-cell.difference-digit-cell { color: #212529; }
+        .grid-cell.borrow-input-cell input.styled-input { --theme-carry-text-color: #0d6efd; }
+        :root {
+            --theme-highlight-bg-color: rgba(13, 110, 253, 0.05);
+            --theme-highlight-group-bg-color: rgba(13, 110, 253, 0.1);
+        }
+
+
+        /* --- THEME DEFINITIONS --- */
+        /* 1. Candy Theme (Girlish) */
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6; --theme-highlight-color: #ff69b4; --theme-carry-text-color: #c71585;
+            --theme-highlight-bg-color: rgba(255, 105, 180, 0.05); --theme-highlight-group-bg-color: rgba(255, 105, 180, 0.1);
+        }
+        body.theme-candy .control-label { color: #c71585; }
+        body.theme-candy .setting-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
+        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
+        body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
+        body.theme-candy .task-header h3 { color: #ff69b4; }
+        body.theme-candy .task p { color: #8a2be2; }
+        body.theme-candy button.task-button { background-color: #ff69b4; color: white; }
+        body.theme-candy button.task-button:hover { background-color: #ff1493; }
+        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border: 1px solid #90ee90; }
+        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border: 1px solid #ffb6c1; }
+        body.theme-candy .grid-cell.operand-digit, body.theme-candy .grid-cell.op-symbol { color: #9932cc; }
+        body.theme-candy .grid-cell.cell-with-line-below { border-bottom-color: #ffb6c1; }
+        body.theme-candy .grid-cell.difference-digit-cell { color: #9932cc; }
+        body.theme-candy input.styled-input { border-color: #ffb6c1; }
+        body.theme-candy input.styled-input:disabled:not(.borrow-digit-input) { background-color: #ffe4e1; color: #da70d6; }
+        body.theme-candy .grid-cell.borrow-input-cell input.styled-input { border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-candy .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+
+        /* 2. Space Theme (Boyish) */
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa; --theme-highlight-color: #facc15; --theme-carry-text-color: #fde047;
+             --theme-highlight-bg-color: rgba(250, 204, 21, 0.05); --theme-highlight-group-bg-color: rgba(250, 204, 21, 0.1);
+        }
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .setting-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
+        body.theme-space .task-header h3 { color: #93c5fd; }
+        body.theme-space .task p { color: #cbd5e1; }
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space button.task-button:hover { background-color: #1d4ed8; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+        body.theme-space .grid-cell.operand-digit, body.theme-space .grid-cell.op-symbol { color: #e2e8f0; }
+        body.theme-space .grid-cell.cell-with-line-below { border-bottom-color: #475569; }
+        body.theme-space .grid-cell.difference-digit-cell { color: #e2e8f0; }
+        body.theme-space input.styled-input { background-color: #1e293b; color: #e2e8f0; border-color: #475569;}
+        body.theme-space input.styled-input:disabled:not(.borrow-digit-input) { background-color: #334155; color: #94a3b8; }
+        body.theme-space .grid-cell.borrow-input-cell input.styled-input { background-color: #0f172a; border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-space .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+        /* 3. Jungle Theme (Boyish) */
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f; --theme-highlight-color: #8bc34a; --theme-carry-text-color: #558b2f;
+            --theme-highlight-bg-color: rgba(139, 195, 74, 0.05); --theme-highlight-group-bg-color: rgba(139, 195, 74, 0.1);
+        }
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .setting-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
+        body.theme-jungle .task-header h3 { color: #558b2f; }
+        body.theme-jungle .task p { color: #2e7d32; }
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle button.task-button:hover { background-color: #689f38; }
+        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-jungle .grid-cell.operand-digit, body.theme-jungle .grid-cell.op-symbol { color: #1b5e20; }
+        body.theme-jungle .grid-cell.cell-with-line-below { border-bottom-color: #81c784; }
+        body.theme-jungle .grid-cell.difference-digit-cell { color: #1b5e20; }
+        body.theme-jungle input.styled-input { border-color: #81c784; }
+        body.theme-jungle input.styled-input:disabled:not(.borrow-digit-input) { background-color: #dcedc8; color: #558b2f; }
+        body.theme-jungle .grid-cell.borrow-input-cell input.styled-input { border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-jungle .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+
+        /* 4. Magic Forest Theme (Girlish) */
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2; --theme-highlight-color: #9932cc; --theme-carry-text-color: #8a2be2;
+            --theme-highlight-bg-color: rgba(153, 50, 204, 0.05); --theme-highlight-group-bg-color: rgba(153, 50, 204, 0.1);
+        }
+        body.theme-magicforest .control-label { color: #9932cc; }
+        body.theme-magicforest .setting-button.active { background-color: #9370db; color: #f8f0ff; }
+        body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
+        body.theme-magicforest h1, body.theme-magicforest h2 { color: #8a2be2; }
+        body.theme-magicforest .task { background-color: #f5f5f5; border: 2px dashed #ba55d3; }
+        body.theme-magicforest .task-header h3 { color: #9932cc; }
+        body.theme-magicforest .task p { color: #4b0082; }
+        body.theme-magicforest button.task-button { background-color: #9370db; }
+        body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
+        body.theme-magicforest .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-magicforest .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-magicforest .grid-cell.operand-digit, body.theme-magicforest .grid-cell.op-symbol { color: #483d8b; }
+        body.theme-magicforest .grid-cell.cell-with-line-below { border-bottom-color: #ba55d3; }
+        body.theme-magicforest .grid-cell.difference-digit-cell { color: #483d8b; }
+        body.theme-magicforest input.styled-input { border-color: #ba55d3;}
+        body.theme-magicforest input.styled-input:disabled:not(.borrow-digit-input) { background-color: #f0e6ff; color: #9370db; }
+        body.theme-magicforest .grid-cell.borrow-input-cell input.styled-input { border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-magicforest .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+        /* 5. Robo/Tech Theme (Boyish) */
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1; --theme-highlight-color: #00e676; --theme-carry-text-color: #26c6da;
+            --theme-highlight-bg-color: rgba(0, 230, 118, 0.05); --theme-highlight-group-bg-color: rgba(0, 230, 118, 0.1);
+        }
+        body.theme-tech .control-label { color: #26c6da; }
+        body.theme-tech .setting-button.active { background-color: #00838f; color: #e0f7fa; }
+        body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
+        body.theme-tech h1, body.theme-tech h2 { color: #00acc1; }
+        body.theme-tech .task { background-color: #455a64; border: 2px dashed #78909c; }
+        body.theme-tech .task-header h3 { color: #26c6da; }
+        body.theme-tech .task p { color: #b0bec5; }
+        body.theme-tech button.task-button { background-color: #0097a7; }
+        body.theme-tech button.task-button:hover { background-color: #00838f; }
+        body.theme-tech .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-tech .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+        body.theme-tech .grid-cell.operand-digit, body.theme-tech .grid-cell.op-symbol { color: #eceff1; }
+        body.theme-tech .grid-cell.cell-with-line-below { border-bottom-color: #78909c; }
+        body.theme-tech .grid-cell.difference-digit-cell { color: #eceff1; }
+        body.theme-tech input.styled-input { background-color: #37474f; color: #eceff1; border-color: #78909c; }
+        body.theme-tech input.styled-input:disabled:not(.borrow-digit-input) { background-color: #455a64; color: #b0bec5; }
+        body.theme-tech .grid-cell.borrow-input-cell input.styled-input { background-color: #263238; border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-tech .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+
+        /* 6. Ocean Theme (Girlish) */
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa; --theme-highlight-color: #4dd0e1; --theme-carry-text-color: #00897b;
+             --theme-highlight-bg-color: rgba(77, 208, 225, 0.05); --theme-highlight-group-bg-color: rgba(77, 208, 225, 0.1);
+        }
+        body.theme-ocean .control-label { color: #00acc1; }
+        body.theme-ocean .setting-button.active { background-color: #4db6ac; color: #e0f2f1; }
+        body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
+        body.theme-ocean h1, body.theme-ocean h2 { color: #00897b; }
+        body.theme-ocean .task { background-color: #e0f7fa; border: 2px dashed #80deea; }
+        body.theme-ocean .task-header h3 { color: #00acc1; }
+        body.theme-ocean .task p { color: #00695c; }
+        body.theme-ocean button.task-button { background-color: #26a69a; }
+        body.theme-ocean button.task-button:hover { background-color: #00897b; }
+        body.theme-ocean .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-ocean .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-ocean .grid-cell.operand-digit, body.theme-ocean .grid-cell.op-symbol { color: #004d40; }
+        body.theme-ocean .grid-cell.cell-with-line-below { border-bottom-color: #80deea; }
+        body.theme-ocean .grid-cell.difference-digit-cell { color: #004d40; }
+        body.theme-ocean input.styled-input { border-color: #80deea;}
+        body.theme-ocean input.styled-input:disabled:not(.borrow-digit-input) { background-color: #b2ebf2; color: #26a69a; }
+        body.theme-ocean .grid-cell.borrow-input-cell input.styled-input { border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-ocean .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+        /* 7. Sport Theme (Boyish) */
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f; --theme-highlight-color: #2196f3; --theme-carry-text-color: #1565c0;
+            --theme-highlight-bg-color: rgba(33, 150, 243, 0.05); --theme-highlight-group-bg-color: rgba(33, 150, 243, 0.1);
+        }
+        body.theme-sport .control-label { color: #1976d2; }
+        body.theme-sport .setting-button.active { background-color: #1976d2; color: #e3f2fd; }
+        body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
+        body.theme-sport h1, body.theme-sport h2 { color: #d32f2f; }
+        body.theme-sport .task { background-color: #e3f2fd; border: 2px dashed #42a5f5; }
+        body.theme-sport .task-header h3 { color: #1976d2; }
+        body.theme-sport .task p { color: #0d47a1; }
+        body.theme-sport button.task-button { background-color: #2196f3; }
+        body.theme-sport button.task-button:hover { background-color: #1976d2; }
+        body.theme-sport .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sport .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-sport .grid-cell.operand-digit, body.theme-sport .grid-cell.op-symbol { color: #01579b; }
+        body.theme-sport .grid-cell.cell-with-line-below { border-bottom-color: #42a5f5; }
+        body.theme-sport .grid-cell.difference-digit-cell { color: #01579b; }
+        body.theme-sport input.styled-input { border-color: #42a5f5;}
+        body.theme-sport input.styled-input:disabled:not(.borrow-digit-input) { background-color: #bbdefb; color: #1976d2; }
+        body.theme-sport .grid-cell.borrow-input-cell input.styled-input { border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-sport .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+
+        /* 8. Flower Garden Theme (Girlish) */
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347; --theme-highlight-color: #ffa07a; --theme-carry-text-color: #ff7f50;
+            --theme-highlight-bg-color: rgba(255, 160, 122, 0.05); --theme-highlight-group-bg-color: rgba(255, 160, 122, 0.1);
+        }
+        body.theme-flowergarden .control-label { color: #ff7f50; }
+        body.theme-flowergarden .setting-button.active { background-color: #ffdab9; color: #8b4513; }
+        body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
+        body.theme-flowergarden h1, body.theme-flowergarden h2 { color: #ff6347; }
+        body.theme-flowergarden .task { background-color: #fffafa; border: 2px dashed #ffe4b5; }
+        body.theme-flowergarden .task-header h3 { color: #ff7f50; }
+        body.theme-flowergarden .task p { color: #8b4513; }
+        body.theme-flowergarden button.task-button { background-color: #ffa07a; }
+        body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
+        body.theme-flowergarden .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-flowergarden .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-flowergarden .grid-cell.operand-digit, body.theme-flowergarden .grid-cell.op-symbol { color: #a0522d; }
+        body.theme-flowergarden .grid-cell.cell-with-line-below { border-bottom-color: #ffdab9; }
+        body.theme-flowergarden .grid-cell.difference-digit-cell { color: #a0522d; }
+        body.theme-flowergarden input.styled-input { border-color: #ffdab9;}
+        body.theme-flowergarden input.styled-input:disabled:not(.borrow-digit-input) { background-color: #fff5ee; color: #d2691e; }
+        body.theme-flowergarden .grid-cell.borrow-input-cell input.styled-input { border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-flowergarden .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+
+        /* 9. Adventure Theme (Boyish) */
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c; --theme-highlight-color: #795548; --theme-carry-text-color: #6d4c41;
+            --theme-highlight-bg-color: rgba(121, 85, 72, 0.05); --theme-highlight-group-bg-color: rgba(121, 85, 72, 0.1);
+        }
+        body.theme-adventure .control-label { color: #6d4c41; }
+        body.theme-adventure .setting-button.active { background-color: #a1887f; color: #efebe9; }
+        body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
+        body.theme-adventure h1, body.theme-adventure h2 { color: #bf360c; }
+        body.theme-adventure .task { background-color: #d7ccc8; border: 2px dashed #8d6e63; }
+        body.theme-adventure .task-header h3 { color: #6d4c41; }
+        body.theme-adventure .task p { color: #4e342e; }
+        body.theme-adventure button.task-button { background-color: #795548; }
+        body.theme-adventure button.task-button:hover { background-color: #5d4037; }
+        body.theme-adventure .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-adventure .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-adventure .grid-cell.operand-digit, body.theme-adventure .grid-cell.op-symbol { color: #3e2723; }
+        body.theme-adventure .grid-cell.cell-with-line-below { border-bottom-color: #8d6e63; }
+        body.theme-adventure .grid-cell.difference-digit-cell { color: #3e2723; }
+        body.theme-adventure input.styled-input { border-color: #8d6e63;}
+        body.theme-adventure input.styled-input:disabled:not(.borrow-digit-input) { background-color: #d7ccc8; color: #5d4037; }
+        body.theme-adventure .grid-cell.borrow-input-cell input.styled-input { border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-adventure .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+
+        /* 10. Sky Theme (Girlish) */
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff; --theme-highlight-color: #87ceeb; --theme-carry-text-color: #1e90ff;
+            --theme-highlight-bg-color: rgba(135, 206, 235, 0.05); --theme-highlight-group-bg-color: rgba(135, 206, 235, 0.1);
+        }
+        body.theme-sky .control-label { color: #00bfff; }
+        body.theme-sky .setting-button.active { background-color: #add8e6; color: #005a9c; }
+        body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
+        body.theme-sky h1, body.theme-sky h2 { color: #1e90ff; }
+        body.theme-sky .task { background-color: #f5faff; border: 2px dashed #add8e6; }
+        body.theme-sky .task-header h3 { color: #00bfff; }
+        body.theme-sky .task p { color: #5f9ea0; }
+        body.theme-sky button.task-button { background-color: #87cefa; }
+        body.theme-sky button.task-button:hover { background-color: #6495ed; }
+        body.theme-sky .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sky .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-sky .grid-cell.operand-digit, body.theme-sky .grid-cell.op-symbol { color: #4682b4; }
+        body.theme-sky .grid-cell.cell-with-line-below { border-bottom-color: #b0e0e6; }
+        body.theme-sky .grid-cell.difference-digit-cell { color: #4682b4; }
+        body.theme-sky input.styled-input { border-color: #b0e0e6;}
+        body.theme-sky input.styled-input:disabled:not(.borrow-digit-input) { background-color: #e6f7ff; color: #6495ed; }
+        body.theme-sky .grid-cell.borrow-input-cell input.styled-input { border-color: var(--theme-carry-text-color); color:var(--theme-carry-text-color)}
+        body.theme-sky .grid-cell.borrow-input-cell input.styled-input:disabled { background-color: transparent; border-color:transparent;}
+
+    </style>
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="w-full mt-4">
+            <div class="settings-row">
+                <div class="settings-group">
+                    <p class="control-label">Téma választó:</p>
+                    <div id="themeSelector" class="flex flex-wrap justify-center gap-2">
+                        <button class="setting-button theme-button" data-theme="theme-candy">Cukorka</button>
+                        <button class="setting-button theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                        <button class="setting-button theme-button" data-theme="theme-ocean">Óceán</button>
+                        <button class="setting-button theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                        <button class="setting-button theme-button" data-theme="theme-sky">Égbolt</button>
+                        <button class="setting-button theme-button" data-theme="theme-space">Űr</button>
+                        <button class="setting-button theme-button" data-theme="theme-jungle">Őserdő</button>
+                        <button class="setting-button theme-button" data-theme="theme-tech">Techno</button>
+                        <button class="setting-button theme-button" data-theme="theme-sport">Sport</button>
+                        <button class="setting-button theme-button" data-theme="theme-adventure">Kaland</button>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <p class="control-label">Számjegyek száma:</p>
+                    <div id="digitCountSelector" class="flex flex-wrap justify-center gap-2">
+                        <button class="setting-button" data-digits="2">2-jegyű</button>
+                        <button class="setting-button active" data-digits="3">3-jegyű</button>
+                        <button class="setting-button" data-digits="4">4-jegyű</button>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <p class="control-label">Segítség:</p>
+                    <div id="helpLevelSelector" class="flex flex-wrap justify-center gap-2">
+                        <button class="setting-button active" data-help="independent">Önálló</button>
+                        <button class="setting-button" data-help="step-by-step">Lépésenként</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Írásbeli Kivonás Gyakorló</h1>
+        <h2>3. Osztály</h2>
+
+        <div class="task">
+            <div class="task-header">
+                <h3>Feladat:</h3>
+                <button id="newTaskButton" class="task-button new-task-button">Új feladat</button>
+            </div>
+            <p id="taskInstructions">Végezd el a kivonást!</p>
+
+            <div id="mainSubtractionGrid" class="main-subtraction-grid">
+                </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="checkButton" class="task-button">Ellenőrzés</button>
+            </div>
+            <p id="feedbackArea" class="feedback" style="margin-top: 15px;">&nbsp;</p>
+        </div>
+    </div>
+
+    <script>
+        // Globális DOM Elemek Referenciái
+        const themeSelector = document.getElementById('themeSelector');
+        const digitCountSelector = document.getElementById('digitCountSelector');
+        const helpLevelSelector = document.getElementById('helpLevelSelector');
+        const newTaskButton = document.getElementById('newTaskButton');
+        const checkButton = document.getElementById('checkButton');
+        const taskInstructions = document.getElementById('taskInstructions');
+        const mainSubtractionGrid = document.getElementById('mainSubtractionGrid'); 
+        const feedbackArea = document.getElementById('feedbackArea');
+        const bodyEl = document.body;
+
+        let currentSettings = {
+            theme: 'theme-candy', 
+            digitCount: 3,   
+            helpLevel: 'independent' 
+        };
+
+        let task = {
+            num1: 0,
+            num2: 0,
+            calculatedDifferenceDigits: [], // Balról jobbra tárolja a helyes különbségjegyeket
+            calculatedBorrows: []         // Balról jobbra. calculatedBorrows[i] az i. (balról) oszlop KIVONANDÓJA ALÁ kerülő pótlék.
+        };
+        
+        let currentStepColumnFromRight = 0; 
+        let currentSubStep = 'difference_digit'; 
+
+        themeSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('setting-button')) {
+                currentSettings.theme = e.target.dataset.theme;
+                applyTheme(currentSettings.theme);
+            }
+        });
+        digitCountSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('setting-button')) {
+                currentSettings.digitCount = parseInt(e.target.dataset.digits);
+                updateActiveButtonVisuals(digitCountSelector, e.target);
+                generateNewTask(); 
+            }
+        });
+        helpLevelSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('setting-button')) {
+                currentSettings.helpLevel = e.target.dataset.help;
+                updateActiveButtonVisuals(helpLevelSelector, e.target);
+                generateNewTask(); 
+            }
+        });
+
+        newTaskButton.addEventListener('click', generateNewTask);
+        checkButton.addEventListener('click', handleCheck);
+
+        function applyTheme(themeClass) {
+            bodyEl.className = ''; 
+            bodyEl.classList.add(themeClass); 
+            themeSelector.querySelectorAll('button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeClass);
+            });
+            updateActiveButtonVisuals(digitCountSelector, digitCountSelector.querySelector(`[data-digits="${currentSettings.digitCount}"]`));
+            updateActiveButtonVisuals(helpLevelSelector, helpLevelSelector.querySelector(`[data-help="${currentSettings.helpLevel}"]`));
+        }
+        
+        function updateActiveButtonVisuals(container, activeButton) {
+            if (!container || !activeButton) return;
+            container.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            activeButton.classList.add('active');
+        }
+
+        function generateNewTask() {
+            feedbackArea.textContent = '\u00A0'; 
+            feedbackArea.className = 'feedback mt-4'; 
+            currentStepColumnFromRight = 0; 
+            currentSubStep = 'difference_digit';
+            checkButton.textContent = (currentSettings.helpLevel === 'independent') ? "Ellenőrzés" : "Lépés ellenőrzése";
+            
+            const minNum1 = Math.pow(10, currentSettings.digitCount - 1);
+            const maxNum1 = Math.pow(10, currentSettings.digitCount) - 1;
+            
+            let attempts = 0;
+            const MAX_ATTEMPTS = 100;
+            let foundSuitable = false;
+
+            while(attempts < MAX_ATTEMPTS && !foundSuitable) {
+                task.num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+                let maxNum2 = task.num1 -1;
+                 if (maxNum2 < 0) maxNum2 = 0;
+                let minNum2Allowed = (currentSettings.digitCount > 1) ? Math.pow(10, currentSettings.digitCount - 2) : 0; 
+                if (task.num1 < Math.pow(10, currentSettings.digitCount -1) * 1.2 && currentSettings.digitCount > 1) { 
+                     minNum2Allowed = 1; 
+                }
+                if (maxNum2 < minNum2Allowed && maxNum2 >=0) minNum2Allowed = 0;
+
+
+                task.num2 = Math.floor(Math.random() * (maxNum2 - minNum2Allowed + 1)) + minNum2Allowed;
+                 if (task.num1 === task.num2 && task.num1 > 0) {
+                    task.num2 = Math.max(0, task.num2 - (Math.floor(Math.random()* (task.num1 > 10 ? 5:1) )+1) );
+                }
+                 if (task.num2 < 0) task.num2 = 0;
+
+                let s1_check = String(task.num1).padStart(currentSettings.digitCount, '0');
+                let s2_check = String(task.num2).padStart(currentSettings.digitCount, '0');
+                let carryCheckLogic = 0;
+                let hasBorrowInLogic = false;
+                 for(let i = 0; i < currentSettings.digitCount; i++){ 
+                    let d1_check = parseInt(s1_check[currentSettings.digitCount - 1 - i]);
+                    let d2_check = parseInt(s2_check[currentSettings.digitCount - 1 - i]);
+                    let eff_d2_check = d2_check + carryCheckLogic;
+                    if(d1_check < eff_d2_check){
+                        hasBorrowInLogic = true;
+                        carryCheckLogic = 1;
+                    } else {
+                        carryCheckLogic = 0;
+                    }
+                }
+                if (hasBorrowInLogic || currentSettings.digitCount === 1) {
+                    foundSuitable = true;
+                }
+                attempts++;
+            }
+             if (!foundSuitable) { 
+                 let n1Base = "5";
+                 let n2Base = "1";
+                 if (currentSettings.digitCount === 2) { n1Base = "50"; n2Base = "15";}
+                 else if (currentSettings.digitCount === 3) { n1Base = "500"; n2Base = "155";}
+                 else if (currentSettings.digitCount === 4) { n1Base = "5000"; n2Base = "1555";}
+                 else {n1Base = "8"; n2Base="3";}
+
+                 task.num1 = parseInt(n1Base);
+                 task.num2 = parseInt(n2Base);
+                 if(task.num1 <= task.num2 && task.num1 > 0) task.num2 = task.num1-1;
+             }
+
+            calculateCorrectSteps();    
+            renderTaskDisplay();        
+            prepareCurrentStepInputs(); 
+            updateTaskInstructions();   
+        }
+
+        function calculateCorrectSteps() {
+            task.calculatedDifferenceDigits = []; 
+            task.calculatedBorrows = [];      
+            let carryFromPreviousCol = 0; 
+            const maxLength = currentSettings.digitCount;
+
+            const sNum1Padded = String(task.num1).padStart(maxLength, '0');
+            const sNum2Padded = String(task.num2).padStart(maxLength, '0');
+
+            for (let i = 0; i < maxLength; i++) { // Jobbról balra haladunk (i=0 az egyesek helyiértéke)
+                const currentDigitIndexFromLeft = maxLength - 1 - i; 
+                
+                let digit1 = parseInt(sNum1Padded[currentDigitIndexFromLeft]);
+                let digit2Original = parseInt(sNum2Padded[currentDigitIndexFromLeft]);
+                
+                task.calculatedBorrows.unshift(carryFromPreviousCol); 
+
+                let effectiveDigit2 = digit2Original + carryFromPreviousCol;
+
+                if (digit1 < effectiveDigit2) {
+                    task.calculatedDifferenceDigits.unshift((digit1 + 10) - effectiveDigit2);
+                    carryFromPreviousCol = 1; 
+                } else {
+                    task.calculatedDifferenceDigits.unshift(digit1 - effectiveDigit2);
+                    carryFromPreviousCol = 0;
+                }
+            }
+            task.calculatedBorrows.pop(); // Remove the last trivial diff, because it is always 0 and should not be handled on the UI eaither!
+        }
+
+        function renderTaskDisplay() {
+            mainSubtractionGrid.innerHTML = ''; 
+            const sNum1 = String(task.num1).padStart(currentSettings.digitCount, '0');
+            const sNum2 = String(task.num2).padStart(currentSettings.digitCount, '0');
+            const maxLength = currentSettings.digitCount;
+            const gridCols = maxLength + 1; 
+
+            mainSubtractionGrid.style.gridTemplateColumns = `repeat(${gridCols}, 30px)`;
+            mainSubtractionGrid.style.gridTemplateRows = `repeat(5, auto)`;
+
+            // 1. sor: Kisebbítendő
+            for (let i = 0; i < maxLength; i++) {
+                const cell = createGridCell(sNum1[i], 1, i + 2, ['operand-digit']);
+                cell.dataset.colFromLeft = i; 
+                cell.dataset.rowType = "minuend";
+                mainSubtractionGrid.appendChild(cell);
+            }
+
+            // 2. sor: Operátor + Kivonandó
+            mainSubtractionGrid.appendChild(createGridCell('-', 2, 1, ['op-symbol']));
+            for (let i = 0; i < maxLength; i++) {
+                const cell = createGridCell(sNum2[i], 2, i + 2, ['operand-digit']);
+                cell.dataset.colFromLeft = i;
+                cell.dataset.rowType = "subtrahend";
+                mainSubtractionGrid.appendChild(cell);
+            }
+            
+            // 3. sor: Pótlás inputok
+            mainSubtractionGrid.appendChild(createGridCell(null, 3, 1)); // Operátor alatt
+            for (let i = 0; i < maxLength; i++) { // Oszlopok balról jobbra
+                const currentGridColumnForOperand = i + 2;
+                const cell = createGridCell(null, 3, currentGridColumnForOperand, ['borrow-input-cell']);
+                if (i < maxLength - 1) { // Csak az utolsó ELŐTTI oszlopig (balról) van értelme PÓTLÉK INPUTNAK,
+                                         // ami a TŐLE JOBBRA LÉVŐ oszlopból származik.
+                                         // A borrow-input-${i} az (i). (0-tól indexelt) pótlékot jelöli,
+                                         // ami az (i+1). (balról) KIVONANDÓ számjegy alá kerül.
+                    const borrowInputId = `borrow-input-${i}`; // 0-tól (maxLength-2)-ig.
+                    const input = createStyledInput(true, borrowInputId, 'borrow');
+                    // Ez az input a balról i. pótlékot (0-indexelt) jelenti.
+                    // A `task.calculatedBorrows[i+1]` a helyes érték, mert `calculatedBorrows[0]` az egyesekhez tartozik (mindig 0).
+                    input.dataset.borrowSlotIndex = i; // Hanyadik pótlás input (0 = legbaloldalibb megjelenő)
+                    cell.appendChild(input);
+                } else {
+                    cell.classList.add('empty-borrow'); // Nincs input a legjobboldalibb kivonandó alatt
+                }
+                mainSubtractionGrid.appendChild(cell);
+            }
+
+
+            // 4. sor: Vonal
+            mainSubtractionGrid.appendChild(createGridCell(null, 4, 1)); 
+            for (let i = 0; i < maxLength; i++) {
+                mainSubtractionGrid.appendChild(createGridCell(null, 4, i + 2, ['cell-with-line-below']));
+            }
+
+            // 5. sor: Különbség inputok
+            mainSubtractionGrid.appendChild(createGridCell(null, 5, 1)); 
+            for (let i = 0; i < maxLength; i++) {
+                const diffInputId = `diff-digit-${i}`; 
+                const input = createStyledInput(true, diffInputId, 'difference');
+                input.dataset.colFromLeft = i; 
+                const cell = createGridCell(null, 5, i + 2, ['difference-digit-cell']);
+                cell.appendChild(input);
+                mainSubtractionGrid.appendChild(cell);
+            }
+        }
+        
+        function createGridCell(content, row, col, classList = []) {
+            const cell = document.createElement('div');
+            cell.classList.add('grid-cell', ...classList);
+            if (content !== null && typeof content !== 'undefined') cell.textContent = content;
+            cell.style.gridRow = String(row); 
+            cell.style.gridColumn = String(col); 
+            return cell;
+        }
+
+        function createStyledInput(disabled, id, type = null) { 
+            const input = document.createElement('input');
+            input.type = 'text'; 
+            input.inputMode = 'numeric'; 
+            input.pattern = "[0-9]*"; 
+            input.classList.add('styled-input');
+            if (type === 'borrow') input.classList.add('borrow-digit-input');
+            if (type === 'difference') input.classList.add('diff-digit-input');
+            input.id = id; 
+            input.maxLength = 1;
+            
+            input.addEventListener('input', (e) => { 
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                handleInputAndFocusNext(e); 
+            });
+            input.disabled = disabled;
+            return input;
+        }
+
+       function handleInputAndFocusNext(event) {
+            const currentInput = event.target;
+            if (currentInput.value.length >= currentInput.maxLength && currentSettings.helpLevel === 'independent') {
+                const allInputsInGrid = Array.from(mainSubtractionGrid.querySelectorAll('input.styled-input:not([disabled])'));
+                const currentInputIndexInArray = allInputsInGrid.indexOf(currentInput);
+                
+                if (currentInputIndexInArray !== -1 && currentInputIndexInArray < allInputsInGrid.length - 1) {
+                    try { allInputsInGrid[currentInputIndexInArray + 1].focus(); } catch (e) {}
+                }
+            }
+        }
+        
+        function prepareCurrentStepInputs() {
+            mainSubtractionGrid.querySelectorAll('input.styled-input').forEach(inp => { 
+                inp.style.borderColor = ''; 
+                if(currentSettings.helpLevel === 'step-by-step') inp.disabled = true; 
+            });
+            mainSubtractionGrid.querySelectorAll('.grid-cell.operand-digit, .grid-cell.borrow-input-cell, .grid-cell.difference-digit-cell')
+                .forEach(cell => cell.classList.remove('highlight-target', 'highlight-group', 'top-member', 'bottom-member'));
+            
+            mainSubtractionGrid.querySelectorAll('.borrow-input-cell input.styled-input:disabled').forEach(inp => {
+                // Don't remove highlight-group if it was set for a fixed borrow value
+            });
+
+
+            const maxLength = currentSettings.digitCount;
+            const targetColFromLeft = maxLength - 1 - currentStepColumnFromRight; 
+
+            if (currentSettings.helpLevel === 'independent') {
+                mainSubtractionGrid.querySelectorAll('input.styled-input').forEach(inp => {
+                     // Az első (jobbról) kivonandó alatt nincs borrow input, de a többi igen
+                    if(inp.classList.contains('borrow-digit-input')) {
+                        // A borrow inputok ID-ja `borrow-input-${i}` ahol i = 0-tól (maxLength-2)-ig.
+                        // A `dataset.borrowSlotIndex` is ezt az i-t tárolja.
+                        // A legelső (jobbról) kivonandó alatt nincs.
+                    }
+                    inp.disabled = false
+                });
+                try {
+                     // Fókusz a legjobboldalibb KÜLÖNBSÉG inputra
+                    const firstDiffInput = document.getElementById(`diff-digit-${maxLength-1}`); 
+                    if (firstDiffInput) firstDiffInput.focus();
+                } catch (e) {}
+            } else { // step-by-step
+                if (currentStepColumnFromRight >= maxLength && currentSubStep === 'difference_digit') { 
+                    taskInstructions.textContent = "Kész vagy! A kivonás véget ért.";
+                    checkButton.textContent = "Új feladat";
+                    return;
+                }
+                 if (targetColFromLeft < 0 && currentSubStep === 'borrow_digit') { 
+                     taskInstructions.textContent = "Kész vagy! A kivonás véget ért.";
+                     checkButton.textContent = "Új feladat";
+                     return;
+                 }
+
+                const minuendCell = mainSubtractionGrid.querySelector(`.operand-digit[data-row-type="minuend"][data-col-from-left="${targetColFromLeft}"]`);
+                const subtrahendCell = mainSubtractionGrid.querySelector(`.operand-digit[data-row-type="subtrahend"][data-col-from-left="${targetColFromLeft}"]`);
+
+                // Az AKTUÁLIS oszlop (targetColFromLeft) KIVONANDÓJA ALÁ eső pótlékot (ha van) mutatjuk és kiemeljük
+                const currentBorrowValueForThisColumn = task.calculatedBorrows[targetColFromLeft] || 0;
+                let borrowCellForCurrentSubtrahend;
+                if (targetColFromLeft > 0) { // Csak a második oszloptól van borrow input alatta
+                    const borrowInputToDisplayUserEntry = document.getElementById(`borrow-input-${targetColFromLeft - 1}`);
+                     if (borrowInputToDisplayUserEntry) {
+                        borrowCellForCurrentSubtrahend = borrowInputToDisplayUserEntry.parentElement;
+                        if (currentSubStep === 'difference_digit' && !borrowInputToDisplayUserEntry.disabled) {
+                            // Ha még nem írta be a user, de már tudjuk a helyeset a számításból (pl. előző oszlopnál már kiderült)
+                            // Ezt a részt a handleCheck-ben kell kezelni, hogy a USER által beírtat fixálja
+                        }
+                    }
+                }
+
+
+                if (currentSubStep === 'difference_digit') {
+                    if (minuendCell) minuendCell.classList.add('highlight-target');
+                    if (subtrahendCell) subtrahendCell.classList.add('highlight-target');
+
+                    if (borrowCellForCurrentSubtrahend && currentBorrowValueForThisColumn > 0) {
+                        // Ha az aktuális kivonandó alatt van egy már beírt és helyes pótlék, azt is kiemeljük
+                        const borrowInputInside = borrowCellForCurrentSubtrahend.querySelector('input.borrow-digit-input');
+                        if (borrowInputInside && borrowInputInside.disabled && parseInt(borrowInputInside.value) === currentBorrowValueForThisColumn) {
+                            if(subtrahendCell) subtrahendCell.classList.add('highlight-group', 'top-member');
+                            borrowCellForCurrentSubtrahend.classList.add('highlight-group', 'bottom-member');
+                        }
+                    }
+                    
+                    const diffInput = document.getElementById(`diff-digit-${targetColFromLeft}`);
+                    if (diffInput) {
+                        diffInput.disabled = false;
+                        diffInput.value = '';
+                        try { diffInput.focus(); } catch (e) {}
+                    }
+                } else { // borrow_digit (az AKTUÁLIS oszlop eredményéből származó pótlékot kérjük a KÖVETKEZŐHÖZ)
+                    // A pótlék, amit most kérünk, a (targetColFromLeft - 1) indexű (balról) oszlop KIVONANDÓJA alá fog kerülni.
+                    // Ez az input ID-ja: `borrow-input-${targetColFromLeft - 1}`.
+                    const borrowSlotToEnable = targetColFromLeft - 1; 
+                    if (borrowSlotToEnable >= 0) { 
+                        const borrowInput = document.getElementById(`borrow-input-${borrowSlotToEnable}`);
+                        if (borrowInput) {
+                            borrowInput.disabled = false;
+                            borrowInput.value = '';
+                            try { borrowInput.focus(); } catch (e) {}
+                            const prevDiffInput = document.getElementById(`diff-digit-${targetColFromLeft}`);
+                            if(prevDiffInput && prevDiffInput.parentElement) prevDiffInput.parentElement.classList.add('highlight-target');
+                        }
+                    } else { 
+                         currentStepColumnFromRight++; 
+                         currentSubStep = 'difference_digit';
+                         prepareCurrentStepInputs(); 
+                    }
+                }
+            }
+            updateTaskInstructions(); 
+        }
+        
+       function handleCheck() {
+            const maxLength = currentSettings.digitCount;
+
+            if (currentSettings.helpLevel === 'independent') {
+                let allCorrect = true;
+                let allFilledProperly = true; 
+
+                for (let i = 0; i < maxLength; i++) { 
+                    const diffInputEl = document.getElementById(`diff-digit-${i}`);
+                    if (!diffInputEl) { allCorrect = false; continue; }
+                    if (diffInputEl.value.trim() === "") allFilledProperly = false;
+                    const userDiffDigit = parseInt(diffInputEl.value);
+                    const correctDiffDigit = task.calculatedDifferenceDigits[i];
+                    if (isNaN(userDiffDigit) || userDiffDigit !== correctDiffDigit) {
+                        updateInputFieldFeedback(diffInputEl, false); allCorrect = false;
+                    } else { updateInputFieldFeedback(diffInputEl, true); }
+
+                    // Pótlék ellenőrzése: A balról i. oszlop KIVONANDÓJA alatti pótlékot (ha i > 0)
+                    // a `borrow-input-${i-1}` ID-jű input tartalmazza.
+                    // Ennek a helyes értéke a `task.calculatedBorrows[i]`.
+                    if (i > 0) { // Csak a második oszloptól (balról) van pótlék alatta
+                        const borrowInputEl = document.getElementById(`borrow-input-${i-1}`);
+                        if (!borrowInputEl) continue; 
+                        
+                        const correctBorrow = task.calculatedBorrows[i-1] || 0; 
+                        if (borrowInputEl.value.trim() === "" && correctBorrow !== 0) allFilledProperly = false;
+                        const userBorrow = borrowInputEl.value.trim() === "" ? 0 : parseInt(borrowInputEl.value);
+
+                        if (isNaN(userBorrow) || userBorrow !== correctBorrow) {
+                             updateInputFieldFeedback(borrowInputEl, false); allCorrect = false;
+                        } else { updateInputFieldFeedback(borrowInputEl, true); }
+                    }
+                }
+                
+                if (!allFilledProperly && allCorrect) { 
+                    feedbackArea.textContent = "Kérlek, tölts ki minden szükséges mezőt (különbség és pótlások)!";
+                    feedbackArea.className = 'feedback incorrect mt-4';
+                    return;
+                }
+                
+                if (allCorrect) {
+                    feedbackArea.textContent = "Gratulálok, sikeresen elvégezted a kivonást!";
+                    feedbackArea.className = 'feedback correct mt-4';
+                    checkButton.textContent = "Új feladat";
+                    mainSubtractionGrid.querySelectorAll('input.styled-input').forEach(inp => inp.disabled = true);
+                } else {
+                    feedbackArea.textContent = "Nem minden számjegy vagy pótlás helyes. Kérlek, ellenőrizd!";
+                    feedbackArea.className = 'feedback incorrect mt-4';
+                }
+            } else { // step-by-step
+                const targetColFromLeft = maxLength - 1 - currentStepColumnFromRight;
+
+                if (currentSubStep === 'difference_digit') {
+                    if (targetColFromLeft < 0) { generateNewTask(); return;} 
+                    const diffInput = document.getElementById(`diff-digit-${targetColFromLeft}`);
+                    if (!diffInput) return;
+                    const userInput = parseInt(diffInput.value);
+                    const correctValue = task.calculatedDifferenceDigits[targetColFromLeft];
+
+                    if (isNaN(userInput)) {
+                        feedbackArea.textContent = 'Kérlek, írj be egy számot a különbséghez!';
+                        updateInputFieldFeedback(diffInput, false); try { diffInput.focus(); } catch(e){}
+                        feedbackArea.className = 'feedback incorrect mt-4';
+                        return;
+                    }
+                    if (userInput === correctValue) {
+                        updateInputFieldFeedback(diffInput, true);
+                        diffInput.disabled = true;
+                        
+                        // Van-e pótlék, amit ebből az oszlopból (targetColFromLeft) kell továbbvinni
+                        // a KÖVETKEZŐ (balra, azaz targetColFromLeft - 1) oszlophoz?
+                        // A task.calculatedBorrows[targetColFromLeft] az AKTUÁLIS oszlop kivonandója alatti pótlék.
+                        // Nekünk az kell, ami az AKTUÁLIS oszlop számításából keletkezik.
+                        // Ez a `task.calculatedBorrows[targetColFromLeft - 1]` lenne, ha a borrows a *cél* oszlopot indexelné.
+                        // De a `calculateCorrectSteps` a `carryForNextSubtrahend`-et számolja, ami a `task.calculatedBorrows[targetColFromLeft]` lesz.
+                        // Pontosabban: `task.calculatedBorrows[targetColFromLeft]` az, ami az AKTUÁLIS oszlop kivonandójához HOZZÁADÓDIK.
+                        // Ami az aktuális oszlopból a KÖVETKEZŐBE (balra) megy, az a `task.calculatedBorrows[targetColFromLeft-1]`.
+                        // De a `calculatedBorrows` tömböt úgy töltjük, hogy `calculatedBorrows[idx_balrol]` az `idx_balrol` oszlophoz tartozó pótlék.
+                        // Tehát a pótlék, amit az aktuális oszlop (targetColFromLeft) számítása generál,
+                        // és a KÖVETKEZŐ (targetColFromLeft - 1) oszlophoz kerül, az `task.calculatedBorrows[targetColFromLeft-1]`.
+                        // Ezt kell bekérni, ha `targetColFromLeft > 0`.
+
+                        if (targetColFromLeft > 0) { // Van még oszlop balra, ahova pótlék mehet
+                            feedbackArea.textContent = 'Helyes a különbség! Most add meg a pótlékot a következő oszlop kivonandója alá (0 vagy 1).';
+                            currentSubStep = 'borrow_digit';
+                        } else { // Ez volt a legbaloldalibb oszlop, nincs több pótlék innen
+                            feedbackArea.textContent = 'Helyes! Az utolsó számjegy is megvan.';
+                            currentStepColumnFromRight++;
+                            currentSubStep = 'difference_digit'; 
+                        }
+                        prepareCurrentStepInputs();
+                    } else {
+                        feedbackArea.textContent = 'A különbség ebben az oszlopban nem pontos. Próbáld újra!';
+                        updateInputFieldFeedback(diffInput, false); try { diffInput.focus(); } catch(e){}
+                    }
+                } else { // borrow_digit
+                    // A pótlékot a (targetColFromLeft - 1) indexű (balról) BORROW-INPUTBA írjuk.
+                    // Ez a pótlék az AKTUÁLIS oszlop (targetColFromLeft) kivonásából adódott.
+                    // Ennek a helyes értéke a `task.calculatedBorrows[targetColFromLeft -1]`.
+                    const borrowInputIndexForHTML = targetColFromLeft - 1; 
+                    if (borrowInputIndexForHTML < 0) { 
+                        currentStepColumnFromRight++;
+                        currentSubStep = 'difference_digit';
+                        prepareCurrentStepInputs();
+                        return;
+                    }
+
+                    const borrowInputEl = document.getElementById(`borrow-input-${borrowInputIndexForHTML}`);
+                    if (!borrowInputEl) return;
+
+                    const userBorrow = borrowInputEl.value.trim() === "" ? 0 : parseInt(borrowInputEl.value);
+                    const correctBorrow = task.calculatedBorrows[borrowInputIndexForHTML +1] || 0; // +1 mert a calculatedBorrows[0] az egyeseké (mindig 0)
+                                                                                                // a calculatedBorrows[1] a tízeseké stb.
+                                                                                                // a borrow-input-0 a tízesekhez tartozik.
+                                                                                                // Tehát borrow-input-${k} a calculatedBorrows[${k+1}]
+                    
+                    if (isNaN(userBorrow)){
+                         feedbackArea.textContent = 'Kérlek, írj be egy számot (0 vagy 1) a pótlékhoz!';
+                         updateInputFieldFeedback(borrowInputEl, false); try { borrowInputEl.focus(); } catch(e){}
+                         return;
+                    }
+
+                    if (userBorrow === correctBorrow) {
+                        updateInputFieldFeedback(borrowInputEl, true);
+                        borrowInputEl.disabled = true;
+                        if(correctBorrow > 0) borrowInputEl.parentElement.classList.add('highlight-group', 'bottom-member');
+
+
+                        feedbackArea.textContent = 'A pótlék helyes! Folytasd a következő oszloppal.';
+                        currentStepColumnFromRight++; 
+                        currentSubStep = 'difference_digit';
+                        prepareCurrentStepInputs();
+                    } else {
+                        feedbackArea.textContent = 'A pótlék nem helyes. Próbáld újra (0 vagy 1)!';
+                        updateInputFieldFeedback(borrowInputEl, false);
+                        try { borrowInputEl.focus(); } catch(e){}
+                    }
+                }
+            }
+            feedbackArea.className = feedbackArea.textContent.includes("Helyes") || feedbackArea.textContent.includes("Kész vagy") ? 'feedback correct mt-4' : 'feedback incorrect mt-4';
+        }
+        
+        function updateInputFieldFeedback(inputElement, isCorrect) {
+            if (!inputElement) return;
+            inputElement.style.borderColor = isCorrect ? 'green' : 'red';
+        }
+
+       function updateTaskInstructions() {
+            const maxLength = currentSettings.digitCount;
+            const targetColFromLeft = maxLength - 1 - currentStepColumnFromRight;
+            
+            if (currentSettings.helpLevel === 'independent') {
+                taskInstructions.textContent = `Végezd el a kivonást: ${task.num1} - ${task.num2}. Írd be a pótlásokat is (ahol szükséges, 0 vagy 1)!`;
+                checkButton.textContent = "Ellenőrzés";
+            } else { 
+                if (currentStepColumnFromRight >= maxLength && currentSubStep === 'difference_digit') {
+                    taskInstructions.textContent = "Kész vagy! A kivonás véget ért.";
+                    checkButton.textContent = "Új feladat";
+                    return;
+                }
+                 if (targetColFromLeft < 0 && currentSubStep === 'borrow_digit') { 
+                     taskInstructions.textContent = "Kész vagy! A kivonás véget ért.";
+                     checkButton.textContent = "Új feladat";
+                     return;
+                 }
+
+                let placeValueText = "";
+                if (currentStepColumnFromRight === 0) placeValueText = "az egyeseknél";
+                else if (currentStepColumnFromRight === 1) placeValueText = "a tízeseknél";
+                else if (currentStepColumnFromRight === 2) placeValueText = "a százasoknál";
+                else if (currentStepColumnFromRight === 3) placeValueText = "az ezreseknél";
+                else placeValueText = `a ${maxLength - targetColFromLeft}. helyiértéken (jobbról)`;
+
+                const sNum1Padded = String(task.num1).padStart(maxLength, '0');
+                const sNum2Padded = String(task.num2).padStart(maxLength, '0');
+                const d1 = parseInt(sNum1Padded[targetColFromLeft]);
+                const d2Orig = parseInt(sNum2Padded[targetColFromLeft]);
+                // A pótlék, ami az AKTUÁLIS oszlop KIVONANDÓJÁHOZ tartozik (azaz a tőle JOBBRA lévő oszlopból jött)
+                // az a task.calculatedBorrows[targetColFromLeft]
+                const borrowInCurrentCol = task.calculatedBorrows[targetColFromLeft] || 0; 
+
+                if (currentSubStep === 'difference_digit') {
+                    const effectiveD2 = d2Orig + borrowInCurrentCol;
+                    let instruction = `Számold ki a különbséget ${placeValueText}: ${d1} - (${d2Orig}` + (borrowInCurrentCol > 0 ? ` + ${borrowInCurrentCol} pótlék` : '') + `) = ?`;
+                    if (d1 < effectiveD2) {
+                         instruction += ` (Vegyél kölcsön: ${d1+10} - ${effectiveD2})`;
+                    }
+                    taskInstructions.textContent = instruction;
+                } else { // borrow_digit
+                    // A pótlékot a (targetColFromLeft - 1) indexű (balról) oszlophoz (azaz a KÖVETKEZŐ oszlophoz) kérjük.
+                    let nextPlaceValueText = "";
+                    if (currentStepColumnFromRight + 1 === 1) nextPlaceValueText = "tízesek";
+                    else if (currentStepColumnFromRight + 1 === 2) nextPlaceValueText = "százasok";
+                    else if (currentStepColumnFromRight + 1 === 3) nextPlaceValueText = "ezresek";
+                    else if (currentStepColumnFromRight + 1 < maxLength) nextPlaceValueText = `következő (balra) oszlop`;
+                    
+                    if (targetColFromLeft > 0) { 
+                         taskInstructions.textContent = `Mennyi pótlékot kell átvinni a ${nextPlaceValueText} kivonandójához? (0, ha nem kellett kölcsönvenni ${placeValueText}.)`;
+                    } else {
+                         taskInstructions.textContent = "Minden pótlékot megadtál."; 
+                    }
+                }
+                checkButton.textContent = "Lépés ellenőrzése";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTheme(currentSettings.theme); 
+            generateNewTask();
+        });
+    </script>
+</body>
+</html>
