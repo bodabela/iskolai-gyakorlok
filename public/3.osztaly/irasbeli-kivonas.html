@@ -198,9 +198,7 @@
          .grid-cell.borrow-input-cell { 
             height: 25px; 
             padding-top: 2px; 
-            /* A pótlás inputot a cellán belül jobbra toljuk kissé, a képhez hasonlóan */
-            justify-content: flex-end; /* Jobbra igazítás */
-            padding-right: 5px; /* Kis térköz jobbról */
+            justify-content: center; /* Kép alapján inkább középre a kis pótlást */
         }
         .grid-cell.borrow-input-cell input.styled-input {
             font-size: 0.65em; 
@@ -217,13 +215,12 @@
         }
         .grid-cell.borrow-input-cell input.styled-input:disabled {
             background-color: transparent;
-            border: 1px solid transparent;
+            border: 1px solid transparent; /* Alapból ne legyen keret, ha disabled és üres */
             font-weight: bold; 
             color: var(--theme-carry-text-color, blue); 
         }
-        /* Üres borrow cella (pl. egyesek alatt) */
-        .grid-cell.borrow-input-cell.empty-borrow {
-            border: none; /* Ne legyen látható keret, ha üres */
+        .grid-cell.borrow-input-cell.empty-borrow input.styled-input {
+             border-color: transparent !important; /* Ha üres és nincs input, ne látszódjon a keret sem */
         }
 
 
@@ -236,24 +233,17 @@
         .grid-cell.highlight-target { 
             box-shadow: 0 0 0 2px var(--theme-highlight-color, #0d6efd);
             border-radius: 4px;
-            background-color: var(--theme-highlight-bg-color, rgba(13, 110, 253, 0.05)); /* Nagyon enyhe háttér */
+            background-color: var(--theme-highlight-bg-color, rgba(13, 110, 253, 0.05)); 
         }
         .grid-cell.highlight-group { 
-            background-color: var(--theme-highlight-group-bg-color, rgba(13, 110, 253, 0.1));
-            border-radius: 0px; /* A szomszédos cellákkal együtt alkosson téglalapot */
+            background-color: var(--theme-highlight-group-bg-color, rgba(13, 110, 253, 0.1)) !important;
         }
-         .grid-cell.highlight-group.top-member {
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-        }
-        .grid-cell.highlight-group.bottom-member {
-            border-bottom-left-radius: 4px;
-            border-bottom-right-radius: 4px;
-        }
+        /* A highlight-group top/bottom member most nem kell, mert a cellákra tesszük a highlight-group-ot */
         .grid-cell.borrow-input-cell.highlight-group input.styled-input:disabled {
-             color: var(--theme-highlight-color, #0d6efd); 
+             color: var(--theme-highlight-color, #0d6efd) !important; 
              font-weight: bold;
-             border: 1px dashed var(--theme-highlight-color, #0d6efd); /* Kiemelt pótléknak is legyen kerete */
+             /* A kép alapján a beírt pótlékot is bekeretezi a kiemelés */
+             border: 1px solid var(--theme-highlight-color, #0d6efd) !important;
         }
 
 
@@ -294,14 +284,14 @@
         .grid-cell.borrow-input-cell input.styled-input { --theme-carry-text-color: #0d6efd; }
         :root {
             --theme-highlight-bg-color: rgba(13, 110, 253, 0.05);
-            --theme-highlight-group-bg-color: rgba(13, 110, 253, 0.1);
+            --theme-highlight-group-bg-color: rgba(13, 110, 253, 0.12); /* Kicsit erősebb a csoportnak */
         }
 
 
         /* --- THEME DEFINITIONS --- */
         /* 1. Candy Theme (Girlish) */
         body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6; --theme-highlight-color: #ff69b4; --theme-carry-text-color: #c71585;
-            --theme-highlight-bg-color: rgba(255, 105, 180, 0.05); --theme-highlight-group-bg-color: rgba(255, 105, 180, 0.1);
+            --theme-highlight-bg-color: rgba(255, 105, 180, 0.05); --theme-highlight-group-bg-color: rgba(255, 105, 180, 0.12);
         }
         body.theme-candy .control-label { color: #c71585; }
         body.theme-candy .setting-button.active { background-color: #ffb6c1; color: #7c3c60; }
@@ -325,7 +315,7 @@
 
         /* 2. Space Theme (Boyish) */
         body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa; --theme-highlight-color: #facc15; --theme-carry-text-color: #fde047;
-             --theme-highlight-bg-color: rgba(250, 204, 21, 0.05); --theme-highlight-group-bg-color: rgba(250, 204, 21, 0.1);
+             --theme-highlight-bg-color: rgba(250, 204, 21, 0.05); --theme-highlight-group-bg-color: rgba(250, 204, 21, 0.12);
         }
         body.theme-space .control-label { color: #93c5fd; }
         body.theme-space .setting-button.active { background-color: #1e3a8a; color: #93c5fd; }
@@ -348,7 +338,7 @@
 
         /* 3. Jungle Theme (Boyish) */
         body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f; --theme-highlight-color: #8bc34a; --theme-carry-text-color: #558b2f;
-            --theme-highlight-bg-color: rgba(139, 195, 74, 0.05); --theme-highlight-group-bg-color: rgba(139, 195, 74, 0.1);
+            --theme-highlight-bg-color: rgba(139, 195, 74, 0.05); --theme-highlight-group-bg-color: rgba(139, 195, 74, 0.12);
         }
         body.theme-jungle .control-label { color: #558b2f; }
         body.theme-jungle .setting-button.active { background-color: #689f38; color: #dcedc8; }
@@ -372,7 +362,7 @@
 
         /* 4. Magic Forest Theme (Girlish) */
         body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2; --theme-highlight-color: #9932cc; --theme-carry-text-color: #8a2be2;
-            --theme-highlight-bg-color: rgba(153, 50, 204, 0.05); --theme-highlight-group-bg-color: rgba(153, 50, 204, 0.1);
+            --theme-highlight-bg-color: rgba(153, 50, 204, 0.05); --theme-highlight-group-bg-color: rgba(153, 50, 204, 0.12);
         }
         body.theme-magicforest .control-label { color: #9932cc; }
         body.theme-magicforest .setting-button.active { background-color: #9370db; color: #f8f0ff; }
@@ -395,7 +385,7 @@
 
         /* 5. Robo/Tech Theme (Boyish) */
         body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1; --theme-highlight-color: #00e676; --theme-carry-text-color: #26c6da;
-            --theme-highlight-bg-color: rgba(0, 230, 118, 0.05); --theme-highlight-group-bg-color: rgba(0, 230, 118, 0.1);
+            --theme-highlight-bg-color: rgba(0, 230, 118, 0.05); --theme-highlight-group-bg-color: rgba(0, 230, 118, 0.12);
         }
         body.theme-tech .control-label { color: #26c6da; }
         body.theme-tech .setting-button.active { background-color: #00838f; color: #e0f7fa; }
@@ -419,7 +409,7 @@
 
         /* 6. Ocean Theme (Girlish) */
         body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa; --theme-highlight-color: #4dd0e1; --theme-carry-text-color: #00897b;
-             --theme-highlight-bg-color: rgba(77, 208, 225, 0.05); --theme-highlight-group-bg-color: rgba(77, 208, 225, 0.1);
+             --theme-highlight-bg-color: rgba(77, 208, 225, 0.05); --theme-highlight-group-bg-color: rgba(77, 208, 225, 0.12);
         }
         body.theme-ocean .control-label { color: #00acc1; }
         body.theme-ocean .setting-button.active { background-color: #4db6ac; color: #e0f2f1; }
@@ -442,7 +432,7 @@
 
         /* 7. Sport Theme (Boyish) */
         body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f; --theme-highlight-color: #2196f3; --theme-carry-text-color: #1565c0;
-            --theme-highlight-bg-color: rgba(33, 150, 243, 0.05); --theme-highlight-group-bg-color: rgba(33, 150, 243, 0.1);
+            --theme-highlight-bg-color: rgba(33, 150, 243, 0.05); --theme-highlight-group-bg-color: rgba(33, 150, 243, 0.12);
         }
         body.theme-sport .control-label { color: #1976d2; }
         body.theme-sport .setting-button.active { background-color: #1976d2; color: #e3f2fd; }
@@ -466,7 +456,7 @@
 
         /* 8. Flower Garden Theme (Girlish) */
         body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347; --theme-highlight-color: #ffa07a; --theme-carry-text-color: #ff7f50;
-            --theme-highlight-bg-color: rgba(255, 160, 122, 0.05); --theme-highlight-group-bg-color: rgba(255, 160, 122, 0.1);
+            --theme-highlight-bg-color: rgba(255, 160, 122, 0.05); --theme-highlight-group-bg-color: rgba(255, 160, 122, 0.12);
         }
         body.theme-flowergarden .control-label { color: #ff7f50; }
         body.theme-flowergarden .setting-button.active { background-color: #ffdab9; color: #8b4513; }
@@ -490,7 +480,7 @@
 
         /* 9. Adventure Theme (Boyish) */
         body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c; --theme-highlight-color: #795548; --theme-carry-text-color: #6d4c41;
-            --theme-highlight-bg-color: rgba(121, 85, 72, 0.05); --theme-highlight-group-bg-color: rgba(121, 85, 72, 0.1);
+            --theme-highlight-bg-color: rgba(121, 85, 72, 0.05); --theme-highlight-group-bg-color: rgba(121, 85, 72, 0.12);
         }
         body.theme-adventure .control-label { color: #6d4c41; }
         body.theme-adventure .setting-button.active { background-color: #a1887f; color: #efebe9; }
@@ -514,7 +504,7 @@
 
         /* 10. Sky Theme (Girlish) */
         body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff; --theme-highlight-color: #87ceeb; --theme-carry-text-color: #1e90ff;
-            --theme-highlight-bg-color: rgba(135, 206, 235, 0.05); --theme-highlight-group-bg-color: rgba(135, 206, 235, 0.1);
+            --theme-highlight-bg-color: rgba(135, 206, 235, 0.05); --theme-highlight-group-bg-color: rgba(135, 206, 235, 0.12);
         }
         body.theme-sky .control-label { color: #00bfff; }
         body.theme-sky .setting-button.active { background-color: #add8e6; color: #005a9c; }
@@ -617,8 +607,8 @@
         let task = {
             num1: 0,
             num2: 0,
-            calculatedDifferenceDigits: [], // Balról jobbra tárolja a helyes különbségjegyeket
-            calculatedBorrows: []         // Balról jobbra. calculatedBorrows[i] az i. (balról) oszlop KIVONANDÓJA ALÁ kerülő pótlék.
+            calculatedDifferenceDigits: [], 
+            calculatedBorrows: []         
         };
         
         let currentStepColumnFromRight = 0; 
@@ -735,13 +725,18 @@
         }
 
         function calculateCorrectSteps() {
-            task.calculatedDifferenceDigits = []; 
-            task.calculatedBorrows = [];      
-            let carryFromPreviousCol = 0; 
+            task.calculatedDifferenceDigits = []; // Balról jobbra tároljuk majd (a végén megfordítjuk)
+            task.calculatedBorrows = [];      // Balról jobbra. task.calculatedBorrows[i] az i. (balról) oszlop KIVONANDÓJA ALÁ kerülő pótlék.
+            
+            let carryForNextSubtrahend = 0; 
             const maxLength = currentSettings.digitCount;
 
             const sNum1Padded = String(task.num1).padStart(maxLength, '0');
             const sNum2Padded = String(task.num2).padStart(maxLength, '0');
+            
+            let tempDiffDigitsReversed = [];
+            let tempBorrowsForSubtrahendReversed = [];
+
 
             for (let i = 0; i < maxLength; i++) { // Jobbról balra haladunk (i=0 az egyesek helyiértéke)
                 const currentDigitIndexFromLeft = maxLength - 1 - i; 
@@ -749,20 +744,22 @@
                 let digit1 = parseInt(sNum1Padded[currentDigitIndexFromLeft]);
                 let digit2Original = parseInt(sNum2Padded[currentDigitIndexFromLeft]);
                 
-                task.calculatedBorrows.unshift(carryFromPreviousCol); 
+                tempBorrowsForSubtrahendReversed.push(carryForNextSubtrahend); // Az AKTUÁLIS oszlop kivonandójához tartozó pótlék
 
-                let effectiveDigit2 = digit2Original + carryFromPreviousCol;
+                let effectiveDigit2 = digit2Original + carryForNextSubtrahend;
 
                 if (digit1 < effectiveDigit2) {
-                    task.calculatedDifferenceDigits.unshift((digit1 + 10) - effectiveDigit2);
-                    carryFromPreviousCol = 1; 
+                    tempDiffDigitsReversed.push((digit1 + 10) - effectiveDigit2);
+                    carryForNextSubtrahend = 1; 
                 } else {
-                    task.calculatedDifferenceDigits.unshift(digit1 - effectiveDigit2);
-                    carryFromPreviousCol = 0;
+                    tempDiffDigitsReversed.push(digit1 - effectiveDigit2);
+                    carryForNextSubtrahend = 0;
                 }
             }
-            task.calculatedBorrows.pop(); // Remove the last trivial diff, because it is always 0 and should not be handled on the UI eaither!
+            task.calculatedDifferenceDigits = tempDiffDigitsReversed.reverse();
+            task.calculatedBorrows = tempBorrowsForSubtrahendReversed.reverse();
         }
+
 
         function renderTaskDisplay() {
             mainSubtractionGrid.innerHTML = ''; 
@@ -796,15 +793,16 @@
             for (let i = 0; i < maxLength; i++) { // Oszlopok balról jobbra
                 const currentGridColumnForOperand = i + 2;
                 const cell = createGridCell(null, 3, currentGridColumnForOperand, ['borrow-input-cell']);
-                if (i < maxLength - 1) { // Csak az utolsó ELŐTTI oszlopig (balról) van értelme PÓTLÉK INPUTNAK,
-                                         // ami a TŐLE JOBBRA LÉVŐ oszlopból származik.
-                                         // A borrow-input-${i} az (i). (0-tól indexelt) pótlékot jelöli,
-                                         // ami az (i+1). (balról) KIVONANDÓ számjegy alá kerül.
-                    const borrowInputId = `borrow-input-${i}`; // 0-tól (maxLength-2)-ig.
+                // Pótlás input CSAK akkor kell, ha NEM az első (jobbról) kivonandó számjegy alatt vagyunk
+                // Azaz, ha i (balról index) < maxLength - 1
+                if (i < maxLength - 1) {
+                    // Az `i`-edik (0-tól `maxLength-2`-ig) `borrow-input` mező
+                    // a `i+1`-edik (balról, 1-től `maxLength-1`-ig) oszlop kivonandója alá kerül.
+                    // Tehát a `borrow-input-0` a MÁSODIK (balról) oszlop alá.
+                    // Ennek a helyes értéke a `task.calculatedBorrows[i+1]` lesz.
+                    const borrowInputId = `borrow-input-${i}`; 
                     const input = createStyledInput(true, borrowInputId, 'borrow');
-                    // Ez az input a balról i. pótlékot (0-indexelt) jelenti.
-                    // A `task.calculatedBorrows[i+1]` a helyes érték, mert `calculatedBorrows[0]` az egyesekhez tartozik (mindig 0).
-                    input.dataset.borrowSlotIndex = i; // Hanyadik pótlás input (0 = legbaloldalibb megjelenő)
+                    input.dataset.borrowSlotIndex = i; 
                     cell.appendChild(input);
                 } else {
                     cell.classList.add('empty-borrow'); // Nincs input a legjobboldalibb kivonandó alatt
@@ -876,29 +874,17 @@
                 inp.style.borderColor = ''; 
                 if(currentSettings.helpLevel === 'step-by-step') inp.disabled = true; 
             });
-            mainSubtractionGrid.querySelectorAll('.grid-cell.operand-digit, .grid-cell.borrow-input-cell, .grid-cell.difference-digit-cell')
-                .forEach(cell => cell.classList.remove('highlight-target', 'highlight-group', 'top-member', 'bottom-member'));
+            mainSubtractionGrid.querySelectorAll('.grid-cell') 
+                .forEach(cell => cell.classList.remove('highlight-target', 'highlight-group'));
             
-            mainSubtractionGrid.querySelectorAll('.borrow-input-cell input.styled-input:disabled').forEach(inp => {
-                // Don't remove highlight-group if it was set for a fixed borrow value
-            });
-
-
             const maxLength = currentSettings.digitCount;
             const targetColFromLeft = maxLength - 1 - currentStepColumnFromRight; 
 
             if (currentSettings.helpLevel === 'independent') {
                 mainSubtractionGrid.querySelectorAll('input.styled-input').forEach(inp => {
-                     // Az első (jobbról) kivonandó alatt nincs borrow input, de a többi igen
-                    if(inp.classList.contains('borrow-digit-input')) {
-                        // A borrow inputok ID-ja `borrow-input-${i}` ahol i = 0-tól (maxLength-2)-ig.
-                        // A `dataset.borrowSlotIndex` is ezt az i-t tárolja.
-                        // A legelső (jobbról) kivonandó alatt nincs.
-                    }
                     inp.disabled = false
                 });
                 try {
-                     // Fókusz a legjobboldalibb KÜLÖNBSÉG inputra
                     const firstDiffInput = document.getElementById(`diff-digit-${maxLength-1}`); 
                     if (firstDiffInput) firstDiffInput.focus();
                 } catch (e) {}
@@ -908,25 +894,26 @@
                     checkButton.textContent = "Új feladat";
                     return;
                 }
-                 if (targetColFromLeft < 0 && currentSubStep === 'borrow_digit') { 
+                // Ha borrow_digit substeppel futunk ki (nincs több pótlékot bekérni)
+                if (currentSubStep === 'borrow_digit' && targetColFromLeft < 0 ) {
                      taskInstructions.textContent = "Kész vagy! A kivonás véget ért.";
                      checkButton.textContent = "Új feladat";
                      return;
-                 }
+                }
+
 
                 const minuendCell = mainSubtractionGrid.querySelector(`.operand-digit[data-row-type="minuend"][data-col-from-left="${targetColFromLeft}"]`);
                 const subtrahendCell = mainSubtractionGrid.querySelector(`.operand-digit[data-row-type="subtrahend"][data-col-from-left="${targetColFromLeft}"]`);
-
+                
                 // Az AKTUÁLIS oszlop (targetColFromLeft) KIVONANDÓJA ALÁ eső pótlékot (ha van) mutatjuk és kiemeljük
-                const currentBorrowValueForThisColumn = task.calculatedBorrows[targetColFromLeft] || 0;
-                let borrowCellForCurrentSubtrahend;
-                if (targetColFromLeft > 0) { // Csak a második oszloptól van borrow input alatta
-                    const borrowInputToDisplayUserEntry = document.getElementById(`borrow-input-${targetColFromLeft - 1}`);
-                     if (borrowInputToDisplayUserEntry) {
-                        borrowCellForCurrentSubtrahend = borrowInputToDisplayUserEntry.parentElement;
-                        if (currentSubStep === 'difference_digit' && !borrowInputToDisplayUserEntry.disabled) {
-                            // Ha még nem írta be a user, de már tudjuk a helyeset a számításból (pl. előző oszlopnál már kiderült)
-                            // Ezt a részt a handleCheck-ben kell kezelni, hogy a USER által beírtat fixálja
+                // Ez a pótlék a (targetColFromLeft - 1) ID-jű borrow-inputban van, ha targetColFromLeft > 0
+                if (targetColFromLeft > 0 && currentSubStep === 'difference_digit') {
+                    const borrowInputForCurrentSubtrahend = document.getElementById(`borrow-input-${targetColFromLeft - 1}`);
+                    if (borrowInputForCurrentSubtrahend && borrowInputForCurrentSubtrahend.disabled) { // Csak ha már beírta és jó volt
+                        const borrowVal = parseInt(borrowInputForCurrentSubtrahend.value);
+                        if (!isNaN(borrowVal) && borrowVal > 0) {
+                            if(subtrahendCell) subtrahendCell.classList.add('highlight-group');
+                            if(borrowInputForCurrentSubtrahend.parentElement) borrowInputForCurrentSubtrahend.parentElement.classList.add('highlight-group');
                         }
                     }
                 }
@@ -934,16 +921,7 @@
 
                 if (currentSubStep === 'difference_digit') {
                     if (minuendCell) minuendCell.classList.add('highlight-target');
-                    if (subtrahendCell) subtrahendCell.classList.add('highlight-target');
-
-                    if (borrowCellForCurrentSubtrahend && currentBorrowValueForThisColumn > 0) {
-                        // Ha az aktuális kivonandó alatt van egy már beírt és helyes pótlék, azt is kiemeljük
-                        const borrowInputInside = borrowCellForCurrentSubtrahend.querySelector('input.borrow-digit-input');
-                        if (borrowInputInside && borrowInputInside.disabled && parseInt(borrowInputInside.value) === currentBorrowValueForThisColumn) {
-                            if(subtrahendCell) subtrahendCell.classList.add('highlight-group', 'top-member');
-                            borrowCellForCurrentSubtrahend.classList.add('highlight-group', 'bottom-member');
-                        }
-                    }
+                    if (subtrahendCell && !subtrahendCell.classList.contains('highlight-group')) subtrahendCell.classList.add('highlight-target');
                     
                     const diffInput = document.getElementById(`diff-digit-${targetColFromLeft}`);
                     if (diffInput) {
@@ -951,12 +929,11 @@
                         diffInput.value = '';
                         try { diffInput.focus(); } catch (e) {}
                     }
-                } else { // borrow_digit (az AKTUÁLIS oszlop eredményéből származó pótlékot kérjük a KÖVETKEZŐHÖZ)
-                    // A pótlék, amit most kérünk, a (targetColFromLeft - 1) indexű (balról) oszlop KIVONANDÓJA alá fog kerülni.
-                    // Ez az input ID-ja: `borrow-input-${targetColFromLeft - 1}`.
-                    const borrowSlotToEnable = targetColFromLeft - 1; 
-                    if (borrowSlotToEnable >= 0) { 
-                        const borrowInput = document.getElementById(`borrow-input-${borrowSlotToEnable}`);
+                } else { // borrow_digit (az AKTUÁLIS oszlop eredményéből származó pótlékot kérjük a KÖVETKEZŐ oszlophoz)
+                    // A pótlékot a (targetColFromLeft - 1) slotIndexű borrow-inputba kell írni.
+                    const borrowSlotIndexToEnable = targetColFromLeft - 1; 
+                    if (borrowSlotIndexToEnable >= 0) { 
+                        const borrowInput = document.getElementById(`borrow-input-${borrowSlotIndexToEnable}`);
                         if (borrowInput) {
                             borrowInput.disabled = false;
                             borrowInput.value = '';
@@ -991,14 +968,14 @@
                         updateInputFieldFeedback(diffInputEl, false); allCorrect = false;
                     } else { updateInputFieldFeedback(diffInputEl, true); }
 
-                    // Pótlék ellenőrzése: A balról i. oszlop KIVONANDÓJA alatti pótlékot (ha i > 0)
-                    // a `borrow-input-${i-1}` ID-jű input tartalmazza.
+                    // Pótlék ellenőrzése: A balról `i`. oszlop KIVONANDÓJA alatti pótlékot
+                    // a `borrow-input-${i-1}` ID-jű input tartalmazza (ha `i > 0`).
                     // Ennek a helyes értéke a `task.calculatedBorrows[i]`.
-                    if (i > 0) { // Csak a második oszloptól (balról) van pótlék alatta
+                    if (i > 0) { 
                         const borrowInputEl = document.getElementById(`borrow-input-${i-1}`);
                         if (!borrowInputEl) continue; 
                         
-                        const correctBorrow = task.calculatedBorrows[i-1] || 0; 
+                        const correctBorrow = task.calculatedBorrows[i] || 0; 
                         if (borrowInputEl.value.trim() === "" && correctBorrow !== 0) allFilledProperly = false;
                         const userBorrow = borrowInputEl.value.trim() === "" ? 0 : parseInt(borrowInputEl.value);
 
@@ -1043,23 +1020,31 @@
                         updateInputFieldFeedback(diffInput, true);
                         diffInput.disabled = true;
                         
-                        // Van-e pótlék, amit ebből az oszlopból (targetColFromLeft) kell továbbvinni
-                        // a KÖVETKEZŐ (balra, azaz targetColFromLeft - 1) oszlophoz?
-                        // A task.calculatedBorrows[targetColFromLeft] az AKTUÁLIS oszlop kivonandója alatti pótlék.
-                        // Nekünk az kell, ami az AKTUÁLIS oszlop számításából keletkezik.
-                        // Ez a `task.calculatedBorrows[targetColFromLeft - 1]` lenne, ha a borrows a *cél* oszlopot indexelné.
-                        // De a `calculateCorrectSteps` a `carryForNextSubtrahend`-et számolja, ami a `task.calculatedBorrows[targetColFromLeft]` lesz.
-                        // Pontosabban: `task.calculatedBorrows[targetColFromLeft]` az, ami az AKTUÁLIS oszlop kivonandójához HOZZÁADÓDIK.
-                        // Ami az aktuális oszlopból a KÖVETKEZŐBE (balra) megy, az a `task.calculatedBorrows[targetColFromLeft-1]`.
-                        // De a `calculatedBorrows` tömböt úgy töltjük, hogy `calculatedBorrows[idx_balrol]` az `idx_balrol` oszlophoz tartozó pótlék.
-                        // Tehát a pótlék, amit az aktuális oszlop (targetColFromLeft) számítása generál,
-                        // és a KÖVETKEZŐ (targetColFromLeft - 1) oszlophoz kerül, az `task.calculatedBorrows[targetColFromLeft-1]`.
-                        // Ezt kell bekérni, ha `targetColFromLeft > 0`.
+                        // Meghatározzuk, hogy az AKTUÁLIS oszlopban (targetColFromLeft) történt-e kölcsönzés,
+                        // ami a KÖVETKEZŐ (balra, targetColFromLeft - 1) oszlophoz generál pótlást.
+                        // A task.calculatedBorrows[targetColFromLeft-1] tartalmazza ezt az értéket.
+                        // De a pótlékot a task.calculatedBorrows[targetColFromLeft] adja az aktuális oszlophoz.
+                        // Ami a következőhöz kell, az a (carryFromPreviousCol a calculateCorrectSteps-ben az aktuális oszlop után).
+                        // Ez a task.calculatedBorrows[targetColFromLeft-1] (ha balról nézzük)
+                        let borrowGeneratedForNextCol = 0;
+                        if (targetColFromLeft > 0) { // Csak ha van hova továbbvinni pótlást
+                             let digit1 = parseInt(String(task.num1).padStart(maxLength, '0')[targetColFromLeft]);
+                             let digit2Orig = parseInt(String(task.num2).padStart(maxLength, '0')[targetColFromLeft]);
+                             let borrowInCurrent = task.calculatedBorrows[targetColFromLeft] || 0;
+                             if (digit1 < (digit2Orig + borrowInCurrent)) {
+                                 borrowGeneratedForNextCol = 1;
+                             }
+                        }
 
-                        if (targetColFromLeft > 0) { // Van még oszlop balra, ahova pótlék mehet
-                            feedbackArea.textContent = 'Helyes a különbség! Most add meg a pótlékot a következő oszlop kivonandója alá (0 vagy 1).';
+
+                        if (targetColFromLeft > 0 && borrowGeneratedForNextCol > 0) { 
+                            feedbackArea.textContent = 'Helyes a különbség! Most add meg a pótlékot a következő oszlop kivonandója alá (1).';
                             currentSubStep = 'borrow_digit';
-                        } else { // Ez volt a legbaloldalibb oszlop, nincs több pótlék innen
+                        } else if (targetColFromLeft > 0 && borrowGeneratedForNextCol === 0) {
+                             feedbackArea.textContent = 'Helyes a különbség! Most add meg a pótlékot (0).';
+                             currentSubStep = 'borrow_digit'; // Meg kell adnia a 0-t is
+                        }
+                        else { 
                             feedbackArea.textContent = 'Helyes! Az utolsó számjegy is megvan.';
                             currentStepColumnFromRight++;
                             currentSubStep = 'difference_digit'; 
@@ -1070,25 +1055,24 @@
                         updateInputFieldFeedback(diffInput, false); try { diffInput.focus(); } catch(e){}
                     }
                 } else { // borrow_digit
-                    // A pótlékot a (targetColFromLeft - 1) indexű (balról) BORROW-INPUTBA írjuk.
+                    // A pótlék, amit ellenőrzünk, a (targetColFromLeft - 1) indexű (balról) borrow-input mezőben van.
                     // Ez a pótlék az AKTUÁLIS oszlop (targetColFromLeft) kivonásából adódott.
-                    // Ennek a helyes értéke a `task.calculatedBorrows[targetColFromLeft -1]`.
-                    const borrowInputIndexForHTML = targetColFromLeft - 1; 
-                    if (borrowInputIndexForHTML < 0) { 
+                    // A helyes értéke a task.calculatedBorrows[targetColFromLeft - 1].
+                    const borrowHtmlInputIndex = targetColFromLeft - 1; 
+                    if (borrowHtmlInputIndex < 0) { 
                         currentStepColumnFromRight++;
                         currentSubStep = 'difference_digit';
                         prepareCurrentStepInputs();
                         return;
                     }
 
-                    const borrowInputEl = document.getElementById(`borrow-input-${borrowInputIndexForHTML}`);
+                    const borrowInputEl = document.getElementById(`borrow-input-${borrowHtmlInputIndex}`);
                     if (!borrowInputEl) return;
 
                     const userBorrow = borrowInputEl.value.trim() === "" ? 0 : parseInt(borrowInputEl.value);
-                    const correctBorrow = task.calculatedBorrows[borrowInputIndexForHTML +1] || 0; // +1 mert a calculatedBorrows[0] az egyeseké (mindig 0)
-                                                                                                // a calculatedBorrows[1] a tízeseké stb.
-                                                                                                // a borrow-input-0 a tízesekhez tartozik.
-                                                                                                // Tehát borrow-input-${k} a calculatedBorrows[${k+1}]
+                    // A helyes pótlék, ami a balról (targetColFromLeft-1) oszlop ALÁ kerülne,
+                    // az a `task.calculatedBorrows[targetColFromLeft-1]`.
+                    const correctBorrow = task.calculatedBorrows[targetColFromLeft -1 ] || 0;
                     
                     if (isNaN(userBorrow)){
                          feedbackArea.textContent = 'Kérlek, írj be egy számot (0 vagy 1) a pótlékhoz!';
@@ -1099,7 +1083,7 @@
                     if (userBorrow === correctBorrow) {
                         updateInputFieldFeedback(borrowInputEl, true);
                         borrowInputEl.disabled = true;
-                        if(correctBorrow > 0) borrowInputEl.parentElement.classList.add('highlight-group', 'bottom-member');
+                        if(correctBorrow > 0) borrowInputEl.parentElement.classList.add('highlight-group'); // Csak a borrow cellát emeljük ki
 
 
                         feedbackArea.textContent = 'A pótlék helyes! Folytasd a következő oszloppal.';
@@ -1151,28 +1135,24 @@
                 const sNum2Padded = String(task.num2).padStart(maxLength, '0');
                 const d1 = parseInt(sNum1Padded[targetColFromLeft]);
                 const d2Orig = parseInt(sNum2Padded[targetColFromLeft]);
-                // A pótlék, ami az AKTUÁLIS oszlop KIVONANDÓJÁHOZ tartozik (azaz a tőle JOBBRA lévő oszlopból jött)
-                // az a task.calculatedBorrows[targetColFromLeft]
-                const borrowInCurrentCol = task.calculatedBorrows[targetColFromLeft] || 0; 
+                const borrowValueForTheCurrentColumn = task.calculatedBorrows[targetColFromLeft] || 0; 
 
                 if (currentSubStep === 'difference_digit') {
-                    const effectiveD2 = d2Orig + borrowInCurrentCol;
-                    let instruction = `Számold ki a különbséget ${placeValueText}: ${d1} - (${d2Orig}` + (borrowInCurrentCol > 0 ? ` + ${borrowInCurrentCol} pótlék` : '') + `) = ?`;
+                    const effectiveD2 = d2Orig + borrowValueForTheCurrentColumn;
+                    let instruction = `Számold ki a különbséget ${placeValueText}: ${d1} - (${d2Orig}` + (borrowValueForTheCurrentColumn > 0 ? ` + ${borrowValueForTheCurrentColumn} pótlék` : '') + `) = ?`;
                     if (d1 < effectiveD2) {
                          instruction += ` (Vegyél kölcsön: ${d1+10} - ${effectiveD2})`;
                     }
                     taskInstructions.textContent = instruction;
                 } else { // borrow_digit
-                    // A pótlékot a (targetColFromLeft - 1) indexű (balról) oszlophoz (azaz a KÖVETKEZŐ oszlophoz) kérjük.
                     let nextPlaceValueText = "";
-                    if (currentStepColumnFromRight + 1 === 1) nextPlaceValueText = "tízesek";
-                    else if (currentStepColumnFromRight + 1 === 2) nextPlaceValueText = "százasok";
-                    else if (currentStepColumnFromRight + 1 === 3) nextPlaceValueText = "ezresek";
-                    else if (currentStepColumnFromRight + 1 < maxLength) nextPlaceValueText = `következő (balra) oszlop`;
+                    if (targetColFromLeft === 1) nextPlaceValueText = "százasok"; // Mert a tízesek (jobbról 1.) számítása után a százasok (jobbról 2.) alá kerülő pótlást kérjük
+                    else if (targetColFromLeft === 2) nextPlaceValueText = "ezresek";
+                    else if (targetColFromLeft > 0) nextPlaceValueText = `következő (balra) oszlop`;
                     
                     if (targetColFromLeft > 0) { 
-                         taskInstructions.textContent = `Mennyi pótlékot kell átvinni a ${nextPlaceValueText} kivonandójához? (0, ha nem kellett kölcsönvenni ${placeValueText}.)`;
-                    } else {
+                         taskInstructions.textContent = `Mennyi pótlékot kell írni a ${nextPlaceValueText} kivonandója alá? (0, ha nem kellett kölcsönvenni ${placeValueText}.)`;
+                    } else { // Nem kellene ide eljutni, ha a borrow_digit csak akkor jön, ha targetColFromLeft > 0
                          taskInstructions.textContent = "Minden pótlékot megadtál."; 
                     }
                 }
