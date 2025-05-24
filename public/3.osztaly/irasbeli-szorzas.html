@@ -694,17 +694,6 @@
             });
             currentRow++;
 
-            // VONAL a feladvány alatt (a feladvány szélességében)
-            const lineStartColTask = gridCols - taskString.length + 1;
-            const lineEndColTask = lineStartColTask + taskString.length - 1;
-             for (let k = 1; k < lineStartColTask; k++) {
-                 mainMultiplicationGrid.appendChild(createGridCell('', currentRow, k));
-            }
-            for (let j = lineStartColTask; j <= lineEndColTask; j++) {
-                 mainMultiplicationGrid.appendChild(createGridCell(null, currentRow, j, ['cell-with-line-below']));
-            }
-            currentRow++;
-
             // RÉSZSZORZATOK
             for (let i = 0; i < numPartialProducts; i++) {
                 const partialProductStrArray = task.partialProducts[i].split('');
@@ -744,16 +733,11 @@
                      mainMultiplicationGrid.appendChild(createGridCell('', currentRow, k));
                 }
                 if (finalProductLength < gridCols && plusSignCol > 0){ // Csak akkor írjuk ki a + jelet, ha van helye
-                     mainMultiplicationGrid.appendChild(createGridCell('+', currentRow, plusSignCol, ['op-symbol']));
+                     mainMultiplicationGrid.appendChild(createGridCell('+', currentRow-1, plusSignCol, ['op-symbol']));
                 } else if (finalProductLength === gridCols && plusSignCol === 0) { // Ha a + jel a 0. oszlopba kerülne
                      // Ne tegyünk semmit, vagy tegyük az 1. oszlopba, ha az üres
                 }
 
-
-                for (let j = gridCols - finalProductLength + 1; j <= gridCols; j++) {
-                     mainMultiplicationGrid.appendChild(createGridCell(null, currentRow, j, ['cell-with-line-below']));
-                }
-                currentRow++;
             }
 
             const finalProductRenderStartCol = sMultiplicand.length - finalProductLength + 3;
