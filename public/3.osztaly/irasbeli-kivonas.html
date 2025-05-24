@@ -721,7 +721,6 @@
             renderTaskDisplay();
             prepareCurrentStepInputs();
             updateTaskInstructions();
-			console.log("task", task)
         }
 
         function calculateCorrectSteps() {
@@ -859,22 +858,11 @@
             const order = [];
             const maxLength = currentSettings.digitCount;
 
-            // 1. Különbség számjegyek bevitele (felhasználói szempontból jobbról balra történik a kitöltés)
-            // Az ID-k balról jobbra növekvő indexszel (`diff-digit-0` a legbaloldalibb).
-            // A sorrendben először a jobboldaliakat vesszük (magasabb index).
-            // Tehát `diff-digit-(maxLength-1)` az első, `diff-digit-0` az utolsó ebben a szakaszban.
             for (let i = maxLength - 1; i >= 0; i--) {
                 order.push(`diff-digit-${i}`);
+                order.push(`borrow-input-${i-1}`);
             }
 
-            // 2. Pótlás-különbség párok, jobbról balra haladva a pótlásokon
-            // A jobbról első pótlás a `borrow-input-${maxLength-2}` ID-jű.
-            // Ez a (maxLength-1) indexű (balról) 'diff-digit' oszlophoz kapcsolódik (azaz az ALATTA lévő 'diff-digit' az `diff-digit-${maxLength-1}`).
-            // A `borrow-input-${k}` a `k+1`. (balról) oszlophoz tartozik.
-            for (let borrowSlotIdx = maxLength - 2; borrowSlotIdx >= 0; borrowSlotIdx--) {
-                order.push(`borrow-input-${borrowSlotIdx}`);
-                order.push(`diff-digit-${borrowSlotIdx + 1}`);
-            }
             return order;
         }
 
@@ -890,7 +878,6 @@
                     if (currentIndexInOrder !== -1 && currentIndexInOrder < focusOrder.length - 1) {
                         const nextInputId = focusOrder[currentIndexInOrder + 1];
                         const nextInputToFocus = document.getElementById(nextInputId);
-
                         if (nextInputToFocus && (typeof nextInputToFocus.disabled === 'undefined' || nextInputToFocus.disabled === false)) {
                             try {
                                 nextInputToFocus.focus();
