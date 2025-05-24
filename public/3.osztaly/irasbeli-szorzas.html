@@ -828,7 +828,7 @@
         }
 
 
-        function activateNextStepInput() {
+		function activateNextStepInput() {
             if (currentSettings.helpLevel !== 'step-by-step') return;
             mainMultiplicationGrid.querySelectorAll('.grid-cell.highlight-target').forEach(cell => cell.classList.remove('highlight-target'));
 
@@ -836,61 +836,61 @@
             const sMultiplier = String(task.multiplier);
 
             if (currentStep.phase === 'multiply') {
-                if (currentStep.currentMultiplierDigitIndexFromLeft < sMultiplier.length) {
-                    if (currentStep.currentMultiplicandDigitIndexFromRight < sMultiplicand.length) {
+                if (currentStep.currentMultiplierDigitIndexFromLeft < sMultiplier.length) { // Van még feldolgozandó szorzó számjegy
+                    const ppString = task.partialProducts[currentStep.currentMultiplierDigitIndexFromLeft];
+                    // currentMultiplicandDigitIndexFromRight mostantól a részszorzat jobbról számított n-edik számjegyét jelöli (0-tól)
+                    if (currentStep.currentMultiplicandDigitIndexFromRight < ppString.length) {
+                        // Van még beírandó számjegy az AKTUÁLIS részszorzatból
+
+                        // Kiemelés (opcionális, de hasznos a felhasználónak)
+                        const currentMultiplierDigit = sMultiplier[currentStep.currentMultiplierDigitIndexFromLeft];
+                        // A szorzandó melyik számjegye releváns ehhez a részszorzat-számjegyhez (bonyolultabb az átvitelek miatt, egyszerűsítve)
+                        // const multiplicandDigitIndexForHighlight = sMultiplicand.length - 1 - (currentStep.currentMultiplicandDigitIndexFromRight % sMultiplicand.length) ; // Ez nem mindig pontos átvitellel
+                        // Egyszerűbb kiemelni az aktuális szorzót és az egész szorzandót, ha még az elején vagyunk
                         const multiplierCellToHighlight = mainMultiplicationGrid.querySelector(`.multiplier-digit-${currentStep.currentMultiplierDigitIndexFromLeft}`);
-                        const multiplicandDigitIndexFromLeftGlobal = sMultiplicand.length - 1 - currentStep.currentMultiplicandDigitIndexFromRight;
-                        const multiplicandCellToHighlight = mainMultiplicationGrid.querySelector(`.multiplicand-digit-${multiplicandDigitIndexFromLeftGlobal}`);
+                        if (multiplierCellToHighlight) multiplierCellToHighlight.classList.add('highlight-target');
+                        // Lehetne még finomítani a szorzandó kiemelését az aktuális szorzási lépéshez
 
-                        if(multiplierCellToHighlight) multiplierCellToHighlight.classList.add('highlight-target');
-                        if(multiplicandCellToHighlight) multiplicandCellToHighlight.classList.add('highlight-target');
-
-                        const ppString = task.partialProducts[currentStep.currentMultiplierDigitIndexFromLeft];
                         const targetDigitIndexInPP_Left = ppString.length - 1 - currentStep.currentMultiplicandDigitIndexFromRight;
-
-                        if (targetDigitIndexInPP_Left >= 0 && targetDigitIndexInPP_Left < ppString.length) {
-                             const targetInput = document.getElementById(`pp-${currentStep.currentMultiplierDigitIndexFromLeft}-${targetDigitIndexInPP_Left}`);
-                            if (targetInput) {
-                                targetInput.disabled = false;
-                                try { targetInput.focus(); } catch (e) {}
-                            }
+                        const targetInput = document.getElementById(`pp-${currentStep.currentMultiplierDigitIndexFromLeft}-${targetDigitIndexInPP_Left}`);
+                        if (targetInput) {
+                            targetInput.disabled = false;
+                            try { targetInput.focus(); } catch (e) { console.warn("Focus failed on pp input", e); }
                         } else {
-                            currentStep.currentMultiplicandDigitIndexFromRight++;
-                            activateNextStepInput();
+                            console.error(`Error: Input field pp-${currentStep.currentMultiplierDigitIndexFromLeft}-${targetDigitIndexInPP_Left} not found, but expected for partial product.`);
+                            // Hiba esetén próbáljunk továbblépni, hogy ne akadjon be a feladat
+                            currentStep.currentMultiplicandDigitIndexFromRight = 0;
+                            currentStep.currentMultiplierDigitIndexFromLeft++;
+                            activateNextStepInput(); // Rekurzív hívás a következő állapothoz
                             return;
                         }
                     } else {
-                        currentStep.currentMultiplicandDigitIndexFromRight = 0;
+                        // Az aktuális részszorzattal végeztünk, lépünk a következő szorzó számjegyre
+                        currentStep.currentMultiplicandDigitIndexFromRight = 0; // Visszaállítjuk a részszorzat-számjegy indexet
                         currentStep.currentMultiplierDigitIndexFromLeft++;
-                        activateNextStepInput();
+                        activateNextStepInput(); // Rekurzív hívás
+                        return;
                     }
                 } else {
+                    // Nincs több szorzó számjegy, átlépünk a sum fázisra
                     currentStep.phase = 'sum';
-                    currentStep.sumColumnNo = 0;
-                    activateNextStepInput();
-                }
-            } else if (currentStep.phase === 'sum') {
-                if (task.partialProducts.length <= 1) {
-                    if(task.finalProductDigits.length > 0) {
-                         for(let j=0; j < task.finalProductDigits.length; j++){
-                             const fpInput = document.getElementById(`fp-${j}`);
-                             if(fpInput) fpInput.disabled = false;
-                        }
-                        const firstFinalInput = document.getElementById(`fp-0`);
-                        if(firstFinalInput) try{firstFinalInput.focus();}catch(e){}
-                    }
-                    taskInstructions.textContent = "A szorzás kész!";
-                    checkButton.textContent = "Ellenőrzés";
-                    currentStep.phase = 'done';
+                    currentStep.sumColumnNo = 0; // Jobbról az első oszloppal kezdünk
+                    activateNextStepInput(); // Rekurzív hívás
                     return;
                 }
-
+            } else if (currentStep.phase === 'sum') {
                 if (currentStep.sumColumnNo < task.finalProductDigits.length) {
                     const targetFpInputIndexLeft = task.finalProductDigits.length - 1 - currentStep.sumColumnNo;
                     const targetInput = document.getElementById(`fp-${targetFpInputIndexLeft}`);
                     if (targetInput) {
                         targetInput.disabled = false;
-                        try { targetInput.focus(); } catch (e) {}
+                        try { targetInput.focus(); } catch (e) { console.warn("Focus failed on fp input", e); }
+                    } else {
+                        console.error(`Error: Input field fp-${targetFpInputIndexLeft} not found for final product.`);
+                        // Hiba esetén próbáljunk továbblépni
+                        currentStep.sumColumnNo++;
+                        activateNextStepInput();
+                        return;
                     }
                 } else {
                     taskInstructions.textContent = "Kész vagy a szorzással és az összeadással!";
@@ -902,33 +902,45 @@
         }
 
         function handleCheck() {
-            let allCorrect = true;
+            let allCorrectGlobally = true; // A teljes feladat helyességét jelzi, nem csak az aktuális lépését
             let allInputsFilled = true;
             const isStepByStep = currentSettings.helpLevel === 'step-by-step';
 
             if (isStepByStep && currentStep.phase !== 'done') {
                 let currentInputEl;
                 let correctValueStr;
-                let isCurrentStepCorrect = false;
+                let isCurrentStepCorrect = false; // Csak az aktuális lépés helyességét jelzi
 
                 if (currentStep.phase === 'multiply') {
-                    if (currentStep.currentMultiplierDigitIndexFromLeft < String(task.multiplier).length &&
-                        currentStep.currentMultiplicandDigitIndexFromRight < String(task.multiplicand).length) {
-                        const ppString = task.partialProducts[currentStep.currentMultiplierDigitIndexFromLeft];
-                        const digitIdxInPP_Left = ppString.length - 1 - currentStep.currentMultiplicandDigitIndexFromRight;
-                         if (digitIdxInPP_Left >=0 && digitIdxInPP_Left < ppString.length) {
-                            currentInputEl = document.getElementById(`pp-${currentStep.currentMultiplierDigitIndexFromLeft}-${digitIdxInPP_Left}`);
-                            correctValueStr = ppString[digitIdxInPP_Left];
-                        } else { isCurrentStepCorrect = true; }
-                    } else { isCurrentStepCorrect = true; }
+                    const currentPPString = task.partialProducts[currentStep.currentMultiplierDigitIndexFromLeft];
+                    if (currentPPString && currentStep.currentMultiplicandDigitIndexFromRight < currentPPString.length) {
+                        const digitIdxInPP_Left = currentPPString.length - 1 - currentStep.currentMultiplicandDigitIndexFromRight;
+                        currentInputEl = document.getElementById(`pp-${currentStep.currentMultiplierDigitIndexFromLeft}-${digitIdxInPP_Left}`);
+                        if (currentInputEl) {
+                           correctValueStr = currentPPString[digitIdxInPP_Left];
+                        } else {
+                            // Ha az input nem található, de a logika szerint léteznie kellene, az hiba.
+                            console.error(`Error in handleCheck: Input pp-${currentStep.currentMultiplierDigitIndexFromLeft}-${digitIdxInPP_Left} not found for multiply phase.`);
+                            isCurrentStepCorrect = false; // Jelöljük hibásnak, hogy ne akadjon be
+                        }
+                    } else {
+                        // Ha nincs mit ellenőrizni ebben a részszorzatban (mert túlmentünk a hosszán),
+                        // akkor ezt a "nem létező" lépést vegyük helyesnek, hogy tovább tudjunk lépni.
+                        isCurrentStepCorrect = true;
+                    }
                 } else if (currentStep.phase === 'sum') {
                     if (currentStep.sumColumnNo < task.finalProductDigits.length) {
                         const digitIdxInFP_Left = task.finalProductDigits.length - 1 - currentStep.sumColumnNo;
-                        if (digitIdxInFP_Left >=0 && digitIdxInFP_Left < task.finalProductDigits.length) {
-                            currentInputEl = document.getElementById(`fp-${digitIdxInFP_Left}`);
+                        currentInputEl = document.getElementById(`fp-${digitIdxInFP_Left}`);
+                        if (currentInputEl) {
                             correctValueStr = task.finalProductDigits[digitIdxInFP_Left];
-                        } else { isCurrentStepCorrect = true; }
-                    } else { isCurrentStepCorrect = true; }
+                        } else {
+                             console.error(`Error in handleCheck: Input fp-${digitIdxInFP_Left} not found for sum phase.`);
+                             isCurrentStepCorrect = false;
+                        }
+                    } else {
+                        isCurrentStepCorrect = true; // Vége az összeadásnak
+                    }
                 }
 
                 if (currentInputEl) {
@@ -938,11 +950,19 @@
                         updateInputFieldFeedback(currentInputEl, false);
                         try { currentInputEl.focus(); } catch(e){}
                         isCurrentStepCorrect = false;
+                    } else if (userInputStr === correctValueStr) {
+                        isCurrentStepCorrect = true;
+                        updateInputFieldFeedback(currentInputEl, true);
                     } else {
-                        isCurrentStepCorrect = userInputStr === correctValueStr;
-                        updateInputFieldFeedback(currentInputEl, isCurrentStepCorrect);
+                        isCurrentStepCorrect = false;
+                        updateInputFieldFeedback(currentInputEl, false);
                     }
+                } else if (!isCurrentStepCorrect && currentStep.phase !== 'done') {
+                    // Ha nem volt currentInputEl (pl. error), de nem is jelöltük helyesnek, akkor hiba van
+                    // Ez az ág azért kell, hogy ne akadjon be, ha currentInputEl null, de isCurrentStepCorrect nem lett true
+                    feedbackArea.textContent = 'Hiba történt a lépés ellenőrzésekor. Próbálj új feladatot kérni.';
                 }
+
 
                 if (isCurrentStepCorrect) {
                     feedbackArea.textContent = 'Helyes! Haladj tovább.';
@@ -955,7 +975,7 @@
                         currentStep.sumColumnNo++;
                     }
                     activateNextStepInput(); // Következő lépés engedélyezése
-                } else if(currentInputEl) {
+                } else if (currentInputEl) { // Csak akkor, ha volt mit ellenőrizni és az hibás volt
                     feedbackArea.textContent = 'Nem pontos. Próbáld újra!';
                     feedbackArea.className = 'feedback incorrect mt-4';
                     try { currentInputEl.focus(); } catch(e){}
@@ -968,22 +988,42 @@
                 const partialProductStr = task.partialProducts[i];
                 for (let j = 0; j < partialProductStr.length; j++) {
                     const inputEl = document.getElementById(`pp-${i}-${j}`);
-                    if (!inputEl) { allCorrect = false; continue; }
+                    if (!inputEl) { allCorrectGlobally = false; continue; }
                     if (inputEl.value === "") allInputsFilled = false;
                     if (inputEl.value !== partialProductStr[j]) {
-                        updateInputFieldFeedback(inputEl, false); allCorrect = false;
+                        updateInputFieldFeedback(inputEl, false); allCorrectGlobally = false;
                     } else { updateInputFieldFeedback(inputEl, true); }
                 }
             }
 
-            for (let j = 0; j < task.finalProductDigits.length; j++) {
-                const inputEl = document.getElementById(`fp-${j}`);
-                if (!inputEl) { allCorrect = false; continue; }
-                if (inputEl.value === "") allInputsFilled = false;
-                if (inputEl.value !== task.finalProductDigits[j]) {
-                     updateInputFieldFeedback(inputEl, false); allCorrect = false;
-                } else { updateInputFieldFeedback(inputEl, true); }
+            if (task.partialProducts.length > 1) { // Csak akkor ellenőrizzük az összeget, ha volt mit összeadni
+                for (let j = 0; j < task.finalProductDigits.length; j++) {
+                    const inputEl = document.getElementById(`fp-${j}`);
+                    if (!inputEl) { allCorrectGlobally = false; continue; }
+                    if (inputEl.value === "") allInputsFilled = false;
+                    if (inputEl.value !== task.finalProductDigits[j]) {
+                         updateInputFieldFeedback(inputEl, false); allCorrectGlobally = false;
+                    } else { updateInputFieldFeedback(inputEl, true); }
+                }
+            } else { // Ha csak egy részszorzat van, az a végeredmény
+                 for (let j = 0; j < task.finalProductDigits.length; j++) { // Az fp- mezők itt a részszorzatot jelentik
+                    const inputEl = document.getElementById(`fp-${j}`); // Vagy pp-0-j, attól függ, hogy van-e fp- mező egyáltalán
+                    if (!inputEl) { // Ha fp-k helyett pp-0-kat kell ellenőrizni
+                        const pp0InputEl = document.getElementById(`pp-0-${j}`);
+                        if(!pp0InputEl) {allCorrectGlobally = false; continue;}
+                        if (pp0InputEl.value === "") allInputsFilled = false;
+                        if (pp0InputEl.value !== task.finalProductDigits[j]) { // finalProductDigits[j] itt a ppString[j]-nek felel meg
+                            updateInputFieldFeedback(pp0InputEl, false); allCorrectGlobally = false;
+                        } else { updateInputFieldFeedback(pp0InputEl, true); }
+                        continue;
+                    }
+                    if (inputEl.value === "") allInputsFilled = false;
+                    if (inputEl.value !== task.finalProductDigits[j]) {
+                         updateInputFieldFeedback(inputEl, false); allCorrectGlobally = false;
+                    } else { updateInputFieldFeedback(inputEl, true); }
+                }
             }
+
 
             if (!allInputsFilled && currentSettings.helpLevel === 'independent') {
                  feedbackArea.textContent = "Kérlek, tölts ki minden mezőt!";
@@ -991,18 +1031,17 @@
                  return;
             }
 
-            if (allCorrect) {
+            if (allCorrectGlobally) {
                 feedbackArea.textContent = "Gratulálok, sikeresen elvégezted a szorzást!";
                 feedbackArea.className = 'feedback correct mt-4';
                 checkButton.textContent = "Új feladat";
                 mainMultiplicationGrid.querySelectorAll('input.styled-input').forEach(inp => inp.disabled = true);
-                currentStep.phase = 'done';
+                currentStep.phase = 'done'; // Biztosítjuk, hogy 'done' állapotba kerüljön
             } else {
                 feedbackArea.textContent = "Nem minden számjegy helyes. Kérlek, ellenőrizd!";
                 feedbackArea.className = 'feedback incorrect mt-4';
             }
         }
-
 
         function updateInputFieldFeedback(inputElement, isCorrect) {
             if (!inputElement) return;
@@ -1010,10 +1049,10 @@
         }
 
         function updateTaskInstructions() {
-             taskInstructions.textContent = `Végezd el a szorzást: ${task.multiplicand} × ${task.multiplier}.`;
-             if (currentSettings.helpLevel === 'independent' || currentStep.phase === 'done') {
+            taskInstructions.textContent = `Végezd el a szorzást: ${task.multiplicand} × ${task.multiplier}.`;
+            if (currentSettings.helpLevel === 'independent' || currentStep.phase === 'done') {
                 checkButton.textContent = (currentStep.phase === 'done' && feedbackArea.classList.contains('correct')) ? "Új feladat" : "Ellenőrzés";
-             } else {
+            } else {
                 checkButton.textContent = "Lépés ellenőrzése";
                 const sMultiplicand = String(task.multiplicand);
                 const sMultiplier = String(task.multiplier);
@@ -1022,13 +1061,14 @@
                     const multiplierDigit = sMultiplier[currentStep.currentMultiplierDigitIndexFromLeft];
                     taskInstructions.textContent = `Szorozd: ${multiplicandDigit} (szorzandó ${currentStep.currentMultiplicandDigitIndexFromRight+1}. jegye jobbról) × ${multiplierDigit} (szorzó ${currentStep.currentMultiplierDigitIndexFromLeft+1}. jegye balról). Írd be az eredmény (utolsó) számjegyét.`;
                 } else if (currentStep.phase === 'sum' && currentStep.sumColumnNo < task.finalProductDigits.length) {
-                     taskInstructions.textContent = `Add össze a(z) ${currentStep.sumColumnNo + 1}. oszlopot (jobbról számolva).`;
+                    // Pontosított instrukció a végeredmény számjegyének beírásához
+                    taskInstructions.textContent = `Írd be a végeredmény ${task.finalProductDigits.length - currentStep.sumColumnNo}. számjegyét (jobbról számolva).`;
                 } else if (currentStep.phase === 'multiply' && currentStep.currentMultiplierDigitIndexFromLeft >= sMultiplier.length) {
-                    taskInstructions.textContent = (task.partialProducts.length > 1) ? "Minden szorzás kész. Most add össze a részszorzatokat!" : "A szorzás kész!";
+                    taskInstructions.textContent = (task.partialProducts.length > 1) ? "Minden szorzás kész. Most írd be a végeredmény számjegyeit!" : "A szorzás kész! Írd be a végeredmény számjegyeit.";
                 } else if (currentStep.phase === 'sum' && currentStep.sumColumnNo >= task.finalProductDigits.length) {
                     taskInstructions.textContent = "Az összeadás kész!";
                 }
-             }
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
