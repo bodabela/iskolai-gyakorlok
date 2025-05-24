@@ -39,7 +39,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px; 
+            gap: 8px;
             width:100%;
         }
         /* Beállítás csoportok stílusai */
@@ -109,7 +109,7 @@
             padding: 20px;
             border-radius: 10px;
             transition: background-color 0.5s ease, border-color 0.5s ease;
-            position: relative; 
+            position: relative;
         }
         /* Feladat fejlécének stílusai */
         .task-header {
@@ -124,10 +124,10 @@
             font-size: clamp(1.1em, 3.5vw, 1.3em);
             transition: color 0.5s ease;
         }
-        .new-task-button { 
+        .new-task-button {
             padding: 6px 12px;
             font-size: 0.8em;
-            margin-left: 10px; 
+            margin-left: 10px;
         }
 
         /* Feladat szövegének stílusai */
@@ -137,9 +137,9 @@
             margin-bottom: 10px;
             transition: color 0.5s ease;
         }
-        
+
         /* Feladat gombok általános stílusai */
-        button.task-button { 
+        button.task-button {
             padding: 10px 20px;
             color: white;
             border: none;
@@ -170,77 +170,77 @@
         /* Kivonási rács stílusai */
         .main-subtraction-grid {
             display: grid;
-            gap: 1px; 
-            justify-content: center; 
-            margin: 1rem auto; 
-            font-size: 1.5em; 
-            position: relative; 
+            gap: 1px;
+            justify-content: center;
+            margin: 1rem auto;
+            font-size: 1.5em;
+            position: relative;
         }
 
         /* Rács celláinak általános stílusai */
         .grid-cell {
-            width: 30px; 
+            width: 30px;
             height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px; 
-            line-height: 30px; 
-            border-radius: 4px; 
+            font-size: 20px;
+            line-height: 30px;
+            border-radius: 4px;
             box-sizing: border-box;
             transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-            background-color: transparent; 
+            background-color: transparent;
         }
         .grid-cell.operand-digit { /* Kisebbítendő/kivonandó számjegyek cellái */ }
-        .grid-cell.op-symbol { 
+        .grid-cell.op-symbol {
             font-weight: bold;
         }
-         .grid-cell.borrow-input-cell { 
-            height: 25px; 
-            padding-top: 2px; 
+         .grid-cell.borrow-input-cell {
+            height: 25px;
+            padding-top: 2px;
             justify-content: center; /* Kép alapján inkább középre a kis pótlást */
         }
         .grid-cell.borrow-input-cell input.styled-input {
-            font-size: 0.65em; 
+            font-size: 0.65em;
             height: 20px;
             width: 20px;
-            padding: 0px; 
-            color: var(--theme-carry-text-color, blue); 
+            padding: 0px;
+            color: var(--theme-carry-text-color, blue);
             border: 1px dashed var(--theme-carry-text-color, blue);
-            background-color: transparent; 
+            background-color: transparent;
             border-radius: 3px;
         }
         .grid-cell.borrow-input-cell input.styled-input:focus {
-            background-color: rgba(255,255,255,0.5); 
+            background-color: rgba(255,255,255,0.5);
         }
         .grid-cell.borrow-input-cell input.styled-input:disabled {
             background-color: transparent;
             border: 1px solid transparent; /* Alapból ne legyen keret, ha disabled és üres */
-            font-weight: bold; 
-            color: var(--theme-carry-text-color, blue); 
+            font-weight: bold;
+            color: var(--theme-carry-text-color, blue);
         }
         .grid-cell.borrow-input-cell.empty-borrow input.styled-input {
              border-color: transparent !important; /* Ha üres és nincs input, ne látszódjon a keret sem */
         }
 
 
-        .grid-cell.cell-with-line-below { 
-            border-bottom-width: 2px; 
+        .grid-cell.cell-with-line-below {
+            border-bottom-width: 2px;
             border-bottom-style: solid;
         }
         .grid-cell.difference-digit-cell { /* Különbség számjegyeinek cellái */
         }
-        .grid-cell.highlight-target { 
+        .grid-cell.highlight-target {
             box-shadow: 0 0 0 2px var(--theme-highlight-color, #0d6efd);
             border-radius: 4px;
-            background-color: var(--theme-highlight-bg-color, rgba(13, 110, 253, 0.05)); 
+            background-color: var(--theme-highlight-bg-color, rgba(13, 110, 253, 0.05));
         }
-        .grid-cell.highlight-group { 
-            background-color: var(--theme-highlight-group-bg-color, rgba(13, 110, 253, 0.1)) !important;
+        .grid-cell.highlight-group {
+            background-color: var(--theme-highlight-group-bg-color, rgba(13, 110, 253, 0.12)) !important;
         }
         /* A highlight-group top/bottom member most nem kell, mert a cellákra tesszük a highlight-group-ot */
         .grid-cell.borrow-input-cell.highlight-group input.styled-input:disabled {
-             color: var(--theme-highlight-color, #0d6efd) !important; 
+             color: var(--theme-highlight-color, #0d6efd) !important;
              font-weight: bold;
              /* A kép alapján a beírt pótlékot is bekeretezi a kiemelés */
              border: 1px solid var(--theme-highlight-color, #0d6efd) !important;
@@ -251,23 +251,23 @@
         .grid-cell input.styled-input {
             width: 100%;
             height: 100%;
-            font-size: inherit; 
+            font-size: inherit;
             padding: 0;
             margin: 0;
             border-radius: 4px;
             text-align: center;
-            border: 1px solid #d1d5db; 
-            background-color: #fff; 
+            border: 1px solid #d1d5db;
+            background-color: #fff;
             box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
             box-sizing: border-box;
-            color: #333; 
+            color: #333;
         }
-        .grid-cell input.styled-input:disabled:not(.borrow-digit-input) { 
+        .grid-cell input.styled-input:disabled:not(.borrow-digit-input) {
              font-weight: bold;
-             background-color: #e9ecef; 
+             background-color: #e9ecef;
              color: #495057;
         }
-        
+
         /* Alapértelmezett téma stílusok */
         .setting-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
         .task-button { background-color: #007bff; color: white; }
@@ -577,7 +577,7 @@
 
             <div id="mainSubtractionGrid" class="main-subtraction-grid">
                 </div>
-            
+
             <div style="text-align: center; margin-top: 20px;">
                 <button id="checkButton" class="task-button">Ellenőrzés</button>
             </div>
@@ -593,25 +593,25 @@
         const newTaskButton = document.getElementById('newTaskButton');
         const checkButton = document.getElementById('checkButton');
         const taskInstructions = document.getElementById('taskInstructions');
-        const mainSubtractionGrid = document.getElementById('mainSubtractionGrid'); 
+        const mainSubtractionGrid = document.getElementById('mainSubtractionGrid');
         const feedbackArea = document.getElementById('feedbackArea');
         const bodyEl = document.body;
 
         let currentSettings = {
-            theme: 'theme-candy', 
-            digitCount: 3,   
-            helpLevel: 'independent' 
+            theme: 'theme-candy',
+            digitCount: 3,
+            helpLevel: 'independent'
         };
 
         let task = {
             num1: 0,
             num2: 0,
-            calculatedDifferenceDigits: [], 
-            calculatedBorrows: []         
+            calculatedDifferenceDigits: [],
+            calculatedBorrows: []
         };
-        
-        let currentStepColumnFromRight = 0; 
-        let currentSubStep = 'difference_digit'; 
+
+        let currentStepColumnFromRight = 0;
+        let currentSubStep = 'difference_digit';
 
         themeSelector.addEventListener('click', (e) => {
             if (e.target.classList.contains('setting-button')) {
@@ -623,14 +623,14 @@
             if (e.target.classList.contains('setting-button')) {
                 currentSettings.digitCount = parseInt(e.target.dataset.digits);
                 updateActiveButtonVisuals(digitCountSelector, e.target);
-                generateNewTask(); 
+                generateNewTask();
             }
         });
         helpLevelSelector.addEventListener('click', (e) => {
             if (e.target.classList.contains('setting-button')) {
                 currentSettings.helpLevel = e.target.dataset.help;
                 updateActiveButtonVisuals(helpLevelSelector, e.target);
-                generateNewTask(); 
+                generateNewTask();
             }
         });
 
@@ -638,15 +638,15 @@
         checkButton.addEventListener('click', handleCheck);
 
         function applyTheme(themeClass) {
-            bodyEl.className = ''; 
-            bodyEl.classList.add(themeClass); 
+            bodyEl.className = '';
+            bodyEl.classList.add(themeClass);
             themeSelector.querySelectorAll('button').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.theme === themeClass);
             });
             updateActiveButtonVisuals(digitCountSelector, digitCountSelector.querySelector(`[data-digits="${currentSettings.digitCount}"]`));
             updateActiveButtonVisuals(helpLevelSelector, helpLevelSelector.querySelector(`[data-help="${currentSettings.helpLevel}"]`));
         }
-        
+
         function updateActiveButtonVisuals(container, activeButton) {
             if (!container || !activeButton) return;
             container.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
@@ -654,15 +654,15 @@
         }
 
         function generateNewTask() {
-            feedbackArea.textContent = '\u00A0'; 
-            feedbackArea.className = 'feedback mt-4'; 
-            currentStepColumnFromRight = 0; 
+            feedbackArea.textContent = '\u00A0';
+            feedbackArea.className = 'feedback mt-4';
+            currentStepColumnFromRight = 0;
             currentSubStep = 'difference_digit';
             checkButton.textContent = (currentSettings.helpLevel === 'independent') ? "Ellenőrzés" : "Lépés ellenőrzése";
-            
+
             const minNum1 = Math.pow(10, currentSettings.digitCount - 1);
             const maxNum1 = Math.pow(10, currentSettings.digitCount) - 1;
-            
+
             let attempts = 0;
             const MAX_ATTEMPTS = 100;
             let foundSuitable = false;
@@ -671,9 +671,9 @@
                 task.num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
                 let maxNum2 = task.num1 -1;
                  if (maxNum2 < 0) maxNum2 = 0;
-                let minNum2Allowed = (currentSettings.digitCount > 1) ? Math.pow(10, currentSettings.digitCount - 2) : 0; 
-                if (task.num1 < Math.pow(10, currentSettings.digitCount -1) * 1.2 && currentSettings.digitCount > 1) { 
-                     minNum2Allowed = 1; 
+                let minNum2Allowed = (currentSettings.digitCount > 1) ? Math.pow(10, currentSettings.digitCount - 2) : 0;
+                if (task.num1 < Math.pow(10, currentSettings.digitCount -1) * 1.2 && currentSettings.digitCount > 1) {
+                     minNum2Allowed = 1;
                 }
                 if (maxNum2 < minNum2Allowed && maxNum2 >=0) minNum2Allowed = 0;
 
@@ -688,7 +688,7 @@
                 let s2_check = String(task.num2).padStart(currentSettings.digitCount, '0');
                 let carryCheckLogic = 0;
                 let hasBorrowInLogic = false;
-                 for(let i = 0; i < currentSettings.digitCount; i++){ 
+                 for(let i = 0; i < currentSettings.digitCount; i++){
                     let d1_check = parseInt(s1_check[currentSettings.digitCount - 1 - i]);
                     let d2_check = parseInt(s2_check[currentSettings.digitCount - 1 - i]);
                     let eff_d2_check = d2_check + carryCheckLogic;
@@ -704,7 +704,7 @@
                 }
                 attempts++;
             }
-             if (!foundSuitable) { 
+             if (!foundSuitable) {
                  let n1Base = "5";
                  let n2Base = "1";
                  if (currentSettings.digitCount === 2) { n1Base = "50"; n2Base = "15";}
@@ -717,39 +717,40 @@
                  if(task.num1 <= task.num2 && task.num1 > 0) task.num2 = task.num1-1;
              }
 
-            calculateCorrectSteps();    
-            renderTaskDisplay();        
-            prepareCurrentStepInputs(); 
-            updateTaskInstructions();   
+            calculateCorrectSteps();
+            renderTaskDisplay();
+            prepareCurrentStepInputs();
+            updateTaskInstructions();
+			console.log("task", task)
         }
 
         function calculateCorrectSteps() {
-            task.calculatedDifferenceDigits = []; // Balról jobbra tároljuk majd (a végén megfordítjuk)
-            task.calculatedBorrows = [];      // Balról jobbra. task.calculatedBorrows[i] az i. (balról) oszlop KIVONANDÓJA ALÁ kerülő pótlék.
-            
-            let carryForNextSubtrahend = 0; 
+            task.calculatedDifferenceDigits = [];
+            task.calculatedBorrows = [];
+
+            let carryForNextSubtrahend = 0;
             const maxLength = currentSettings.digitCount;
 
             const sNum1Padded = String(task.num1).padStart(maxLength, '0');
             const sNum2Padded = String(task.num2).padStart(maxLength, '0');
-            
+
             let tempDiffDigitsReversed = [];
             let tempBorrowsForSubtrahendReversed = [];
 
 
-            for (let i = 0; i < maxLength; i++) { // Jobbról balra haladunk (i=0 az egyesek helyiértéke)
-                const currentDigitIndexFromLeft = maxLength - 1 - i; 
-                
+            for (let i = 0; i < maxLength; i++) {
+                const currentDigitIndexFromLeft = maxLength - 1 - i;
+
                 let digit1 = parseInt(sNum1Padded[currentDigitIndexFromLeft]);
                 let digit2Original = parseInt(sNum2Padded[currentDigitIndexFromLeft]);
-                
-                tempBorrowsForSubtrahendReversed.push(carryForNextSubtrahend); // Az AKTUÁLIS oszlop kivonandójához tartozó pótlék
+
+                tempBorrowsForSubtrahendReversed.push(carryForNextSubtrahend);
 
                 let effectiveDigit2 = digit2Original + carryForNextSubtrahend;
 
                 if (digit1 < effectiveDigit2) {
                     tempDiffDigitsReversed.push((digit1 + 10) - effectiveDigit2);
-                    carryForNextSubtrahend = 1; 
+                    carryForNextSubtrahend = 1;
                 } else {
                     tempDiffDigitsReversed.push(digit1 - effectiveDigit2);
                     carryForNextSubtrahend = 0;
@@ -757,15 +758,16 @@
             }
             task.calculatedDifferenceDigits = tempDiffDigitsReversed.reverse();
             task.calculatedBorrows = tempBorrowsForSubtrahendReversed.reverse();
+			task.calculatedBorrows.pop();
         }
 
 
         function renderTaskDisplay() {
-            mainSubtractionGrid.innerHTML = ''; 
+            mainSubtractionGrid.innerHTML = '';
             const sNum1 = String(task.num1).padStart(currentSettings.digitCount, '0');
             const sNum2 = String(task.num2).padStart(currentSettings.digitCount, '0');
             const maxLength = currentSettings.digitCount;
-            const gridCols = maxLength + 1; 
+            const gridCols = maxLength + 1;
 
             mainSubtractionGrid.style.gridTemplateColumns = `repeat(${gridCols}, 30px)`;
             mainSubtractionGrid.style.gridTemplateRows = `repeat(5, auto)`;
@@ -773,7 +775,7 @@
             // 1. sor: Kisebbítendő
             for (let i = 0; i < maxLength; i++) {
                 const cell = createGridCell(sNum1[i], 1, i + 2, ['operand-digit']);
-                cell.dataset.colFromLeft = i; 
+                cell.dataset.colFromLeft = i;
                 cell.dataset.rowType = "minuend";
                 mainSubtractionGrid.appendChild(cell);
             }
@@ -786,114 +788,159 @@
                 cell.dataset.rowType = "subtrahend";
                 mainSubtractionGrid.appendChild(cell);
             }
-            
+
             // 3. sor: Pótlás inputok
             mainSubtractionGrid.appendChild(createGridCell(null, 3, 1)); // Operátor alatt
             for (let i = 0; i < maxLength; i++) { // Oszlopok balról jobbra
                 const currentGridColumnForOperand = i + 2;
                 const cell = createGridCell(null, 3, currentGridColumnForOperand, ['borrow-input-cell']);
-                // Pótlás input CSAK akkor kell, ha NEM az első (jobbról) kivonandó számjegy alatt vagyunk
-                // Azaz, ha i (balról index) < maxLength - 1
                 if (i < maxLength - 1) {
-                    // Az `i`-edik (0-tól `maxLength-2`-ig) `borrow-input` mező
-                    // a `i+1`-edik (balról, 1-től `maxLength-1`-ig) oszlop kivonandója alá kerül.
-                    // Tehát a `borrow-input-0` a MÁSODIK (balról) oszlop alá.
-                    // Ennek a helyes értéke a `task.calculatedBorrows[i+1]` lesz.
-                    const borrowInputId = `borrow-input-${i}`; 
+                    // A balról 'i' indexű 'borrow-input' a (i+1) indexű (balról) oszlop kivonandója alá kerül.
+                    // A helyes értéke a task.calculatedBorrows[i+1] lesz (mivel a borrows tömb is balról indexelt).
+                    const borrowInputId = `borrow-input-${i}`; // borrowSlotIndex = i
                     const input = createStyledInput(true, borrowInputId, 'borrow');
-                    input.dataset.borrowSlotIndex = i; 
+                    input.dataset.borrowSlotIndex = i;
                     cell.appendChild(input);
                 } else {
-                    cell.classList.add('empty-borrow'); // Nincs input a legjobboldalibb kivonandó alatt
+                    cell.classList.add('empty-borrow');
                 }
                 mainSubtractionGrid.appendChild(cell);
             }
 
 
             // 4. sor: Vonal
-            mainSubtractionGrid.appendChild(createGridCell(null, 4, 1)); 
+            mainSubtractionGrid.appendChild(createGridCell(null, 4, 1));
             for (let i = 0; i < maxLength; i++) {
                 mainSubtractionGrid.appendChild(createGridCell(null, 4, i + 2, ['cell-with-line-below']));
             }
 
             // 5. sor: Különbség inputok
-            mainSubtractionGrid.appendChild(createGridCell(null, 5, 1)); 
+            mainSubtractionGrid.appendChild(createGridCell(null, 5, 1));
             for (let i = 0; i < maxLength; i++) {
-                const diffInputId = `diff-digit-${i}`; 
+                const diffInputId = `diff-digit-${i}`;
                 const input = createStyledInput(true, diffInputId, 'difference');
-                input.dataset.colFromLeft = i; 
+                input.dataset.colFromLeft = i;
                 const cell = createGridCell(null, 5, i + 2, ['difference-digit-cell']);
                 cell.appendChild(input);
                 mainSubtractionGrid.appendChild(cell);
             }
         }
-        
+
         function createGridCell(content, row, col, classList = []) {
             const cell = document.createElement('div');
             cell.classList.add('grid-cell', ...classList);
             if (content !== null && typeof content !== 'undefined') cell.textContent = content;
-            cell.style.gridRow = String(row); 
-            cell.style.gridColumn = String(col); 
+            cell.style.gridRow = String(row);
+            cell.style.gridColumn = String(col);
             return cell;
         }
 
-        function createStyledInput(disabled, id, type = null) { 
+        function createStyledInput(disabled, id, type = null) {
             const input = document.createElement('input');
-            input.type = 'text'; 
-            input.inputMode = 'numeric'; 
-            input.pattern = "[0-9]*"; 
+            input.type = 'text';
+            input.inputMode = 'numeric';
+            input.pattern = "[0-9]*";
             input.classList.add('styled-input');
             if (type === 'borrow') input.classList.add('borrow-digit-input');
             if (type === 'difference') input.classList.add('diff-digit-input');
-            input.id = id; 
+            input.id = id;
             input.maxLength = 1;
-            
-            input.addEventListener('input', (e) => { 
+
+            input.addEventListener('input', (e) => {
                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                handleInputAndFocusNext(e); 
+                handleInputAndFocusNext(e);
             });
             input.disabled = disabled;
             return input;
         }
 
-       function handleInputAndFocusNext(event) {
+        // ÚJ SEGÉDFÜGGVÉNY A FÓKUSZ SORRENDHEZ
+        function getFocusOrderIndependent() {
+            const order = [];
+            const maxLength = currentSettings.digitCount;
+
+            // 1. Különbség számjegyek bevitele (felhasználói szempontból jobbról balra történik a kitöltés)
+            // Az ID-k balról jobbra növekvő indexszel (`diff-digit-0` a legbaloldalibb).
+            // A sorrendben először a jobboldaliakat vesszük (magasabb index).
+            // Tehát `diff-digit-(maxLength-1)` az első, `diff-digit-0` az utolsó ebben a szakaszban.
+            for (let i = maxLength - 1; i >= 0; i--) {
+                order.push(`diff-digit-${i}`);
+            }
+
+            // 2. Pótlás-különbség párok, jobbról balra haladva a pótlásokon
+            // A jobbról első pótlás a `borrow-input-${maxLength-2}` ID-jű.
+            // Ez a (maxLength-1) indexű (balról) 'diff-digit' oszlophoz kapcsolódik (azaz az ALATTA lévő 'diff-digit' az `diff-digit-${maxLength-1}`).
+            // A `borrow-input-${k}` a `k+1`. (balról) oszlophoz tartozik.
+            for (let borrowSlotIdx = maxLength - 2; borrowSlotIdx >= 0; borrowSlotIdx--) {
+                order.push(`borrow-input-${borrowSlotIdx}`);
+                order.push(`diff-digit-${borrowSlotIdx + 1}`);
+            }
+            return order;
+        }
+
+        function handleInputAndFocusNext(event) {
             const currentInput = event.target;
-            if (currentInput.value.length >= currentInput.maxLength && currentSettings.helpLevel === 'independent') {
-                const allInputsInGrid = Array.from(mainSubtractionGrid.querySelectorAll('input.styled-input:not([disabled])'));
-                const currentInputIndexInArray = allInputsInGrid.indexOf(currentInput);
-                
-                if (currentInputIndexInArray !== -1 && currentInputIndexInArray < allInputsInGrid.length - 1) {
-                    try { allInputsInGrid[currentInputIndexInArray + 1].focus(); } catch (e) {}
+            // Csak akkor lépj tovább, ha az input tele van (1 karakteres mezők esetén ez mindig igaz, ha van benne valami)
+            if (currentInput.value.length >= currentInput.maxLength) {
+                if (currentSettings.helpLevel === 'independent') {
+                    const focusOrder = getFocusOrderIndependent();
+                    const currentId = currentInput.id;
+                    const currentIndexInOrder = focusOrder.indexOf(currentId);
+
+                    if (currentIndexInOrder !== -1 && currentIndexInOrder < focusOrder.length - 1) {
+                        const nextInputId = focusOrder[currentIndexInOrder + 1];
+                        const nextInputToFocus = document.getElementById(nextInputId);
+
+                        if (nextInputToFocus && (typeof nextInputToFocus.disabled === 'undefined' || nextInputToFocus.disabled === false)) {
+                            try {
+                                nextInputToFocus.focus();
+                                if (nextInputToFocus.value.length > 0) { // Ha már van benne érték, jelölje ki
+                                    nextInputToFocus.select();
+                                }
+                            } catch (e) {
+                                console.warn("Fókuszálás sikertelen:", nextInputId, e);
+                            }
+                        }
+                    }
+                } else { // Step-by-step or other modes
+                    // Ide kerülhetne az eredeti, egyszerűbb DOM-sorrend alapú léptetés, ha volt,
+                    // vagy a step-by-step mód saját fókuszkezelése, amit most nem érintünk.
+                    // Például:
+                    // const allInputs = Array.from(mainSubtractionGrid.querySelectorAll('input.styled-input:not([disabled])'));
+                    // const currentInputIndexInArray = allInputs.indexOf(currentInput);
+                    // if (currentInputIndexInArray !== -1 && currentInputIndexInArray < allInputs.length - 1) {
+                    //     try { allInputs[currentInputIndexInArray + 1].focus(); } catch (e) {}
+                    // }
                 }
             }
         }
-        
+
         function prepareCurrentStepInputs() {
-            mainSubtractionGrid.querySelectorAll('input.styled-input').forEach(inp => { 
-                inp.style.borderColor = ''; 
-                if(currentSettings.helpLevel === 'step-by-step') inp.disabled = true; 
+            mainSubtractionGrid.querySelectorAll('input.styled-input').forEach(inp => {
+                inp.style.borderColor = '';
+                if(currentSettings.helpLevel === 'step-by-step') inp.disabled = true;
             });
-            mainSubtractionGrid.querySelectorAll('.grid-cell') 
+            mainSubtractionGrid.querySelectorAll('.grid-cell')
                 .forEach(cell => cell.classList.remove('highlight-target', 'highlight-group'));
-            
+
             const maxLength = currentSettings.digitCount;
-            const targetColFromLeft = maxLength - 1 - currentStepColumnFromRight; 
+            const targetColFromLeft = maxLength - 1 - currentStepColumnFromRight;
 
             if (currentSettings.helpLevel === 'independent') {
                 mainSubtractionGrid.querySelectorAll('input.styled-input').forEach(inp => {
                     inp.disabled = false
                 });
                 try {
-                    const firstDiffInput = document.getElementById(`diff-digit-${maxLength-1}`); 
+                    // Kezdeti fókusz a jobbról első különbség mezőre
+                    const firstDiffInput = document.getElementById(`diff-digit-${maxLength-1}`);
                     if (firstDiffInput) firstDiffInput.focus();
                 } catch (e) {}
             } else { // step-by-step
-                if (currentStepColumnFromRight >= maxLength && currentSubStep === 'difference_digit') { 
+                if (currentStepColumnFromRight >= maxLength && currentSubStep === 'difference_digit') {
                     taskInstructions.textContent = "Kész vagy! A kivonás véget ért.";
                     checkButton.textContent = "Új feladat";
                     return;
                 }
-                // Ha borrow_digit substeppel futunk ki (nincs több pótlékot bekérni)
                 if (currentSubStep === 'borrow_digit' && targetColFromLeft < 0 ) {
                      taskInstructions.textContent = "Kész vagy! A kivonás véget ért.";
                      checkButton.textContent = "Új feladat";
@@ -903,12 +950,10 @@
 
                 const minuendCell = mainSubtractionGrid.querySelector(`.operand-digit[data-row-type="minuend"][data-col-from-left="${targetColFromLeft}"]`);
                 const subtrahendCell = mainSubtractionGrid.querySelector(`.operand-digit[data-row-type="subtrahend"][data-col-from-left="${targetColFromLeft}"]`);
-                
-                // Az AKTUÁLIS oszlop (targetColFromLeft) KIVONANDÓJA ALÁ eső pótlékot (ha van) mutatjuk és kiemeljük
-                // Ez a pótlék a (targetColFromLeft - 1) ID-jű borrow-inputban van, ha targetColFromLeft > 0
+
                 if (targetColFromLeft > 0 && currentSubStep === 'difference_digit') {
                     const borrowInputForCurrentSubtrahend = document.getElementById(`borrow-input-${targetColFromLeft - 1}`);
-                    if (borrowInputForCurrentSubtrahend && borrowInputForCurrentSubtrahend.disabled) { // Csak ha már beírta és jó volt
+                    if (borrowInputForCurrentSubtrahend && borrowInputForCurrentSubtrahend.disabled) {
                         const borrowVal = parseInt(borrowInputForCurrentSubtrahend.value);
                         if (!isNaN(borrowVal) && borrowVal > 0) {
                             if(subtrahendCell) subtrahendCell.classList.add('highlight-group');
@@ -921,17 +966,16 @@
                 if (currentSubStep === 'difference_digit') {
                     if (minuendCell) minuendCell.classList.add('highlight-target');
                     if (subtrahendCell && !subtrahendCell.classList.contains('highlight-group')) subtrahendCell.classList.add('highlight-target');
-                    
+
                     const diffInput = document.getElementById(`diff-digit-${targetColFromLeft}`);
                     if (diffInput) {
                         diffInput.disabled = false;
                         diffInput.value = '';
                         try { diffInput.focus(); } catch (e) {}
                     }
-                } else { // borrow_digit (az AKTUÁLIS oszlop eredményéből származó pótlékot kérjük a KÖVETKEZŐ oszlophoz)
-                    // A pótlékot a (targetColFromLeft - 1) slotIndexű borrow-inputba kell írni.
-                    const borrowSlotIndexToEnable = targetColFromLeft - 1; 
-                    if (borrowSlotIndexToEnable >= 0) { 
+                } else {
+                    const borrowSlotIndexToEnable = targetColFromLeft - 1;
+                    if (borrowSlotIndexToEnable >= 0) {
                         const borrowInput = document.getElementById(`borrow-input-${borrowSlotIndexToEnable}`);
                         if (borrowInput) {
                             borrowInput.disabled = false;
@@ -940,24 +984,24 @@
                             const prevDiffInput = document.getElementById(`diff-digit-${targetColFromLeft}`);
                             if(prevDiffInput && prevDiffInput.parentElement) prevDiffInput.parentElement.classList.add('highlight-target');
                         }
-                    } else { 
-                         currentStepColumnFromRight++; 
+                    } else {
+                         currentStepColumnFromRight++;
                          currentSubStep = 'difference_digit';
-                         prepareCurrentStepInputs(); 
+                         prepareCurrentStepInputs();
                     }
                 }
             }
-            updateTaskInstructions(); 
+            updateTaskInstructions();
         }
-        
-       function handleCheck() {
+
+        function handleCheck() {
             const maxLength = currentSettings.digitCount;
 
             if (currentSettings.helpLevel === 'independent') {
                 let allCorrect = true;
-                let allFilledProperly = true; 
+                let allFilledProperly = true;
 
-                for (let i = 0; i < maxLength; i++) { 
+                for (let i = 0; i < maxLength; i++) {
                     const diffInputEl = document.getElementById(`diff-digit-${i}`);
                     if (!diffInputEl) { allCorrect = false; continue; }
                     if (diffInputEl.value.trim() === "") allFilledProperly = false;
@@ -967,14 +1011,11 @@
                         updateInputFieldFeedback(diffInputEl, false); allCorrect = false;
                     } else { updateInputFieldFeedback(diffInputEl, true); }
 
-                    // Pótlék ellenőrzése: A balról `i`. oszlop KIVONANDÓJA alatti pótlékot
-                    // a `borrow-input-${i-1}` ID-jű input tartalmazza (ha `i > 0`).
-                    // Ennek a helyes értéke a `task.calculatedBorrows[i]`.
-                    if (i > 0) { 
+                    if (i > 0) {
                         const borrowInputEl = document.getElementById(`borrow-input-${i-1}`);
-                        if (!borrowInputEl) continue; 
-                        
-                        const correctBorrow = task.calculatedBorrows[i] || 0; 
+                        if (!borrowInputEl) continue;
+
+                        const correctBorrow = task.calculatedBorrows[i-1] || 0;
                         if (borrowInputEl.value.trim() === "" && correctBorrow !== 0) allFilledProperly = false;
                         const userBorrow = borrowInputEl.value.trim() === "" ? 0 : parseInt(borrowInputEl.value);
 
@@ -983,13 +1024,13 @@
                         } else { updateInputFieldFeedback(borrowInputEl, true); }
                     }
                 }
-                
-                if (!allFilledProperly && allCorrect) { 
+
+                if (!allFilledProperly && allCorrect) {
                     feedbackArea.textContent = "Kérlek, tölts ki minden szükséges mezőt (különbség és pótlások)!";
                     feedbackArea.className = 'feedback incorrect mt-4';
                     return;
                 }
-                
+
                 if (allCorrect) {
                     feedbackArea.textContent = "Gratulálok, sikeresen elvégezted a kivonást!";
                     feedbackArea.className = 'feedback correct mt-4';
@@ -1003,7 +1044,7 @@
                 const targetColFromLeft = maxLength - 1 - currentStepColumnFromRight;
 
                 if (currentSubStep === 'difference_digit') {
-                    if (targetColFromLeft < 0) { generateNewTask(); return;} 
+                    if (targetColFromLeft < 0) { generateNewTask(); return;}
                     const diffInput = document.getElementById(`diff-digit-${targetColFromLeft}`);
                     if (!diffInput) return;
                     const userInput = parseInt(diffInput.value);
@@ -1018,15 +1059,9 @@
                     if (userInput === correctValue) {
                         updateInputFieldFeedback(diffInput, true);
                         diffInput.disabled = true;
-                        
-                        // Meghatározzuk, hogy az AKTUÁLIS oszlopban (targetColFromLeft) történt-e kölcsönzés,
-                        // ami a KÖVETKEZŐ (balra, targetColFromLeft - 1) oszlophoz generál pótlást.
-                        // A task.calculatedBorrows[targetColFromLeft-1] tartalmazza ezt az értéket.
-                        // De a pótlékot a task.calculatedBorrows[targetColFromLeft] adja az aktuális oszlophoz.
-                        // Ami a következőhöz kell, az a (carryFromPreviousCol a calculateCorrectSteps-ben az aktuális oszlop után).
-                        // Ez a task.calculatedBorrows[targetColFromLeft-1] (ha balról nézzük)
+
                         let borrowGeneratedForNextCol = 0;
-                        if (targetColFromLeft > 0) { // Csak ha van hova továbbvinni pótlást
+                        if (targetColFromLeft > 0) {
                              let digit1 = parseInt(String(task.num1).padStart(maxLength, '0')[targetColFromLeft]);
                              let digit2Orig = parseInt(String(task.num2).padStart(maxLength, '0')[targetColFromLeft]);
                              let borrowInCurrent = task.calculatedBorrows[targetColFromLeft] || 0;
@@ -1036,17 +1071,17 @@
                         }
 
 
-                        if (targetColFromLeft > 0 && borrowGeneratedForNextCol > 0) { 
+                        if (targetColFromLeft > 0 && borrowGeneratedForNextCol > 0) {
                             feedbackArea.textContent = 'Helyes a különbség! Most add meg a pótlékot a következő oszlop kivonandója alá (1).';
                             currentSubStep = 'borrow_digit';
                         } else if (targetColFromLeft > 0 && borrowGeneratedForNextCol === 0) {
                              feedbackArea.textContent = 'Helyes a különbség! Most add meg a pótlékot (0).';
-                             currentSubStep = 'borrow_digit'; // Meg kell adnia a 0-t is
+                             currentSubStep = 'borrow_digit';
                         }
-                        else { 
+                        else {
                             feedbackArea.textContent = 'Helyes! Az utolsó számjegy is megvan.';
                             currentStepColumnFromRight++;
-                            currentSubStep = 'difference_digit'; 
+                            currentSubStep = 'difference_digit';
                         }
                         prepareCurrentStepInputs();
                     } else {
@@ -1054,11 +1089,8 @@
                         updateInputFieldFeedback(diffInput, false); try { diffInput.focus(); } catch(e){}
                     }
                 } else { // borrow_digit
-                    // A pótlék, amit ellenőrzünk, a (targetColFromLeft - 1) indexű (balról) borrow-input mezőben van.
-                    // Ez a pótlék az AKTUÁLIS oszlop (targetColFromLeft) kivonásából adódott.
-                    // A helyes értéke a task.calculatedBorrows[targetColFromLeft - 1].
-                    const borrowHtmlInputIndex = targetColFromLeft - 1; 
-                    if (borrowHtmlInputIndex < 0) { 
+                    const borrowHtmlInputIndex = targetColFromLeft - 1;
+                    if (borrowHtmlInputIndex < 0) {
                         currentStepColumnFromRight++;
                         currentSubStep = 'difference_digit';
                         prepareCurrentStepInputs();
@@ -1069,10 +1101,8 @@
                     if (!borrowInputEl) return;
 
                     const userBorrow = borrowInputEl.value.trim() === "" ? 0 : parseInt(borrowInputEl.value);
-                    // A helyes pótlék, ami a balról (targetColFromLeft-1) oszlop ALÁ kerülne,
-                    // az a `task.calculatedBorrows[targetColFromLeft-1]`.
                     const correctBorrow = task.calculatedBorrows[targetColFromLeft -1 ] || 0;
-                    
+
                     if (isNaN(userBorrow)){
                          feedbackArea.textContent = 'Kérlek, írj be egy számot (0 vagy 1) a pótlékhoz!';
                          updateInputFieldFeedback(borrowInputEl, false); try { borrowInputEl.focus(); } catch(e){}
@@ -1082,11 +1112,11 @@
                     if (userBorrow === correctBorrow) {
                         updateInputFieldFeedback(borrowInputEl, true);
                         borrowInputEl.disabled = true;
-                        if(correctBorrow > 0) borrowInputEl.parentElement.classList.add('highlight-group'); // Csak a borrow cellát emeljük ki
+                        if(correctBorrow > 0) borrowInputEl.parentElement.classList.add('highlight-group');
 
 
                         feedbackArea.textContent = 'A pótlék helyes! Folytasd a következő oszloppal.';
-                        currentStepColumnFromRight++; 
+                        currentStepColumnFromRight++;
                         currentSubStep = 'difference_digit';
                         prepareCurrentStepInputs();
                     } else {
@@ -1098,7 +1128,7 @@
             }
             feedbackArea.className = feedbackArea.textContent.includes("Helyes") || feedbackArea.textContent.includes("Kész vagy") ? 'feedback correct mt-4' : 'feedback incorrect mt-4';
         }
-        
+
         function updateInputFieldFeedback(inputElement, isCorrect) {
             if (!inputElement) return;
             inputElement.style.borderColor = isCorrect ? 'green' : 'red';
@@ -1107,17 +1137,17 @@
        function updateTaskInstructions() {
             const maxLength = currentSettings.digitCount;
             const targetColFromLeft = maxLength - 1 - currentStepColumnFromRight;
-            
+
             if (currentSettings.helpLevel === 'independent') {
                 taskInstructions.textContent = `Végezd el a kivonást: ${task.num1} - ${task.num2}. Írd be a pótlásokat is (ahol szükséges, 0 vagy 1)!`;
                 checkButton.textContent = "Ellenőrzés";
-            } else { 
+            } else {
                 if (currentStepColumnFromRight >= maxLength && currentSubStep === 'difference_digit') {
                     taskInstructions.textContent = "Kész vagy! A kivonás véget ért.";
                     checkButton.textContent = "Új feladat";
                     return;
                 }
-                 if (targetColFromLeft < 0 && currentSubStep === 'borrow_digit') { 
+                 if (targetColFromLeft < 0 && currentSubStep === 'borrow_digit') {
                      taskInstructions.textContent = "Kész vagy! A kivonás véget ért.";
                      checkButton.textContent = "Új feladat";
                      return;
@@ -1134,7 +1164,7 @@
                 const sNum2Padded = String(task.num2).padStart(maxLength, '0');
                 const d1 = parseInt(sNum1Padded[targetColFromLeft]);
                 const d2Orig = parseInt(sNum2Padded[targetColFromLeft]);
-                const borrowValueForTheCurrentColumn = task.calculatedBorrows[targetColFromLeft] || 0; 
+                const borrowValueForTheCurrentColumn = task.calculatedBorrows[targetColFromLeft] || 0;
 
                 if (currentSubStep === 'difference_digit') {
                     const effectiveD2 = d2Orig + borrowValueForTheCurrentColumn;
@@ -1145,14 +1175,14 @@
                     taskInstructions.textContent = instruction;
                 } else { // borrow_digit
                     let nextPlaceValueText = "";
-                    if (targetColFromLeft === 1) nextPlaceValueText = "százasok"; // Mert a tízesek (jobbról 1.) számítása után a százasok (jobbról 2.) alá kerülő pótlást kérjük
+                    if (targetColFromLeft === 1) nextPlaceValueText = "százasok";
                     else if (targetColFromLeft === 2) nextPlaceValueText = "ezresek";
                     else if (targetColFromLeft > 0) nextPlaceValueText = `következő (balra) oszlop`;
-                    
-                    if (targetColFromLeft > 0) { 
+
+                    if (targetColFromLeft > 0) {
                          taskInstructions.textContent = `Mennyi pótlékot kell írni a ${nextPlaceValueText} kivonandója alá? (0, ha nem kellett kölcsönvenni ${placeValueText}.)`;
-                    } else { // Nem kellene ide eljutni, ha a borrow_digit csak akkor jön, ha targetColFromLeft > 0
-                         taskInstructions.textContent = "Minden pótlékot megadtál."; 
+                    } else {
+                         taskInstructions.textContent = "Minden pótlékot megadtál.";
                     }
                 }
                 checkButton.textContent = "Lépés ellenőrzése";
@@ -1160,7 +1190,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            applyTheme(currentSettings.theme); 
+            applyTheme(currentSettings.theme);
             generateNewTask();
         });
     </script>
