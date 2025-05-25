@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1. Osztály - Láncszámolás</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .settings-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width:100%;
+        }
+        .settings-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 10px;
+        }
+
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+
+        .theme-button, .range-button, .length-button {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-button:hover, .range-button:hover, .length-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .theme-button.active, .range-button.active, .length-button.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
+            transform: translateY(1px);
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em);
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em);
+            margin-bottom: 25px;
+        }
+        .task {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+            position: relative;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: clamp(1.1em, 3.5vw, 1.3em);
+            transition: color 0.5s ease;
+        }
+        .new-task-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .task p.instructions {
+            line-height: 1.6;
+            font-size: clamp(1em, 3vw, 1.1em);
+            margin-bottom: 15px;
+            transition: color 0.5s ease;
+        }
+
+        .chain-calculation-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center; /* Vertikálisan középre igazítjuk az egész sort */
+            gap: 0px;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 8px;
+            min-height: 80px; /* Növelt magasság a művelet fölötti elhelyezéshez */
+            transition: background-color 0.3s ease;
+        }
+        .chain-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.4em, 4.5vw, 1.8em);
+            font-weight: bold;
+            transition: color 0.5s ease;
+            min-width: 45px;
+            height: 45px;
+            margin: 0 5px;
+        }
+        .chain-item .number-display { /* Start szám és eredmény inputok dobozaihoz */
+            width: 100%;
+            height: 100%;
+            padding: 0 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            box-sizing: border-box;
+        }
+         .chain-item .operation-number-display { /* A műveletben szereplő MÁSODIK operandus doboza */
+            width: 40px; /* Fix méret a konzisztencia érdekében */
+            height: 40px;
+            padding: 0 5px;
+            border-radius: 6px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9em; /* Kicsit kisebb, mint a fő számok */
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            box-sizing: border-box;
+            color: white; /* Alapértelmezett szövegszín a jobb kontraszthoz */
+        }
+        .chain-operation-group { /* Konténer a műveletnek és a nyílnak */
+            display: flex;
+            flex-direction: column; /* Művelet a nyíl FÖLÖTT */
+            align-items: center;
+            justify-content: center;
+            margin: 0 1px 0 3px; /* Finomhangolt margók */
+            min-width: 60px; /* Szélesség, hogy a művelet elférjen */
+            align-self: flex-end; /* Alulra igazítja a nyilat, hogy a művelet fölé kerülhessen */
+            padding-bottom: 5px; /* Kis tér a nyíl alatt, hogy ne érjen az inputhoz */
+        }
+        .chain-operation-group .op-display-container { /* Művelet (pl. + 2) konténere */
+            display: flex;
+            align-items: center;
+            margin-bottom: -8px; /* Közelebb húzza a nyílhoz */
+            font-size: clamp(1.2em, 3.5vw, 1.5em); /* Művelet betűmérete */
+        }
+        .chain-operation-group .op-sign { /* Csak a műveleti jel: + vagy - */
+            margin-right: 3px;
+            font-weight: bold;
+        }
+        .chain-operation-group .arrow-symbol {
+            font-size: xxx-large; /* Nagyobb nyíl */
+            line-height: 0.8; /* Csökkenti a nyíl vertikális helyigényét */
+            margin-bottom: 35px;
+        }
+
+        .chain-item input[type="number"] {
+            width: 100%;
+            height: 100%;
+            padding: 8px;
+            font-size: 1em;
+            text-align: center;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.7); /* Enyhén áttetsző háttér alapból */
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .chain-equals {
+            font-size: clamp(1.4em, 4.5vw, 1.8em);
+            margin: 0 5px;
+            align-self: center; /* Hogy az egyenlőségjel is középen legyen */
+        }
+
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        button.task-button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em);
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+            min-height: 1.5em;
+            line-height: 1.4;
+        }
+
+        /* Alapértelmezett téma stílusok */
+        .theme-button, .range-button, .length-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
+        button.task-button { background-color: #007bff; color: white; }
+        .container { background-color: #ffffff; border: 1px solid #e5e7eb; }
+        .task { background-color: #f9fafb; border: 1px dashed #d1d5db; }
+        .feedback.correct { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .feedback.incorrect { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
+        h1, h2 { color: #007bff; }
+        .chain-calculation-container { background-color: #f0f8ff; }
+        .chain-item { color: #0056b3; }
+        .chain-item .number-display { background-color: #bee3f8; color: #004085; }
+        /* .chain-item .operation-number-display alapstílus (felülírják a témák) */
+        .chain-item .operation-number-display { background-color: #ced4da; color: #343a40; }
+        .chain-operation-group .op-sign { color: #0056b3; }
+        .chain-operation-group .arrow-symbol { color: #0056b3; }
+        .chain-item input[type="number"] { border-color: #90cdf4; background-color: #ffffff;}
+
+
+        /* --- THEME DEFINITIONS --- */
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
+        body.theme-candy .chain-item { color: #c71585; }
+        body.theme-candy .chain-item .number-display { background-color: #ffb6c1; color: #a52a2a; }
+        body.theme-candy .chain-item .operation-number-display.op-plus { background-color: #a8e6cf; color: #2c6b2f;} /* Világoszöld */
+        body.theme-candy .chain-item .operation-number-display.op-minus { background-color: #ff8a80; color: #b71c1c; } /* Világospiros */
+        body.theme-candy .chain-operation-group .op-sign { color: #db7093; }
+        body.theme-candy .chain-operation-group .arrow-symbol { color: #db7093; }
+        body.theme-candy .chain-item input[type="number"] { border-color: #ffc0cb; background-color: #fff5f8;}
+
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;}
+        body.theme-space .chain-item { color: #93c5fd; }
+        body.theme-space .chain-item .number-display { background-color: #374151; color: #e5e7eb; }
+        body.theme-space .chain-item .operation-number-display.op-plus { background-color: #34d399; color: #065f46;}
+        body.theme-space .chain-item .operation-number-display.op-minus { background-color: #f87171; color: #7f1d1d;}
+        body.theme-space .chain-operation-group .op-sign { color: #60a5fa; }
+        body.theme-space .chain-operation-group .arrow-symbol { color: #60a5fa; }
+        body.theme-space .chain-item input[type="number"] { border-color: #4b5563; background-color: #1f2937; color: #e5e7eb; }
+
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;}
+        body.theme-jungle .chain-item { color: #2e7d32; }
+        body.theme-jungle .chain-item .number-display { background-color: #a5d6a7; color: #1b5e20; }
+        body.theme-jungle .chain-item .operation-number-display.op-plus { background-color: #81c784; color: #1b5e20;}
+        body.theme-jungle .chain-item .operation-number-display.op-minus { background-color: #e57373; color: #c62828;}
+        body.theme-jungle .chain-operation-group .op-sign { color: #388e3c; }
+        body.theme-jungle .chain-operation-group .arrow-symbol { color: #388e3c; }
+        body.theme-jungle .chain-item input[type="number"] { border-color: #81c784; background-color: #f1f8e9; }
+
+        body.theme-magicforest .chain-item { color: #6a0dad; } body.theme-magicforest .chain-item .number-display { background-color: #dda0dd; color: #483d8b; } body.theme-magicforest .chain-item .operation-number-display.op-plus { background-color: #ce93d8; color: #4a148c;} body.theme-magicforest .chain-item .operation-number-display.op-minus { background-color: #f48fb1; color: #880e4f;} body.theme-magicforest .chain-operation-link .op-sign, body.theme-magicforest .chain-operation-link .arrow-symbol { color: #8a2be2; } body.theme-magicforest .chain-item input {border-color: #ba55d3; background-color: #f8f0ff;}
+        body.theme-tech .chain-item { color: #80d8ff; } body.theme-tech .chain-item .number-display { background-color: #455a64; color: #e0f7fa; } body.theme-tech .chain-item .operation-number-display.op-plus { background-color: #00bfa5; color: #004d40;} body.theme-tech .chain-item .operation-number-display.op-minus { background-color: #ff5252; color: #b71c1c;} body.theme-tech .chain-operation-link .op-sign, body.theme-tech .chain-operation-link .arrow-symbol { color: #00bcd4; } body.theme-tech .chain-item input {border-color: #546e7a; background-color: #37474f; color: #e0f7fa;}
+        body.theme-ocean .chain-item { color: #00695c; } body.theme-ocean .chain-item .number-display { background-color: #80deea; color: #004d40; } body.theme-ocean .chain-item .operation-number-display.op-plus { background-color: #4db6ac; color: #004d40;} body.theme-ocean .chain-item .operation-number-display.op-minus { background-color: #ff8a80; color: #c62828;} body.theme-ocean .chain-operation-link .op-sign, body.theme-ocean .chain-operation-link .arrow-symbol { color: #00897b; } body.theme-ocean .chain-item input {border-color: #4dd0e1; background-color: #e0f2f1;}
+        body.theme-sport .chain-item { color: #0d47a1; } body.theme-sport .chain-item .number-display { background-color: #90caf9; color: #023047; } body.theme-sport .chain-item .operation-number-display.op-plus { background-color: #64b5f6; color: #01579b;} body.theme-sport .chain-item .operation-number-display.op-minus { background-color: #ef5350; color: #b71c1c;} body.theme-sport .chain-operation-link .op-sign, body.theme-sport .chain-operation-link .arrow-symbol { color: #1565c0; } body.theme-sport .chain-item input {border-color: #64b5f6; background-color: #e3f2fd;}
+        body.theme-flowergarden .chain-item { color: #8b4513; } body.theme-flowergarden .chain-item .number-display { background-color: #ffdab9; color: #5d4037; } body.theme-flowergarden .chain-item .operation-number-display.op-plus { background-color: #ffcc80; color: #e65100;} body.theme-flowergarden .chain-item .operation-number-display.op-minus { background-color: #ffab91; color: #d84315;} body.theme-flowergarden .chain-operation-link .op-sign, body.theme-flowergarden .chain-operation-link .arrow-symbol { color: #ff8c00; } body.theme-flowergarden .chain-item input {border-color: #ffe4b5; background-color: #fffaf0;}
+        body.theme-adventure .chain-item { color: #4e342e; } body.theme-adventure .chain-item .number-display { background-color: #a1887f; color: #f5f5dc; } body.theme-adventure .chain-item .operation-number-display.op-plus { background-color: #8d6e63; color: #3e2723;} body.theme-adventure .chain-item .operation-number-display.op-minus { background-color: #bcaaa4; color: #5d4037;} body.theme-adventure .chain-operation-link .op-sign, body.theme-adventure .chain-operation-link .arrow-symbol { color: #5d4037; } body.theme-adventure .chain-item input {border-color: #8d6e63; background-color: #efebe9;}
+        body.theme-sky .chain-item { color: #1e90ff; } body.theme-sky .chain-item .number-display { background-color: #b0e0e6; color: #005a9c; } body.theme-sky .chain-item .operation-number-display.op-plus { background-color: #81d4fa; color: #01579b;} body.theme-sky .chain-item .operation-number-display.op-minus { background-color: #90a4ae; color: #263238;} body.theme-sky .chain-operation-link .op-sign, body.theme-sky .chain-operation-link .arrow-symbol { color: #00bfff; } body.theme-sky .chain-item input {border-color: #add8e6; background-color: #f0f8ff;}
+
+    </style>
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="settings-row">
+            <div class="settings-group">
+                <p class="control-label">Téma választó:</p>
+                <div id="themeSelector" class="theme-selector">
+                    <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                    <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                    <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                    <button class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                    <button class="theme-button" data-theme="theme-sky">Égbolt</button>
+                    <button class="theme-button" data-theme="theme-space">Űr</button>
+                    <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                    <button class="theme-button" data-theme="theme-tech">Techno</button>
+                    <button class="theme-button" data-theme="theme-sport">Sport</button>
+                    <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+                </div>
+            </div>
+            <div class="settings-group">
+                <p class="control-label">Számkör:</p>
+                <div id="rangeSelector" class="range-selector">
+                    <button class="range-button" data-range="5">5-ös</button>
+                    <button class="range-button active" data-range="10">10-es</button>
+                    <button class="range-button" data-range="20">20-as</button>
+                </div>
+            </div>
+            <div class="settings-group">
+                <p class="control-label">Lánc hossza (műveletek):</p>
+                <div id="lengthSelector" class="length-selector">
+                    <button class="length-button" data-length="2">2</button>
+                    <button class="length-button active" data-length="3">3</button>
+                    <button class="length-button" data-length="4">4</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>1. Osztály - Matematika Feladatok</h1>
+        <h2>Téma: Láncszámolás</h2>
+
+        <div id="chainTaskContainer" class="task">
+            <div class="task-header">
+                <h3>Kövesd a nyilakat és számolj!</h3>
+                <button id="newTaskButton" class="task-button new-task-button">Új feladat</button>
+            </div>
+            <p id="taskInstructions" class="instructions">Mennyi lesz a lánc végén az eredmény?</p>
+            <div id="chainCalculationDisplay" class="chain-calculation-container">
+                </div>
+            <button id="checkButton" class="task-button">Ellenőrzés</button>
+            <p id="feedbackArea" class="feedback">&nbsp;</p>
+        </div>
+    </div>
+
+    <script>
+        const bodyEl = document.body;
+        const themeSelector = document.getElementById('themeSelector');
+        const rangeSelector = document.getElementById('rangeSelector');
+        const lengthSelector = document.getElementById('lengthSelector');
+        const newTaskButton = document.getElementById('newTaskButton');
+        const checkButton = document.getElementById('checkButton');
+        const chainCalculationDisplay = document.getElementById('chainCalculationDisplay');
+        const feedbackArea = document.getElementById('feedbackArea');
+
+        let currentSettings = {
+            theme: 'theme-candy',
+            numberRange: 10,
+            chainLength: 3
+        };
+
+        let currentTask = {
+            startNumber: 0,
+            operations: [],
+            userInputs: []
+        };
+
+        const operatorColors = {
+            '+': { signColor: '#388E3C', bgBoxColor: '#C8E6C9' }, // Világoszöld doboz, sötétzöld jel
+            '-': { signColor: '#D32F2F', bgBoxColor: '#FFCDD2' }  // Világospiros doboz, sötétpiros jel
+        };
+        const numberDisplayColors = ["#FFD700", "#87CEEB", "#90EE90", "#FFA07A", "#FFC0CB", "#DDA0DD", "#FFB347", "#B28DFF"];
+
+        function applyTheme(themeClass) {
+            bodyEl.className = '';
+            bodyEl.classList.add(themeClass);
+            themeSelector.querySelectorAll('.theme-button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeClass);
+            });
+            rangeSelector.querySelectorAll('.range-button').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.range) === currentSettings.numberRange);
+            });
+            lengthSelector.querySelectorAll('.length-button').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.length) === currentSettings.chainLength);
+            });
+        }
+
+        themeSelector.addEventListener('click', (e) => { if (e.target.classList.contains('theme-button')) { currentSettings.theme = e.target.dataset.theme; applyTheme(currentSettings.theme); } });
+        rangeSelector.addEventListener('click', (e) => { if (e.target.classList.contains('range-button')) { currentSettings.numberRange = parseInt(e.target.dataset.range); applyTheme(currentSettings.theme); generateNewChainTask(); } });
+        lengthSelector.addEventListener('click', (e) => { if (e.target.classList.contains('length-button')) { currentSettings.chainLength = parseInt(e.target.dataset.length); applyTheme(currentSettings.theme); generateNewChainTask(); } });
+        newTaskButton.addEventListener('click', generateNewChainTask);
+        checkButton.addEventListener('click', checkChainTask);
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateNewChainTask() {
+            feedbackArea.textContent = '\u00A0';
+            feedbackArea.className = 'feedback';
+            currentTask.operations = [];
+            currentTask.userInputs = [];
+            currentTask.startNumber = getRandomInt(0, Math.floor(currentSettings.numberRange * 0.75));
+            if (currentTask.startNumber > currentSettings.numberRange) currentTask.startNumber = currentSettings.numberRange;
+            let currentResult = currentTask.startNumber;
+
+            for (let i = 0; i < currentSettings.chainLength; i++) {
+                let operator, number, nextResult, attempts = 0;
+                do {
+                    operator = Math.random() < 0.5 ? '+' : '-';
+                    if (operator === '+') {
+                        let maxAdd = currentSettings.numberRange - currentResult;
+                        if (maxAdd < 1 && currentResult < currentSettings.numberRange) maxAdd = 1; else if (maxAdd < 1) maxAdd = 0;
+                        number = getRandomInt((maxAdd > 0 ? 1 : 0), maxAdd);
+                        nextResult = currentResult + number;
+                    } else {
+                        let maxSubtract = currentResult;
+                        if (maxSubtract < 1 && currentResult > 0) maxSubtract = 1; else if (maxSubtract < 1) maxSubtract = 0;
+                        number = getRandomInt((maxSubtract > 0 ? 1 : 0), maxSubtract);
+                        nextResult = currentResult - number;
+                    }
+                    attempts++;
+                } while ((nextResult < 0 || nextResult > currentSettings.numberRange) && attempts < 50);
+                if (attempts >= 50) {
+                    if(operator === '+') number = Math.max(0, currentSettings.numberRange - currentResult); else number = currentResult;
+                    nextResult = (operator === '+') ? (currentResult + number) : (currentResult - number);
+                    nextResult = Math.max(0, Math.min(nextResult, currentSettings.numberRange));
+                }
+                currentTask.operations.push({ operator, number, intermediateResult: nextResult });
+                currentResult = nextResult;
+            }
+            renderChain();
+            if (currentTask.userInputs.length > 0) currentTask.userInputs[0].focus();
+        }
+
+        function renderChain() {
+            chainCalculationDisplay.innerHTML = '';
+            currentTask.userInputs = [];
+
+            const startNumElContainer = document.createElement('div');
+            startNumElContainer.classList.add('chain-item');
+            const startNumEl = document.createElement('div');
+            startNumEl.classList.add('number-display');
+            startNumEl.textContent = currentTask.startNumber;
+            startNumEl.style.backgroundColor = numberDisplayColors[0 % numberDisplayColors.length];
+            startNumElContainer.appendChild(startNumEl);
+            chainCalculationDisplay.appendChild(startNumElContainer);
+
+            currentTask.operations.forEach((op, index) => {
+                const operationGroup = document.createElement('div');
+                operationGroup.classList.add('chain-operation-group');
+
+                const opDisplayContainer = document.createElement('div');
+                opDisplayContainer.classList.add('op-display-container');
+
+                const opSign = document.createElement('span');
+                opSign.classList.add('op-sign');
+                opSign.textContent = op.operator;
+                opSign.style.color = operatorColors[op.operator].signColor;
+                opDisplayContainer.appendChild(opSign);
+
+                const opNumberEl = document.createElement('div');
+                opNumberEl.classList.add('chain-item'); // A művelet számának konténere
+                const opNumberDisplay = document.createElement('div');
+                opNumberDisplay.classList.add('operation-number-display');
+                opNumberDisplay.classList.add(op.operator === '+' ? 'op-plus' : 'op-minus'); // Osztály a specifikusabb tematikus színezéshez
+                opNumberDisplay.textContent = op.number;
+                 // Téma-specifikus háttérszín és szövegszín a CSS-ben lesz kezelve az .op-plus és .op-minus osztályok alapján
+                opNumberEl.appendChild(opNumberDisplay);
+                opDisplayContainer.appendChild(opNumberEl);
+
+                operationGroup.appendChild(opDisplayContainer);
+
+                const arrowSymbol = document.createElement('span');
+                arrowSymbol.classList.add('arrow-symbol');
+                arrowSymbol.innerHTML = '&rarr;';
+                arrowSymbol.style.color = operatorColors[op.operator].signColor;
+                operationGroup.appendChild(arrowSymbol);
+                chainCalculationDisplay.appendChild(operationGroup);
+
+                const inputEl = document.createElement('input');
+                inputEl.type = 'number';
+                inputEl.min = 0;
+                inputEl.max = currentSettings.numberRange;
+                inputEl.dataset.stepIndex = index;
+                inputEl.maxLength = String(currentSettings.numberRange).length;
+
+                inputEl.addEventListener('input', function() {
+                    const currentStepIndex = parseInt(this.dataset.stepIndex);
+                    const expectedValueStr = String(currentTask.operations[currentStepIndex].intermediateResult);
+                    if (this.value.length >= expectedValueStr.length) {
+                        if (currentStepIndex < currentTask.userInputs.length - 1) {
+                            currentTask.userInputs[currentStepIndex + 1].focus();
+                        } else {
+                            document.getElementById('checkButton').focus();
+                        }
+                    }
+                });
+                const inputWrapper = document.createElement('div');
+                inputWrapper.classList.add('chain-item');
+                inputWrapper.appendChild(inputEl);
+                chainCalculationDisplay.appendChild(inputWrapper);
+                currentTask.userInputs.push(inputEl);
+            });
+        }
+
+        function checkChainTask() {
+            let allCorrect = true;
+            let allFilled = true;
+            if (currentTask.userInputs.length === 0) { feedbackArea.textContent = "Nincs feladat generálva."; feedbackArea.className = 'feedback incorrect'; return; }
+            currentTask.userInputs.forEach((inputEl, index) => {
+                const userAnswerStr = inputEl.value.trim();
+                if (userAnswerStr === "") { allFilled = false; inputEl.style.borderColor = 'red'; }
+                else {
+                    const userAnswer = parseInt(userAnswerStr);
+                    const correctAnswer = currentTask.operations[index].intermediateResult;
+                    if (isNaN(userAnswer) || userAnswer !== correctAnswer) { allCorrect = false; inputEl.style.borderColor = 'red'; }
+                    else { inputEl.style.borderColor = 'green'; }
+                }
+            });
+            if (!allFilled) { feedbackArea.textContent = 'Kérlek, tölts ki minden mezőt!'; feedbackArea.className = 'feedback incorrect'; }
+            else if (allCorrect) { feedbackArea.textContent = 'Minden lépés helyes! Ügyes vagy! 🎉'; feedbackArea.className = 'feedback correct'; }
+            else { feedbackArea.textContent = 'Van néhány hiba. Nézd át a pirossal jelölt részeket! 🤔'; feedbackArea.className = 'feedback incorrect'; }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTheme(currentSettings.theme);
+            generateNewChainTask();
+        });
+    </script>
+</body>
+</html>
