@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1. Osztály - Számok Szomszédai</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .theme-selector, .range-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+       
+        .theme-button, .range-button {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-button:hover, .range-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .theme-button.active, .range-button.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000); 
+            transform: translateY(1px);
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px; 
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px; 
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em); 
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em); 
+            margin-bottom: 20px;
+        }
+
+        .number-list-section-container {
+            background-color: rgba(0,0,0,0.02);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            transition: background-color 0.5s ease;
+            display: grid; /* CSS Grid a címkék és számok elrendezéséhez */
+            grid-template-columns: auto 1fr; /* Címke szélessége auto, számok kitöltik a maradék helyet */
+            row-gap: 8px; /* Térköz a páros és páratlan sorok között */
+            column-gap: 10px; /* Térköz a címke és a számok között */
+            align-items: start; /* Igazítás a sorok tetejéhez */
+        }
+        
+        .list-label {
+            font-size: clamp(1.05em, 3.2vw, 1.25em);
+            font-weight: bold;
+            text-align: right; 
+            white-space: nowrap;
+            transition: color 0.5s ease;
+            padding-top: 5px; /* Kis igazítás, hogy a dobozokkal egy vonalban legyen a teteje */
+        }
+        .list-label.odd-label { grid-row: 1; grid-column: 1; }
+        .list-label.even-label { grid-row: 2; grid-column: 1; }
+
+        .number-list-items {
+            display: flex; 
+            flex-wrap: wrap;
+            gap: 6px; 
+        }
+        #oddNumbersList { grid-row: 1; grid-column: 2; }
+        #evenNumbersList { grid-row: 2; grid-column: 2; padding-left: 25px; /* Eltolás a páros sornak a kép alapján */ }
+
+
+        .number-list-item {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 28px; 
+            height: 28px;
+            padding: 0 6px;
+            border: 1.5px solid; 
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+            margin-right: 4px; 
+            margin-bottom: 4px; 
+        }
+
+        .task {
+            margin-bottom: 30px; 
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0; 
+            font-size: clamp(1.1em, 3.5vw, 1.3em); 
+            transition: color 0.5s ease;
+        }
+        .new-task-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px; 
+        }
+
+        .neighbor-tasks-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap; 
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .neighbor-task-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            gap: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            min-width: 200px;
+            flex: 1; 
+            max-width: 280px;
+            transition: background-color 0.5s ease;
+        }
+        .neighbor-task-column h4 {
+            font-size: clamp(1.05em, 3.2vw, 1.2em);
+            font-weight: bold;
+            margin-bottom: 8px;
+            transition: color 0.5s ease;
+        }
+        .neighbor-problem {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: clamp(1.1em, 3.5vw, 1.3em);
+            font-weight: bold;
+            width: 100%;
+            transition: color 0.5s ease;
+        }
+        .neighbor-problem input[type="number"] {
+            width: 45px; 
+            padding: 7px;
+            font-size: 0.95em;
+            text-align: center;
+            border-radius: 5px;
+            border: 1.5px solid; 
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            transition: border-color 0.5s ease, background-color 0.5s ease;
+        }
+        .neighbor-problem .target-number-display {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 38px;
+            height: 38px;
+            font-weight: bold;
+            border-radius: 5px;
+            /* color and background-color from theme */
+            margin: 0 3px;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        .neighbor-problem .relation-symbol {
+            margin: 0 2px;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        button.task-button { 
+            padding: 10px 20px; 
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em); 
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+        .feedback {
+            margin-top: 15px; 
+            font-weight: bold;
+            padding: 10px; 
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em); 
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+            min-height: 1.5em;
+        }
+        
+        /* --- THEME DEFINITIONS --- */
+        .theme-button, .range-button {
+            background-color: #e0e0e0;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        
+        /* 1. Candy Theme (Girlish) */
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
+        body.theme-candy .control-label { color: #c71585; }
+        body.theme-candy .theme-button.active, body.theme-candy .range-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
+        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
+        body.theme-candy .number-list-section-container { background-color: rgba(255, 228, 225, 0.7); }
+        body.theme-candy .list-label { color: #ff69b4; }
+        body.theme-candy .number-list-item { border-color: #ffb6c1; background-color: #fffafa; color: #c71585; }
+        body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
+        body.theme-candy .neighbor-task-column { background-color: rgba(255, 240, 245, 0.8); }
+        body.theme-candy .neighbor-task-column h4 { color: #ff69b4; }
+        body.theme-candy .neighbor-problem { color: #9932cc; }
+        body.theme-candy .neighbor-problem .target-number-display { background-color: #ffd1dc; color: #c71585;}
+        body.theme-candy .neighbor-problem input[type="number"] { border-color: #ffb6c1; background-color: #fffafa; color: #9932cc;}
+        body.theme-candy button.task-button { background-color: #ff69b4; }
+        body.theme-candy button.task-button:hover { background-color: #ff1493; }
+        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border: 1px solid #90ee90; }
+        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border: 1px solid #ffb6c1; }
+
+        /* 2. Space Theme (Boyish) */
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;}
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .theme-button.active, body.theme-space .range-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .number-list-section-container { background-color: rgba(30, 41, 59, 0.7); }
+        body.theme-space .list-label { color: #93c5fd; }
+        body.theme-space .number-list-item { border-color: #475569; background-color: #1e293b; color: #93c5fd; }
+        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
+        body.theme-space .neighbor-task-column { background-color: rgba(51, 65, 85, 0.8); }
+        body.theme-space .neighbor-task-column h4 { color: #93c5fd; }
+        body.theme-space .neighbor-problem { color: #e2e8f0; }
+        body.theme-space .neighbor-problem .target-number-display { background-color: #3b82f6; color: #eff6ff;}
+        body.theme-space .neighbor-problem input[type="number"] { border: 2px solid #475569; background-color: #1e293b; color: #e2e8f0;}
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space button.task-button:hover { background-color: #1d4ed8; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+
+        /* 3. Jungle Theme (Boyish) */
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;}
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .number-list-section-container { background-color: rgba(232, 245, 233, 0.7); }
+        body.theme-jungle .list-label { color: #558b2f; }
+        body.theme-jungle .number-list-item { border-color: #81c784; background-color: #f1f8e9; color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
+        body.theme-jungle .neighbor-task-column { background-color: rgba(220, 237, 200, 0.8); }
+        body.theme-jungle .neighbor-task-column h4 { color: #558b2f; }
+        body.theme-jungle .neighbor-problem { color: #1b5e20; }
+        body.theme-jungle .neighbor-problem .target-number-display { background-color: #aed581; color: #33691e;}
+        body.theme-jungle .neighbor-problem input[type="number"] { border: 2px solid #81c784; background-color: #f1f8e9; color: #1b5e20;}
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle button.task-button:hover { background-color: #689f38; }
+        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        
+        /* 4. Magic Forest Theme (Girlish) */
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;}
+        body.theme-magicforest .control-label { color: #9932cc; }
+        body.theme-magicforest .theme-button.active, body.theme-magicforest .range-button.active { background-color: #9370db; color: #f8f0ff; }
+        body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
+        body.theme-magicforest h1, body.theme-magicforest h2 { color: #8a2be2; }
+        body.theme-magicforest .number-list-section-container { background-color: rgba(216, 191, 216, 0.7); }
+        body.theme-magicforest .list-label { color: #9932cc; }
+        body.theme-magicforest .number-list-item { border-color: #ba55d3; background-color: #f5f5f5; color: #6a0dad; }
+        body.theme-magicforest .task { background-color: #f5f5f5; border: 2px dashed #ba55d3; }
+        body.theme-magicforest .neighbor-task-column { background-color: rgba(245, 245, 245, 0.8); }
+        body.theme-magicforest .neighbor-task-column h4 { color: #9932cc; }
+        body.theme-magicforest .neighbor-problem { color: #483d8b; }
+        body.theme-magicforest .neighbor-problem .target-number-display { background-color: #dda0dd; color: #4b0082;}
+        body.theme-magicforest .neighbor-problem input[type="number"] { border: 2px solid #ba55d3; background-color: #f8f0ff; color: #483d8b;}
+        body.theme-magicforest button.task-button { background-color: #9370db; }
+        body.theme-magicforest .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-magicforest .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+
+        /* 5. Robo/Tech Theme (Boyish) */
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;}
+        body.theme-tech .control-label { color: #26c6da; }
+        body.theme-tech .theme-button.active, body.theme-tech .range-button.active { background-color: #00838f; color: #e0f7fa; }
+        body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
+        body.theme-tech h1, body.theme-tech h2 { color: #00acc1; }
+        body.theme-tech .number-list-section-container { background-color: rgba(55, 71, 79, 0.7); }
+        body.theme-tech .list-label { color: #26c6da; }
+        body.theme-tech .number-list-item { border-color: #78909c; background-color: #455a64; color: #b0bec5; }
+        body.theme-tech .task { background-color: #455a64; border: 2px dashed #78909c; }
+        body.theme-tech .neighbor-task-column { background-color: rgba(69, 90, 100, 0.8); }
+        body.theme-tech .neighbor-task-column h4 { color: #26c6da; }
+        body.theme-tech .neighbor-problem { color: #eceff1; }
+        body.theme-tech .neighbor-problem .target-number-display { background-color: #00bcd4; color: #1a202c;}
+        body.theme-tech .neighbor-problem input[type="number"] { border: 2px solid #78909c; background-color: #37474f; color: #eceff1; }
+        body.theme-tech button.task-button { background-color: #0097a7; }
+        body.theme-tech .feedback.correct { color: #388e3c; background-color: #1b5e20; border: 1px solid #4caf50; }
+        body.theme-tech .feedback.incorrect { color: #d32f2f; background-color: #4e0000; border: 1px solid #f44336; }
+        
+        /* 6. Ocean Theme (Girlish) */
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;}
+        body.theme-ocean .control-label { color: #00acc1; }
+        body.theme-ocean .theme-button.active, body.theme-ocean .range-button.active { background-color: #4db6ac; color: #e0f2f1; }
+        body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
+        body.theme-ocean h1, body.theme-ocean h2 { color: #00897b; }
+        body.theme-ocean .number-list-section-container { background-color: rgba(178, 235, 242, 0.7); }
+        body.theme-ocean .list-label { color: #00acc1; }
+        body.theme-ocean .number-list-item { border-color: #80deea; background-color: #e0f7fa; color: #00796b; }
+        body.theme-ocean .task { background-color: #e0f7fa; border: 2px dashed #80deea; }
+        body.theme-ocean .neighbor-task-column { background-color: rgba(224, 247, 250, 0.8); }
+        body.theme-ocean .neighbor-task-column h4 { color: #00acc1; }
+        body.theme-ocean .neighbor-problem { color: #004d40; }
+        body.theme-ocean .neighbor-problem .target-number-display { background-color: #4dd0e1; color: #004d40;}
+        body.theme-ocean .neighbor-problem input[type="number"] { border: 2px solid #80deea; background-color: #e0f2f1; color: #004d40;}
+        body.theme-ocean button.task-button { background-color: #26a69a; }
+        body.theme-ocean .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-ocean .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+
+        /* 7. Sport Theme (Boyish) */
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;}
+        body.theme-sport .control-label { color: #1976d2; }
+        body.theme-sport .theme-button.active, body.theme-sport .range-button.active { background-color: #1976d2; color: #e3f2fd; }
+        body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
+        body.theme-sport h1, body.theme-sport h2 { color: #d32f2f; }
+        body.theme-sport .number-list-section-container { background-color: rgba(187, 222, 251, 0.7); }
+        body.theme-sport .list-label { color: #1976d2; }
+        body.theme-sport .number-list-item { border-color: #42a5f5; background-color: #e3f2fd; color: #0d47a1; }
+        body.theme-sport .task { background-color: #e3f2fd; border: 2px dashed #42a5f5; }
+        body.theme-sport .neighbor-task-column { background-color: rgba(227, 242, 253, 0.8); }
+        body.theme-sport .neighbor-task-column h4 { color: #1976d2; }
+        body.theme-sport .neighbor-problem { color: #01579b; }
+        body.theme-sport .neighbor-problem .target-number-display { background-color: #64b5f6; color: #01579b;}
+        body.theme-sport .neighbor-problem input[type="number"] { border: 2px solid #42a5f5; background-color: #e3f2fd; color: #01579b;}
+        body.theme-sport button.task-button { background-color: #2196f3; }
+        body.theme-sport .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sport .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+
+        /* 8. Flower Garden Theme (Girlish) */
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;}
+        body.theme-flowergarden .control-label { color: #ff7f50; }
+        body.theme-flowergarden .theme-button.active, body.theme-flowergarden .range-button.active { background-color: #ffdab9; color: #8b4513; }
+        body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
+        body.theme-flowergarden h1, body.theme-flowergarden h2 { color: #ff6347; }
+        body.theme-flowergarden .number-list-section-container { background-color: rgba(255, 245, 238, 0.7); }
+        body.theme-flowergarden .list-label { color: #ff7f50; }
+        body.theme-flowergarden .number-list-item { border-color: #ffdab9; background-color: #fffaf0; color: #a0522d; }
+        body.theme-flowergarden .task { background-color: #fffafa; border: 2px dashed #ffe4b5; }
+        body.theme-flowergarden .neighbor-task-column { background-color: rgba(255, 250, 240, 0.8); }
+        body.theme-flowergarden .neighbor-task-column h4 { color: #ff7f50; }
+        body.theme-flowergarden .neighbor-problem { color: #8b4513; }
+        body.theme-flowergarden .neighbor-problem .target-number-display { background-color: #ffdab9; color: #8b4513;}
+        body.theme-flowergarden .neighbor-problem input[type="number"] { border: 2px solid #ffdab9; background-color: #fffaf0; color: #a0522d;}
+        body.theme-flowergarden button.task-button { background-color: #ffa07a; }
+        body.theme-flowergarden .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-flowergarden .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+
+        /* 9. Adventure Theme (Boyish) */
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;}
+        body.theme-adventure .control-label { color: #6d4c41; }
+        body.theme-adventure .theme-button.active, body.theme-adventure .range-button.active { background-color: #a1887f; color: #efebe9; }
+        body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
+        body.theme-adventure h1, body.theme-adventure h2 { color: #bf360c; }
+        body.theme-adventure .number-list-section-container { background-color: rgba(239, 235, 233, 0.7); }
+        body.theme-adventure .list-label { color: #6d4c41; }
+        body.theme-adventure .number-list-item { border-color: #8d6e63; background-color: #d7ccc8; color: #4e342e; }
+        body.theme-adventure .task { background-color: #d7ccc8; border: 2px dashed #8d6e63; }
+        body.theme-adventure .neighbor-task-column { background-color: rgba(215, 204, 200, 0.8); }
+        body.theme-adventure .neighbor-task-column h4 { color: #6d4c41; }
+        body.theme-adventure .neighbor-problem { color: #3e2723; }
+        body.theme-adventure .neighbor-problem .target-number-display { background-color: #a1887f; color: #3e2723;}
+        body.theme-adventure .neighbor-problem input[type="number"] { border: 2px solid #8d6e63; background-color: #efebe9; color: #3e2723;}
+        body.theme-adventure button.task-button { background-color: #795548; }
+        body.theme-adventure .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-adventure .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+
+        /* 10. Sky Theme (Girlish) */
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;}
+        body.theme-sky .control-label { color: #00bfff; }
+        body.theme-sky .theme-button.active, body.theme-sky .range-button.active { background-color: #add8e6; color: #005a9c; }
+        body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
+        body.theme-sky h1, body.theme-sky h2 { color: #1e90ff; }
+        body.theme-sky .number-list-section-container { background-color: rgba(230, 247, 255, 0.7); }
+        body.theme-sky .list-label { color: #00bfff; }
+        body.theme-sky .number-list-item { border-color: #b0e0e6; background-color: #f5faff; color: #1e90ff; }
+        body.theme-sky .task { background-color: #f5faff; border: 2px dashed #add8e6; }
+        body.theme-sky .neighbor-task-column { background-color: rgba(245, 250, 255, 0.8); }
+        body.theme-sky .neighbor-task-column h4 { color: #00bfff; }
+        body.theme-sky .neighbor-problem { color: #4682b4; }
+        body.theme-sky .neighbor-problem .target-number-display { background-color: #b0e0e6; color: #005a9c;}
+        body.theme-sky .neighbor-problem input[type="number"] { border: 2px solid #b0e0e6; background-color: #f5faff; color: #4682b4;}
+        body.theme-sky button.task-button { background-color: #87cefa; }
+        body.theme-sky .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-sky .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+
+    </style>
+</head>
+<body class="theme-candy"> 
+    <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                <button class="theme-button" data-theme="theme-sky">Égbolt</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+        <div>
+            <p class="control-label">Számkör választó (maximum érték):</p>
+            <div class="range-selector">
+                <button class="range-button active" data-range="20">20</button>
+                <button class="range-button" data-range="30">30</button> 
+                <button class="range-button" data-range="50">50</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>1. Osztály - Matematika Feladatok</h1>
+        <h2>Téma: Számok Szomszédai</h2>
+
+        <div class="number-list-section-container">
+            <span class="list-label odd-label">Páratlan számok:</span>
+            <div id="oddNumbersList" class="number-list-items"></div>
+            <span class="list-label even-label">Páros számok:</span>
+            <div id="evenNumbersList" class="number-list-items"></div>
+        </div>
+
+        <div class="task">
+            <div class="task-header">
+                <h3>1. Feladat: Keresd a szomszédokat!</h3>
+                <button class="task-button new-task-button" onclick="generateAllTasks()">Új feladatok</button>
+            </div>
+            
+            <div id="neighborTasksContainer" class="neighbor-tasks-container">
+                <div class="neighbor-task-column" id="directNeighborsColumn">
+                    <h4>Egyes szomszédok</h4>
+                    </div>
+                <div class="neighbor-task-column" id="evenNeighborsColumn">
+                    <h4>Páros szomszédok</h4>
+                    </div>
+                <div class="neighbor-task-column" id="oddNeighborsColumn">
+                    <h4>Páratlan szomszédok</h4>
+                    </div>
+            </div>
+            <button class="task-button" onclick="checkAllAnswers()">Ellenőrzés</button>
+            <p id="globalFeedback" class="feedback"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentNumberRangeMax = 20; 
+        const NUM_EXAMPLES_PER_TYPE = 5;
+        let currentTheme = 'theme-candy';
+
+        let currentSettings = { // Globálisan elérhető currentSettings
+            theme: 'theme-candy',
+            numberRangeMax: 20
+        };
+
+        let tasks = {
+            direct: [],
+            even: [],
+            odd: []
+        };
+
+        const bodyEl = document.body;
+        const themeButtons = document.querySelectorAll('.theme-button');
+        const rangeButtons = document.querySelectorAll('.range-button');
+        const oddNumbersListEl = document.getElementById('oddNumbersList');
+        const evenNumbersListEl = document.getElementById('evenNumbersList');
+        const directNeighborsColumnEl = document.getElementById('directNeighborsColumn');
+        const evenNeighborsColumnEl = document.getElementById('evenNeighborsColumn');
+        const oddNeighborsColumnEl = document.getElementById('oddNeighborsColumn');
+        const globalFeedbackEl = document.getElementById('globalFeedback');
+
+        function applyTheme(themeClass) {
+            bodyEl.className = ''; 
+            bodyEl.classList.add(themeClass); 
+            currentTheme = themeClass;
+            currentSettings.theme = themeClass;
+
+            themeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeClass);
+            });
+            rangeButtons.forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRangeMax);
+            });
+        }
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                applyTheme(button.dataset.theme);
+            });
+        });
+
+        rangeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentNumberRangeMax = parseInt(button.dataset.range);
+                currentSettings.numberRangeMax = currentNumberRangeMax;
+                applyTheme(currentTheme); 
+                updateOddEvenDisplay();
+                generateAllTasks();
+            });
+        });
+        
+        function updateOddEvenDisplay() {
+            oddNumbersListEl.innerHTML = '';
+            evenNumbersListEl.innerHTML = '';
+            for (let i = 1; i <= currentNumberRangeMax; i++) {
+                const item = document.createElement('span');
+                item.classList.add('number-list-item');
+                item.textContent = i;
+                if (i % 2 === 0) {
+                    evenNumbersListEl.appendChild(item);
+                } else {
+                    oddNumbersListEl.appendChild(item);
+                }
+            }
+        }
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            if (min > max) return min;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateProblemHTML(idPrefix, targetNumber) {
+            const problemDiv = document.createElement('div');
+            problemDiv.classList.add('neighbor-problem');
+            problemDiv.innerHTML = `
+                <input type="number" id="${idPrefix}_before" min="-10" max="${currentNumberRangeMax + 10}">
+                <span class="relation-symbol">&lt;</span>
+                <span class="target-number-display" id="${idPrefix}_target">${targetNumber}</span>
+                <span class="relation-symbol">&lt;</span>
+                <input type="number" id="${idPrefix}_after" min="-10" max="${currentNumberRangeMax + 10}">
+            `;
+            return problemDiv;
+        }
+        
+        function generateTasksForType(type, columnEl) {
+            tasks[type] = [];
+            const problemElements = columnEl.querySelectorAll('.neighbor-problem');
+            problemElements.forEach(el => el.remove());
+
+            const usedTargetNumbers = new Set();
+
+            for (let i = 0; i < NUM_EXAMPLES_PER_TYPE; i++) {
+                let targetNumber, smallerNeighbor, largerNeighbor;
+                let attempts = 0;
+                const maxAttempts = 50; // Több próbálkozás az egyedi számokért
+
+                do {
+                    targetNumber = getRandomInt(0, currentNumberRangeMax); 
+                    attempts++;
+                } while (usedTargetNumbers.has(targetNumber) && attempts < maxAttempts);
+                
+                if (attempts >= maxAttempts && usedTargetNumbers.has(targetNumber)) {
+                    let fallbackTarget = -1;
+                    for(let tn_fallback = 0; tn_fallback <= currentNumberRangeMax; tn_fallback++){
+                        if(!usedTargetNumbers.has(tn_fallback)){
+                            fallbackTarget = tn_fallback;
+                            break;
+                        }
+                    }
+                    if (fallbackTarget !== -1) targetNumber = fallbackTarget;
+                    else {
+                        if (tasks[type].length >= NUM_EXAMPLES_PER_TYPE) continue; 
+                        targetNumber = getRandomInt(0, currentNumberRangeMax); 
+                    }
+                }
+                usedTargetNumbers.add(targetNumber);
+
+                if (type === 'direct') {
+                    smallerNeighbor = targetNumber - 1;
+                    largerNeighbor = targetNumber + 1;
+                } else if (type === 'even') {
+                    smallerNeighbor = (targetNumber % 2 === 0) ? targetNumber - 2 : targetNumber - 1;
+                    if (targetNumber === 1) smallerNeighbor = 0;
+                    else if (targetNumber === 0) smallerNeighbor = -2; 
+                    else if (smallerNeighbor < 0 && targetNumber > 0 ) smallerNeighbor = 0; 
+
+                    largerNeighbor = (targetNumber % 2 === 0) ? targetNumber + 2 : targetNumber + 1;
+                    if (targetNumber === currentNumberRangeMax && targetNumber % 2 !== 0) largerNeighbor = targetNumber + 1; // pl. max 19, target 19, next even 20
+                    else if (targetNumber === currentNumberRangeMax -1 && (currentNumberRangeMax -1) % 2 !== 0) largerNeighbor = currentNumberRangeMax;
+
+
+                } else { // odd
+                    smallerNeighbor = (targetNumber % 2 !== 0) ? targetNumber - 2 : targetNumber - 1;
+                    if (targetNumber === 0) smallerNeighbor = -1;
+                    else if (targetNumber === 2) smallerNeighbor = 1; 
+                    else if (smallerNeighbor < -1 && targetNumber === 1) smallerNeighbor = -1; 
+                    else if (smallerNeighbor < 1 && targetNumber > 0) smallerNeighbor = (targetNumber === 1 ? -1 : 1);
+
+
+                    largerNeighbor = (targetNumber % 2 !== 0) ? targetNumber + 2 : targetNumber + 1;
+                     if (targetNumber === currentNumberRangeMax && targetNumber % 2 === 0) largerNeighbor = targetNumber + 1; // pl. max 20, target 20, next odd 21
+                }
+
+
+                tasks[type].push({
+                    idPrefix: `${type}_task_${i}`,
+                    target: targetNumber,
+                    correctBefore: smallerNeighbor,
+                    correctAfter: largerNeighbor
+                });
+                const problemEl = generateProblemHTML(`${type}_task_${i}`, targetNumber);
+                columnEl.appendChild(problemEl);
+            }
+        }
+
+        function generateAllTasks() {
+            globalFeedbackEl.textContent = '';
+            globalFeedbackEl.className = 'feedback';
+            generateTasksForType('direct', directNeighborsColumnEl);
+            generateTasksForType('even', evenNeighborsColumnEl);
+            generateTasksForType('odd', oddNeighborsColumnEl);
+        }
+
+        function checkAllAnswers() {
+            let allCorrectOverall = true;
+            let correctCount = 0;
+            let totalInputsChecked = 0;
+
+            ['direct', 'even', 'odd'].forEach(type => {
+                tasks[type].forEach(task => {
+                    const beforeInputEl = document.getElementById(`${task.idPrefix}_before`);
+                    const afterInputEl = document.getElementById(`${task.idPrefix}_after`);
+                    
+                    if (!beforeInputEl || !afterInputEl) return;
+
+                    totalInputsChecked += 2; 
+
+                    const userAnswerBeforeRaw = beforeInputEl.value.trim();
+                    const userAnswerAfterRaw = afterInputEl.value.trim();
+                    
+                    const userAnswerBefore = (userAnswerBeforeRaw === "" && task.correctBefore < 0) ? task.correctBefore : parseInt(userAnswerBeforeRaw);
+                    const userAnswerAfter = parseInt(userAnswerAfterRaw);
+
+                    if (!isNaN(userAnswerBefore) && userAnswerBefore === task.correctBefore) {
+                        beforeInputEl.style.borderColor = 'green';
+                        correctCount++;
+                    } else {
+                        beforeInputEl.style.borderColor = 'red';
+                        allCorrectOverall = false;
+                    }
+
+                    if (!isNaN(userAnswerAfter) && userAnswerAfter === task.correctAfter) {
+                        afterInputEl.style.borderColor = 'green';
+                        correctCount++;
+                    } else {
+                        afterInputEl.style.borderColor = 'red';
+                        allCorrectOverall = false;
+                    }
+                });
+            });
+            
+            if (totalInputsChecked === 0) {
+                 globalFeedbackEl.textContent = "Nincsenek még feladatok!";
+                 globalFeedbackEl.className = 'feedback incorrect';
+                 return;
+            }
+
+            if (allCorrectOverall && correctCount === totalInputsChecked) {
+                globalFeedbackEl.textContent = 'Minden válasz helyes! Ügyes vagy! 🎉';
+                globalFeedbackEl.className = 'feedback correct';
+            } else {
+                globalFeedbackEl.textContent = `Összesen ${correctCount} helyes válasz a ${totalInputsChecked / 2} feladatból. Nézd át a pirossal jelölt válaszokat!`;
+                globalFeedbackEl.className = 'feedback incorrect';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTheme(currentSettings.theme); 
+            updateOddEvenDisplay(); 
+            generateAllTasks();     
+        });
+    </script>
+</body>
+</html>
