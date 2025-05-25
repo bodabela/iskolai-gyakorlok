@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1. Osztály - Pótlás Táblázatban</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .theme-selector, .range-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+       
+        .theme-button, .range-button {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-button:hover, .range-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .theme-button.active, .range-button.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000); 
+            transform: translateY(1px);
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px; 
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px; 
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em); 
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em); 
+            margin-bottom: 25px;
+        }
+        .task {
+            margin-bottom: 30px; 
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0; 
+            font-size: clamp(1.1em, 3.5vw, 1.3em); 
+            transition: color 0.5s ease;
+        }
+        .new-task-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px; 
+        }
+
+        .task p.instructions { 
+            line-height: 1.6; 
+            font-size: clamp(1em, 3vw, 1.1em); 
+            margin-bottom: 10px; 
+            transition: color 0.5s ease;
+        }
+
+        .table-task-container {
+            margin-top: 15px;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .table-task table {
+            width: auto; 
+            min-width: 200px; 
+            margin: 0; 
+            border-collapse: collapse; 
+            font-size: clamp(1.1em, 3.5vw, 1.4em);
+            border: 2px solid var(--table-border-color, #ccc); 
+            border-radius: 8px;
+            transition: border-color 0.5s ease;
+            table-layout: auto; 
+        }
+
+        .table-task th, .table-task td {
+            border: 1px solid var(--table-cell-border-color, #ddd); 
+            padding: clamp(4px, 1vw, 6px); /* Kisebb padding, hogy az inputok jobban kitöltsék */
+            text-align: center;
+            min-width: clamp(45px, 11vw, 60px); /* Minimális szélesség az inputoknak és számoknak */
+            height: clamp(45px, 11vw, 60px);
+            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+            box-sizing: border-box;
+        }
+        .table-task th { 
+            font-weight: bold;
+            background-color: var(--table-th-bg-color, #f0f0f0); 
+            color: var(--table-th-text-color, #333); 
+        }
+                
+        .table-task input[type="number"] {
+            width: 90%; /* Kicsit kisebb, hogy legyen hely a cellán belül */
+            height: 90%;
+            padding: 0;
+            margin: 0 auto; /* Középre igazítás a cellán belül */
+            font-size: 0.9em; 
+            text-align: center;
+            border: 1.5px solid var(--input-border-color, #ccc); /* Témázható keret */
+            border-radius: 4px;
+            background-color: var(--input-bg-color, #fff); 
+            color: var(--input-text-color, #212529); 
+            -moz-appearance: textfield;
+            box-sizing: border-box;
+            display: block; /* Hogy a margin: auto működjön */
+        }
+        .table-task input[type=number]::-webkit-outer-spin-button,
+        .table-task input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .table-task .fixed-number-cell-wrapper { 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: clamp(35px, 9vw, 50px); /* Illeszkedjen az input méretéhez */
+            height: clamp(35px, 9vw, 50px);
+            margin: auto; /* Középre igazítás a cellán belül */
+            font-weight: bold;
+            border-radius: 4px;
+            background-color: var(--fixed-cell-bg-color, #e9ecef); 
+            color: var(--fixed-cell-text-color, #495057); 
+            box-sizing: border-box;
+            border: 1px solid var(--fixed-cell-border-color, transparent); /* Opcionális keret */
+        }
+        .table-task .target-sum-cell .fixed-number-cell-wrapper { 
+            font-size: 1.1em; 
+            background-color: var(--target-sum-bg-color, #cfe2ff);
+            color: var(--target-sum-text-color, #084298);
+        }
+         .table-task .task1-given-number .fixed-number-cell-wrapper {
+            background-color: var(--task1-given-bg-color, #d1e7dd);
+            color: var(--task1-given-text-color, #0f5132);
+        }
+        .table-task .task2-x-val .fixed-number-cell-wrapper {
+            background-color: var(--task2-x-bg-color, #f8d7da);
+            color: var(--task2-x-text-color, #842029);
+        }
+        .table-task .task2-y-val .fixed-number-cell-wrapper {
+            background-color: var(--task2-y-bg-color, #cff4fc);
+            color: var(--task2-y-text-color, #055160);
+        }
+        .table-task .header-cell-xy { 
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+
+        .table-task .empty-placeholder-cell { 
+            border: none;
+            background-color: transparent !important;
+        }
+        .table-task .rule-display {
+            font-weight: bold;
+            font-size: 1.1em; 
+            margin-bottom: 10px;
+            transition: color 0.5s ease;
+            padding: 5px;
+            border-radius: 5px;
+            display: inline-block; 
+            background-color: var(--rule-bg-color, #f8f9fa);
+            color: var(--rule-text-color, #212529);
+        }
+
+
+        button.task-button { 
+            padding: 10px 20px; 
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em); 
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+        .feedback {
+            margin-top: 10px; 
+            font-weight: bold;
+            padding: 8px; 
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em); 
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+            min-height: 1.5em; 
+        }
+        
+        /* --- THEME DEFINITIONS --- */
+        :root {
+            --table-border-color: #dee2e6;
+            --table-cell-border-color: #e9ecef;
+            --table-th-bg-color: #f8f9fa;
+            --table-th-text-color: #495057;
+            --fixed-cell-bg-color: #e9ecef;
+            --fixed-cell-text-color: #495057;
+            --fixed-cell-border-color: #ced4da;
+            --target-sum-bg-color: #cfe2ff;
+            --target-sum-text-color: #084298;
+            --task1-given-bg-color: #d1e7dd;
+            --task1-given-text-color: #0f5132;
+            --task2-x-bg-color: #f8d7da;
+            --task2-x-text-color: #842029;
+            --task2-y-bg-color: #cff4fc;
+            --task2-y-text-color: #055160;
+            --input-bg-color: #fff;
+            --input-text-color: #212529;
+            --input-border-color: #ced4da;
+            --rule-bg-color: #f8f9fa;
+            --rule-text-color: #212529;
+            --feedback-correct-border-color: green;
+            --feedback-incorrect-border-color: red;
+        }
+
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;
+            --table-border-color: #ffb6c1; --table-cell-border-color: #ffc0cb;
+            --table-th-bg-color: #ffdae9; --table-th-text-color: #c71585;
+            --fixed-cell-bg-color: #ffe4e1; --fixed-cell-text-color: #9932cc; --fixed-cell-border-color: #ffc0cb;
+            --target-sum-bg-color: #ffc0cb; --target-sum-text-color: #c71585;
+            --task1-given-bg-color: #ffdae9; --task1-given-text-color: #c71585;
+            --task2-x-bg-color: #ffb6c1; --task2-x-text-color: #c71585;
+            --task2-y-bg-color: #ffdae9; --task2-y-text-color: #c71585;
+            --input-bg-color: #fffafa; --input-text-color: #8a2be2; --input-border-color: #ffb6c1;
+            --rule-bg-color: #ffdae9; --rule-text-color: #c71585;
+            --feedback-correct-border-color: #90ee90; --feedback-incorrect-border-color: #ffb6c1;
+        }
+        body.theme-candy .control-label { color: #c71585; }
+        body.theme-candy .theme-button.active, body.theme-candy .range-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .container { background-color: #ffe4e1; border-color: #ffc0cb; }
+        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
+        body.theme-candy .task { background-color: #fffafa; border-color: #ffb6c1; }
+        body.theme-candy .task-header h3 { color: #ff69b4; }
+        body.theme-candy .task p.instructions { color: #8a2be2; }
+        body.theme-candy button.task-button { background-color: #ff69b4; }
+        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border-color: #90ee90; }
+        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border-color: #ffb6c1; }
+
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;
+            --table-border-color: #475569; --table-cell-border-color: #334155;
+            --table-th-bg-color: #1e3a8a; --table-th-text-color: #93c5fd;
+            --fixed-cell-bg-color: #334155; --fixed-cell-text-color: #e2e8f0; --fixed-cell-border-color: #475569;
+            --target-sum-bg-color: #2563eb; --target-sum-text-color: #eff6ff;
+            --task1-given-bg-color: #374151; --task1-given-text-color: #d1d5db;
+            --task2-x-bg-color: #4b5563; --task2-x-text-color: #e5e7eb;
+            --task2-y-bg-color: #374151; --task2-y-text-color: #d1d5db;
+            --input-bg-color: #1e293b; --input-text-color: #e2e8f0; --input-border-color: #475569;
+            --rule-bg-color: #334155; --rule-text-color: #93c5fd;
+            --feedback-correct-border-color: #22c55e; --feedback-incorrect-border-color: #ef4444;
+        }
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .theme-button.active, body.theme-space .range-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border-color: #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .task { background-color: #334155; border-color: #475569; }
+        body.theme-space .task-header h3 { color: #93c5fd; }
+        body.theme-space .task p.instructions { color: #cbd5e1; }
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border-color: #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border-color: #ef4444; }
+
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;
+            --table-border-color: #558b2f; --table-cell-border-color: #81c784;
+            --table-th-bg-color: #a5d6a7; --table-th-text-color: #2e7d32;
+            --fixed-cell-bg-color: #f1f8e9; --fixed-cell-text-color: #1b5e20; --fixed-cell-border-color: #a5d6a7;
+            --target-sum-bg-color: #aed581; --target-sum-text-color: #33691e;
+            --task1-given-bg-color: #dcedc8; --task1-given-text-color: #388e3c;
+            --task2-x-bg-color: #c8e6c9; --task2-x-text-color: #2e7d32;
+            --task2-y-bg-color: #dcedc8; --task2-y-text-color: #388e3c;
+            --input-bg-color: #f9fff6; --input-text-color: #1b5e20; --input-border-color: #81c784;
+            --rule-bg-color: #dcedc8; --rule-text-color: #558b2f;
+            --feedback-correct-border-color: #a5d6a7; --feedback-incorrect-border-color: #ef9a9a;
+        }
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border-color: #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border-color: #81c784; }
+        body.theme-jungle .task-header h3 { color: #558b2f; }
+        body.theme-jungle .task p.instructions { color: #2e7d32; }
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border-color: #a5d6a7; }
+        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border-color: #ef9a9a; }
+        
+        /* További témákhoz a változókat hasonlóan kellene definiálni... */
+         body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2; /* ...többi változó... */ }
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1; /* ... */ }
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa; /* ... */ }
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f; /* ... */ }
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347; /* ... */ }
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c; /* ... */ }
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff; /* ... */ }
+    </style>
+</head>
+<body class="theme-candy"> 
+    <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                <button class="theme-button" data-theme="theme-sky">Égbolt</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+        <div>
+            <p class="control-label">Számkör választó:</p>
+            <div class="range-selector">
+                <button class="range-button" data-range="5">5-ös</button>
+                <button class="range-button active" data-range="10">10-es</button>
+                <button class="range-button" data-range="20">20-as</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>1. Osztály - Matematika Feladatok</h1>
+        <h2>Téma: Pótlás Táblázatban</h2>
+
+        <div class="task">
+            <div class="task-header">
+                <h3>1. Feladat: Mennyit adjak hozzá, hogy ... legyen?</h3>
+                <button class="task-button new-task-button" onclick="generateTask1()">Új feladat</button>
+            </div>
+            <p id="task1_description_p" class="instructions">A számokat pótold a táblázat elején megadott számra! Írd a hiányzó mennyiséget a megfelelő helyre!</p>
+            <div id="task1_table_container" class="table-task-container">
+                </div>
+            <button class="task-button" onclick="checkTask1()">Ellenőrzés</button>
+            <p id="task1_feedback" class="feedback"></p>
+        </div>
+
+        <div class="task">
+             <div class="task-header">
+                <h3>2. Feladat: Töltsd ki a táblázatot a szabály alapján!</h3>
+                <button class="task-button new-task-button" onclick="generateTask2()">Új feladat</button>
+            </div>
+            <p id="task2_rule_p" class="table-task rule-display">Szabály: Y = X + ?</p>
+            <div id="task2_table_container" class="table-task-container">
+                </div>
+            <button class="task-button" onclick="checkTask2()">Ellenőrzés</button>
+            <p id="task2_feedback" class="feedback"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentNumberRange = 10; 
+        let task1Data = { targetSum: 0, columns: [] }; // columns will store {given: number, solution: number, isGivenOnTop: boolean}
+        let task2Data = { rule: { variable1: 'Y', variable2: 'X', operation: '+', diff: 0},
+                          tablePairs: [], solutions: {} };
+
+        const bodyEl = document.body;
+        const themeButtons = document.querySelectorAll('.theme-button');
+        const rangeButtons = document.querySelectorAll('.range-button');
+
+        function applyTheme(themeClass) {
+            bodyEl.className = ''; 
+            bodyEl.classList.add(themeClass); 
+
+            themeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeClass);
+            });
+            rangeButtons.forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange);
+            });
+        }
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                applyTheme(button.dataset.theme);
+            });
+        });
+
+        rangeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentNumberRange = parseInt(button.dataset.range);
+                rangeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                generateTask1();
+                generateTask2();
+            });
+        });
+        
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            if (min > max) return min; // Handle cases where min could become > max after adjustments
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateTask1() {
+            task1Data.targetSum = getRandomInt(Math.floor(currentNumberRange / 2) + 1, currentNumberRange);
+            if (currentNumberRange === 5 && task1Data.targetSum < 2) task1Data.targetSum = getRandomInt(2,5);
+            else if (task1Data.targetSum < 1 && currentNumberRange > 0) task1Data.targetSum = 1;
+            else if (currentNumberRange === 0 ) task1Data.targetSum = 0;
+
+            task1Data.columns = [];
+            const numColsToGenerate = 8; 
+            const usedNumbers = new Set();
+
+            for (let i = 0; i < numColsToGenerate; i++) {
+                let num;
+                let attempts = 0;
+                do {
+                    num = getRandomInt(0, task1Data.targetSum - (task1Data.targetSum > 0 ? 1 : 0) ); 
+                    attempts++;
+                } while (usedNumbers.has(num) && attempts < 50); // Növeltük az attempts limitet
+                
+                if(attempts >= 50 && usedNumbers.has(num)) { 
+                    let foundFallback = false;
+                    for(let fallbackNum = 0; fallbackNum < task1Data.targetSum; fallbackNum++) {
+                        if(!usedNumbers.has(fallbackNum)) {
+                            num = fallbackNum;
+                            foundFallback = true;
+                            break;
+                        }
+                    }
+                    if(!foundFallback && task1Data.columns.length < numColsToGenerate) { // Ha végképp nincs, és még kell
+                        num = task1Data.targetSum > 0 ? task1Data.targetSum -1 : 0; // Utolsó lehetőség
+                        if (usedNumbers.has(num) && task1Data.targetSum > 1) num = task1Data.targetSum -2;
+                         if (usedNumbers.has(num) && task1Data.targetSum > 2) num = task1Data.targetSum -3;
+                    }
+                }
+                if(task1Data.columns.length >= numColsToGenerate && !usedNumbers.has(num)) continue; 
+
+                usedNumbers.add(num);
+                task1Data.columns.push({
+                    given: num,
+                    solution: task1Data.targetSum - num,
+                    isGivenOnTop: Math.random() < 0.5 // Véletlenszerűen dől el, hogy a megadott szám felül vagy alul van-e
+                });
+            }
+            renderTask1Table();
+            document.getElementById('task1_feedback').textContent = '';
+            document.getElementById('task1_feedback').className = 'feedback';
+            document.getElementById('task1_description_p').textContent = `A számokat pótold a táblázat elején megadott ${task1Data.targetSum} számra! Írd a hiányzó mennyiséget a megfelelő helyre!`;
+        }
+
+        function renderTask1Table() {
+            const container = document.getElementById('task1_table_container');
+            container.innerHTML = '';
+            const table = document.createElement('table');
+            
+            const row1 = table.insertRow(); // Felső sor
+            const row2 = table.insertRow(); // Alsó sor
+
+            // Célösszeg cella (első oszlop, két sort átfogva)
+            const targetCell = row1.insertCell();
+            targetCell.classList.add('target-sum-cell');
+            targetCell.rowSpan = 2; // Átfogja mindkét sort
+            const targetWrapper = document.createElement('div');
+            targetWrapper.classList.add('fixed-number-cell-wrapper');
+            targetWrapper.textContent = task1Data.targetSum;
+            targetCell.appendChild(targetWrapper);
+            
+            task1Data.columns.forEach((colData, i) => {
+                const cellTop = row1.insertCell();
+                const cellBottom = row2.insertCell();
+
+                if (colData.isGivenOnTop) {
+                    cellTop.classList.add('task1-given-number');
+                    const numDisplay = document.createElement('div');
+                    numDisplay.classList.add('fixed-number-cell-wrapper');
+                    numDisplay.textContent = colData.given;
+                    cellTop.appendChild(numDisplay);
+
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.id = `task1_ans_${i}`;
+                    input.min = 0;
+                    input.max = currentNumberRange;
+                    cellBottom.appendChild(input);
+                } else {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.id = `task1_ans_${i}`;
+                    input.min = 0;
+                    input.max = currentNumberRange;
+                    cellTop.appendChild(input);
+                    
+                    cellBottom.classList.add('task1-given-number');
+                    const numDisplay = document.createElement('div');
+                    numDisplay.classList.add('fixed-number-cell-wrapper');
+                    numDisplay.textContent = colData.given;
+                    cellBottom.appendChild(numDisplay);
+                }
+            });
+            container.appendChild(table);
+        }
+
+        function checkTask1() {
+            const feedbackEl = document.getElementById('task1_feedback');
+            let allCorrect = true;
+            let allFilled = true;
+            task1Data.columns.forEach((colData, i) => {
+                const inputEl = document.getElementById(`task1_ans_${i}`);
+                if (!inputEl) return;
+                if (inputEl.value.trim() === "") {
+                    allFilled = false;
+                    inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)'; 
+                } else {
+                    const userAnswer = parseInt(inputEl.value);
+                    if (userAnswer !== colData.solution) {
+                        allCorrect = false;
+                        inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
+                    } else {
+                        inputEl.style.borderColor = 'var(--feedback-correct-border-color, green)';
+                    }
+                }
+            });
+
+            if (!allFilled) {
+                 feedbackEl.textContent = 'Még nem töltöttél ki minden mezőt!';
+                 feedbackEl.className = 'feedback incorrect';
+            } else if (allCorrect) {
+                feedbackEl.textContent = 'Ügyes vagy, minden pótlás helyes!';
+                feedbackEl.className = 'feedback correct';
+            } else {
+                feedbackEl.textContent = 'Van hibás válasz. Nézd át a pirossal jelölteket!';
+                feedbackEl.className = 'feedback incorrect';
+            }
+        }
+
+        function generateTask2() {
+            const diff = getRandomInt(1, Math.min(5, currentNumberRange >=1 ? Math.max(1, currentNumberRange -1) : 1)); 
+            const operations = ['+', '-'];
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+            
+            task2Data.rule.operation = operation;
+            task2Data.rule.diff = diff;
+
+            if (operation === '+') { // Y = X + diff
+                task2Data.rule.variable1 = 'Y';
+                task2Data.rule.variable2 = 'X';
+                document.getElementById('task2_rule_p').innerHTML = `Szabály: Y = X + ${diff} &nbsp;&nbsp; <span style="font-size:0.8em;">(X = Y - ${diff})</span>`;
+            } else { // Y = X - diff
+                task2Data.rule.variable1 = 'Y'; 
+                task2Data.rule.variable2 = 'X';
+                document.getElementById('task2_rule_p').innerHTML = `Szabály: Y = X - ${diff} &nbsp;&nbsp; <span style="font-size:0.8em;">(X = Y + ${diff})</span>`;
+            }
+
+            task2Data.tablePairs = [];
+            task2Data.solutions = {};
+            const numPairsToGenerate = getRandomInt(3, 4);
+            const knownValuesThisTask = { X: new Set(), Y: new Set() };
+
+            for (let i = 0; i < numPairsToGenerate; i++) {
+                let xVal, yVal;
+                let knownVar = (Math.random() < 0.5) ? 'X' : 'Y';
+                let attempts = 0;
+
+                do {
+                    attempts++;
+                    if (knownVar === 'X') {
+                        if (operation === '+') { 
+                            xVal = getRandomInt(0, currentNumberRange - diff);
+                            yVal = xVal + diff;
+                        } else { 
+                            xVal = getRandomInt(diff, currentNumberRange);
+                            yVal = xVal - diff;
+                        }
+                    } else { 
+                        if (operation === '+') { 
+                            yVal = getRandomInt(diff, currentNumberRange);
+                            xVal = yVal - diff;
+                        } else { 
+                            yVal = getRandomInt(0, currentNumberRange - diff);
+                            xVal = yVal + diff;
+                        }
+                    }
+                    if (xVal < 0 || xVal > currentNumberRange || yVal < 0 || yVal > currentNumberRange) {
+                        continue; 
+                    }
+
+                } while ( ((knownVar === 'X' && knownValuesThisTask.X.has(xVal)) || (knownVar === 'Y' && knownValuesThisTask.Y.has(yVal)) ) && attempts < 50);
+                
+                if (attempts >= 50 && ((knownVar === 'X' && knownValuesThisTask.X.has(xVal)) || (knownVar === 'Y' && knownValuesThisTask.Y.has(yVal)))) {
+                    if (knownVar === 'X') {
+                        for(let fx = 0; fx <= currentNumberRange - (operation === '+' ? diff : 0); fx++) {
+                            if (!knownValuesThisTask.X.has(fx)) { xVal = fx; yVal = operation === '+' ? fx+diff : fx-diff; if (yVal >=0 && yVal <= currentNumberRange) break;}
+                        }
+                    } else {
+                         for(let fy = (operation === '+' ? diff : 0); fy <= currentNumberRange - (operation === '-' ? diff : 0); fy++) {
+                            if (!knownValuesThisTask.Y.has(fy)) { yVal = fy; xVal = operation === '+' ? fy-diff : fy+diff; if (xVal >=0 && xVal <= currentNumberRange) break;}
+                        }
+                    }
+                }
+                if (xVal < 0 || xVal > currentNumberRange || yVal < 0 || yVal > currentNumberRange) {
+                     // Ha a fallback is rossz, akkor az utolsó oszlopot kihagyjuk
+                     if (task2Data.tablePairs.length < numPairsToGenerate -1 || task2Data.tablePairs.length === 0) {i--; continue;} else break;
+                }
+
+
+                if (knownVar === 'X') knownValuesThisTask.X.add(xVal); else knownValuesThisTask.Y.add(yVal);
+
+                task2Data.tablePairs.push({ x: (knownVar === 'X' ? xVal : null), y: (knownVar === 'Y' ? yVal : null) });
+                task2Data.solutions[`x_${i}`] = xVal;
+                task2Data.solutions[`y_${i}`] = yVal;
+            }
+            renderTask2Table();
+            document.getElementById('task2_feedback').textContent = '';
+            document.getElementById('task2_feedback').className = 'feedback';
+        }
+
+        function renderTask2Table() {
+            const container = document.getElementById('task2_table_container');
+            container.innerHTML = '';
+            if (task2Data.tablePairs.length === 0) return; // Ne generáljon üres táblát
+            const table = document.createElement('table');
+            
+            const xRow = table.insertRow();
+            const xHeaderCell = xRow.insertCell();
+            xHeaderCell.outerHTML = "<th class='header-cell-xy'>X</th>";
+
+            task2Data.tablePairs.forEach((pair, i) => {
+                const cell = xRow.insertCell();
+                if (pair.x !== null) {
+                    cell.classList.add('task2-x-val');
+                    const numDisplay = document.createElement('div');
+                    numDisplay.classList.add('fixed-number-cell-wrapper');
+                    numDisplay.textContent = pair.x;
+                    cell.appendChild(numDisplay);
+                } else {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.id = `task2_x_${i}`;
+                    input.min = 0;
+                    input.max = currentNumberRange;
+                    cell.appendChild(input);
+                }
+            });
+
+            const yRow = table.insertRow();
+            const yHeaderCell = yRow.insertCell();
+            yHeaderCell.outerHTML = "<th class='header-cell-xy'>Y</th>";
+
+            task2Data.tablePairs.forEach((pair, i) => {
+                const cell = yRow.insertCell();
+                if (pair.y !== null) {
+                    cell.classList.add('task2-y-val');
+                    const numDisplay = document.createElement('div');
+                    numDisplay.classList.add('fixed-number-cell-wrapper');
+                    numDisplay.textContent = pair.y;
+                    cell.appendChild(numDisplay);
+                } else {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.id = `task2_y_${i}`;
+                    input.min = 0;
+                    input.max = currentNumberRange;
+                    cell.appendChild(input);
+                }
+            });
+            container.appendChild(table);
+        }
+
+
+        function checkTask2() {
+            const feedbackEl = document.getElementById('task2_feedback');
+            let allCorrect = true;
+            let allFilled = true;
+
+            task2Data.tablePairs.forEach((pair, i) => {
+                if (pair.x === null) { 
+                    const inputEl = document.getElementById(`task2_x_${i}`);
+                    if (!inputEl) return;
+                    if (inputEl.value.trim() === "") {
+                        allFilled = false;
+                        inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
+                    } else {
+                        const userAnswer = parseInt(inputEl.value);
+                        if (userAnswer !== task2Data.solutions[`x_${i}`]) {
+                            allCorrect = false;
+                            inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
+                        } else {
+                            inputEl.style.borderColor = 'var(--feedback-correct-border-color, green)';
+                        }
+                    }
+                }
+                if (pair.y === null) { 
+                    const inputEl = document.getElementById(`task2_y_${i}`);
+                    if (!inputEl) return;
+                     if (inputEl.value.trim() === "") {
+                        allFilled = false;
+                        inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
+                    } else {
+                        const userAnswer = parseInt(inputEl.value);
+                        if (userAnswer !== task2Data.solutions[`y_${i}`]) {
+                            allCorrect = false;
+                            inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
+                        } else {
+                            inputEl.style.borderColor = 'var(--feedback-correct-border-color, green)';
+                        }
+                    }
+                }
+            });
+            
+            if (!allFilled) {
+                 feedbackEl.textContent = 'Még nem töltöttél ki minden üres mezőt!';
+                 feedbackEl.className = 'feedback incorrect';
+            } else if (allCorrect) {
+                feedbackEl.textContent = 'Helyes! Ügyesen alkalmaztad a szabályt.';
+                feedbackEl.className = 'feedback correct';
+            } else {
+                feedbackEl.textContent = 'Van hibás válasz. Ellenőrizd a pirossal jelölteket és a szabályt!';
+                feedbackEl.className = 'feedback incorrect';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTheme('theme-candy'); 
+            generateTask1(); 
+            generateTask2();
+        });
+    </script>
+</body>
+</html>
