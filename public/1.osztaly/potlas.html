@@ -115,6 +115,7 @@
             font-size: clamp(1em, 3vw, 1.1em); 
             margin-bottom: 10px; 
             transition: color 0.5s ease;
+            text-align: center; 
         }
 
         .table-task-container {
@@ -129,7 +130,7 @@
             min-width: 200px; 
             margin: 0; 
             border-collapse: collapse; 
-            font-size: clamp(1.1em, 3.5vw, 1.4em);
+            font-size: clamp(1em, 3vw, 1.2em);
             border: 2px solid var(--table-border-color, #ccc); 
             border-radius: 8px;
             transition: border-color 0.5s ease;
@@ -138,12 +139,13 @@
 
         .table-task th, .table-task td {
             border: 1px solid var(--table-cell-border-color, #ddd); 
-            padding: clamp(4px, 1vw, 6px); /* Kisebb padding, hogy az inputok jobban kitöltsék */
+            padding: clamp(3px, 0.8vw, 5px); 
             text-align: center;
-            min-width: clamp(45px, 11vw, 60px); /* Minimális szélesség az inputoknak és számoknak */
-            height: clamp(45px, 11vw, 60px);
+            min-width: clamp(45px, 9vw, 55px);
+            height: clamp(45px, 9vw, 55px);  
             transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
             box-sizing: border-box;
+            vertical-align: middle;
         }
         .table-task th { 
             font-weight: bold;
@@ -151,20 +153,23 @@
             color: var(--table-th-text-color, #333); 
         }
                 
-        .table-task input[type="number"] {
-            width: 90%; /* Kicsit kisebb, hogy legyen hely a cellán belül */
-            height: 90%;
-            padding: 0;
-            margin: 0 auto; /* Középre igazítás a cellán belül */
-            font-size: 0.9em; 
+        .table-task .table-input {
+            width: clamp(40px, 8vw, 50px); 
+            height: clamp(38px, 7.5vw, 45px);
+            padding: clamp(6px, 1vw, 8px);    
             text-align: center;
-            border: 1.5px solid var(--input-border-color, #ccc); /* Témázható keret */
-            border-radius: 4px;
+            font-size: clamp(0.9em, 2.8vw, 1.1em); 
+            font-weight: normal; 
+            border-radius: 6px;
+            border: 1px solid var(--input-border-color, #ccc); 
             background-color: var(--input-bg-color, #fff); 
-            color: var(--input-text-color, #212529); 
+            color: var(--input-text-color, #212529);
             -moz-appearance: textfield;
             box-sizing: border-box;
-            display: block; /* Hogy a margin: auto működjön */
+            margin: auto; 
+            display: block;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            transition: border-color 0.3s ease, border-width 0.3s ease;
         }
         .table-task input[type=number]::-webkit-outer-spin-button,
         .table-task input[type=number]::-webkit-inner-spin-button {
@@ -172,60 +177,32 @@
             margin: 0;
         }
         
-        .table-task .fixed-number-cell-wrapper { 
-            display: flex;
-            justify-content: center;
+        .table-task .table-fixed-number {
+            font-size: clamp(1.1em, 3.5vw, 1.3em); 
+            font-weight: bold; 
+            padding: clamp(5px, 1vw, 8px); 
+            display: inline-flex;
             align-items: center;
-            width: clamp(35px, 9vw, 50px); /* Illeszkedjen az input méretéhez */
-            height: clamp(35px, 9vw, 50px);
-            margin: auto; /* Középre igazítás a cellán belül */
-            font-weight: bold;
+            justify-content: center;
+            color: var(--fixed-cell-text-color, #333);
+            background-color: var(--fixed-cell-bg-color, #e9ecef);
             border-radius: 4px;
-            background-color: var(--fixed-cell-bg-color, #e9ecef); 
-            color: var(--fixed-cell-text-color, #495057); 
+            min-width: clamp(40px, 8vw, 50px); 
+            min-height: clamp(38px, 7.5vw, 45px); 
             box-sizing: border-box;
-            border: 1px solid var(--fixed-cell-border-color, transparent); /* Opcionális keret */
-        }
-        .table-task .target-sum-cell .fixed-number-cell-wrapper { 
-            font-size: 1.1em; 
-            background-color: var(--target-sum-bg-color, #cfe2ff);
-            color: var(--target-sum-text-color, #084298);
-        }
-         .table-task .task1-given-number .fixed-number-cell-wrapper {
-            background-color: var(--task1-given-bg-color, #d1e7dd);
-            color: var(--task1-given-text-color, #0f5132);
-        }
-        .table-task .task2-x-val .fixed-number-cell-wrapper {
-            background-color: var(--task2-x-bg-color, #f8d7da);
-            color: var(--task2-x-text-color, #842029);
-        }
-        .table-task .task2-y-val .fixed-number-cell-wrapper {
-            background-color: var(--task2-y-bg-color, #cff4fc);
-            color: var(--task2-y-text-color, #055160);
-        }
-        .table-task .header-cell-xy { 
-            font-weight: bold;
-            font-size: 1.1em;
+            border: 1px solid var(--fixed-cell-border-color, transparent);
+            line-height: 1;
         }
 
-
+        .table-task .target-sum-cell .table-fixed-number { 
+            font-size: clamp(1.2em, 3.8vw, 1.4em); 
+        }
+        
         .table-task .empty-placeholder-cell { 
             border: none;
             background-color: transparent !important;
         }
-        .table-task .rule-display {
-            font-weight: bold;
-            font-size: 1.1em; 
-            margin-bottom: 10px;
-            transition: color 0.5s ease;
-            padding: 5px;
-            border-radius: 5px;
-            display: inline-block; 
-            background-color: var(--rule-bg-color, #f8f9fa);
-            color: var(--rule-text-color, #212529);
-        }
-
-
+      
         button.task-button { 
             padding: 10px 20px; 
             color: white;
@@ -253,42 +230,30 @@
             min-height: 1.5em; 
         }
         
-        /* --- THEME DEFINITIONS --- */
         :root {
             --table-border-color: #dee2e6;
             --table-cell-border-color: #e9ecef;
             --table-th-bg-color: #f8f9fa;
             --table-th-text-color: #495057;
-            --fixed-cell-bg-color: #e9ecef;
+            --fixed-cell-bg-color: #e9ecef; 
             --fixed-cell-text-color: #495057;
             --fixed-cell-border-color: #ced4da;
-            --target-sum-bg-color: #cfe2ff;
-            --target-sum-text-color: #084298;
-            --task1-given-bg-color: #d1e7dd;
-            --task1-given-text-color: #0f5132;
-            --task2-x-bg-color: #f8d7da;
-            --task2-x-text-color: #842029;
-            --task2-y-bg-color: #cff4fc;
-            --task2-y-text-color: #055160;
-            --input-bg-color: #fff;
+            --target-sum-bg-color: #FFD700; 
+            --target-sum-text-color: #423A02; 
+            --input-bg-color: #fff; 
             --input-text-color: #212529;
             --input-border-color: #ced4da;
-            --rule-bg-color: #f8f9fa;
-            --rule-text-color: #212529;
             --feedback-correct-border-color: green;
             --feedback-incorrect-border-color: red;
+            --feedback-border-width: 2.5px;
         }
 
         body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;
             --table-border-color: #ffb6c1; --table-cell-border-color: #ffc0cb;
             --table-th-bg-color: #ffdae9; --table-th-text-color: #c71585;
-            --fixed-cell-bg-color: #ffe4e1; --fixed-cell-text-color: #9932cc; --fixed-cell-border-color: #ffc0cb;
-            --target-sum-bg-color: #ffc0cb; --target-sum-text-color: #c71585;
-            --task1-given-bg-color: #ffdae9; --task1-given-text-color: #c71585;
-            --task2-x-bg-color: #ffb6c1; --task2-x-text-color: #c71585;
-            --task2-y-bg-color: #ffdae9; --task2-y-text-color: #c71585;
-            --input-bg-color: #fffafa; --input-text-color: #8a2be2; --input-border-color: #ffb6c1;
-            --rule-bg-color: #ffdae9; --rule-text-color: #c71585;
+            --fixed-cell-text-color: #9932cc; --fixed-cell-border-color: #ffc0cb;
+            --target-sum-text-color: #7c0057; 
+            --input-text-color: #8a2be2; --input-border-color: #ffb6c1;
             --feedback-correct-border-color: #90ee90; --feedback-incorrect-border-color: #ffb6c1;
         }
         body.theme-candy .control-label { color: #c71585; }
@@ -305,13 +270,9 @@
         body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;
             --table-border-color: #475569; --table-cell-border-color: #334155;
             --table-th-bg-color: #1e3a8a; --table-th-text-color: #93c5fd;
-            --fixed-cell-bg-color: #334155; --fixed-cell-text-color: #e2e8f0; --fixed-cell-border-color: #475569;
-            --target-sum-bg-color: #2563eb; --target-sum-text-color: #eff6ff;
-            --task1-given-bg-color: #374151; --task1-given-text-color: #d1d5db;
-            --task2-x-bg-color: #4b5563; --task2-x-text-color: #e5e7eb;
-            --task2-y-bg-color: #374151; --task2-y-text-color: #d1d5db;
-            --input-bg-color: #1e293b; --input-text-color: #e2e8f0; --input-border-color: #475569;
-            --rule-bg-color: #334155; --rule-text-color: #93c5fd;
+            --fixed-cell-text-color: #e2e8f0; --fixed-cell-border-color: #475569;
+            --target-sum-text-color: #f0f9ff; 
+            --input-text-color: #e2e8f0; --input-border-color: #475569;
             --feedback-correct-border-color: #22c55e; --feedback-incorrect-border-color: #ef4444;
         }
         body.theme-space .control-label { color: #93c5fd; }
@@ -328,13 +289,9 @@
         body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;
             --table-border-color: #558b2f; --table-cell-border-color: #81c784;
             --table-th-bg-color: #a5d6a7; --table-th-text-color: #2e7d32;
-            --fixed-cell-bg-color: #f1f8e9; --fixed-cell-text-color: #1b5e20; --fixed-cell-border-color: #a5d6a7;
-            --target-sum-bg-color: #aed581; --target-sum-text-color: #33691e;
-            --task1-given-bg-color: #dcedc8; --task1-given-text-color: #388e3c;
-            --task2-x-bg-color: #c8e6c9; --task2-x-text-color: #2e7d32;
-            --task2-y-bg-color: #dcedc8; --task2-y-text-color: #388e3c;
-            --input-bg-color: #f9fff6; --input-text-color: #1b5e20; --input-border-color: #81c784;
-            --rule-bg-color: #dcedc8; --rule-text-color: #558b2f;
+            --fixed-cell-text-color: #1b5e20; --fixed-cell-border-color: #a5d6a7;
+            --target-sum-text-color: #143d06; 
+            --input-text-color: #1b5e20; --input-border-color: #81c784;
             --feedback-correct-border-color: #a5d6a7; --feedback-incorrect-border-color: #ef9a9a;
         }
         body.theme-jungle .control-label { color: #558b2f; }
@@ -348,14 +305,14 @@
         body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border-color: #a5d6a7; }
         body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border-color: #ef9a9a; }
         
-        /* További témákhoz a változókat hasonlóan kellene definiálni... */
-         body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2; /* ...többi változó... */ }
-        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1; /* ... */ }
-        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa; /* ... */ }
-        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f; /* ... */ }
-        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347; /* ... */ }
-        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c; /* ... */ }
-        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff; /* ... */ }
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2; } body.theme-magicforest .task p.instructions {color: #4b0082;} 
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;} body.theme-tech .task p.instructions {color: #b0bec5;} 
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;} body.theme-ocean .task p.instructions {color: #00695c;} 
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;} body.theme-sport .task p.instructions {color: #0d47a1;} 
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;} body.theme-flowergarden .task p.instructions {color: #8b4513;} 
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;} body.theme-adventure .task p.instructions {color: #4e342e;} 
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;} body.theme-sky .task p.instructions {color: #5f9ea0;} 
+
     </style>
 </head>
 <body class="theme-candy"> 
@@ -395,7 +352,7 @@
                 <button class="task-button new-task-button" onclick="generateTask1()">Új feladat</button>
             </div>
             <p id="task1_description_p" class="instructions">A számokat pótold a táblázat elején megadott számra! Írd a hiányzó mennyiséget a megfelelő helyre!</p>
-            <div id="task1_table_container" class="table-task-container">
+            <div id="task1_table_container" class="table-task-container table-task">
                 </div>
             <button class="task-button" onclick="checkTask1()">Ellenőrzés</button>
             <p id="task1_feedback" class="feedback"></p>
@@ -406,8 +363,8 @@
                 <h3>2. Feladat: Töltsd ki a táblázatot a szabály alapján!</h3>
                 <button class="task-button new-task-button" onclick="generateTask2()">Új feladat</button>
             </div>
-            <p id="task2_rule_p" class="table-task rule-display">Szabály: Y = X + ?</p>
-            <div id="task2_table_container" class="table-task-container">
+            <p id="task2_rule_p" class="instructions">Szabály: Y = X + ?</p>
+            <div id="task2_table_container" class="table-task-container table-task">
                 </div>
             <button class="task-button" onclick="checkTask2()">Ellenőrzés</button>
             <p id="task2_feedback" class="feedback"></p>
@@ -416,32 +373,76 @@
 
     <script>
         let currentNumberRange = 10; 
-        let task1Data = { targetSum: 0, columns: [] }; // columns will store {given: number, solution: number, isGivenOnTop: boolean}
+        let task1Data = { targetSum: 0, columns: [] }; 
         let task2Data = { rule: { variable1: 'Y', variable2: 'X', operation: '+', diff: 0},
-                          tablePairs: [], solutions: {} };
+                            tablePairs: [], solutions: {} };
 
         const bodyEl = document.body;
         const themeButtons = document.querySelectorAll('.theme-button');
         const rangeButtons = document.querySelectorAll('.range-button');
+        const NUM_COLS_TASK1_TASK2 = 8; 
+
+        const columnColorPairs = [
+            { strong: '#FFADAD', pastel: '#FFD6A5' }, { strong: '#A0C4FF', pastel: '#BDB2FF' }, 
+            { strong: '#9BF6FF', pastel: '#CAFFBF' }, { strong: '#FDFFB6', pastel: '#FFD1A0' }, 
+            { strong: '#FFC6FF', pastel: '#D9B9FF' }, { strong: '#A0E7E5', pastel: '#B4F8C8' }, 
+            { strong: '#FFAFCC', pastel: '#BDE0FE' }, { strong: '#FBF8CC', pastel: '#FDE4CF' }
+        ];
+        
+        function getUniqueColorPairFromArray(availableColorsArray) {
+            if (!availableColorsArray || availableColorsArray.length === 0) {
+                return columnColorPairs[Math.floor(Math.random() * columnColorPairs.length)];
+            }
+            const randomIndex = Math.floor(Math.random() * availableColorsArray.length);
+            return availableColorsArray.splice(randomIndex, 1)[0]; 
+        }
+        
+        function getDifferentColorPair(excludePair = null) {
+            let choice;
+            let attempts = 0;
+            const maxAttempts = columnColorPairs.length * 2;
+            do {
+                choice = columnColorPairs[Math.floor(Math.random() * columnColorPairs.length)];
+                attempts++;
+            } while (excludePair && choice.strong === excludePair.strong && choice.pastel === excludePair.pastel && attempts < maxAttempts && columnColorPairs.length > 1);
+            return choice;
+        }
+
+        function setupInputFocusAndMaxlength(inputElements, setInitialFocus = false) {
+            inputElements.forEach((inputEl, index) => {
+                if (!inputEl) return; 
+                
+                // expectedValue az input elem dataset-jéből jön
+                const expectedSolution = inputEl.dataset.expectedValue;
+                const expectedLength = String(expectedSolution).length;
+                inputEl.setAttribute('maxlength', expectedLength);
+
+                inputEl.style.borderColor = `var(--input-border-color, #ccc)`;
+                inputEl.style.borderWidth = '1px';
+                inputEl.style.borderStyle = 'solid';
+
+                inputEl.addEventListener('input', () => {
+                    const value = inputEl.value;
+                    if (value.length >= expectedLength && index < inputElements.length - 1) {
+                         if(inputElements[index + 1]) inputElements[index + 1].focus();
+                    }
+                });
+            });
+            if (setInitialFocus && inputElements.length > 0 && inputElements[0]) {
+                setTimeout(() => {
+                    if (inputElements[0]) inputElements[0].focus();
+                }, 50);
+            }
+        }
 
         function applyTheme(themeClass) {
             bodyEl.className = ''; 
             bodyEl.classList.add(themeClass); 
-
-            themeButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.theme === themeClass);
-            });
-            rangeButtons.forEach(btn => {
-                btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange);
-            });
+            themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeClass));
+            rangeButtons.forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange));
         }
 
-        themeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                applyTheme(button.dataset.theme);
-            });
-        });
-
+        themeButtons.forEach(button => button.addEventListener('click', () => applyTheme(button.dataset.theme)));
         rangeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 currentNumberRange = parseInt(button.dataset.range);
@@ -455,50 +456,48 @@
         function getRandomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
-            if (min > max) return min; // Handle cases where min could become > max after adjustments
+            if (min > max) return min; 
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
         function generateTask1() {
-            task1Data.targetSum = getRandomInt(Math.floor(currentNumberRange / 2) + 1, currentNumberRange);
+            task1Data.targetSum = getRandomInt(Math.max(1, Math.floor(currentNumberRange / 2) + 1), currentNumberRange);
             if (currentNumberRange === 5 && task1Data.targetSum < 2) task1Data.targetSum = getRandomInt(2,5);
             else if (task1Data.targetSum < 1 && currentNumberRange > 0) task1Data.targetSum = 1;
             else if (currentNumberRange === 0 ) task1Data.targetSum = 0;
 
             task1Data.columns = [];
-            const numColsToGenerate = 8; 
-            const usedNumbers = new Set();
+            const usedGivenNumbers = new Set();
 
-            for (let i = 0; i < numColsToGenerate; i++) {
-                let num;
+            for (let i = 0; i < NUM_COLS_TASK1_TASK2; i++) {
+                let givenNum;
                 let attempts = 0;
+                const maxAttempts = 50;
+                let uniquePossible = (task1Data.targetSum +1) > usedGivenNumbers.size;
+
                 do {
-                    num = getRandomInt(0, task1Data.targetSum - (task1Data.targetSum > 0 ? 1 : 0) ); 
+                    if (task1Data.targetSum === 0) givenNum = 0;
+                    else givenNum = getRandomInt(0, task1Data.targetSum -1 );
                     attempts++;
-                } while (usedNumbers.has(num) && attempts < 50); // Növeltük az attempts limitet
+                } while (usedGivenNumbers.has(givenNum) && attempts < maxAttempts && uniquePossible && usedGivenNumbers.size < (task1Data.targetSum +1) ); 
                 
-                if(attempts >= 50 && usedNumbers.has(num)) { 
-                    let foundFallback = false;
-                    for(let fallbackNum = 0; fallbackNum < task1Data.targetSum; fallbackNum++) {
-                        if(!usedNumbers.has(fallbackNum)) {
-                            num = fallbackNum;
-                            foundFallback = true;
+                if (usedGivenNumbers.has(givenNum) && uniquePossible && usedGivenNumbers.size < (task1Data.targetSum+1)) { 
+                    for (let fallback = 0; fallback <= task1Data.targetSum; fallback++) {
+                        if (!usedGivenNumbers.has(fallback)) {
+                            givenNum = fallback;
                             break;
                         }
                     }
-                    if(!foundFallback && task1Data.columns.length < numColsToGenerate) { // Ha végképp nincs, és még kell
-                        num = task1Data.targetSum > 0 ? task1Data.targetSum -1 : 0; // Utolsó lehetőség
-                        if (usedNumbers.has(num) && task1Data.targetSum > 1) num = task1Data.targetSum -2;
-                         if (usedNumbers.has(num) && task1Data.targetSum > 2) num = task1Data.targetSum -3;
-                    }
                 }
-                if(task1Data.columns.length >= numColsToGenerate && !usedNumbers.has(num)) continue; 
+                usedGivenNumbers.add(givenNum);
+                const solutionNum = task1Data.targetSum - givenNum;
+                const isGivenFixed = Math.random() < 0.5;
 
-                usedNumbers.add(num);
                 task1Data.columns.push({
-                    given: num,
-                    solution: task1Data.targetSum - num,
-                    isGivenOnTop: Math.random() < 0.5 // Véletlenszerűen dől el, hogy a megadott szám felül vagy alul van-e
+                    fixedValue: isGivenFixed ? givenNum : solutionNum,
+                    valueToFind: isGivenFixed ? solutionNum : givenNum,
+                    isFixedOnTop: Math.random() < 0.5, 
+                    id: `task1_input_col${i}` 
                 });
             }
             renderTask1Table();
@@ -512,72 +511,85 @@
             container.innerHTML = '';
             const table = document.createElement('table');
             
-            const row1 = table.insertRow(); // Felső sor
-            const row2 = table.insertRow(); // Alsó sor
+            const row1 = table.insertRow(); 
+            const row2 = table.insertRow(); 
+            const orderedInputs = [];
+            let availableColorsForTask1 = [...columnColorPairs]; 
 
-            // Célösszeg cella (első oszlop, két sort átfogva)
             const targetCell = row1.insertCell();
             targetCell.classList.add('target-sum-cell');
-            targetCell.rowSpan = 2; // Átfogja mindkét sort
+            targetCell.rowSpan = 2; 
             const targetWrapper = document.createElement('div');
-            targetWrapper.classList.add('fixed-number-cell-wrapper');
+            targetWrapper.classList.add('table-fixed-number'); 
             targetWrapper.textContent = task1Data.targetSum;
+            targetWrapper.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--target-sum-bg-color').trim(); 
+            targetWrapper.style.color = getComputedStyle(document.documentElement).getPropertyValue('--target-sum-text-color').trim();
             targetCell.appendChild(targetWrapper);
             
-            task1Data.columns.forEach((colData, i) => {
+            task1Data.columns.forEach((colData) => {
                 const cellTop = row1.insertCell();
                 const cellBottom = row2.insertCell();
-
-                if (colData.isGivenOnTop) {
-                    cellTop.classList.add('task1-given-number');
-                    const numDisplay = document.createElement('div');
-                    numDisplay.classList.add('fixed-number-cell-wrapper');
-                    numDisplay.textContent = colData.given;
-                    cellTop.appendChild(numDisplay);
-
-                    const input = document.createElement('input');
-                    input.type = 'number';
-                    input.id = `task1_ans_${i}`;
-                    input.min = 0;
-                    input.max = currentNumberRange;
-                    cellBottom.appendChild(input);
-                } else {
-                    const input = document.createElement('input');
-                    input.type = 'number';
-                    input.id = `task1_ans_${i}`;
-                    input.min = 0;
-                    input.max = currentNumberRange;
-                    cellTop.appendChild(input);
-                    
-                    cellBottom.classList.add('task1-given-number');
-                    const numDisplay = document.createElement('div');
-                    numDisplay.classList.add('fixed-number-cell-wrapper');
-                    numDisplay.textContent = colData.given;
-                    cellBottom.appendChild(numDisplay);
+                
+                let colors;
+                if (availableColorsForTask1.length > 0) {
+                    colors = getUniqueColorPairFromArray(availableColorsForTask1);
+                } else { 
+                    colors = columnColorPairs[Math.floor(Math.random() * columnColorPairs.length)];
                 }
+
+                const fixedEl = document.createElement('div');
+                fixedEl.classList.add('table-fixed-number');
+                fixedEl.textContent = colData.fixedValue;
+                fixedEl.style.backgroundColor = colors.strong; 
+                fixedEl.style.color = getComputedStyle(document.documentElement).getPropertyValue('--fixed-cell-text-color').trim();
+
+                const inputEl = document.createElement('input');
+                inputEl.type = 'number';
+                inputEl.classList.add('table-input');
+                inputEl.id = colData.id; 
+                inputEl.min = 0;
+                inputEl.max = currentNumberRange;
+                inputEl.style.backgroundColor = colors.pastel; 
+                inputEl.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
+                inputEl.dataset.expectedValue = colData.valueToFind; // Elvárt érték tárolása
+
+                if (colData.isFixedOnTop) {
+                    cellTop.appendChild(fixedEl);
+                    cellBottom.appendChild(inputEl);
+                } else {
+                    cellTop.appendChild(inputEl);
+                    cellBottom.appendChild(fixedEl);
+                }
+                orderedInputs.push(inputEl);
             });
             container.appendChild(table);
+            setupInputFocusAndMaxlength(orderedInputs, true); 
         }
 
         function checkTask1() {
             const feedbackEl = document.getElementById('task1_feedback');
             let allCorrect = true;
             let allFilled = true;
-            task1Data.columns.forEach((colData, i) => {
-                const inputEl = document.getElementById(`task1_ans_${i}`);
-                if (!inputEl) return;
+            const borderWidth = getComputedStyle(document.documentElement).getPropertyValue('--feedback-border-width').trim();
+
+            task1Data.columns.forEach((colData) => {
+                const inputEl = document.getElementById(colData.id);
+                if (!inputEl || !inputEl.closest('td')) return;  
+                
                 if (inputEl.value.trim() === "") {
                     allFilled = false;
-                    inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)'; 
+                    inputEl.style.borderColor = `var(--feedback-incorrect-border-color)`;
                 } else {
                     const userAnswer = parseInt(inputEl.value);
-                    if (userAnswer !== colData.solution) {
+                    if (userAnswer !== colData.valueToFind) { 
                         allCorrect = false;
-                        inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
+                        inputEl.style.borderColor = `var(--feedback-incorrect-border-color)`;
                     } else {
-                        inputEl.style.borderColor = 'var(--feedback-correct-border-color, green)';
+                        inputEl.style.borderColor = `var(--feedback-correct-border-color)`;
                     }
                 }
+                inputEl.style.borderWidth = borderWidth;
+                inputEl.style.borderStyle = 'solid';
             });
 
             if (!allFilled) {
@@ -600,22 +612,18 @@
             task2Data.rule.operation = operation;
             task2Data.rule.diff = diff;
 
-            if (operation === '+') { // Y = X + diff
-                task2Data.rule.variable1 = 'Y';
-                task2Data.rule.variable2 = 'X';
-                document.getElementById('task2_rule_p').innerHTML = `Szabály: Y = X + ${diff} &nbsp;&nbsp; <span style="font-size:0.8em;">(X = Y - ${diff})</span>`;
-            } else { // Y = X - diff
-                task2Data.rule.variable1 = 'Y'; 
-                task2Data.rule.variable2 = 'X';
-                document.getElementById('task2_rule_p').innerHTML = `Szabály: Y = X - ${diff} &nbsp;&nbsp; <span style="font-size:0.8em;">(X = Y + ${diff})</span>`;
+            const ruleP = document.getElementById('task2_rule_p');
+            if (operation === '+') { 
+                ruleP.textContent = `Szabály: Y = X + ${diff} (vagy másképp: X = Y - ${diff})`;
+            } else { 
+                ruleP.textContent = `Szabály: Y = X - ${diff} (vagy másképp: X = Y + ${diff})`;
             }
 
             task2Data.tablePairs = [];
             task2Data.solutions = {};
-            const numPairsToGenerate = getRandomInt(3, 4);
             const knownValuesThisTask = { X: new Set(), Y: new Set() };
 
-            for (let i = 0; i < numPairsToGenerate; i++) {
+            for (let i = 0; i < NUM_COLS_TASK1_TASK2; i++) {
                 let xVal, yVal;
                 let knownVar = (Math.random() < 0.5) ? 'X' : 'Y';
                 let attempts = 0;
@@ -646,27 +654,34 @@
                 } while ( ((knownVar === 'X' && knownValuesThisTask.X.has(xVal)) || (knownVar === 'Y' && knownValuesThisTask.Y.has(yVal)) ) && attempts < 50);
                 
                 if (attempts >= 50 && ((knownVar === 'X' && knownValuesThisTask.X.has(xVal)) || (knownVar === 'Y' && knownValuesThisTask.Y.has(yVal)))) {
+                    let foundFallback = false;
                     if (knownVar === 'X') {
                         for(let fx = 0; fx <= currentNumberRange - (operation === '+' ? diff : 0); fx++) {
-                            if (!knownValuesThisTask.X.has(fx)) { xVal = fx; yVal = operation === '+' ? fx+diff : fx-diff; if (yVal >=0 && yVal <= currentNumberRange) break;}
+                            if (!knownValuesThisTask.X.has(fx)) { xVal = fx; yVal = operation === '+' ? fx+diff : fx-diff; if (yVal >=0 && yVal <= currentNumberRange) {foundFallback=true; break;}}
                         }
                     } else {
                          for(let fy = (operation === '+' ? diff : 0); fy <= currentNumberRange - (operation === '-' ? diff : 0); fy++) {
-                            if (!knownValuesThisTask.Y.has(fy)) { yVal = fy; xVal = operation === '+' ? fy-diff : fy+diff; if (xVal >=0 && xVal <= currentNumberRange) break;}
+                            if (!knownValuesThisTask.Y.has(fy)) { yVal = fy; xVal = operation === '+' ? fy-diff : fy+diff; if (xVal >=0 && xVal <= currentNumberRange) {foundFallback=true; break;}}
                         }
+                    }
+                     if (!foundFallback) { 
+                         if (task2Data.tablePairs.length < NUM_COLS_TASK1_TASK2 -1 || task2Data.tablePairs.length === 0) {i--; continue;} else break;
                     }
                 }
                 if (xVal < 0 || xVal > currentNumberRange || yVal < 0 || yVal > currentNumberRange) {
-                     // Ha a fallback is rossz, akkor az utolsó oszlopot kihagyjuk
-                     if (task2Data.tablePairs.length < numPairsToGenerate -1 || task2Data.tablePairs.length === 0) {i--; continue;} else break;
+                     if (task2Data.tablePairs.length < NUM_COLS_TASK1_TASK2 -1 || task2Data.tablePairs.length === 0) {i--; continue;} else break;
                 }
-
 
                 if (knownVar === 'X') knownValuesThisTask.X.add(xVal); else knownValuesThisTask.Y.add(yVal);
 
-                task2Data.tablePairs.push({ x: (knownVar === 'X' ? xVal : null), y: (knownVar === 'Y' ? yVal : null) });
-                task2Data.solutions[`x_${i}`] = xVal;
-                task2Data.solutions[`y_${i}`] = yVal;
+                task2Data.tablePairs.push({ 
+                    x: (knownVar === 'X' ? xVal : null), 
+                    y: (knownVar === 'Y' ? yVal : null),
+                    xInputId: (knownVar === 'Y' ? `task2_x_col${i}` : null),
+                    yInputId: (knownVar === 'X' ? `task2_y_col${i}` : null) 
+                });
+                task2Data.solutions[`x_col${i}`] = xVal;
+                task2Data.solutions[`y_col${i}`] = yVal;
             }
             renderTask2Table();
             document.getElementById('task2_feedback').textContent = '';
@@ -676,27 +691,34 @@
         function renderTask2Table() {
             const container = document.getElementById('task2_table_container');
             container.innerHTML = '';
-            if (task2Data.tablePairs.length === 0) return; // Ne generáljon üres táblát
+            if (task2Data.tablePairs.length === 0) return;
             const table = document.createElement('table');
+            const orderedInputs = [];
             
             const xRow = table.insertRow();
             const xHeaderCell = xRow.insertCell();
             xHeaderCell.outerHTML = "<th class='header-cell-xy'>X</th>";
+            const xColors = getDifferentColorPair();
 
             task2Data.tablePairs.forEach((pair, i) => {
                 const cell = xRow.insertCell();
                 if (pair.x !== null) {
-                    cell.classList.add('task2-x-val');
                     const numDisplay = document.createElement('div');
-                    numDisplay.classList.add('fixed-number-cell-wrapper');
+                    numDisplay.classList.add('table-fixed-number');
                     numDisplay.textContent = pair.x;
+                    numDisplay.style.backgroundColor = xColors.strong;
+                    numDisplay.style.color = getComputedStyle(document.documentElement).getPropertyValue('--fixed-cell-text-color').trim();
                     cell.appendChild(numDisplay);
                 } else {
                     const input = document.createElement('input');
                     input.type = 'number';
-                    input.id = `task2_x_${i}`;
+                    input.classList.add('table-input');
+                    input.id = pair.xInputId; 
                     input.min = 0;
                     input.max = currentNumberRange;
+                    input.style.backgroundColor = xColors.pastel;
+                    input.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
+                    input.dataset.expectedValue = task2Data.solutions[`x_col${i}`]; // Elvárt érték
                     cell.appendChild(input);
                 }
             });
@@ -704,25 +726,45 @@
             const yRow = table.insertRow();
             const yHeaderCell = yRow.insertCell();
             yHeaderCell.outerHTML = "<th class='header-cell-xy'>Y</th>";
+            const yColors = getDifferentColorPair(xColors); 
 
             task2Data.tablePairs.forEach((pair, i) => {
                 const cell = yRow.insertCell();
                 if (pair.y !== null) {
-                    cell.classList.add('task2-y-val');
                     const numDisplay = document.createElement('div');
-                    numDisplay.classList.add('fixed-number-cell-wrapper');
+                    numDisplay.classList.add('table-fixed-number');
                     numDisplay.textContent = pair.y;
+                    numDisplay.style.backgroundColor = yColors.strong;
+                    numDisplay.style.color = getComputedStyle(document.documentElement).getPropertyValue('--fixed-cell-text-color').trim();
                     cell.appendChild(numDisplay);
                 } else {
                     const input = document.createElement('input');
                     input.type = 'number';
-                    input.id = `task2_y_${i}`;
+                    input.classList.add('table-input');
+                    input.id = pair.yInputId;
                     input.min = 0;
                     input.max = currentNumberRange;
+                    input.style.backgroundColor = yColors.pastel;
+                    input.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
+                    input.dataset.expectedValue = task2Data.solutions[`y_col${i}`]; // Elvárt érték
                     cell.appendChild(input);
                 }
             });
             container.appendChild(table);
+
+            for (let i = 0; i < NUM_COLS_TASK1_TASK2; i++) {
+                const pair = task2Data.tablePairs[i];
+                if (pair) {
+                    if (pair.x === null && pair.xInputId) {
+                        const inputEl = document.getElementById(pair.xInputId);
+                        if (inputEl) orderedInputs.push(inputEl);
+                    } else if (pair.y === null && pair.yInputId) { 
+                        const inputEl = document.getElementById(pair.yInputId);
+                        if (inputEl) orderedInputs.push(inputEl);
+                    }
+                }
+            }
+            setupInputFocusAndMaxlength(orderedInputs, false); 
         }
 
 
@@ -730,40 +772,31 @@
             const feedbackEl = document.getElementById('task2_feedback');
             let allCorrect = true;
             let allFilled = true;
+            const borderWidth = getComputedStyle(document.documentElement).getPropertyValue('--feedback-border-width').trim();
 
             task2Data.tablePairs.forEach((pair, i) => {
-                if (pair.x === null) { 
-                    const inputEl = document.getElementById(`task2_x_${i}`);
-                    if (!inputEl) return;
-                    if (inputEl.value.trim() === "") {
-                        allFilled = false;
-                        inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
-                    } else {
-                        const userAnswer = parseInt(inputEl.value);
-                        if (userAnswer !== task2Data.solutions[`x_${i}`]) {
-                            allCorrect = false;
-                            inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
+                const checkInput = (inputId, solutionKey) => {
+                    if (pair[solutionKey.charAt(0)] === null && inputId) { 
+                        const inputEl = document.getElementById(inputId);
+                        if (!inputEl) return;
+                        if (inputEl.value.trim() === "") {
+                            allFilled = false;
+                            inputEl.style.borderColor = `var(--feedback-incorrect-border-color)`;
                         } else {
-                            inputEl.style.borderColor = 'var(--feedback-correct-border-color, green)';
+                            const userAnswer = parseInt(inputEl.value);
+                            if (userAnswer !== task2Data.solutions[solutionKey]) {
+                                allCorrect = false;
+                                inputEl.style.borderColor = `var(--feedback-incorrect-border-color)`;
+                            } else {
+                                inputEl.style.borderColor = `var(--feedback-correct-border-color)`;
+                            }
                         }
+                        inputEl.style.borderWidth = borderWidth;
+                        inputEl.style.borderStyle = 'solid';
                     }
-                }
-                if (pair.y === null) { 
-                    const inputEl = document.getElementById(`task2_y_${i}`);
-                    if (!inputEl) return;
-                     if (inputEl.value.trim() === "") {
-                        allFilled = false;
-                        inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
-                    } else {
-                        const userAnswer = parseInt(inputEl.value);
-                        if (userAnswer !== task2Data.solutions[`y_${i}`]) {
-                            allCorrect = false;
-                            inputEl.style.borderColor = 'var(--feedback-incorrect-border-color, red)';
-                        } else {
-                            inputEl.style.borderColor = 'var(--feedback-correct-border-color, green)';
-                        }
-                    }
-                }
+                };
+                checkInput(pair.xInputId, `x_col${i}`);
+                checkInput(pair.yInputId, `y_col${i}`);
             });
             
             if (!allFilled) {
@@ -779,7 +812,10 @@
         }
         
         document.addEventListener('DOMContentLoaded', function() {
-            applyTheme('theme-candy'); 
+            const initialTheme = bodyEl.classList.contains('theme-space') ? 'theme-space' : 
+                               bodyEl.classList.contains('theme-jungle') ? 'theme-jungle' : 
+                               'theme-candy'; 
+            applyTheme(initialTheme); 
             generateTask1(); 
             generateTask2();
         });
