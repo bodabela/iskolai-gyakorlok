@@ -143,7 +143,7 @@
             text-align: center;
             min-width: clamp(45px, 9vw, 55px);
             height: clamp(45px, 9vw, 55px);  
-            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
             box-sizing: border-box;
             vertical-align: middle;
         }
@@ -162,8 +162,8 @@
             font-weight: normal; 
             border-radius: 6px;
             border: 1px solid var(--input-border-color, #ccc); 
-            background-color: var(--input-bg-color, #fff); 
-            color: var(--input-text-color, #212529);
+            background-color: var(--input-bg-color, #fff); /* Alapértelmezett, felülírja az oszlop-szin osztály */
+            color: var(--input-text-color, #212529); /* Alapértelmezett, felülírja az oszlop-szin osztály */
             -moz-appearance: textfield;
             box-sizing: border-box;
             margin: auto; 
@@ -184,8 +184,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: var(--fixed-cell-text-color, #333);
-            background-color: var(--fixed-cell-bg-color, #e9ecef);
+            color: var(--fixed-cell-text-color, #333); /* Alapértelmezett, felülírja az oszlop-szin osztály */
+            background-color: var(--fixed-cell-bg-color, #e9ecef); /* Alapértelmezett, felülírja az oszlop-szin osztály */
             border-radius: 4px;
             min-width: clamp(40px, 8vw, 50px); 
             min-height: clamp(38px, 7.5vw, 45px); 
@@ -193,9 +193,11 @@
             border: 1px solid var(--fixed-cell-border-color, transparent);
             line-height: 1;
         }
-
-        .table-task .target-sum-cell .table-fixed-number { 
+        
+        .table-task .target-sum-cell-styled .table-fixed-number { 
             font-size: clamp(1.2em, 3.8vw, 1.4em); 
+            background-color: var(--target-sum-bg-color);
+            color: var(--target-sum-text-color);
         }
         
         .table-task .empty-placeholder-cell { 
@@ -246,7 +248,52 @@
             --feedback-correct-border-color: green;
             --feedback-incorrect-border-color: red;
             --feedback-border-width: 2.5px;
+
+            /* Alapértelmezett oszlop színek */
+            --oszlop-szin-1-eros: #f8d7da; --oszlop-szin-1-pasztell: #fde7e9;
+            --oszlop-szin-2-eros: #cce5ff; --oszlop-szin-2-pasztell: #e7f2ff;
+            --oszlop-szin-3-eros: #d4edda; --oszlop-szin-3-pasztell: #eaf7ec;
+            --oszlop-szin-4-eros: #fff3cd; --oszlop-szin-4-pasztell: #fff9e7;
+            --oszlop-szin-5-eros: #d1ecf1; --oszlop-szin-5-pasztell: #e8f7f9;
         }
+
+        /* Téma-specifikus oszlop színek */
+        body.theme-candy {
+            --oszlop-szin-1-eros: #ffc0cb; --oszlop-szin-1-pasztell: #ffe4e1; /* Pinkek */
+            --oszlop-szin-2-eros: #dda0dd; --oszlop-szin-2-pasztell: #f2dcf2; /* Lilák */
+            --oszlop-szin-3-eros: #ffb6c1; --oszlop-szin-3-pasztell: #fff0f5; /* Világosabb pinkek */
+            --oszlop-szin-4-eros: #db7093; --oszlop-szin-4-pasztell: #ffe4f0; /* Sötétebb rózsaszín */
+            --oszlop-szin-5-eros: #ff7f50; --oszlop-szin-5-pasztell: #ffdab9; /* Korall/Barack */
+        }
+        body.theme-space {
+            --oszlop-szin-1-eros: #3b82f6; --oszlop-szin-1-pasztell: #60a5fa; /* Kékek */
+            --oszlop-szin-2-eros: #10b981; --oszlop-szin-2-pasztell: #34d399; /* Zöldek */
+            --oszlop-szin-3-eros: #8b5cf6; --oszlop-szin-3-pasztell: #a78bfa; /* Lilák */
+            --oszlop-szin-4-eros: #f59e0b; --oszlop-szin-4-pasztell: #fbbf24; /* Narancsok */
+            --oszlop-szin-5-eros: #ec4899; --oszlop-szin-5-pasztell: #f472b6; /* Pinkek */
+        }
+        body.theme-jungle {
+            --oszlop-szin-1-eros: #81c784; --oszlop-szin-1-pasztell: #a5d6a7; /* Világoszöld */
+            --oszlop-szin-2-eros: #66bb6a; --oszlop-szin-2-pasztell: #81c784; /* Középzöld */
+            --oszlop-szin-3-eros: #a1887f; --oszlop-szin-3-pasztell: #bcaaa4; /* Barna */
+            --oszlop-szin-4-eros: #ffd54f; --oszlop-szin-4-pasztell: #ffe082; /* Sárga */
+            --oszlop-szin-5-eros: #4db6ac; --oszlop-szin-5-pasztell: #80cbc4; /* Türkiz */
+        }
+        /* További témákhoz hasonlóan definiálhatóak az --oszlop-szin-X változók */
+
+
+        /* Oszlop színező osztályok */
+        .oszlop-szin-1 .table-fixed-number { background-color: var(--oszlop-szin-1-eros); color: var(--fixed-cell-text-color);}
+        .oszlop-szin-1 .table-input { background-color: var(--oszlop-szin-1-pasztell); color: var(--input-text-color);}
+        .oszlop-szin-2 .table-fixed-number { background-color: var(--oszlop-szin-2-eros); color: var(--fixed-cell-text-color);}
+        .oszlop-szin-2 .table-input { background-color: var(--oszlop-szin-2-pasztell); color: var(--input-text-color);}
+        .oszlop-szin-3 .table-fixed-number { background-color: var(--oszlop-szin-3-eros); color: var(--fixed-cell-text-color);}
+        .oszlop-szin-3 .table-input { background-color: var(--oszlop-szin-3-pasztell); color: var(--input-text-color);}
+        .oszlop-szin-4 .table-fixed-number { background-color: var(--oszlop-szin-4-eros); color: var(--fixed-cell-text-color);}
+        .oszlop-szin-4 .table-input { background-color: var(--oszlop-szin-4-pasztell); color: var(--input-text-color);}
+        .oszlop-szin-5 .table-fixed-number { background-color: var(--oszlop-szin-5-eros); color: var(--fixed-cell-text-color);}
+        .oszlop-szin-5 .table-input { background-color: var(--oszlop-szin-5-pasztell); color: var(--input-text-color);}
+
 
         body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;
             --table-border-color: #ffb6c1; --table-cell-border-color: #ffc0cb;
@@ -343,11 +390,12 @@
     </div>
 
     <div class="container">
-        <h1>Pótlások</h1>
+        <h1>1. Osztály - Matematika Feladatok</h1>
+        <h2>Téma: Pótlás Táblázatban</h2>
 
         <div class="task">
             <div class="task-header">
-                <h3>Pótlás adott számra</h3>
+                <h3>1. Feladat: Mennyit adjak hozzá, hogy ... legyen?</h3>
                 <button class="task-button new-task-button" onclick="generateTask1()">Új feladat</button>
             </div>
             <p id="task1_description_p" class="instructions">A számokat pótold a táblázat elején megadott számra! Írd a hiányzó mennyiséget a megfelelő helyre!</p>
@@ -359,7 +407,7 @@
 
         <div class="task">
              <div class="task-header">
-                <h3>Szabály alapú pótlás</h3>
+                <h3>2. Feladat: Töltsd ki a táblázatot a szabály alapján!</h3>
                 <button class="task-button new-task-button" onclick="generateTask2()">Új feladat</button>
             </div>
             <p id="task2_rule_p" class="instructions">Szabály: Y = X + ?</p>
@@ -381,29 +429,30 @@
         const rangeButtons = document.querySelectorAll('.range-button');
         const NUM_COLS_TASK1_TASK2 = 8; 
 
-        const columnColorPairs = [
-            { strong: '#FFADAD', pastel: '#FFD6A5' }, { strong: '#A0C4FF', pastel: '#BDB2FF' }, 
-            { strong: '#9BF6FF', pastel: '#CAFFBF' }, { strong: '#FDFFB6', pastel: '#FFD1A0' }, 
-            { strong: '#FFC6FF', pastel: '#D9B9FF' }, { strong: '#A0E7E5', pastel: '#B4F8C8' }, 
-            { strong: '#FFAFCC', pastel: '#BDE0FE' }, { strong: '#FBF8CC', pastel: '#FDE4CF' }
+        const oszlopAlapSzinOsztalyok = [
+            'oszlop-szin-1', 'oszlop-szin-2', 'oszlop-szin-3', 'oszlop-szin-4', 'oszlop-szin-5'
         ];
         
-        function getUniqueColorPairFromArray(availableColorsArray) {
-            if (!availableColorsArray || availableColorsArray.length === 0) {
-                return columnColorPairs[Math.floor(Math.random() * columnColorPairs.length)];
+        function getUniqueClassFromArray(availableClassesArray) {
+            if (!availableClassesArray || availableClassesArray.length === 0) {
+                // Ha elfogytak az egyedi osztályok, válasszunk egyet véletlenszerűen az alap listából
+                return oszlopAlapSzinOsztalyok[Math.floor(Math.random() * oszlopAlapSzinOsztalyok.length)];
             }
-            const randomIndex = Math.floor(Math.random() * availableColorsArray.length);
-            return availableColorsArray.splice(randomIndex, 1)[0]; 
+            const randomIndex = Math.floor(Math.random() * availableClassesArray.length);
+            return availableClassesArray.splice(randomIndex, 1)[0]; 
         }
         
-        function getDifferentColorPair(excludePair = null) {
+        function getDifferentClass(availableClassesArray, excludeClass = null) {
             let choice;
             let attempts = 0;
-            const maxAttempts = columnColorPairs.length * 2;
+            const maxAttempts = availableClassesArray.length > 1 ? availableClassesArray.length * 2 : 1;
+            if (availableClassesArray.length === 0) { // Fallback, ha a forrás tömb üres
+                return oszlopAlapSzinOsztalyok[Math.floor(Math.random() * oszlopAlapSzinOsztalyok.length)];
+            }
             do {
-                choice = columnColorPairs[Math.floor(Math.random() * columnColorPairs.length)];
+                choice = availableClassesArray[Math.floor(Math.random() * availableClassesArray.length)];
                 attempts++;
-            } while (excludePair && choice.strong === excludePair.strong && choice.pastel === excludePair.pastel && attempts < maxAttempts && columnColorPairs.length > 1);
+            } while (excludeClass && choice === excludeClass && attempts < maxAttempts && availableClassesArray.length > 1);
             return choice;
         }
 
@@ -411,10 +460,10 @@
             inputElements.forEach((inputEl, index) => {
                 if (!inputEl) return; 
                 
-                // expectedValue az input elem dataset-jéből jön
-                const expectedSolution = inputEl.dataset.expectedValue;
-                const expectedLength = String(expectedSolution).length;
-                inputEl.setAttribute('maxlength', expectedLength);
+                const expectedSolutionString = String(inputEl.dataset.expectedValue);
+                const fieldMaxLengthBasedOnNumberRange = currentNumberRange > 9 ? 2 : 1;
+                inputEl.setAttribute('maxlength', fieldMaxLengthBasedOnNumberRange);
+
 
                 inputEl.style.borderColor = `var(--input-border-color, #ccc)`;
                 inputEl.style.borderWidth = '1px';
@@ -422,7 +471,8 @@
 
                 inputEl.addEventListener('input', () => {
                     const value = inputEl.value;
-                    if (value.length >= expectedLength && index < inputElements.length - 1) {
+                    // Akkor lépjen tovább, ha a beírt érték hossza megegyezik a VÁRT megoldás hosszával
+                    if (value.length >= expectedSolutionString.length && index < inputElements.length - 1) {
                          if(inputElements[index + 1]) inputElements[index + 1].focus();
                     }
                 });
@@ -439,6 +489,11 @@
             bodyEl.classList.add(themeClass); 
             themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeClass));
             rangeButtons.forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange));
+            // Téma váltásakor újra kell generálni a táblákat, hogy az új téma CSS változói érvényesüljenek a JS által beállított stílusokban is
+            if (typeof generateTask1 === 'function' && typeof generateTask2 === 'function') { // Csak ha már definiálva vannak
+                generateTask1();
+                generateTask2();
+            }
         }
 
         themeButtons.forEach(button => button.addEventListener('click', () => applyTheme(button.dataset.theme)));
@@ -513,34 +568,31 @@
             const row1 = table.insertRow(); 
             const row2 = table.insertRow(); 
             const orderedInputs = [];
-            let availableColorsForTask1 = [...columnColorPairs]; 
+            let availableColorClassesForTask1 = [...oszlopAlapSzinOsztalyok]; 
 
             const targetCell = row1.insertCell();
-            targetCell.classList.add('target-sum-cell');
+            targetCell.classList.add('target-sum-cell-styled'); // CSS osztály a stílushoz
             targetCell.rowSpan = 2; 
             const targetWrapper = document.createElement('div');
             targetWrapper.classList.add('table-fixed-number'); 
             targetWrapper.textContent = task1Data.targetSum;
-            targetWrapper.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--target-sum-bg-color').trim(); 
-            targetWrapper.style.color = getComputedStyle(document.documentElement).getPropertyValue('--target-sum-text-color').trim();
+            // A stílust a .target-sum-cell-styled .table-fixed-number CSS szabály kezeli
             targetCell.appendChild(targetWrapper);
             
             task1Data.columns.forEach((colData) => {
                 const cellTop = row1.insertCell();
                 const cellBottom = row2.insertCell();
                 
-                let colors;
-                if (availableColorsForTask1.length > 0) {
-                    colors = getUniqueColorPairFromArray(availableColorsForTask1);
-                } else { 
-                    colors = columnColorPairs[Math.floor(Math.random() * columnColorPairs.length)];
-                }
+                const colorClass = getUniqueClassFromArray(availableColorClassesForTask1);
+                // Az osztályt a td elemek kapják, hogy a bennük lévő input/fixed-number örökölhesse
+                cellTop.classList.add(colorClass);
+                cellBottom.classList.add(colorClass);
+
 
                 const fixedEl = document.createElement('div');
                 fixedEl.classList.add('table-fixed-number');
                 fixedEl.textContent = colData.fixedValue;
-                fixedEl.style.backgroundColor = colors.strong; 
-                fixedEl.style.color = getComputedStyle(document.documentElement).getPropertyValue('--fixed-cell-text-color').trim();
+                // Háttér és szövegszín a CSS osztályból jön
 
                 const inputEl = document.createElement('input');
                 inputEl.type = 'number';
@@ -548,9 +600,8 @@
                 inputEl.id = colData.id; 
                 inputEl.min = 0;
                 inputEl.max = currentNumberRange;
-                inputEl.style.backgroundColor = colors.pastel; 
-                inputEl.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
-                inputEl.dataset.expectedValue = colData.valueToFind; // Elvárt érték tárolása
+                inputEl.dataset.expectedValue = colData.valueToFind; 
+                // Háttér és szövegszín a CSS osztályból jön
 
                 if (colData.isFixedOnTop) {
                     cellTop.appendChild(fixedEl);
@@ -693,20 +744,24 @@
             if (task2Data.tablePairs.length === 0) return;
             const table = document.createElement('table');
             const orderedInputs = [];
+            let availableClassesForX = [...oszlopAlapSzinOsztalyok];
+            let availableClassesForY = [...oszlopAlapSzinOsztalyok];
+
+            const xColorClass = getDifferentClass(availableClassesForX);
+            const yColorClass = getDifferentClass(availableClassesForY, xColorClass); // Próbáljon meg mást, mint X
+
             
             const xRow = table.insertRow();
             const xHeaderCell = xRow.insertCell();
             xHeaderCell.outerHTML = "<th class='header-cell-xy'>X</th>";
-            const xColors = getDifferentColorPair();
-
+            
             task2Data.tablePairs.forEach((pair, i) => {
                 const cell = xRow.insertCell();
+                cell.classList.add(xColorClass); // Sor színezése
                 if (pair.x !== null) {
                     const numDisplay = document.createElement('div');
                     numDisplay.classList.add('table-fixed-number');
                     numDisplay.textContent = pair.x;
-                    numDisplay.style.backgroundColor = xColors.strong;
-                    numDisplay.style.color = getComputedStyle(document.documentElement).getPropertyValue('--fixed-cell-text-color').trim();
                     cell.appendChild(numDisplay);
                 } else {
                     const input = document.createElement('input');
@@ -715,9 +770,7 @@
                     input.id = pair.xInputId; 
                     input.min = 0;
                     input.max = currentNumberRange;
-                    input.style.backgroundColor = xColors.pastel;
-                    input.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
-                    input.dataset.expectedValue = task2Data.solutions[`x_col${i}`]; // Elvárt érték
+                    input.dataset.expectedValue = task2Data.solutions[`x_col${i}`]; 
                     cell.appendChild(input);
                 }
             });
@@ -725,16 +778,14 @@
             const yRow = table.insertRow();
             const yHeaderCell = yRow.insertCell();
             yHeaderCell.outerHTML = "<th class='header-cell-xy'>Y</th>";
-            const yColors = getDifferentColorPair(xColors); 
 
             task2Data.tablePairs.forEach((pair, i) => {
                 const cell = yRow.insertCell();
+                cell.classList.add(yColorClass); // Sor színezése
                 if (pair.y !== null) {
                     const numDisplay = document.createElement('div');
                     numDisplay.classList.add('table-fixed-number');
                     numDisplay.textContent = pair.y;
-                    numDisplay.style.backgroundColor = yColors.strong;
-                    numDisplay.style.color = getComputedStyle(document.documentElement).getPropertyValue('--fixed-cell-text-color').trim();
                     cell.appendChild(numDisplay);
                 } else {
                     const input = document.createElement('input');
@@ -743,9 +794,7 @@
                     input.id = pair.yInputId;
                     input.min = 0;
                     input.max = currentNumberRange;
-                    input.style.backgroundColor = yColors.pastel;
-                    input.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
-                    input.dataset.expectedValue = task2Data.solutions[`y_col${i}`]; // Elvárt érték
+                    input.dataset.expectedValue = task2Data.solutions[`y_col${i}`];
                     cell.appendChild(input);
                 }
             });
@@ -766,7 +815,6 @@
             setupInputFocusAndMaxlength(orderedInputs, false); 
         }
 
-
         function checkTask2() {
             const feedbackEl = document.getElementById('task2_feedback');
             let allCorrect = true;
@@ -775,6 +823,7 @@
 
             task2Data.tablePairs.forEach((pair, i) => {
                 const checkInput = (inputId, solutionKey) => {
+                    // Azért kell a pair[solutionKey.charAt(0)], hogy tudjuk, eredetileg X vagy Y volt-e null az adott oszlopban
                     if (pair[solutionKey.charAt(0)] === null && inputId) { 
                         const inputEl = document.getElementById(inputId);
                         if (!inputEl) return;
@@ -811,12 +860,17 @@
         }
         
         document.addEventListener('DOMContentLoaded', function() {
-            const initialTheme = bodyEl.classList.contains('theme-space') ? 'theme-space' : 
-                               bodyEl.classList.contains('theme-jungle') ? 'theme-jungle' : 
-                               'theme-candy'; 
+            // Téma osztály inicializálása a body-ról, ha van
+            let initialTheme = 'theme-candy'; // Alapértelmezett
+            for (let i = 0; i < bodyEl.classList.length; i++) {
+                if (bodyEl.classList[i].startsWith('theme-')) {
+                    initialTheme = bodyEl.classList[i];
+                    break;
+                }
+            }
             applyTheme(initialTheme); 
-            generateTask1(); 
-            generateTask2();
+            // generateTask1 és generateTask2 az applyTheme-ben is meghívódik,
+            // így itt már nem kell külön, hogy elkerüljük a dupla generálást induláskor.
         });
     </script>
 </body>
