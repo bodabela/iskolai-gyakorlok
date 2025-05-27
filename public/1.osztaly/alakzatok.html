@@ -99,11 +99,13 @@
             align-items: center;
             margin-bottom: 15px;
         }
-        .task-header h3 {
+        .task-header h3, #shape_introduction h3 { /* Kiterjesztve az ismertető címére is */
             margin-top: 0;
-            margin-bottom: 0;
+            margin-bottom: 15px; /* Egységes térköz */
             font-size: clamp(1.1em, 3.5vw, 1.3em);
             transition: color 0.5s ease;
+            width: 100%; /* Teljes szélesség, hogy középre tudjon igazodni a text-align:center miatt */
+            text-align: center;
         }
         .new-task-button {
             padding: 6px 12px;
@@ -142,17 +144,17 @@
             border-radius: 6px;
             font-size: clamp(0.9em, 2.8vw, 1.05em);
             transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
-            min-height: 1.5em; /* Hogy ne ugráljon az elrendezés */
+            min-height: 1.5em; 
         }
         .feedback.correct {
-            color: var(--feedback-correct-text-color, #166534); /* green-800 */
-            background-color: var(--feedback-correct-bg-color, #dcfce7); /* green-100 */
-            border: 1px solid var(--feedback-correct-border-color, #4ade80); /* green-400 */
+            color: var(--feedback-correct-text-color, #166534); 
+            background-color: var(--feedback-correct-bg-color, #dcfce7); 
+            border: 1px solid var(--feedback-correct-border-color, #4ade80); 
         }
         .feedback.incorrect {
-            color: var(--feedback-incorrect-text-color, #991b1b); /* red-800 */
-            background-color: var(--feedback-incorrect-bg-color, #fee2e2); /* red-100 */
-            border: 1px solid var(--feedback-incorrect-border-color, #f87171); /* red-400 */
+            color: var(--feedback-incorrect-text-color, #991b1b); 
+            background-color: var(--feedback-incorrect-bg-color, #fee2e2); 
+            border: 1px solid var(--feedback-incorrect-border-color, #f87171); 
         }
 
         /* Alakzatfelismerő specifikus stílusok */
@@ -165,7 +167,7 @@
             margin-bottom: 20px;
             min-height: 100px;
         }
-        .shape-item, .shadow-item, .grouping-bin, .colorable-shape, .sequence-item-display, .position-task-shape {
+        .shape-item, .shadow-item, .grouping-bin, .colorable-shape, .sequence-item-display, .position-task-shape, .legend-shape-item-display {
             width: 70px;
             height: 70px;
             border: 2px solid transparent;
@@ -178,17 +180,16 @@
             user-select: none;
             box-sizing: border-box;
         }
-         /* A .position-task-shape.target-for-question stílust már nem használjuk a 9. feladatban a kiemelés eltávolítása miatt,
-            de meghagyhatjuk itt, hátha más feladatnál kellhet hasonló.
-         .position-task-shape.target-for-question {
-            border: 3px solid var(--selected-item-border-color, blue) !important;
-            transform: scale(1.1);
-        } */
+        .legend-shape-item-display { /* Kifejezetten a legendához, ha eltérő méret kellene */
+            width: 80px; 
+            height: 80px;
+        }
 
-        .shape-item:hover, .shadow-item:hover, .colorable-shape:hover, .sequence-item-display:hover {
+
+        .shape-item:hover, .shadow-item:hover, .colorable-shape:hover, .sequence-item-display:hover, .legend-shape-item-display:hover {
             transform: scale(1.05);
         }
-        .shape-item svg, .shadow-item svg, .colorable-shape svg, .sequence-item-display svg, .position-task-shape svg {
+        .shape-item svg, .shadow-item svg, .colorable-shape svg, .sequence-item-display svg, .position-task-shape svg, .legend-shape-item-display svg {
             width: 90%;
             height: 90%;
         }
@@ -246,8 +247,8 @@
             gap: 20px;
             min-height: 150px;
         }
-        .grouping-bin { /* Task 3 bin-jei */
-            width: 130px; /* Kicsit szélesebb a hosszabb szövegek miatt */
+        .grouping-bin { 
+            width: 130px; 
             height: 130px;
             border: 2px dashed;
             border-radius: 10px;
@@ -288,7 +289,6 @@
             box-shadow: 0 0 5px 2px var(--selected-item-border-color, black);
         }
 
-        /* 9. feladat új stílusai */
         .position-question-text {
             font-size: clamp(1em, 3vw, 1.1em);
             margin-bottom: 8px;
@@ -322,30 +322,55 @@
             box-shadow: 0 0 3px var(--feedback-incorrect-border-color, red);
         }
 
+        /* Alakzat ismertető stílusai */
+        .shape-legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Reszponzívabb 4 oszlopos elrendezés */
+            gap: 20px;
+            padding: 10px;
+            justify-items: center;
+        }
+        .shape-legend-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: var(--task-bg); /* Enyhe háttér, hogy elkülönüljön, ha a task háttere más */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .shape-legend-item p {
+            margin-top: 8px;
+            font-size: 0.95em;
+            font-weight: bold;
+            color: var(--task-header-color);
+        }
+
 
         /* Téma specifikus CSS változók */
         :root {
-            --body-bg-start: #e0f2fe; /* light blue */
-            --body-bg-end: #f3e8ff;   /* light purple */
+            --body-bg-start: #e0f2fe; 
+            --body-bg-end: #f3e8ff;   
             --container-bg: #ffffff;
             --text-color: #333333;
-            --h1-color: #3b82f6; /* blue-500 */
-            --h2-color: #6366f1; /* indigo-500 */
-            --task-bg: #f9fafb; /* gray-50 */
-            --task-border: #e5e7eb; /* gray-200 */
-            --task-header-color: #1f2937; /* gray-800 */
-            --task-instruction-color: #4b5563; /* gray-600 */
-            --button-bg: #3b82f6; /* blue-500 */
-            --button-hover-bg: #2563eb; /* blue-600 */
-            --theme-button-active-border-color: #60a5fa; /* blue-400 */
+            --h1-color: #3b82f6; 
+            --h2-color: #6366f1; 
+            --task-bg: #f9fafb; 
+            --task-border: #e5e7eb; 
+            --task-header-color: #1f2937; 
+            --task-instruction-color: #4b5563; 
+            --button-bg: #3b82f6; 
+            --button-hover-bg: #2563eb; 
+            --theme-button-active-border-color: #60a5fa; 
             --feedback-correct-text-color: #166534;
             --feedback-correct-bg-color: #dcfce7;
             --feedback-correct-border-color: #4ade80;
             --feedback-incorrect-text-color: #991b1b;
             --feedback-incorrect-bg-color: #fee2e2;
             --feedback-incorrect-border-color: #f87171;
-            --selected-item-border-color: #3b82f6; /* blue */
-            --selected-item-bg-color: #bfdbfe;  /* light blue for button bg */
+            --selected-item-border-color: #3b82f6; 
+            --selected-item-bg-color: #bfdbfe;  
 
             --shape-fill-default: #d1d5db; --shape-stroke-default: #6b7280;
             --shadow-fill-default: #a1a1aa;
@@ -542,6 +567,12 @@
         <h1>Alakzatfelismerő Feladatok</h1>
         <h2>1. Osztály</h2>
 
+        <div class="task" id="shape_introduction" style="background-color: var(--task-bg); border-color: var(--task-border);">
+            <h3 style="color: var(--task-header-color);">Ismerd meg az alakzatokat!</h3>
+            <div class="shape-legend-grid" id="shape_legend_area">
+                </div>
+        </div>
+
         <div class="task" id="task1_connect_shapes">
             <div class="task-header">
                 <h3 style="color: var(--task-header-color);">1. Feladat: Kösd össze az egyformákat!</h3>
@@ -694,14 +725,14 @@
             "paralelogramma": "negyszog",
             "trapez": "negyszog",
             "haromszog": "haromszog",
-            "otszog": "otszog", // Ezeknek nincs külön kategóriájuk a 3. feladatban
-            "hatszog": "hatszog"  // Ezeknek sincs
+            "otszog": "otszog", 
+            "hatszog": "hatszog"  
         };
 
         const SHAPE_NAMES = {
-            kor: "kör", negyzet: "négyzet", haromszog: "háromszög", teglalap: "téglalap",
-            otszog: "ötszög", hatszog: "hatszög", trapez: "trapéz", rombusz: "rombusz",
-            paralelogramma: "paralelogramma"
+            kor: "Kör", negyzet: "Négyzet", haromszog: "Háromszög", teglalap: "Téglalap",
+            otszog: "Ötszög", hatszog: "Hatszög", trapez: "Trapéz", rombusz: "Rombusz",
+            paralelogramma: "Paralelogramma"
         };
         const SHAPE_NAMES_PLURAL = {
             kor: "köröket", negyzet: "négyzeteket", haromszog: "háromszögeket", teglalap: "téglalapokat",
@@ -809,7 +840,7 @@
                     break;
                 case "trapez": 
                     shapeEl = document.createElementNS(SVG_NS, "polygon");
-                    const topWidthT = (size - 2 * padding) * 0.5; // Kisebb felső alap
+                    const topWidthT = (size - 2 * padding) * 0.5; 
                     const bottomWidthT = size - 2 * padding;
                     const heightT = (size - 2 * padding) * 0.6;
                     const topY_T = (size - heightT) / 2;
@@ -824,15 +855,15 @@
                     shapeEl = document.createElementNS(SVG_NS, "polygon");
                     const midX_R = size / 2;
                     const midY_R = size / 2;
-                    const diagX_R = size - 2 * padding; // Vízszintes átló
-                    const diagY_R = (size - 2 * padding) * 0.7; // Függőleges átló (kisebb)
+                    const diagX_R = size - 2 * padding; 
+                    const diagY_R = (size - 2 * padding) * 0.7; 
                     shapeEl.setAttribute("points", `${midX_R},${midY_R - diagY_R/2} ${midX_R + diagX_R/2},${midY_R} ${midX_R},${midY_R + diagY_R/2} ${midX_R - diagX_R/2},${midY_R}`);
                     break;
                 case "paralelogramma":
                     shapeEl = document.createElementNS(SVG_NS, "polygon");
                     const width_P = (size - 2 * padding) * 0.8;
                     const height_P = (size - 2 * padding) * 0.5;
-                    const skew_P = (size - 2 * padding) * 0.3; // Dőlés mértéke
+                    const skew_P = (size - 2 * padding) * 0.3; 
                     const y_P_top = (size - height_P) / 2;
                     const y_P_bottom = y_P_top + height_P;
                     const x_P_top_left = padding + skew_P;
@@ -971,6 +1002,12 @@
                 task.style.backgroundColor = styles.getPropertyValue('--task-bg').trim();
                 task.style.borderColor = styles.getPropertyValue('--task-border').trim();
             });
+            
+            // Frissítjük az ismertetőt is a témaváltáskor
+            if (typeof generateShapeLegend === 'function') {
+                try { generateShapeLegend(); } catch(e) { console.warn("Hiba az alakzat ismertető frissítésekor:", e); }
+            }
+
 
             const isThemeChange = true;
             if (typeof generateTask1 === 'function') try { generateTask1(isThemeChange); } catch(e){console.warn("Hiba T1 újragenerálásakor témaváltáskor:",e)}
@@ -991,6 +1028,29 @@
         });
         // --- END TÉMA KEZELÉS ---
 
+        // --- ALAKZAT ISMERTETŐ ---
+        function generateShapeLegend() {
+            const legendArea = document.getElementById('shape_legend_area');
+            if (!legendArea) return;
+            legendArea.innerHTML = ''; // Töröljük a korábbi tartalmat
+
+            ALL_SHAPE_TYPES.forEach(type => {
+                const itemDiv = document.createElement('div');
+                itemDiv.classList.add('shape-legend-item');
+
+                const shapeDisplay = document.createElement('div');
+                shapeDisplay.classList.add('legend-shape-item-display'); // Használhatunk egyedi méretet/stílust
+                shapeDisplay.appendChild(createShapeSvg(type, 70)); // Kicsit nagyobb méret az ismertetőhöz
+
+                const nameP = document.createElement('p');
+                nameP.textContent = SHAPE_NAMES[type] || type.charAt(0).toUpperCase() + type.slice(1);
+
+                itemDiv.appendChild(shapeDisplay);
+                itemDiv.appendChild(nameP);
+                legendArea.appendChild(itemDiv);
+            });
+        }
+
 
         // --- FELADAT SPECIFIKUS LOGIKA ---
         let task1State = {};
@@ -1005,18 +1065,17 @@
 
             const availableForTask1 = ["kor", "negyzet", "haromszog", "teglalap", "otszog", "rombusz"];
             let baseShapes = [];
-            const numberOfPairs = 3; // Marad 3 pár
-            let usedTypes = []; // Hogy biztosítsuk a változatosságot, ha lehet
+            const numberOfPairs = 3; 
+            let usedTypes = []; 
 
             for(let i=0; i < numberOfPairs; i++){
                 let randomType;
-                // Próbáljunk meg nem ismétlődő alakzatokat választani, ha van elég
                 if (usedTypes.length < availableForTask1.length) {
                     do {
                         randomType = availableForTask1[Math.floor(Math.random() * availableForTask1.length)];
                     } while (usedTypes.includes(randomType));
                     usedTypes.push(randomType);
-                } else { // Ha már minden típust használtunk, akkor jöhet ismétlődés
+                } else { 
                     randomType = availableForTask1[Math.floor(Math.random() * availableForTask1.length)];
                 }
                 baseShapes.push(randomType);
@@ -1234,7 +1293,7 @@
             }
 
             let shapesToGroupTypes = [];
-            const numberOfShapesToGroup = 5 + Math.floor(Math.random() * 3); // 5-7 alakzat
+            const numberOfShapesToGroup = 5 + Math.floor(Math.random() * 3); 
             for(let i=0; i < numberOfShapesToGroup; i++){ 
                 shapesToGroupTypes.push(shapesForTask3[Math.floor(Math.random() * shapesForTask3.length)]);
             }
@@ -1625,8 +1684,8 @@
 
         let task9State = {
             shapesInOrder: [],
-            questionedShapeType: null, // Az alakzat típusa, amire rákérdezünk
-            questionedShapeIndex: -1, // Az EGYETLEN ilyen típusú alakzat indexe
+            questionedShapeType: null, 
+            questionedShapeIndex: -1, 
             correctPosFromLeft: 0,
             correctPosFromRight: 0
         };
@@ -1646,13 +1705,9 @@
             const numShapes = getRandomInt(5, 8);
             task9State.shapesInOrder = [];
 
-            // 1. Válasszunk egy típust, amire rákérdezünk
             task9State.questionedShapeType = ALL_SHAPE_TYPES[Math.floor(Math.random() * ALL_SHAPE_TYPES.length)];
-
-            // 2. Helyezzük el ezt a típust egyszer egy véletlen pozícióba
             task9State.questionedShapeIndex = Math.floor(Math.random() * numShapes);
 
-            // 3. Töltsük fel a többi helyet MÁS típusú alakzatokkal
             for (let i = 0; i < numShapes; i++) {
                 if (i === task9State.questionedShapeIndex) {
                     task9State.shapesInOrder.push(task9State.questionedShapeType);
@@ -1660,7 +1715,7 @@
                     let randomOtherType;
                     do {
                         randomOtherType = ALL_SHAPE_TYPES[Math.floor(Math.random() * ALL_SHAPE_TYPES.length)];
-                    } while (randomOtherType === task9State.questionedShapeType); // Ne legyen ugyanolyan, mint a kérdezett
+                    } while (randomOtherType === task9State.questionedShapeType); 
                     task9State.shapesInOrder.push(randomOtherType);
                 }
             }
@@ -1671,7 +1726,7 @@
             const questionedShapeName = SHAPE_NAMES[task9State.questionedShapeType] || "alakzat";
             instructionTextEl.textContent = `Figyeld meg az alakzatokat! A sorban lévő ${questionedShapeName} balról és jobbról hanyadik?`;
 
-            task9State.shapesInOrder.forEach((type, index) => {
+            task9State.shapesInOrder.forEach((type) => { // Az 'index' változót itt nem használjuk a kiemeléshez
                 const shapeDiv = document.createElement('div');
                 shapeDiv.classList.add('position-task-shape');
                 // NEM adjuk hozzá a 'target-for-question' osztályt
@@ -1795,17 +1850,15 @@
                 document.head.appendChild(style);
             }
             
-            // Paletta összeállítása: tartalmazza a szükségeseket + néhány extra véletlenszerűt
             let paletteSet = new Set();
             Object.keys(currentGoal.required).forEach(type => paletteSet.add(type));
             
-            const extrasNeeded = Math.max(0, 4 - paletteSet.size); // Legyen legalább 4-5 elem a palettán
+            const extrasNeeded = Math.max(0, 4 - paletteSet.size); 
             let availableExtras = task10State.paletteShapes.filter(type => !paletteSet.has(type));
             shuffleArray(availableExtras);
             for(let i=0; i < Math.min(extrasNeeded, availableExtras.length); i++) {
                 paletteSet.add(availableExtras[i]);
             }
-            // Ha még mindig kevés, adjunk hozzá a teljes listából (ez ritka eset)
             if (paletteSet.size < 3) {
                 shuffleArray(task10State.paletteShapes);
                 for(const type of task10State.paletteShapes){
@@ -1899,7 +1952,8 @@
 
         // --- INICIALIZÁLÁS ---
         document.addEventListener('DOMContentLoaded', function() {
-            applyTheme(currentTheme);
+            generateShapeLegend(); // Elsőként generáljuk az ismertetőt
+            applyTheme(currentTheme); // Majd a témát, ami frissítheti az ismertetőt is
 
             const initialGenerators = [
                 generateTask1, generateTask2, generateTask3, generateTask4, generateTask5,
