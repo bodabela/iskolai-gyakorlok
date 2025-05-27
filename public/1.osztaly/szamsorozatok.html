@@ -31,14 +31,15 @@
             max-width: 900px;
         }
 
-        .settings-row { /* Hozzáadva a lánc-számolás alapján */
+        .settings-row {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            align-items: flex-start; /* Igazítás a több soros csoportokhoz */
             gap: 10px 15px;
             width:100%;
         }
-        .settings-group { /* Hozzáadva a lánc-számolás alapján */
+        .settings-group {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -53,7 +54,7 @@
             transition: color 0.5s ease;
         }
 
-        .theme-button, .range-button { /* range-button hozzáadva */
+        .theme-button, .range-button, .mode-button { /* mode-button hozzáadva */
             padding: 8px 12px;
             border: 1px solid transparent;
             border-radius: 5px;
@@ -62,16 +63,16 @@
             font-size: 0.9em;
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
         }
-        .theme-button:hover, .range-button:hover {
+        .theme-button:hover, .range-button:hover, .mode-button:hover {
             transform: translateY(-1px);
             opacity: 0.9;
         }
-        .theme-button.active, .range-button.active {
+        .theme-button.active, .range-button.active, .mode-button.active {
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
             transform: translateY(1px);
         }
         
-        .range-selector { /* Hozzáadva a hianyos-muveletek alapján */
+        .range-selector, .mode-selector { /* mode-selector hozzáadva */
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -136,32 +137,32 @@
 
         .sequence-container {
             display: flex;
-            flex-wrap: wrap; /* Wrap if too long for one line */
+            flex-wrap: wrap;
             justify-content: center;
-            align-items: center;
-            gap: 5px; /* Smaller gap */
+            align-items: center; 
+            gap: 5px;
             margin: 20px 0;
             padding: 10px;
             border-radius: 8px;
-            min-height: 60px; /* Adjusted min-height */
+            min-height: 60px;
             transition: background-color 0.3s ease;
-            overflow-x: auto; /* Horizontal scroll if needed */
+            overflow-x: auto;
             width: 100%;
             box-sizing: border-box;
         }
         .sequence-item {
-            display: inline-flex; /* Changed to inline-flex for better flow */
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: clamp(1.3em, 4.5vw, 1.6em); /* Adjusted font size */
+            font-size: clamp(1.3em, 4.5vw, 1.6em);
             font-weight: bold;
             transition: color 0.5s ease, min-width 0.3s ease, height 0.3s ease, margin 0.3s ease;
-            min-width: 40px; /* Adjusted min-width */
-            height: 40px;    /* Adjusted height */
-            margin: 0 3px;  /* Adjusted margin */
+            min-width: 40px;
+            height: 40px;
+            margin: 0 3px;
         }
         .sequence-item .number-display {
-            padding: 5px 8px; /* Adjusted padding */
+            padding: 5px 8px;
             border-radius: 6px;
             display: inline-flex;
             justify-content: center;
@@ -171,10 +172,10 @@
             min-width: 35px;
         }
         .sequence-item input[type="number"] {
-            width: 45px; /* Adjusted width */
-            height: 40px;   /* Adjusted height */
+            width: 45px;
+            height: 40px;
             padding: 5px;
-            font-size: 0.9em; /* Relative to parent .sequence-item */
+            font-size: 0.9em;
             text-align: center;
             border-radius: 6px;
             border: 2px solid transparent;
@@ -183,6 +184,26 @@
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
             transition: border-color 0.3s ease, background-color 0.3s ease;
         }
+
+        .operator-input-item {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 1px; 
+        }
+        .rule-operator-input {
+            width: 35px;
+            height: 30px;
+            font-size: 0.75em; 
+            text-align: center;
+            border: 1px solid #cccccc; 
+            border-radius: 4px;
+            box-sizing: border-box;
+            padding: 2px;
+            background-color: #f8f8f8; 
+            color: #444444; 
+        }
+
 
         .rule-options-container {
             margin-top: 25px;
@@ -196,7 +217,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s, border-color 0.3s, color 0.3s, transform 0.2s;
-            border: 2px solid; /* Border color from theme */
+            border: 2px solid;
             font-weight: bold;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
@@ -204,9 +225,7 @@
             transform: translateY(-2px);
             opacity: 0.9;
         }
-        .rule-option-button.selected {
-            /* Active state defined by theme */
-        }
+        .rule-option-button.selected { }
 
 
         input[type=number]::-webkit-outer-spin-button,
@@ -246,12 +265,8 @@
             line-height: 1.4;
         }
         
-        /* Step 2 rejtése alapból */
-        #step2_select_rule {
-            display: none;
-        }
+        #step2_select_rule { display: none; }
 
-        /* Input mezők validációja */
         input.correct-input {
             border-color: var(--feedback-correct-border-color, green) !important;
             box-shadow: 0 0 0 2px var(--feedback-correct-border-color, green);
@@ -261,9 +276,8 @@
             box-shadow: 0 0 0 2px var(--feedback-incorrect-border-color, red);
         }
 
-
         /* Alapértelmezett téma stílusok */
-        .theme-button, .range-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
+        .theme-button, .range-button, .mode-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
         button.task-button { background-color: #007bff; color: white; }
         .container { background-color: #ffffff; border: 1px solid #e5e7eb; }
         .task { background-color: #f9fafb; border: 1px dashed #d1d5db; }
@@ -283,7 +297,7 @@
              --feedback-correct-border-color: #90ee90; --feedback-incorrect-border-color: #ffb6c1;
         }
         body.theme-candy .control-label { color: #c71585; }
-        body.theme-candy .theme-button.active, body.theme-candy .range-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .theme-button.active, body.theme-candy .range-button.active, body.theme-candy .mode-button.active { background-color: #ffb6c1; color: #7c3c60; }
         body.theme-candy .container { background-color: #ffe4e1; border-color: #ffc0cb; }
         body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
         body.theme-candy .task { background-color: #fffafa; border-color: #ffb6c1; }
@@ -296,6 +310,7 @@
         body.theme-candy .sequence-item { color: #c71585; }
         body.theme-candy .sequence-item .number-display { background-color: #ffb6c1; color: #a52a2a; }
         body.theme-candy .sequence-item input[type="number"] { border-color: #ffc0cb; background-color: #fff5f8;}
+        body.theme-candy .rule-operator-input { border-color: #ffc0cb; background-color: #fffafa; color: #c71585; }
         body.theme-candy .rule-option-button { background-color: #ffebf0; color: #c71585; border-color: #ffb6c1;}
         body.theme-candy .rule-option-button.selected { background-color: #ff69b4; color: white; border-color: #ff1493;}
 
@@ -304,7 +319,7 @@
             --feedback-correct-border-color: #22c55e; --feedback-incorrect-border-color: #ef4444;
         }
         body.theme-space .control-label { color: #93c5fd; }
-        body.theme-space .theme-button.active, body.theme-space .range-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .theme-button.active, body.theme-space .range-button.active, body.theme-space .mode-button.active { background-color: #1e3a8a; color: #93c5fd; }
         body.theme-space .container { background-color: #1e293b; border-color: #334155; }
         body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
         body.theme-space .task { background-color: #334155; border-color: #475569; }
@@ -317,6 +332,7 @@
         body.theme-space .sequence-item { color: #93c5fd; }
         body.theme-space .sequence-item .number-display { background-color: #374151; color: #e5e7eb; }
         body.theme-space .sequence-item input[type="number"] { border-color: #4b5563; background-color: #1f2937; color: #e5e7eb; }
+        body.theme-space .rule-operator-input { border-color: #4b5563; background-color: #2d3748; color: #93c5fd; }
         body.theme-space .rule-option-button { background-color: #334155; color: #9ca3af; border-color: #4b5563;}
         body.theme-space .rule-option-button.selected { background-color: #2563eb; color: white; border-color: #1d4ed8;}
 
@@ -325,7 +341,7 @@
             --feedback-correct-border-color: #a5d6a7; --feedback-incorrect-border-color: #ef9a9a;
         }
         body.theme-jungle .control-label { color: #558b2f; }
-        body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active, body.theme-jungle .mode-button.active { background-color: #689f38; color: #dcedc8; }
         body.theme-jungle .container { background-color: #e8f5e9; border-color: #a5d6a7; }
         body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
         body.theme-jungle .task { background-color: #dcedc8; border-color: #81c784; }
@@ -338,10 +354,10 @@
         body.theme-jungle .sequence-item { color: #2e7d32; }
         body.theme-jungle .sequence-item .number-display { background-color: #a5d6a7; color: #1b5e20; }
         body.theme-jungle .sequence-item input[type="number"] { border-color: #81c784; background-color: #f1f8e9; }
+        body.theme-jungle .rule-operator-input { border-color: #a5d6a7; background-color: #e8f5e9; color: #388e3c; }
         body.theme-jungle .rule-option-button { background-color: #c8e6c9; color: #388e3c; border-color: #a5d6a7;}
         body.theme-jungle .rule-option-button.selected { background-color: #7cb342; color: white; border-color: #689f38;}
 
-        /* Stb. a többi témához hasonlóan, mint a lanc-szamolas.html-ben... */
         body.theme-magicforest { --theme-button-active-border-color: #8a2be2; --feedback-correct-border-color: #a5d6a7; --feedback-incorrect-border-color: #ef9a9a;}
         body.theme-tech { --theme-button-active-border-color: #00acc1;--feedback-correct-border-color: #4caf50; --feedback-incorrect-border-color: #f44336;}
         body.theme-ocean { --theme-button-active-border-color: #20b2aa;--feedback-correct-border-color: #a5d6a7; --feedback-incorrect-border-color: #ef9a9a;}
@@ -350,14 +366,13 @@
         body.theme-adventure { --theme-button-active-border-color: #bf360c;--feedback-correct-border-color: #a5d6a7; --feedback-incorrect-border-color: #ef9a9a;}
         body.theme-sky { --theme-button-active-border-color: #1e90ff;--feedback-correct-border-color: #a5d6a7; --feedback-incorrect-border-color: #ef9a9a;}
 
-        /* Témákhoz tartozó .sequence-item, .number-display, input, rule-option-button stílusok kiegészítése */
-        body.theme-magicforest .sequence-item { color: #6a0dad; } body.theme-magicforest .sequence-item .number-display { background-color: #dda0dd; color: #483d8b; } body.theme-magicforest .sequence-item input {border-color: #ba55d3; background-color: #f8f0ff;} body.theme-magicforest .rule-option-button {background-color: #e6e6fa; color:#6a0dad; border-color: #dda0dd;} body.theme-magicforest .rule-option-button.selected {background-color: #9370db; color:white; border-color:#8a2be2;}
-        body.theme-tech .sequence-item { color: #80d8ff; } body.theme-tech .sequence-item .number-display { background-color: #455a64; color: #e0f7fa; } body.theme-tech .sequence-item input {border-color: #546e7a; background-color: #37474f; color: #e0f7fa;} body.theme-tech .rule-option-button {background-color: #455a64; color:#b0bec5; border-color: #78909c;} body.theme-tech .rule-option-button.selected {background-color: #0097a7; color:white; border-color:#00838f;}
-        body.theme-ocean .sequence-item { color: #00695c; } body.theme-ocean .sequence-item .number-display { background-color: #80deea; color: #004d40; } body.theme-ocean .sequence-item input {border-color: #4dd0e1; background-color: #e0f2f1;} body.theme-ocean .rule-option-button {background-color: #b2ebf2; color:#00796b; border-color: #80deea;} body.theme-ocean .rule-option-button.selected {background-color: #26a69a; color:white; border-color:#00897b;}
-        body.theme-sport .sequence-item { color: #0d47a1; } body.theme-sport .sequence-item .number-display { background-color: #90caf9; color: #023047; } body.theme-sport .sequence-item input {border-color: #64b5f6; background-color: #e3f2fd;} body.theme-sport .rule-option-button {background-color: #bbdefb; color:#0d47a1; border-color: #90caf9;} body.theme-sport .rule-option-button.selected {background-color: #2196f3; color:white; border-color:#1976d2;}
-        body.theme-flowergarden .sequence-item { color: #8b4513; } body.theme-flowergarden .sequence-item .number-display { background-color: #ffdab9; color: #5d4037; } body.theme-flowergarden .sequence-item input {border-color: #ffe4b5; background-color: #fffaf0;} body.theme-flowergarden .rule-option-button {background-color: #fff5ee; color:#d2691e; border-color: #ffdab9;} body.theme-flowergarden .rule-option-button.selected {background-color: #ffa07a; color:white; border-color:#ff7f50;}
-        body.theme-adventure .sequence-item { color: #4e342e; } body.theme-adventure .sequence-item .number-display { background-color: #a1887f; color: #f5f5dc; } body.theme-adventure .sequence-item input {border-color: #8d6e63; background-color: #efebe9;} body.theme-adventure .rule-option-button {background-color: #d7ccc8; color:#5d4037; border-color: #a1887f;} body.theme-adventure .rule-option-button.selected {background-color: #795548; color:white; border-color:#5d4037;}
-        body.theme-sky .sequence-item { color: #1e90ff; } body.theme-sky .sequence-item .number-display { background-color: #b0e0e6; color: #005a9c; } body.theme-sky .sequence-item input {border-color: #add8e6; background-color: #f0f8ff;} body.theme-sky .rule-option-button {background-color: #e6f7ff; color:#1e90ff; border-color: #b0e0e6;} body.theme-sky .rule-option-button.selected {background-color: #87cefa; color:white; border-color:#6495ed;}
+        body.theme-magicforest .sequence-item { color: #6a0dad; } body.theme-magicforest .sequence-item .number-display { background-color: #dda0dd; color: #483d8b; } body.theme-magicforest .sequence-item input {border-color: #ba55d3; background-color: #f8f0ff;} body.theme-magicforest .rule-operator-input {border-color: #dda0dd; background-color: #f0e6ff; color: #6a0dad;} body.theme-magicforest .rule-option-button {background-color: #e6e6fa; color:#6a0dad; border-color: #dda0dd;} body.theme-magicforest .rule-option-button.selected {background-color: #9370db; color:white; border-color:#8a2be2;}
+        body.theme-tech .sequence-item { color: #80d8ff; } body.theme-tech .sequence-item .number-display { background-color: #455a64; color: #e0f7fa; } body.theme-tech .sequence-item input {border-color: #546e7a; background-color: #37474f; color: #e0f7fa;} body.theme-tech .rule-operator-input {border-color: #78909c; background-color: #37474f; color: #b0bec5;} body.theme-tech .rule-option-button {background-color: #455a64; color:#b0bec5; border-color: #78909c;} body.theme-tech .rule-option-button.selected {background-color: #0097a7; color:white; border-color:#00838f;}
+        body.theme-ocean .sequence-item { color: #00695c; } body.theme-ocean .sequence-item .number-display { background-color: #80deea; color: #004d40; } body.theme-ocean .sequence-item input {border-color: #4dd0e1; background-color: #e0f2f1;} body.theme-ocean .rule-operator-input {border-color: #80deea; background-color: #e0f7fa; color: #00695c;} body.theme-ocean .rule-option-button {background-color: #b2ebf2; color:#00796b; border-color: #80deea;} body.theme-ocean .rule-option-button.selected {background-color: #26a69a; color:white; border-color:#00897b;}
+        body.theme-sport .sequence-item { color: #0d47a1; } body.theme-sport .sequence-item .number-display { background-color: #90caf9; color: #023047; } body.theme-sport .sequence-item input {border-color: #64b5f6; background-color: #e3f2fd;} body.theme-sport .rule-operator-input {border-color: #90caf9; background-color: #e3f2fd; color: #0d47a1;} body.theme-sport .rule-option-button {background-color: #bbdefb; color:#0d47a1; border-color: #90caf9;} body.theme-sport .rule-option-button.selected {background-color: #2196f3; color:white; border-color:#1976d2;}
+        body.theme-flowergarden .sequence-item { color: #8b4513; } body.theme-flowergarden .sequence-item .number-display { background-color: #ffdab9; color: #5d4037; } body.theme-flowergarden .sequence-item input {border-color: #ffe4b5; background-color: #fffaf0;} body.theme-flowergarden .rule-operator-input {border-color: #ffdab9; background-color: #fff8f0; color: #8b4513;} body.theme-flowergarden .rule-option-button {background-color: #fff5ee; color:#d2691e; border-color: #ffdab9;} body.theme-flowergarden .rule-option-button.selected {background-color: #ffa07a; color:white; border-color:#ff7f50;}
+        body.theme-adventure .sequence-item { color: #4e342e; } body.theme-adventure .sequence-item .number-display { background-color: #a1887f; color: #f5f5dc; } body.theme-adventure .sequence-item input {border-color: #8d6e63; background-color: #efebe9;} body.theme-adventure .rule-operator-input {border-color: #a1887f; background-color: #d7ccc8; color: #4e342e;} body.theme-adventure .rule-option-button {background-color: #d7ccc8; color:#5d4037; border-color: #a1887f;} body.theme-adventure .rule-option-button.selected {background-color: #795548; color:white; border-color:#5d4037;}
+        body.theme-sky .sequence-item { color: #1e90ff; } body.theme-sky .sequence-item .number-display { background-color: #b0e0e6; color: #005a9c; } body.theme-sky .sequence-item input {border-color: #add8e6; background-color: #f0f8ff;} body.theme-sky .rule-operator-input {border-color: #b0e0e6; background-color: #e6faff; color: #1e90ff;} body.theme-sky .rule-option-button {background-color: #e6f7ff; color:#1e90ff; border-color: #b0e0e6;} body.theme-sky .rule-option-button.selected {background-color: #87cefa; color:white; border-color:#6495ed;}
 
     </style>
 </head>
@@ -387,11 +402,19 @@
                     <button class="range-button" data-range="20">20-as</button>
                 </div>
             </div>
+            <div class="settings-group">
+                <p class="control-label">Feladat Módja:</p>
+                <div id="modeSelector" class="mode-selector">
+                    <button class="mode-button active" data-mode="memory">Emlékezetből</button>
+                    <button class="mode-button" data-mode="reminder">Emlékeztetővel</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="container">
         <h1>Számsorozatok</h1>
+        <h2>1. Osztály</h2>
 
         <div id="sequenceTask" class="task">
             <div class="task-header">
@@ -400,7 +423,7 @@
             </div>
 
             <div id="step1_fill_sequence">
-                <p class="instructions">Írd be a hiányzó számokat a sorozatba!</p>
+                <p class="instructions" id="step1Instructions">Írd be a hiányzó számokat a sorozatba!</p>
                 <div id="sequenceDisplayArea" class="sequence-container">
                     </div>
                 <button id="checkSequenceButton" class="task-button">Sorozat ellenőrzése</button>
@@ -422,11 +445,13 @@
         const bodyEl = document.body;
         const themeSelector = document.getElementById('themeSelector');
         const rangeSelector = document.getElementById('rangeSelector');
+        const modeSelector = document.getElementById('modeSelector'); // ÚJ
         const newTaskButton = document.getElementById('newTaskButton');
         
         const sequenceDisplayArea = document.getElementById('sequenceDisplayArea');
         const checkSequenceButton = document.getElementById('checkSequenceButton');
         const feedbackStep1 = document.getElementById('feedbackStep1');
+        const step1Instructions = document.getElementById('step1Instructions'); // ÚJ
         
         const step2Container = document.getElementById('step2_select_rule');
         const ruleOptionsContainer = document.getElementById('ruleOptionsContainer');
@@ -436,21 +461,21 @@
         let currentSettings = {
             theme: 'theme-candy',
             numberRangeMax: 10,
+            displayMode: 'memory' // ÚJ: 'memory' vagy 'reminder'
         };
 
         let currentTask = {
             startNumber: 0,
-            rule: [], // pl. [{op: '+', val: 2}, {op: '-', val: 1}]
-            sequence: [], // a teljes helyes sorozat
-            shownElements: 3, // Ezt felülírjuk a generateRuleAndSequence-ben
-            elementsToFill: 0, // ennyit kell kitölteni (2 szabályciklus)
+            rule: [],
+            sequence: [],
+            shownElements: 3, 
+            elementsToFill: 0,
             correctRuleString: "",
-            ruleOptions: [] // 4 db string a szabályoknak
+            ruleOptions: []
         };
         let userSequenceInputs = [];
         let selectedRuleOption = null;
 
-        // --- Segédfüggvények ---
         function getRandomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
@@ -464,7 +489,6 @@
             }
         }
 
-        // --- Téma és Számkörválasztó ---
         function applyTheme(themeClass) {
             bodyEl.className = ''; 
             bodyEl.classList.add(themeClass); 
@@ -472,8 +496,11 @@
             themeSelector.querySelectorAll('.theme-button').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.theme === themeClass);
             });
-             rangeSelector.querySelectorAll('.range-button').forEach(btn => { 
+            rangeSelector.querySelectorAll('.range-button').forEach(btn => { 
                 btn.classList.toggle('active', parseInt(btn.dataset.range) === currentSettings.numberRangeMax);
+            });
+            modeSelector.querySelectorAll('.mode-button').forEach(btn => { // ÚJ
+                btn.classList.toggle('active', btn.dataset.mode === currentSettings.displayMode);
             });
         }
 
@@ -486,13 +513,32 @@
         rangeSelector.addEventListener('click', (e) => {
             if (e.target.classList.contains('range-button')) {
                 currentSettings.numberRangeMax = parseInt(e.target.dataset.range);
+                // Az applyTheme frissíti az active class-t, de ha csak ez változik, explicit kell
                 rangeSelector.querySelectorAll('.range-button').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
                 generateNewSequenceTask();
             }
         });
+
+        // ÚJ: Módválasztó eseménykezelő
+        modeSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('mode-button')) {
+                currentSettings.displayMode = e.target.dataset.mode;
+                modeSelector.querySelectorAll('.mode-button').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                updateStep1Instructions(); // Instrukció frissítése
+                renderSequenceStep(); // Csak a megjelenítést frissítjük, nem kell új feladat
+            }
+        });
+
+        function updateStep1Instructions() {
+            if (currentSettings.displayMode === 'reminder') {
+                step1Instructions.textContent = "Írd be a hiányzó számokat a sorozatba! A számok közé beírhatod a szabályt, amit gondolsz (pl. +2).";
+            } else {
+                step1Instructions.textContent = "Írd be a hiányzó számokat a sorozatba!";
+            }
+        }
         
-        // --- Feladat Generálás ---
         function generateNewSequenceTask() {
             feedbackStep1.textContent = ''; feedbackStep1.className = 'feedback';
             feedbackStep2.textContent = ''; feedbackStep2.className = 'feedback';
@@ -500,17 +546,20 @@
             checkSequenceButton.disabled = false;
             checkRuleButton.disabled = false; 
             selectedRuleOption = null;
+            userSequenceInputs.forEach(input => input.disabled = false);
             userSequenceInputs = [];
-            userSequenceInputs.forEach(input => input.disabled = false); // enable inputs
 
             generateRuleAndSequence();
             generateRuleOptions();
+            updateStep1Instructions(); // Instrukció frissítése az új feladathoz is
             renderSequenceStep();
+            
+            console.log("Új feladat generálva:", JSON.parse(JSON.stringify(currentTask)));
         }
 
         function generateRuleAndSequence() {
-            let ruleLength = Math.random() < 0.6 ? 2 : 3; // 2 vagy 3 lépéses szabály
-            currentTask.shownElements = ruleLength + 1; // Megjelenített elemek száma: szabályhossz + 1
+            let ruleLength = Math.random() < 0.6 ? 2 : 3;
+            currentTask.shownElements = ruleLength + 1; 
 
             let rule = [];
             let tempSequence = [];
@@ -518,12 +567,11 @@
             let validSequence = false;
             let attempts = 0;
 
-            while(!validSequence && attempts < 200) { // Növeltük az attemptek számát a szigorúbb feltételek miatt
+            while(!validSequence && attempts < 200) {
                 attempts++;
                 rule = [];
                 tempSequence = [];
-                
-                startNum = getRandomInt(0, Math.floor(currentSettings.numberRangeMax * 0.6)); // Kicsit lejjebb a kezdő max, hogy több hely legyen a sorozatnak
+                startNum = getRandomInt(0, Math.floor(currentSettings.numberRangeMax * 0.6)); 
 
                 for (let i = 0; i < ruleLength; i++) {
                     let op = Math.random() < 0.5 ? '+' : '-';
@@ -537,15 +585,11 @@
 
                 tempSequence.push(startNum);
                 let currentNum = startNum;
-                // Teljes sorozat hossz: megjelenített elemek + 2 teljes szabályciklusnyi elem (mínusz az első elem, ami már a startNum)
-                // A kitöltendő elemek száma: rule.length * 2
-                // A teljes generálandó sorozat: currentTask.shownElements (ez már tartalmazza az első elemet) + rule.length * 2
-                // De a ciklusnak currentTask.shownElements + (rule.length * 2) - 1 lépést kell megtennie, mert az első elem már megvan.
                 const totalElementsInSequence = currentTask.shownElements + (rule.length * 2);
 
                 validSequence = true; 
                 for (let i = 0; i < totalElementsInSequence - 1; i++) {
-                    const currentRuleStep = rule[i % rule.length]; // i%rule.length biztosítja a szabály ciklikusságát
+                    const currentRuleStep = rule[i % rule.length];
                     if (currentRuleStep.op === '+') {
                         currentNum += currentRuleStep.val;
                     } else {
@@ -557,15 +601,14 @@
                     }
                     tempSequence.push(currentNum);
                 }
-                // Ellenőrizzük, hogy a generált tempSequence hossza megfelelő-e
                 if (validSequence && tempSequence.length !== totalElementsInSequence) {
-                    validSequence = false; // Ha valamiért nem generálódott le elég elem (nem kéne előfordulnia)
+                    validSequence = false; 
                 }
             }
 
              if (!validSequence) { 
                 console.warn("Fallback sequence generation!");
-                ruleLength = 2; // Egyszerűbb fallback szabály
+                ruleLength = 2; 
                 currentTask.shownElements = ruleLength + 1;
                 startNum = currentSettings.numberRangeMax === 5 ? 1 : (currentSettings.numberRangeMax === 10 ? 2: 4);
                 rule = [{op: '+', val: 1}, {op: '-', val: 1}];
@@ -627,33 +670,29 @@
                                 if (newVal !== val) madeChange = true;
                                 val = newVal;
                             }
-                        } else if (attempts <= 5 && i === getRandomInt(0, ruleLength -1) ) { // Véletlenszerűen egy elemet módosítunk az első pár próbálkozásnál
+                        } else if (attempts <= 5 && i === getRandomInt(0, ruleLength -1) ) {
                              if (Math.random() < 0.5) { op = op === '+' ? '-' : '+'; madeChange = true;}
                              else { 
                                  let tempVal = val;
                                  val = getRandomInt(1, maxRuleValOption); 
                                  if(val !== tempVal) madeChange = true;
                             }
-                        }
-                         else { 
+                        } else { 
                             op = Math.random() < 0.5 ? '+' : '-';
                             val = getRandomInt(1, maxRuleValOption);
-                            // Ha nem történt explicit változtatás, és a generált lépés véletlenül megegyezik, az is rendben van,
-                            // a lényeg, hogy a teljes szabály más legyen.
                         }
                         fakeRuleArr.push({op, val});
                     }
                     fakeRuleStr = fakeRuleArr.map(r => `${r.op}${r.val}`).join(', ');
                     
-                    if (fakeRuleStr === correctRuleStr && !madeChange && ruleLength > 0 && attempts < 25) { // Ha mégsem lett más és nem volt explicit változtatás
+                    if (fakeRuleStr === correctRuleStr && !madeChange && ruleLength > 0 && attempts < 25) { 
                         let changeIndex = getRandomInt(0, ruleLength-1);
-                        if (fakeRuleArr[changeIndex]) { // Biztosítjuk, hogy létezik az index
+                        if (fakeRuleArr[changeIndex]) { 
                            fakeRuleArr[changeIndex].val = (fakeRuleArr[changeIndex].val % maxRuleValOption) + 1;
-                           if(fakeRuleArr[changeIndex].val > maxRuleValOption) fakeRuleArr[changeIndex].val = 1; // Ciklikus értékadás
+                           if(fakeRuleArr[changeIndex].val > maxRuleValOption) fakeRuleArr[changeIndex].val = 1;
                            fakeRuleStr = fakeRuleArr.map(r => `${r.op}${r.val}`).join(', ');
                         }
                     }
-
                 } while ((currentTask.ruleOptions.includes(fakeRuleStr) || fakeRuleStr === correctRuleStr) && attempts < 50); 
                 
                 if (!currentTask.ruleOptions.includes(fakeRuleStr) && fakeRuleStr !== correctRuleStr) {
@@ -671,70 +710,88 @@
                     }
                 }
             }
-            // Ha valamiért nem lett meg a 4 opció (nagyon ritka eset), feltöltjük egyszerűen másolt és módosított verzióval
             while(currentTask.ruleOptions.length < 4 && currentTask.rule.length > 0){
                 let lastOption = currentTask.ruleOptions[currentTask.ruleOptions.length-1] || correctRuleStr;
                 let parts = lastOption.split(',');
-                let lastPartVal = parseInt(parts[parts.length-1].substring(1));
-                parts[parts.length-1] = parts[parts.length-1][0] + (lastPartVal + 1);
+                if (parts.length > 0 && parts[parts.length-1].length > 1) { 
+                    let lastPartVal = parseInt(parts[parts.length-1].substring(1));
+                    if (!isNaN(lastPartVal)) { 
+                       parts[parts.length-1] = parts[parts.length-1][0] + (lastPartVal + 1);
+                    } else { 
+                       parts[parts.length-1] = parts[parts.length-1][0] + "1";
+                    }
+                } else { 
+                     parts = [(Math.random() < 0.5 ? '+' : '-') + "1"];
+                }
                 let newOpt = parts.join(',');
                 if(!currentTask.ruleOptions.includes(newOpt)) currentTask.ruleOptions.push(newOpt);
-                else currentTask.ruleOptions.push(correctRuleStr + currentTask.ruleOptions.length); // Végső fallback
+                else currentTask.ruleOptions.push(correctRuleStr + "_" + currentTask.ruleOptions.length); 
             }
-
             shuffleArray(currentTask.ruleOptions);
         }
 
-        // --- Feladat Megjelenítés ---
         function renderSequenceStep() {
             sequenceDisplayArea.innerHTML = '';
-            userSequenceInputs = [];
+            userSequenceInputs = []; 
 
-            // A teljes sorozat hossza: currentTask.sequence.length
             for (let i = 0; i < currentTask.sequence.length; i++) {
                 const itemEl = document.createElement('div');
                 itemEl.classList.add('sequence-item');
 
-                if (i < currentTask.shownElements) {
+                if (i < currentTask.shownElements) { 
                     const numDisplay = document.createElement('div');
                     numDisplay.classList.add('number-display');
                     numDisplay.textContent = currentTask.sequence[i];
                     itemEl.appendChild(numDisplay);
-                } else { // Kitöltendő elemek
+                } else { 
                     const inputEl = document.createElement('input');
                     inputEl.type = 'number';
                     inputEl.min = 0;
                     inputEl.max = currentSettings.numberRangeMax;
                     inputEl.pattern = "\\d*"; 
-                    inputEl.dataset.index = i - currentTask.shownElements; // Input sorszáma 0-tól
+                    inputEl.dataset.index = i - currentTask.shownElements; 
                     
                     inputEl.addEventListener('input', function() {
                         const valStr = this.value;
-                        // A currentTask.sequence tartalmazza a teljes helyes sort, az inputoknak megfelelő helyes érték:
-                        // currentTask.sequence[currentTask.shownElements + parseInt(this.dataset.index)]
                         const expectedFullNumberForThisInput = currentTask.sequence[currentTask.shownElements + parseInt(this.dataset.index)];
                         
                         if (valStr.length >= String(expectedFullNumberForThisInput).length && valStr.length > 0) {
                              if (parseInt(valStr) > currentSettings.numberRangeMax) { 
-                                this.value = valStr.slice(0, String(currentSettings.numberRangeMax).length); // Ne engedjen túl nagy számot beírni
+                                this.value = valStr.slice(0, String(currentSettings.numberRangeMax).length); 
                                 if (parseInt(this.value) > currentSettings.numberRangeMax) this.value = String(currentSettings.numberRangeMax);
                                 return;
                             }
                             const nextInputIndex = parseInt(this.dataset.index) + 1;
-                            if (nextInputIndex < currentTask.elementsToFill) { // currentTask.elementsToFill a kitöltendő inputok száma
-                                userSequenceInputs[nextInputIndex].focus();
+                            if (nextInputIndex < currentTask.elementsToFill) { 
+                                if (userSequenceInputs[nextInputIndex]) userSequenceInputs[nextInputIndex].focus();
                             } else {
                                 checkSequenceButton.focus(); 
                             }
                         }
                     });
-                    
                     itemEl.appendChild(inputEl);
-                    userSequenceInputs.push(inputEl);
+                    userSequenceInputs.push(inputEl); 
                 }
                 sequenceDisplayArea.appendChild(itemEl);
+
+                // ÚJ: Szabály művelet beviteli mező hozzáadása feltételesen
+                if (currentSettings.displayMode === 'reminder' && i < currentTask.shownElements - 1) {
+                    const operatorInputContainer = document.createElement('div');
+                    operatorInputContainer.classList.add('operator-input-item');
+                    
+                    const opInput = document.createElement('input');
+                    opInput.type = 'text';
+                    opInput.classList.add('rule-operator-input');
+                    opInput.placeholder = "±?"; 
+                    opInput.maxLength = 3; 
+                    
+                    operatorInputContainer.appendChild(opInput);
+                    sequenceDisplayArea.appendChild(operatorInputContainer);
+                }
             }
-            if(userSequenceInputs.length > 0) userSequenceInputs[0].focus();
+            if (userSequenceInputs.length > 0) {
+                userSequenceInputs[0].focus();
+            }
         }
         
         function renderRuleStep() {
@@ -755,13 +812,11 @@
                     });
                     this.classList.add('selected');
                     feedbackStep2.textContent = ''; feedbackStep2.className = 'feedback';
-
                 });
                 ruleOptionsContainer.appendChild(button);
             });
         }
 
-        // --- Ellenőrzés ---
         checkSequenceButton.addEventListener('click', function() {
             let allCorrect = true;
             let allFilled = true;
@@ -817,8 +872,7 @@
             ruleOptionsContainer.querySelectorAll('.rule-option-button').forEach(btn => {
                 btn.disabled = true; 
                 if (btn.dataset.rule === currentTask.correctRuleString && !isCorrect) {
-                    btn.classList.add('selected'); // Kiemeli a helyeset, ha a tipp rossz volt
-                     // Témától függően expliciten is beállíthatjuk a "helyes" színeket
+                    btn.classList.add('selected'); 
                      btn.style.borderColor = getComputedStyle(document.body).getPropertyValue('--feedback-correct-border-color').trim() || 'green';
                 } else if (btn.dataset.rule === selectedRuleOption && !isCorrect) {
                      btn.style.borderColor = getComputedStyle(document.body).getPropertyValue('--feedback-incorrect-border-color').trim() || 'red';
@@ -828,8 +882,6 @@
             });
         });
 
-
-        // --- Inicializálás ---
         newTaskButton.addEventListener('click', generateNewSequenceTask);
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -840,7 +892,11 @@
             const initialRangeButton = rangeSelector.querySelector('.range-button.active');
             if (initialRangeButton) currentSettings.numberRangeMax = parseInt(initialRangeButton.dataset.range);
 
-            applyTheme(currentSettings.theme); 
+            const initialModeButton = modeSelector.querySelector('.mode-button.active'); // ÚJ
+            if (initialModeButton) currentSettings.displayMode = initialModeButton.dataset.mode;
+
+
+            applyTheme(currentSettings.theme); // Ez most már a módválasztó gombokat is beállítja
             generateNewSequenceTask();
         });
     </script>
