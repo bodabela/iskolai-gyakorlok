@@ -741,7 +741,9 @@
 
         const TASK8_COLORS = [
             { name: "piros", value: "#FF0000" }, { name: "kék", value: "#0000FF" },
-            { name: "zöld", value: "#008000" }, { name: "sárga", value: "#FFFF00" }
+            { name: "zöld", value: "#008000" }, { name: "sárga", value: "#FFFF00" },
+            { name: "narancs", value: "#FFA500" }, { name: "lila", value: "#800080" },
+            { name: "rózsaszín", value: "#FFC0CB" }, { name: "barna", value: "#A52A2A" }
         ];
 
         function getRandomInt(min, max) {
@@ -1184,7 +1186,8 @@
         function checkTask1() {
             clearFeedback('feedback_task1');
             if (task1State.connections.length === 0) {
-                setFeedback('feedback_task1', "Kérlek, köss össze legalább egy párt!", false); return;
+                setFeedback('feedback_task1', "Kérlek, köss össze legalább egy párt!", false);
+                return;
             }
             let correctConnectionsCount = 0;
             const totalPossiblePairs = task1State.col1.length;
@@ -1587,12 +1590,41 @@
             paletteArea.innerHTML = '';
             shapesArea.innerHTML = '';
 
-            task8State.targetShapeType = ALL_SHAPE_TYPES[Math.floor(Math.random() * ALL_SHAPE_TYPES.length)];
-            task8State.targetColor = TASK8_COLORS[Math.floor(Math.random() * TASK8_COLORS.length)];
-            task8State.selectedPaletteColor = null;
-            task8State.coloredShapes = {};
+            // Új: Több utasítás egyidejűleg
+            const tasksToColor = [];
+            let availableShapeTypes = [...ALL_SHAPE_TYPES];
+            shuffleArray(availableShapeTypes);
 
-            instructionEl.textContent = `Színezd ki az összes ${SHAPE_NAMES_PLURAL[task8State.targetShapeType] || task8State.targetShapeType+"-okat/eket"} ${task8State.targetColor.name} színűre!`;
+            const numInstructions = getRandomInt(2, 4); // 2-4 utasítás
+            let usedColors = new Set();
+            let usedShapeTypes = new Set();
+
+            // Collect unique shape types and colors for instructions
+            for(let i = 0; i < numInstructions; i++) {
+                let shapeType;
+                do {
+                    shapeType = availableShapeTypes[getRandomInt(0, availableShapeTypes.length - 1)];
+                } while (usedShapeTypes.has(shapeType) && availableShapeTypes.length > usedShapeTypes.size); // Ensure unique shape types if possible
+                usedShapeTypes.add(shapeType);
+
+                let colorObj;
+                do {
+                    colorObj = TASK8_COLORS[getRandomInt(0, TASK8_COLORS.length - 1)];
+                } while (usedColors.has(colorObj.value) && TASK8_COLORS.length > usedColors.size); // Ensure unique colors if possible
+                usedColors.add(colorObj.value);
+
+                tasksToColor.push({
+                    shapeType: shapeType,
+                    color: colorObj
+                });
+            }
+            task8State.coloringInstructions = tasksToColor;
+
+            const instructionsText = tasksToColor.map(task => 
+                `színezd az összes ${SHAPE_NAMES_PLURAL[task.shapeType] || task.shapeType+"-okat/eket"} ${task.color.name} színűre`
+            ).join(', a(z) ');
+            instructionEl.textContent = `Válaszd ki a színt, majd kattints az alakzatokra! ${instructionsText}.`;
+
 
             TASK8_COLORS.forEach(color => {
                 const btn = document.createElement('button');
@@ -1609,17 +1641,29 @@
                 paletteArea.appendChild(btn);
             });
 
+            // Új: Legalább 8, de legfeljebb 12 síkidom megjelenítése
+            const numShapesToDisplay = getRandomInt(8, 12); 
             let displayShapesTypes = [];
-            displayShapesTypes.push(task8State.targetShapeType);
-            displayShapesTypes.push(task8State.targetShapeType);
+            let targetShapeTypes = tasksToColor.map(t => t.shapeType);
+            let nonTargetShapes = ALL_SHAPE_TYPES.filter(type => !targetShapeTypes.includes(type));
 
-            let otherShapesForTask8 = ALL_SHAPE_TYPES.filter(s => s !== task8State.targetShapeType);
-            shuffleArray(otherShapesForTask8);
-            for(let i=0; i < Math.min(2, otherShapesForTask8.length); i++) {
-                if(otherShapesForTask8[i]) displayShapesTypes.push(otherShapesForTask8[i]);
+            // Biztosítjuk, hogy minden cél alakzatból legyen legalább 1-2 példány
+            tasksToColor.forEach(task => {
+                const numInstances = getRandomInt(1, 2); 
+                for(let i = 0; i < numInstances; i++) {
+                    displayShapesTypes.push(task.shapeType);
+                }
+            });
+
+            // Feltöltjük a maradék helyet véletlenszerű alakzatokkal, beleértve a már használtakat és a nem cél alakzatokat is.
+            while(displayShapesTypes.length < numShapesToDisplay) {
+                let randomType = ALL_SHAPE_TYPES[getRandomInt(0, ALL_SHAPE_TYPES.length - 1)];
+                displayShapesTypes.push(randomType);
             }
             shuffleArray(displayShapesTypes);
 
+
+            task8State.shapesData = {}; // Rögzítjük az alakzatok kezdeti állapotát
             displayShapesTypes.forEach((type, index) => {
                 const shapeDiv = document.createElement('div');
                 shapeDiv.classList.add('colorable-shape','shape-item');
@@ -1627,14 +1671,19 @@
                 shapeDiv.dataset.shapeType = type;
                 const defaultShapeFill = getThemeColor('--shape-fill-default', '#eeeeee');
                 shapeDiv.appendChild(createShapeSvg(type, 60, { fill: defaultShapeFill }));
-                task8State.coloredShapes[shapeDiv.id] = defaultShapeFill;
+                
+                task8State.shapesData[shapeDiv.id] = {
+                    type: type,
+                    currentColor: defaultShapeFill, // Aktuális szín
+                    originalFill: defaultShapeFill  // Eredeti szín (nem változik)
+                };
 
                 shapeDiv.addEventListener('click', () => {
                     if (task8State.selectedPaletteColor) {
                         const svgEl = shapeDiv.querySelector('svg > *:not(text)');
                         if (svgEl) {
                             svgEl.setAttribute('fill', task8State.selectedPaletteColor.value);
-                            task8State.coloredShapes[shapeDiv.id] = task8State.selectedPaletteColor.value;
+                            task8State.shapesData[shapeDiv.id].currentColor = task8State.selectedPaletteColor.value;
                             shapeDiv.classList.remove('correct-color', 'incorrect-color');
                         }
                     } else {
@@ -1645,40 +1694,45 @@
             });
         }
         function checkTask8() {
-            let allTargetsCorrectlyColored = true;
-            let nonTargetsIncorrectlyColored = false;
-            let targetShapesExist = false;
+            let overallCorrect = true;
+            const instructionMap = new Map(); // shapeType -> expectedColor
+            task8State.coloringInstructions.forEach(inst => {
+                instructionMap.set(inst.shapeType, inst.color.value);
+            });
 
             document.querySelectorAll('#coloring_shapes_area .colorable-shape').forEach(shapeDiv => {
                 shapeDiv.classList.remove('correct-color', 'incorrect-color');
                 const shapeType = shapeDiv.dataset.shapeType;
-                const currentColor = task8State.coloredShapes[shapeDiv.id];
-                const defaultShapeFill = getThemeColor('--shape-fill-default', '#eeeeee');
+                const currentShapeData = task8State.shapesData[shapeDiv.id];
+                const currentColor = currentShapeData.currentColor;
 
-                if (shapeType === task8State.targetShapeType) {
-                    targetShapesExist = true;
-                    if (currentColor === task8State.targetColor.value) {
+                const expectedColorForThisType = instructionMap.get(shapeType);
+
+                if (expectedColorForThisType) { // Ez egy olyan alakzat, amit színeznünk kellene
+                    if (currentColor === expectedColorForThisType) {
                         shapeDiv.classList.add('correct-color');
                     } else {
                         shapeDiv.classList.add('incorrect-color');
-                        allTargetsCorrectlyColored = false;
+                        overallCorrect = false;
                     }
-                } else {
-                    if (currentColor === task8State.targetColor.value) {
+                } else { // Ez egy olyan alakzat, amit NEM kellene színeznünk a feladat alapján
+                    if (currentColor !== currentShapeData.originalFill) { // Ha át lett színezve (és nem a default színre)
                         shapeDiv.classList.add('incorrect-color');
-                        nonTargetsIncorrectlyColored = true;
+                        overallCorrect = false;
                     }
                 }
             });
 
-            if (!targetShapesExist) {
-                 setFeedback('feedback_task8', "Hoppá, nem jelentek meg kiszínezendő alakzatok!", false); return;
-            }
-
-            if (allTargetsCorrectlyColored && !nonTargetsIncorrectlyColored) {
+            if (overallCorrect) {
                 setFeedback('feedback_task8', "Tökéletes színezés! 🎨", true);
             } else {
-                setFeedback('feedback_task8', "Valami nem stimmel a színekkel. Ellenőrizd, hogy a megfelelő alakzatok vannak-e a kért színnel kiszínezve, és a többiek nem!", false);
+                let feedbackMsg = "Valami nem stimmel a színekkel. ";
+                const incorrectShapes = document.querySelectorAll('#coloring_shapes_area .colorable-shape.incorrect-color');
+                if (incorrectShapes.length > 0) {
+                     feedbackMsg += "Nézd át a pirossal jelölt alakzatokat! ";
+                }
+                feedbackMsg += "Győződj meg róla, hogy minden kért alakzat a megfelelő színnel van kiszínezve, és más alakzat nincs kiszínezve!";
+                setFeedback('feedback_task8', feedbackMsg, false);
             }
         }
 
