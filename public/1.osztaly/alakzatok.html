@@ -190,10 +190,6 @@
         .shape-item:hover, .shadow-item:hover, .colorable-shape:hover, .sequence-item-display:hover, .legend-shape-item-display:hover {
             transform: scale(1.05);
         }
-        .shape-item svg, .shadow-item svg, .colorable-shape svg, .sequence-item-display svg, .position-task-shape svg, .legend-shape-item-display svg {
-            width: 90%;
-            height: 90%;
-        }
         .shape-item.selected {
             border-color: var(--selected-item-border-color, #3b82f6) !important;
             box-shadow: 0 0 8px var(--selected-item-border-color, #3b82f6);
@@ -204,6 +200,14 @@
         .shape-item.incorrect-connection, .shadow-item.incorrect-selection, .colorable-shape.incorrect-color, .sequence-item-display.incorrect-choice  {
             border-color: var(--feedback-incorrect-border-color, red) !important;
         }
+        /* Húzás alatt lévő elem stílusa */
+        .shape-item.dragging {
+            opacity: 0.7;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            transform: scale(1.1);
+            z-index: 1000; /* Fontos, hogy húzás közben felül legyen */
+        }
+
 
         .answer-options-container {
             display: flex;
@@ -956,6 +960,8 @@
                 element.classList.remove('dragging');
                 draggedElement = null;
                 draggedElementData = null;
+                dragOffsetX = 0;
+                dragOffsetY = 0;
             });
 
             // Mobile / Touch events
@@ -970,30 +976,24 @@
                 dragOffsetX = touch.clientX - rect.left;
                 dragOffsetY = touch.clientY - rect.top;
 
-                element.style.opacity = '0.5';
-                element.classList.add('dragging');
-                element.style.zIndex = '1000'; // Bring to front while dragging
+                element.classList.add('dragging'); // Add dragging class immediately for visual feedback
+                element.style.position = 'absolute'; // Allow free movement
+                element.style.left = (touch.clientX - rect.left) + 'px';
+                element.style.top = (touch.clientY - rect.top) + 'px';
+                
             }, { passive: false }); // Use passive: false to allow preventDefault
 
             element.addEventListener('touchmove', (event) => {
                 event.preventDefault(); // Prevent scrolling
                 if (draggedElement) {
                     const touch = event.touches[0];
-                    const parentRect = draggedElement.parentElement.getBoundingClientRect();
+                    // Update position relative to the viewport, not parent directly
+                    draggedElement.style.left = (touch.clientX - dragOffsetX) + 'px';
+                    draggedElement.style.top = (touch.clientY - dragOffsetY) + 'px';
 
-                    let newX = touch.clientX - parentRect.left - dragOffsetX;
-                    let newY = touch.clientY - parentRect.top - dragOffsetY;
-
-                    // Ensure the element stays within its parent's bounds
-                    newX = Math.max(0, Math.min(newX, parentRect.width - draggedElement.offsetWidth));
-                    newY = Math.max(0, Math.min(newY, parentRect.height - draggedElement.offsetHeight));
-                    
-                    draggedElement.style.left = `${newX}px`;
-                    draggedElement.style.top = `${newY}px`;
-
-                    // Trigger droppable hover effect
+                    // Trigger droppable hover effect - check elements under the touch
                     const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
-                    document.querySelectorAll('.grouping-bin, .build-canvas').forEach(bin => {
+                    document.querySelectorAll('.grouping-bin, .build-canvas, .sequence-drop-target-area, .build-palette').forEach(bin => {
                         if (bin.contains(targetElement) && !bin.classList.contains('over')) {
                             bin.classList.add('over');
                         } else if (!bin.contains(targetElement) && bin.classList.contains('over')) {
@@ -1005,16 +1005,17 @@
 
             element.addEventListener('touchend', (event) => {
                 if (draggedElement) {
-                    draggedElement.style.opacity = '1';
-                    draggedElement.style.cursor = 'grab';
                     draggedElement.classList.remove('dragging');
-                    draggedElement.style.zIndex = ''; // Reset z-index
+                    draggedElement.style.position = ''; // Reset position properties
+                    draggedElement.style.left = '';
+                    draggedElement.style.top = '';
+                    draggedElement.style.zIndex = '';
 
                     const touch = event.changedTouches[0];
                     const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
 
                     let droppedSuccessfully = false;
-                    document.querySelectorAll('.grouping-bin, .build-canvas, .build-palette').forEach(dropTarget => {
+                    document.querySelectorAll('.grouping-bin, .build-canvas, #sequence_drop_target, .build-palette').forEach(dropTarget => {
                         dropTarget.classList.remove('over'); // Remove hover effect
 
                         const dropTargetRect = dropTarget.getBoundingClientRect();
@@ -1046,8 +1047,6 @@
                                     dropTarget.appendChild(clone);
                                     task10State.placedShapes.push({id: clone.id, type: draggedElementData.type, x: newX, y: newY});
                                     makeDraggable(clone, {type: draggedElementData.type, id: clone.id, fromPalette: false});
-                                    // Remove original if it was from palette (only for task 10 if cloning)
-                                    // In task 3, items are moved, not cloned.
                                 } else {
                                     draggedElement.style.left = newX + 'px';
                                     draggedElement.style.top = newY + 'px';
@@ -1058,41 +1057,52 @@
                                     }
                                 }
                                 droppedSuccessfully = true;
-                            } else if (dropTarget.id === 'build_palette_task10' && !draggedElementData.fromPalette) {
+                            } else if (dropTarget.id === 'build_palette_task10' && draggedElementData && !draggedElementData.fromPalette) {
                                 // Dropping back to palette from canvas (Task 10 only)
                                 draggedElement.remove();
                                 task10State.placedShapes = task10State.placedShapes.filter(s => s.id !== draggedElementData.id);
+                                droppedSuccessfully = true;
+                            } else if (dropTarget.id === 'sequence_drop_target') {
+                                // Task 5 drop target
+                                dropTarget.innerHTML = '';
+                                dropTarget.appendChild(createShapeSvg(draggedElementData.type, 70));
+                                task5State.droppedShapeType = draggedElementData.type;
+                                clearFeedback('feedback_task5');
+                                document.querySelectorAll('#sequence_options_area .shape-item').forEach(item => item.classList.remove('selected'));
+                                const originalOption = document.getElementById(draggedElementData.id);
+                                if(originalOption) originalOption.classList.add('selected');
                                 droppedSuccessfully = true;
                             }
                         }
                     });
 
                     // If not dropped on a valid target, revert to original position for grouping task
-                    if (!droppedSuccessfully && draggedElement.parentElement && draggedElement.parentElement.id === 'grouping_draggable_shapes_area') {
-                         draggedElement.style.position = 'relative';
-                         draggedElement.style.left = '';
-                         draggedElement.style.top = '';
-                         // No change needed for task3State.shapes, as it was already in the draggable area or not yet placed.
-                    } else if (!droppedSuccessfully && draggedElementData && draggedElementData.originalParentId === 'grouping_draggable_shapes_area' && draggedElement.parentElement.id !== 'grouping_draggable_shapes_area') {
-                        // This case handles a shape from a bin being dropped outside any valid target, returning it to the main draggable area.
-                        const originalParent = document.getElementById('grouping_draggable_shapes_area');
-                        if (originalParent) {
-                            originalParent.appendChild(draggedElement);
-                            draggedElement.style.position = 'relative';
-                            draggedElement.style.left = '';
-                            draggedElement.style.top = '';
-                            const shapeState = task3State.shapes.find(s => s.id === draggedElementData.id);
-                            if (shapeState && shapeState.currentBinCategory) {
-                                task3State.binContents[shapeState.currentBinCategory] = task3State.binContents[shapeState.currentBinCategory].filter(id => id !== draggedElementData.id);
-                                shapeState.currentBinCategory = null;
+                    if (!droppedSuccessfully) {
+                        // For grouping task, if dropped outside a bin, move back to draggable area
+                        if (draggedElementData && draggedElementData.originalParentId === 'grouping_draggable_shapes_area') {
+                            const originalParent = document.getElementById('grouping_draggable_shapes_area');
+                            if (originalParent) {
+                                originalParent.appendChild(draggedElement);
+                                draggedElement.style.position = 'relative';
+                                draggedElement.style.left = '';
+                                draggedElement.style.top = '';
+                                const shapeState = task3State.shapes.find(s => s.id === draggedElementData.id);
+                                if (shapeState && shapeState.currentBinCategory) {
+                                    task3State.binContents[shapeState.currentBinCategory] = task3State.binContents[shapeState.currentBinCategory].filter(id => id !== draggedElementData.id);
+                                    shapeState.currentBinCategory = null;
+                                }
                             }
                         }
+                        // For sequence task, if dropped outside, it just disappears from view (already handled by not cloning).
+                        // For build task, if dropped outside, it also disappears from canvas if it was a clone.
                     }
 
                     draggedElement = null;
                     draggedElementData = null;
-                    clearFeedback('feedback_task3'); // Clear feedback for grouping task
-                    clearFeedback('feedback_task10'); // Clear feedback for build task
+                    dragOffsetX = 0;
+                    dragOffsetY = 0;
+                    clearFeedback('feedback_task3'); 
+                    clearFeedback('feedback_task10');
                 }
             });
         }
@@ -1112,16 +1122,13 @@
                 element.classList.remove('over');
                 const data = JSON.parse(event.dataTransfer.getData('text/plain'));
                 if (draggedElement && data) {
-                    // For build canvas, pass event to calculate position
-                    if (element.id === 'build_canvas_task10') {
-                        onDropCallback(draggedElement, element, data, event);
-                    } else {
-                        onDropCallback(draggedElement, element, data);
-                    }
+                    // Pass event to calculate position for tasks that need it (like task 10)
+                    onDropCallback(draggedElement, element, data, event);
                 }
                 draggedElement = null;
                 draggedElementData = null;
             });
+            // No touch event listeners for droppable targets, they are handled by the draggable's touchend
         }
         // --- END SEGÉDFÜGGVÉNYEK ---
 
@@ -1660,7 +1667,7 @@
                 optionDiv.id = `seq_opt_${index}`;
                 optionDiv.dataset.shapeType = optType;
                 optionDiv.appendChild(createShapeSvg(optType, 50));
-                makeDraggable(optionDiv, { type: optType, id: optionDiv.id });
+                makeDraggable(optionDiv, { type: optType, id: optionDiv.id, fromPalette: true, task: 'task5' }); // Add task identifier
                 optionDiv.addEventListener('click', () => {
                     dropTarget.innerHTML = '';
                     dropTarget.appendChild(createShapeSvg(optType, 70));
@@ -1672,13 +1679,19 @@
                 optionsArea.appendChild(optionDiv);
             });
              makeDroppable(dropTarget, (draggedItem, target, data) => {
-                target.innerHTML = '';
-                target.appendChild(createShapeSvg(data.type, 70));
-                task5State.droppedShapeType = data.type;
-                clearFeedback('feedback_task5');
-                 document.querySelectorAll('#sequence_options_area .shape-item').forEach(item => item.classList.remove('selected'));
-                const originalOption = document.getElementById(data.id);
-                if(originalOption) originalOption.classList.add('selected');
+                // This specific onDropCallback for Task 5 needs to be handled
+                // differently than the general one in makeDroppable/touchend for this specific task
+                // The touchend logic in makeDraggable now covers this.
+                // This is a fallback for mouse drag & drop only or if needed specifically.
+                if (data.task === 'task5') {
+                    target.innerHTML = '';
+                    target.appendChild(createShapeSvg(data.type, 70));
+                    task5State.droppedShapeType = data.type;
+                    clearFeedback('feedback_task5');
+                    document.querySelectorAll('#sequence_options_area .shape-item').forEach(item => item.classList.remove('selected'));
+                    const originalOption = document.getElementById(data.id);
+                    if(originalOption) originalOption.classList.add('selected');
+                }
             });
         }
         function checkTask5() {
@@ -2088,13 +2101,13 @@
                 shapeDiv.id = `build_palette_${type}_${index}`;
                 shapeDiv.dataset.shapeType = type;
                 shapeDiv.appendChild(createShapeSvg(type, 50));
-                makeDraggable(shapeDiv, { type: type, id: shapeDiv.id, fromPalette: true });
+                makeDraggable(shapeDiv, { type: type, id: shapeDiv.id, fromPalette: true, task: 'task10' }); // Add task identifier
                 paletteArea.appendChild(shapeDiv);
             });
 
             makeDroppable(canvasArea, onDropToBuildCanvasTask10);
             makeDroppable(paletteArea, (draggedItem, targetPalette, data) => {
-                if (!data.fromPalette) {
+                if (data.task === 'task10' && !data.fromPalette) { // Only allow dropping back to palette for task 10 items not originally from palette
                     draggedItem.remove();
                     task10State.placedShapes = task10State.placedShapes.filter(s => s.id !== data.id);
                 }
@@ -2128,7 +2141,7 @@
                 clone.dataset.shapeType = data.type;
                 targetCanvas.appendChild(clone);
                 task10State.placedShapes.push({id: clone.id, type: data.type, x: newX, y: newY});
-                makeDraggable(clone, {type: data.type, id: clone.id, fromPalette: false});
+                makeDraggable(clone, {type: data.type, id: clone.id, fromPalette: false, task: 'task10'}); // Add task identifier
             } else {
                 draggedItem.style.left = newX + 'px';
                 draggedItem.style.top = newY + 'px';
@@ -2167,6 +2180,10 @@
                      const placed = placedTypesCount[type] || 0;
                      if (placed < needed) {
                          missingParts.push(`${needed - placed} db ${SHAPE_NAMES[type] || type}`);
+                     }
+                     // Highlight missing shapes for visual feedback on canvas
+                     if (placed > needed) { // Too many of a certain shape
+                        // This would require iterating over placedShapes and adding a class to extras
                      }
                  }
                  setFeedback('feedback_task10', missingMsg + missingParts.join(', ') + ".", false);
