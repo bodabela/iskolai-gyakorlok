@@ -179,6 +179,7 @@
             transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
             user-select: none;
             box-sizing: border-box;
+            touch-action: none; /* Mobilon a görgetés megakadályozása */
         }
         .legend-shape-item-display {
             width: 100px;
@@ -929,10 +930,14 @@
 
         let draggedElement = null;
         let draggedElementData = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
 
         function makeDraggable(element, data) {
             element.draggable = true;
             element.style.cursor = 'grab';
+
+            // Desktop / Mouse events
             element.addEventListener('dragstart', (event) => {
                 draggedElement = element;
                 draggedElementData = data || { type: element.dataset.shapeType, id: element.id, originalParentId: element.parentElement.id };
@@ -940,15 +945,160 @@
                 event.dataTransfer.effectAllowed = 'move';
                 element.style.opacity = '0.5';
                 element.classList.add('dragging');
+
+                const rect = element.getBoundingClientRect();
+                dragOffsetX = event.clientX - rect.left;
+                dragOffsetY = event.clientY - rect.top;
             });
             element.addEventListener('dragend', (event) => {
                 element.style.opacity = '1';
                 element.style.cursor = 'grab';
                 element.classList.remove('dragging');
+                draggedElement = null;
+                draggedElementData = null;
+            });
+
+            // Mobile / Touch events
+            element.addEventListener('touchstart', (event) => {
+                // Prevent scrolling while dragging on touch devices
+                event.preventDefault(); 
+                draggedElement = element;
+                draggedElementData = data || { type: element.dataset.shapeType, id: element.id, originalParentId: element.parentElement.id };
+                
+                const touch = event.touches[0];
+                const rect = element.getBoundingClientRect();
+                dragOffsetX = touch.clientX - rect.left;
+                dragOffsetY = touch.clientY - rect.top;
+
+                element.style.opacity = '0.5';
+                element.classList.add('dragging');
+                element.style.zIndex = '1000'; // Bring to front while dragging
+            }, { passive: false }); // Use passive: false to allow preventDefault
+
+            element.addEventListener('touchmove', (event) => {
+                event.preventDefault(); // Prevent scrolling
+                if (draggedElement) {
+                    const touch = event.touches[0];
+                    const parentRect = draggedElement.parentElement.getBoundingClientRect();
+
+                    let newX = touch.clientX - parentRect.left - dragOffsetX;
+                    let newY = touch.clientY - parentRect.top - dragOffsetY;
+
+                    // Ensure the element stays within its parent's bounds
+                    newX = Math.max(0, Math.min(newX, parentRect.width - draggedElement.offsetWidth));
+                    newY = Math.max(0, Math.min(newY, parentRect.height - draggedElement.offsetHeight));
+                    
+                    draggedElement.style.left = `${newX}px`;
+                    draggedElement.style.top = `${newY}px`;
+
+                    // Trigger droppable hover effect
+                    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+                    document.querySelectorAll('.grouping-bin, .build-canvas').forEach(bin => {
+                        if (bin.contains(targetElement) && !bin.classList.contains('over')) {
+                            bin.classList.add('over');
+                        } else if (!bin.contains(targetElement) && bin.classList.contains('over')) {
+                            bin.classList.remove('over');
+                        }
+                    });
+                }
+            }, { passive: false }); // Use passive: false to allow preventDefault
+
+            element.addEventListener('touchend', (event) => {
+                if (draggedElement) {
+                    draggedElement.style.opacity = '1';
+                    draggedElement.style.cursor = 'grab';
+                    draggedElement.classList.remove('dragging');
+                    draggedElement.style.zIndex = ''; // Reset z-index
+
+                    const touch = event.changedTouches[0];
+                    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+
+                    let droppedSuccessfully = false;
+                    document.querySelectorAll('.grouping-bin, .build-canvas, .build-palette').forEach(dropTarget => {
+                        dropTarget.classList.remove('over'); // Remove hover effect
+
+                        const dropTargetRect = dropTarget.getBoundingClientRect();
+                        if (
+                            touch.clientX >= dropTargetRect.left &&
+                            touch.clientX <= dropTargetRect.right &&
+                            touch.clientY >= dropTargetRect.top &&
+                            touch.clientY <= dropTargetRect.bottom
+                        ) {
+                            // This is the drop target
+                            if (dropTarget.classList.contains('grouping-bin')) {
+                                onDropToBinTask3(draggedElement, dropTarget, draggedElementData);
+                                droppedSuccessfully = true;
+                            } else if (dropTarget.id === 'build_canvas_task10') {
+                                // For build canvas, re-calculate position based on drop coordinates
+                                const canvasRect = dropTarget.getBoundingClientRect();
+                                let newX = touch.clientX - canvasRect.left - dragOffsetX;
+                                let newY = touch.clientY - canvasRect.top - dragOffsetY;
+                                newX = Math.max(0, Math.min(newX, canvasRect.width - draggedElement.offsetWidth));
+                                newY = Math.max(0, Math.min(newY, canvasRect.height - draggedElement.offsetHeight));
+
+                                if (draggedElementData.fromPalette) {
+                                    const clone = draggedElement.cloneNode(true);
+                                    clone.style.position = 'absolute';
+                                    clone.style.left = newX + 'px';
+                                    clone.style.top = newY + 'px';
+                                    clone.id = `built_shape_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+                                    clone.dataset.shapeType = draggedElementData.type;
+                                    dropTarget.appendChild(clone);
+                                    task10State.placedShapes.push({id: clone.id, type: draggedElementData.type, x: newX, y: newY});
+                                    makeDraggable(clone, {type: draggedElementData.type, id: clone.id, fromPalette: false});
+                                    // Remove original if it was from palette (only for task 10 if cloning)
+                                    // In task 3, items are moved, not cloned.
+                                } else {
+                                    draggedElement.style.left = newX + 'px';
+                                    draggedElement.style.top = newY + 'px';
+                                    const shapeState = task10State.placedShapes.find(s => s.id === draggedElementData.id);
+                                    if(shapeState) {
+                                        shapeState.x = newX;
+                                        shapeState.y = newY;
+                                    }
+                                }
+                                droppedSuccessfully = true;
+                            } else if (dropTarget.id === 'build_palette_task10' && !draggedElementData.fromPalette) {
+                                // Dropping back to palette from canvas (Task 10 only)
+                                draggedElement.remove();
+                                task10State.placedShapes = task10State.placedShapes.filter(s => s.id !== draggedElementData.id);
+                                droppedSuccessfully = true;
+                            }
+                        }
+                    });
+
+                    // If not dropped on a valid target, revert to original position for grouping task
+                    if (!droppedSuccessfully && draggedElement.parentElement && draggedElement.parentElement.id === 'grouping_draggable_shapes_area') {
+                         draggedElement.style.position = 'relative';
+                         draggedElement.style.left = '';
+                         draggedElement.style.top = '';
+                         // No change needed for task3State.shapes, as it was already in the draggable area or not yet placed.
+                    } else if (!droppedSuccessfully && draggedElementData && draggedElementData.originalParentId === 'grouping_draggable_shapes_area' && draggedElement.parentElement.id !== 'grouping_draggable_shapes_area') {
+                        // This case handles a shape from a bin being dropped outside any valid target, returning it to the main draggable area.
+                        const originalParent = document.getElementById('grouping_draggable_shapes_area');
+                        if (originalParent) {
+                            originalParent.appendChild(draggedElement);
+                            draggedElement.style.position = 'relative';
+                            draggedElement.style.left = '';
+                            draggedElement.style.top = '';
+                            const shapeState = task3State.shapes.find(s => s.id === draggedElementData.id);
+                            if (shapeState && shapeState.currentBinCategory) {
+                                task3State.binContents[shapeState.currentBinCategory] = task3State.binContents[shapeState.currentBinCategory].filter(id => id !== draggedElementData.id);
+                                shapeState.currentBinCategory = null;
+                            }
+                        }
+                    }
+
+                    draggedElement = null;
+                    draggedElementData = null;
+                    clearFeedback('feedback_task3'); // Clear feedback for grouping task
+                    clearFeedback('feedback_task10'); // Clear feedback for build task
+                }
             });
         }
 
         function makeDroppable(element, onDropCallback) {
+            // Desktop / Mouse events
             element.addEventListener('dragover', (event) => {
                 event.preventDefault();
                 event.dataTransfer.dropEffect = 'move';
@@ -962,7 +1112,12 @@
                 element.classList.remove('over');
                 const data = JSON.parse(event.dataTransfer.getData('text/plain'));
                 if (draggedElement && data) {
-                    onDropCallback(draggedElement, element, data);
+                    // For build canvas, pass event to calculate position
+                    if (element.id === 'build_canvas_task10') {
+                        onDropCallback(draggedElement, element, data, event);
+                    } else {
+                        onDropCallback(draggedElement, element, data);
+                    }
                 }
                 draggedElement = null;
                 draggedElementData = null;
@@ -1339,7 +1494,7 @@
                 task3State.binContents[targetBinCategory].push(data.id);
             }
             binElement.appendChild(draggedItem);
-            draggedItem.style.position = 'relative';
+            draggedItem.style.position = 'relative'; // Ensure it's static/relative within the bin
             draggedItem.style.left = '';
             draggedItem.style.top = '';
             clearFeedback('feedback_task3');
@@ -1351,6 +1506,9 @@
                  shapeState.currentBinCategory = null;
             }
             targetArea.appendChild(draggedItem);
+            draggedItem.style.position = 'relative'; // Ensure it's static/relative within the area
+            draggedItem.style.left = '';
+            draggedItem.style.top = '';
             clearFeedback('feedback_task3');
         }
 
@@ -1897,7 +2055,7 @@
                 style.innerHTML = `
                     .build-area-container { display: flex; gap: 20px; margin-top: 20px; justify-content: center; flex-wrap: wrap;}
                     .build-palette { width: 150px; min-height: 250px; border: 2px dashed var(--task-border); padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 10px; background-color: var(--build-palette-bg, var(--task-bg)); border-radius: 8px;}
-                    .build-canvas { width: 300px; height: 250px; border: 2px solid var(--build-canvas-border, var(--task-border)); position: relative; background-color: var(--container-bg); border-radius: 8px; overflow: hidden;}
+                    .build-canvas { width: 300px; height: 250px; border: 2px solid var(--build-canvas-border, var(--task-border)); position: relative; background-color: var(--container-bg); border-radius: 8px; overflow: hidden; touch-action: none;}
                     .build-palette .shape-item { cursor: grab !important; }
                     .build-canvas .shape-item { position: absolute !important; cursor: move !important; }
                 `;
@@ -1942,10 +2100,22 @@
                 }
             });
         }
-        function onDropToBuildCanvasTask10(draggedItem, targetCanvas, data) {
+        function onDropToBuildCanvasTask10(draggedItem, targetCanvas, data, event = null) {
             const canvasRect = targetCanvas.getBoundingClientRect();
-            let newX = event.clientX - canvasRect.left - (draggedItem.offsetWidth / 2);
-            let newY = event.clientY - canvasRect.top - (draggedItem.offsetHeight / 2);
+            let newX, newY;
+
+            if (event && event.touches && event.touches.length > 0) { // Touch event
+                const touch = event.touches[0] || event.changedTouches[0];
+                newX = touch.clientX - canvasRect.left - dragOffsetX;
+                newY = touch.clientY - canvasRect.top - dragOffsetY;
+            } else if (event) { // Mouse event
+                newX = event.clientX - canvasRect.left - dragOffsetX;
+                newY = event.clientY - canvasRect.top - dragOffsetY;
+            } else { // Fallback, should not happen if called correctly
+                newX = draggedItem.offsetLeft;
+                newY = draggedItem.offsetTop;
+            }
+            
             newX = Math.max(0, Math.min(newX, canvasRect.width - draggedItem.offsetWidth));
             newY = Math.max(0, Math.min(newY, canvasRect.height - draggedItem.offsetHeight));
 
