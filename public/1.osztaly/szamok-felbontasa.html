@@ -98,8 +98,8 @@
             transition: background-color 0.5s ease, border-color 0.5s ease;
         }
         .task-header { /* Címek (1. Feladat, 2. Feladat) */
-            /* display: flex; */ /* Removed as h3 is block */
-            /* justify-content: space-between; */
+            display: flex; /* Flexbox a cím és gomb egy sorba rendezéséhez */
+            justify-content: space-between; /* Cím balra, gomb jobbra */
             align-items: center;
             margin-bottom: 10px;
             padding-bottom: 10px;
@@ -110,8 +110,14 @@
             margin-bottom: 0;
             font-size: clamp(1.2em, 4vw, 1.5em);
             transition: color 0.5s ease;
-            text-align: left;
+            text-align: left; /* Cím balra igazítva */
         }
+        .new-task-button { /* Stílus az "Új feladat" gombhoz a task headerben */
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px; /* Kis térköz a cím és a gomb között */
+        }
+
 
         .task p.instructions {
             line-height: 1.6;
@@ -381,7 +387,10 @@
         </div>
 
         <div class="task" id="guided_task_block">
-            <div class="task-header"><h3 id="guided_task_title"></h3></div>
+            <div class="task-header">
+                <h3 id="guided_task_title"></h3>
+                <button class="task-button new-task-button" onclick="generateGuidedTasksForButton()">Új feladat</button>
+            </div>
             <p class="instructions" id="guided_task_instructions"></p>
             <div class="decomposition-tasks-wrapper">
                 <div id="decomposition_table_container_g1" class="decomposition-table-container"></div>
@@ -392,7 +401,10 @@
         </div>
 
         <div class="task" id="standard_task_block">
-            <div class="task-header"><h3 id="standard_task_title"></h3></div>
+            <div class="task-header">
+                <h3 id="standard_task_title"></h3>
+                <button class="task-button new-task-button" onclick="generateStandardTasksForButton()">Új feladat</button>
+            </div>
             <p class="instructions" id="standard_task_instructions"></p>
             <div class="decomposition-tasks-wrapper">
                 <div id="decomposition_table_container_s1" class="decomposition-table-container"></div>
@@ -483,6 +495,49 @@
             });
         });
 
+        function generateSpecificTasksAndUpdate(taskSetIndex) {
+            const taskSet = allTasksSetup[taskSetIndex];
+            const feedbackEl = document.getElementById(taskSet.feedbackAreaId);
+             if (feedbackEl) {
+                feedbackEl.textContent = '';
+                feedbackEl.className = 'feedback';
+            }
+
+            let generatedTargetNumbersForThisSet = new Set();
+             taskSet.tables.forEach(tableDetail => {
+                 let targetNum;
+                let attempts = 0;
+                do {
+                    targetNum = getRandomInt(Math.max(1, Math.floor(currentNumberRange / 2)), currentNumberRange);
+                    if (currentNumberRange === 5 && targetNum < 1) targetNum = getRandomInt(1,5);
+                    else if (targetNum < 1 && currentNumberRange > 0) targetNum = 1;
+                    else if (currentNumberRange === 0 ) targetNum = 0;
+                    attempts++;
+                } while (generatedTargetNumbersForThisSet.has(targetNum) && attempts < 10 && generatedTargetNumbersForThisSet.size < taskSet.tables.length);
+                generatedTargetNumbersForThisSet.add(targetNum);
+                tableDetail.targetNumber = targetNum;
+
+
+                tableDetail.decompositions = [];
+                if (tableDetail.targetNumber === 0) {
+                    tableDetail.decompositions.push({ num1: 0, num2: 0 });
+                } else {
+                    for (let i = 0; i <= tableDetail.targetNumber; i++) {
+                        tableDetail.decompositions.push({ num1: i, num2: tableDetail.targetNumber - i });
+                    }
+                }
+                renderDecompositionTable(tableDetail.containerId, tableDetail.targetNumber, tableDetail.decompositions, tableDetail.inputPrefix, taskSet.mode);
+             });
+            setupSpecificInputFocusAndMaxlength(taskSetIndex);
+        }
+
+        function generateGuidedTasksForButton() {
+            generateSpecificTasksAndUpdate(0);
+        }
+        function generateStandardTasksForButton() {
+            generateSpecificTasksAndUpdate(1);
+        }
+
         function generateAllDecompositionTasks() {
             // Clear all feedback areas
             allTasksSetup.forEach(taskSet => {
@@ -511,7 +566,7 @@
                         else if (currentNumberRange === 0 ) targetNum = 0;
                         attempts++;
                     } while (generatedTargetNumbers.has(targetNum) && attempts < 10 && generatedTargetNumbers.size < Math.min(4, currentNumberRange)); // Stop if we have enough unique or tried enough
-                    
+
                     generatedTargetNumbers.add(targetNum);
                     tableDetail.targetNumber = targetNum;
 
@@ -521,6 +576,16 @@
                         tableDetail.decompositions.push({ num1: 0, num2: 0 });
                     } else {
                         for (let i = 0; i <= tableDetail.targetNumber; i++) {
+							/*
+							const decomposition = { num1: i, num2: tableDetail.targetNumber - i }
+							const swticherForOdds = 
+								tableDetail.decompositions[tableDetail.decompositions.length-1] &&
+								tableDetail.decompositions[tableDetail.decompositions.length-1].num1 == decomposition.num2 &&
+								tableDetail.decompositions[tableDetail.decompositions.length-1].num2 == decomposition.num1
+							if(!swticherForOdds) {
+								tableDetail.decompositions.push(decomposition);
+							}
+							*/
                             tableDetail.decompositions.push({ num1: i, num2: tableDetail.targetNumber - i });
                         }
                     }
@@ -578,7 +643,14 @@
                 const colors = getDifferentColorPairForRow();
                 let prefillNum1 = false;
                 if (mode === 'guided') {
-                    prefillNum1 = (index % 2 === 0); // Alternate pre-filling: num1 on even, num2 on odd
+                    prefillNum1 = (
+									(index + 
+										(
+											(index > decompositionsArray.length / 2 && (decompositionsArray.length % 2) == 0) 
+												? 1 : 0
+										)
+									)
+									% 2 === 0); // Alternate pre-filling: num1 on even, num2 on odd except in case of odd middle turning point
                     if (decompositionsArray.length === 1 && targetNum === 0) prefillNum1 = true;
                 }
 
@@ -625,6 +697,46 @@
             });
             table.appendChild(tableBody);
             container.appendChild(table);
+        }
+
+        function setupSpecificInputFocusAndMaxlength(taskSetIndex) {
+            const taskSet = allTasksSetup[taskSetIndex];
+            const inputsForThisSet = [];
+            taskSet.tables.forEach(tableDetail => {
+                const container = document.getElementById(tableDetail.containerId);
+                if (container) {
+                    const inputsInThisTable = Array.from(container.querySelectorAll('.table-input'));
+                    inputsInThisTable.forEach(inputEl => {
+                        inputEl.dataset.targetNumContext = tableDetail.targetNumber;
+                        inputsForThisSet.push(inputEl);
+                    });
+                }
+            });
+
+            inputsForThisSet.forEach((inputEl, index) => {
+                 inputEl.dataset.focusOrder = index;
+                const targetNumForThisInput = parseInt(inputEl.dataset.targetNumContext);
+                const targetNumStr = String(isNaN(targetNumForThisInput) ? currentNumberRange : targetNumForThisInput);
+                const fieldMaxLength = targetNumStr.length > 0 ? targetNumStr.length : 1;
+                inputEl.setAttribute('maxlength', fieldMaxLength);
+                inputEl.style.borderColor = `var(--input-border-color)`;
+                inputEl.style.borderWidth = `1px`;
+
+                inputEl.addEventListener('input', function() {
+                    if (this.value.length >= parseInt(this.getAttribute('maxlength'))) {
+                        const currentFocusOrder = parseInt(this.dataset.focusOrder);
+                        if (currentFocusOrder < inputsForThisSet.length - 1) {
+                            inputsForThisSet[currentFocusOrder + 1].focus();
+                        } else {
+                            const nextButton = this.closest('.task').querySelector('.task-button[onclick^="checkSpecificTasks"]');
+                            if (nextButton) nextButton.focus();
+                        }
+                    }
+                });
+            });
+             if (inputsForThisSet.length > 0) {
+                 setTimeout(() => inputsForThisSet[0].focus(), 100);
+            }
         }
 
         function setupAllInputFocusAndMaxlength() {
