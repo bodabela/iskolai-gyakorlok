@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Számfelbontás Gyakorló</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .theme-selector, .range-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+       
+        .theme-button, .range-button {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-button:hover, .range-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .theme-button.active, .range-button.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000); 
+            transform: translateY(1px);
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px; 
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px; 
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em); 
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em); 
+            margin-bottom: 25px;
+        }
+        .task {
+            margin-bottom: 30px; 
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0; 
+            font-size: clamp(1.1em, 3.5vw, 1.3em); 
+            transition: color 0.5s ease;
+        }
+        .new-task-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px; 
+        }
+
+        .task p.instructions {
+            line-height: 1.6; 
+            font-size: clamp(1em, 3vw, 1.1em); 
+            margin-bottom: 10px; 
+            transition: color 0.5s ease;
+            text-align: center;
+        }
+
+        .decomposition-table-container {
+            margin-top: 15px;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .decomposition-table {
+            width: auto;
+            min-width: 200px;
+            margin: 0;
+            border-collapse: collapse;
+            font-size: clamp(1.1em, 3.5vw, 1.3em);
+            border: 2px solid var(--table-border-color, #ccc);
+            border-radius: 8px;
+            transition: border-color 0.5s ease;
+            table-layout: fixed; /* Fixed column width for alignment */
+            max-width: 100%;
+        }
+
+        .decomposition-table th, .decomposition-table td {
+            border: 1px solid var(--table-cell-border-color, #ddd);
+            padding: clamp(3px, 0.8vw, 5px);
+            text-align: center;
+            height: clamp(45px, 9vw, 60px);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            box-sizing: border-box;
+            vertical-align: middle;
+        }
+        .decomposition-table th {
+            font-weight: bold;
+            background-color: var(--table-th-bg-color, #f0f0f0);
+            color: var(--table-th-text-color, #333);
+        }
+        .decomposition-table th.merged-header {
+            font-size: clamp(1.6em, 5vw, 2em);
+            padding: 10px;
+            border-bottom: none;
+            border-right: none;
+            border-left: none;
+            background-color: var(--main-number-bg-color, #FFD700);
+            color: var(--main-number-text-color, #423A02);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            z-index: 1; /* Hogy a kerete felül legyen */
+        }
+        .decomposition-table th.merged-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--main-number-bg-color-strong, #FFC107);
+            opacity: 0.3;
+            z-index: -1;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .decomposition-table .column-header {
+            font-size: clamp(0.9em, 2.8vw, 1.1em);
+            font-weight: bold;
+            color: var(--column-header-text-color, #555);
+            background-color: var(--column-header-bg-color, #f0f0f0);
+        }
+
+        .decomposition-table .table-input {
+            width: clamp(40px, 8vw, 50px);
+            height: clamp(38px, 7.5vw, 45px);
+            padding: clamp(6px, 1vw, 8px);
+            text-align: center;
+            font-size: clamp(0.9em, 2.8vw, 1.1em);
+            font-weight: normal;
+            border-radius: 6px;
+            border: 1px solid var(--input-border-color, #ccc);
+            -moz-appearance: textfield;
+            box-sizing: border-box;
+            margin: auto;
+            display: block;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            transition: border-color 0.3s ease, border-width 0.3s ease;
+        }
+        .decomposition-table input[type=number]::-webkit-outer-spin-button,
+        .decomposition-table input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .decomposition-table .plus-sign {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--plus-sign-color, #333);
+        }
+
+        button.task-button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em);
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+            min-height: 1.5em;
+        }
+
+        :root {
+            --table-border-color: #dee2e6;
+            --table-cell-border-color: #e9ecef;
+            --table-th-bg-color: #f8f9fa;
+            --table-th-text-color: #495057;
+            --main-number-bg-color: #FFD700;
+            --main-number-text-color: #423A02;
+            --main-number-bg-color-strong: #FFC107;
+            --column-header-text-color: #555;
+            --column-header-bg-color: #e9ecef;
+            --input-bg-color: #fff;
+            --input-text-color: #212529;
+            --input-border-color: #ced4da;
+            --plus-sign-color: #333;
+            --feedback-correct-border-color: green;
+            --feedback-incorrect-border-color: red;
+            --feedback-border-width: 2.5px;
+        }
+
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;
+            --table-border-color: #ffb6c1; --table-cell-border-color: #ffc0cb;
+            --table-th-bg-color: #ffdae9; --table-th-text-color: #c71585;
+            --main-number-bg-color: #FBCFE8; --main-number-text-color: #881337; --main-number-bg-color-strong: #F472B6;
+            --column-header-text-color: #a52a2a; --column-header-bg-color: #ffe4e1;
+            --input-text-color: #8a2be2; --input-border-color: #ffb6c1;
+            --plus-sign-color: #9932cc;
+            --feedback-correct-border-color: #90ee90; --feedback-incorrect-border-color: #ffb6c1;
+        }
+        body.theme-candy .control-label { color: #c71585; }
+        body.theme-candy .theme-button.active, body.theme-candy .range-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .container { background-color: #ffe4e1; border-color: #ffc0cb; }
+        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
+        body.theme-candy .task { background-color: #fffafa; border-color: #ffb6c1; }
+        body.theme-candy .task-header h3 { color: #ff69b4; }
+        body.theme-candy .task p.instructions { color: #8a2be2; }
+        body.theme-candy button.task-button { background-color: #ff69b4; }
+        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border-color: #90ee90; }
+        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border-color: #ffb6c1; }
+
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;
+            --table-border-color: #475569; --table-cell-border-color: #334155;
+            --table-th-bg-color: #1e3a8a; --table-th-text-color: #93c5fd;
+            --main-number-bg-color: #3B82F6; --main-number-text-color: #E0F2FE; --main-number-bg-color-strong: #2563EB;
+            --column-header-text-color: #93c5fd; --column-header-bg-color: #1e3a8a;
+            --input-text-color: #e2e8f0; --input-border-color: #475569;
+            --plus-sign-color: #e2e8f0;
+            --feedback-correct-border-color: #22c55e; --feedback-incorrect-border-color: #ef4444;
+        }
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .theme-button.active, body.theme-space .range-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border-color: #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .task { background-color: #334155; border-color: #475569; }
+        body.theme-space .task-header h3 { color: #93c5fd; }
+        body.theme-space .task p.instructions { color: #cbd5e1; }
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border-color: #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border-color: #ef4444; }
+
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;
+            --table-border-color: #558b2f; --table-cell-border-color: #81c784;
+            --table-th-bg-color: #a5d6a7; --table-th-text-color: #2e7d32;
+            --main-number-bg-color: #8BC34A; --main-number-text-color: #1B5E20; --main-number-bg-color-strong: #7CB342;
+            --column-header-text-color: #2e7d32; --column-header-bg-color: #a5d6a7;
+            --input-text-color: #1b5e20; --input-border-color: #81c784;
+            --plus-sign-color: #2e7d32;
+            --feedback-correct-border-color: #a5d6a7; --feedback-incorrect-border-color: #ef9a9a;
+        }
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border-color: #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border-color: #81c784; }
+        body.theme-jungle .task-header h3 { color: #558b2f; }
+        body.theme-jungle .task p.instructions { color: #2e7d32; }
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border-color: #a5d6a7; }
+        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border-color: #ef9a9a; }
+
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2; } body.theme-magicforest .task p.instructions {color: #4b0082;}
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;} body.theme-tech .task p.instructions {color: #b0bec5;}
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;} body.theme-ocean .task p.instructions {color: #00695c;}
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;} body.theme-sport .task p.instructions {color: #0d47a1;}
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;} body.theme-flowergarden .task p.instructions {color: #8b4513;}
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;} body.theme-adventure .task p.instructions {color: #4e342e;}
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;} body.theme-sky .task p.instructions {color: #5f9ea0;}
+
+    </style>
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                <button class="theme-button" data-theme="theme-sky">Égbolt</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+        <div>
+            <p class="control-label">Számkör választó:</p>
+            <div class="range-selector">
+                <button class="range-button" data-range="5">5-ös</button>
+                <button class="range-button active" data-range="10">10-es</button>
+                <button class="range-button" data-range="20">20-as</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Számfelbontás Gyakorló</h1>
+        <h2>Bontsd fel a számot különböző módokon!</h2>
+
+        <div class="task">
+            <div class="task-header">
+                <h3>Feladat: Keresd a felbontásokat!</h3>
+                <button class="task-button new-task-button" onclick="generateDecompositionTask()">Új feladat</button>
+            </div>
+            <p class="instructions">Bontsd fel a fenti számot két részre a megadott módon! Írd be a hiányzó számokat a táblázatba. Minden lehetséges felbontást adj meg!</p>
+            <div id="decomposition_table_container" class="decomposition-table-container">
+                </div>
+            <button class="task-button" onclick="checkDecompositionTask()">Ellenőrzés</button>
+            <p id="feedback_area" class="feedback"></p>
+        </div>
+    </div>
+
+    <script>
+        const bodyEl = document.body;
+        const themeButtons = document.querySelectorAll('.theme-button');
+        const rangeButtons = document.querySelectorAll('.range-button');
+        const decompositionTableContainer = document.getElementById('decomposition_table_container');
+        const feedbackArea = document.getElementById('feedback_area');
+
+        let currentNumberRange = 10; // Default range
+        let targetNumber = 0;
+        let decompositions = []; // Stores { num1: X, num2: Y }
+
+        // Definíció: columnBackgroundColors - Különböző színpárok, melyekkel a sorok hátterét színezhetjük
+        const columnBackgroundColors = [
+            { pastel: '#FFE0B2', strong: '#FFB74D' }, // Orange pastel
+            { pastel: '#C8E6C9', strong: '#81C784' }, // Green pastel
+            { pastel: '#BBDEFB', strong: '#64B5F6' }, // Blue pastel
+            { pastel: '#FFCDD2', strong: '#E57373' }, // Red pastel
+            { pastel: '#F8BBD0', strong: '#F06292' }, // Pink pastel
+            { pastel: '#E1BEE7', strong: '#BA68C8' }, // Purple pastel
+            { pastel: '#B2EBF2', strong: '#4DD0E1' }, // Cyan pastel
+            { pastel: '#DCEDC8', strong: '#A5D6A7' }, // Light Green pastel
+            { pastel: '#D1C4E9', strong: '#9575CD' }, // Deep Purple pastel
+            { pastel: '#FFF9C4', strong: '#FFF176' }, // Yellow pastel
+            { pastel: '#CFD8DC', strong: '#90A4AE' }, // Blue Grey pastel
+            { pastel: '#F5F5DC', strong: '#D7CCC8' }  // Beige
+        ];
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function applyTheme(themeClass) {
+            bodyEl.className = '';
+            bodyEl.classList.add(themeClass);
+            themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeClass));
+            rangeButtons.forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange));
+            generateDecompositionTask(); // Regenerate with new theme colors
+        }
+
+        themeButtons.forEach(button => button.addEventListener('click', () => applyTheme(button.dataset.theme)));
+        rangeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentNumberRange = parseInt(button.dataset.range);
+                rangeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                generateDecompositionTask();
+            });
+        });
+
+        function generateDecompositionTask() {
+            feedbackArea.textContent = '';
+            feedbackArea.className = 'feedback';
+
+            targetNumber = getRandomInt(5, currentNumberRange);
+            if (currentNumberRange === 5) targetNumber = getRandomInt(2, 5); // Ensure interesting tasks for 5-range
+            else if (targetNumber === 0) targetNumber = getRandomInt(1, currentNumberRange); // Avoid 0 target if possible
+
+            decompositions = [];
+            for (let i = 0; i <= targetNumber; i++) {
+                decompositions.push({ num1: i, num2: targetNumber - i });
+            }
+
+            renderDecompositionTable();
+            setupInputFocusAndMaxlength();
+        }
+
+        function renderDecompositionTable() {
+            decompositionTableContainer.innerHTML = '';
+            const table = document.createElement('table');
+            table.classList.add('decomposition-table');
+
+            // Header row for the target number
+            const headerRow = table.insertRow();
+            const mergedHeaderCell = headerRow.insertCell();
+            mergedHeaderCell.colSpan = 3;
+            mergedHeaderCell.classList.add('merged-header');
+            mergedHeaderCell.textContent = targetNumber;
+            table.appendChild(headerRow);
+
+            // Column headers for "1. rész" and "2. rész"
+            const colHeaderRow = table.insertRow();
+            colHeaderRow.innerHTML = `
+                <th class="column-header">1. rész</th>
+                <th class="empty-placeholder-cell"></th>
+                <th class="column-header">2. rész</th>
+            `;
+            table.appendChild(colHeaderRow);
+
+            const tableBody = document.createElement('tbody');
+            const allInputs = [];
+
+            // Rows for each decomposition
+            decompositions.forEach((decomp, index) => {
+                const row = table.insertRow();
+                const colors = getDifferentColorPair(index); // Get unique color for each row
+
+                // Input for first part
+                const cell1 = row.insertCell();
+                const input1 = document.createElement('input');
+                input1.type = 'number';
+                input1.classList.add('table-input');
+                input1.id = `input-${index}-1`;
+                input1.min = 0;
+                input1.max = targetNumber;
+                input1.dataset.expected = decomp.num1;
+                input1.style.backgroundColor = colors.pastel; // Apply unique pastel color
+                input1.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
+                cell1.appendChild(input1);
+                allInputs.push(input1);
+
+                // Plus sign in the middle
+                const cellPlus = row.insertCell();
+                cellPlus.classList.add('plus-sign');
+                cellPlus.textContent = '+';
+                cellPlus.style.color = colors.strong; // Apply unique strong color
+                cellPlus.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--table-cell-border-color').trim();
+
+                // Input for second part
+                const cell2 = row.insertCell();
+                const input2 = document.createElement('input');
+                input2.type = 'number';
+                input2.classList.add('table-input');
+                input2.id = `input-${index}-2`;
+                input2.min = 0;
+                input2.max = targetNumber;
+                input2.dataset.expected = decomp.num2;
+                input2.style.backgroundColor = colors.pastel; // Apply unique pastel color
+                input2.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
+                cell2.appendChild(input2);
+                allInputs.push(input2);
+
+                tableBody.appendChild(row);
+            });
+            table.appendChild(tableBody);
+            decompositionTableContainer.appendChild(table);
+
+            // Store inputs for easy access and focus management
+            decompositions.forEach((_, index) => {
+                const input1 = document.getElementById(`input-${index}-1`);
+                const input2 = document.getElementById(`input-${index}-2`);
+                // Ensure inputs are ordered correctly for focus handling
+                if (input1) input1.dataset.focusOrder = index * 2;
+                if (input2) input2.dataset.focusOrder = index * 2 + 1;
+            });
+        }
+        
+        let usedColorPairsForRows = new Set();
+        function getDifferentColorPair(rowIndex) {
+            let selectedPair;
+            let attempts = 0;
+            const maxAttempts = columnBackgroundColors.length * 2;
+            do {
+                selectedPair = columnBackgroundColors[getRandomInt(0, columnBackgroundColors.length - 1)];
+                attempts++;
+            } while (usedColorPairsForRows.has(selectedPair.strong) && attempts < maxAttempts); // Check only strong color for uniqueness
+
+            usedColorPairsForRows.add(selectedPair.strong); // Add to set for uniqueness
+            // Reset set if all colors used to allow reuse for more rows
+            if (usedColorPairsForRows.size === columnBackgroundColors.length) {
+                usedColorPairsForRows.clear();
+            }
+            return selectedPair;
+        }
+
+
+        function setupInputFocusAndMaxlength() {
+            const allInputsInOrder = Array.from(decompositionTableContainer.querySelectorAll('.table-input')).sort((a,b) => parseInt(a.dataset.focusOrder) - parseInt(b.dataset.focusOrder));
+            
+            allInputsInOrder.forEach((inputEl, index) => {
+                const fieldMaxLength = String(targetNumber).length;
+                inputEl.setAttribute('maxlength', fieldMaxLength > 0 ? fieldMaxLength : 1);
+                
+                // Clear previous feedback styles
+                inputEl.style.borderColor = `var(--input-border-color)`;
+                inputEl.style.borderWidth = `1px`;
+
+                inputEl.addEventListener('input', function() {
+                    if (this.value.length >= fieldMaxLength && index < allInputsInOrder.length - 1) {
+                        const nextInput = allInputsInOrder[index + 1];
+                        if (nextInput) nextInput.focus();
+                    } else if (this.value.length >= fieldMaxLength && index === allInputsInOrder.length - 1) {
+                        // Last input, focus check button
+                        document.querySelector('.task-button[onclick="checkDecompositionTask()"]').focus();
+                    }
+                });
+            });
+            // Initial focus
+            if (allInputsInOrder.length > 0) {
+                setTimeout(() => allInputsInOrder[0].focus(), 50);
+            }
+        }
+
+        function checkDecompositionTask() {
+            let allCorrect = true;
+            let allFilled = true;
+            const borderWidth = getComputedStyle(document.documentElement).getPropertyValue('--feedback-border-width').trim();
+
+            decompositions.forEach((decomp, index) => {
+                const input1 = document.getElementById(`input-${index}-1`);
+                const input2 = document.getElementById(`input-${index}-2`);
+
+                let rowCorrect = true;
+
+                // Check first input
+                if (!input1 || input1.value.trim() === "") {
+                    allFilled = false;
+                    rowCorrect = false;
+                    if (input1) input1.style.borderColor = `var(--feedback-incorrect-border-color)`;
+                } else {
+                    const val1 = parseInt(input1.value);
+                    if (val1 !== decomp.num1) {
+                        rowCorrect = false;
+                        if (input1) input1.style.borderColor = `var(--feedback-incorrect-border-color)`;
+                    } else {
+                        if (input1) input1.style.borderColor = `var(--feedback-correct-border-color)`;
+                    }
+                }
+
+                // Check second input
+                if (!input2 || input2.value.trim() === "") {
+                    allFilled = false;
+                    rowCorrect = false;
+                    if (input2) input2.style.borderColor = `var(--feedback-incorrect-border-color)`;
+                } else {
+                    const val2 = parseInt(input2.value);
+                    if (val2 !== decomp.num2) {
+                        rowCorrect = false;
+                        if (input2) input2.style.borderColor = `var(--feedback-incorrect-border-color)`;
+                    } else {
+                        if (input2) input2.style.borderColor = `var(--feedback-correct-border-color)`;
+                    }
+                }
+                
+                // If the sum is correct, but individual parts are not (e.g., 1+4 instead of 2+3 for 5), it's still incorrect.
+                // The current check `val1 !== decomp.num1` already handles this correctly.
+                
+                if (input1) { input1.style.borderWidth = borderWidth; input1.style.borderStyle = 'solid'; }
+                if (input2) { input2.style.borderWidth = borderWidth; input2.style.borderStyle = 'solid'; }
+
+                if (!rowCorrect) allCorrect = false;
+            });
+
+            if (!allFilled) {
+                feedbackArea.textContent = 'Kérlek, tölts ki minden mezőt a táblázatban!';
+                feedbackArea.className = 'feedback incorrect';
+            } else if (allCorrect) {
+                feedbackArea.textContent = 'Gratulálok! Minden felbontás helyes! 🎉';
+                feedbackArea.className = 'feedback correct';
+            } else {
+                feedbackArea.textContent = 'Van hibás felbontás. Nézd át a pirossal jelölteket!';
+                feedbackArea.className = 'feedback incorrect';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTheme('theme-candy'); // Initial theme
+            // generateDecompositionTask() is called within applyTheme
+        });
+    </script>
+</body>
+</html>
