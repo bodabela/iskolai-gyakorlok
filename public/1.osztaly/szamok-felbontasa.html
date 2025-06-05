@@ -343,13 +343,13 @@
         body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border-color: #a5d6a7; }
         body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border-color: #ef9a9a; }
 
-        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2; --task-bg-color: #f0e6ff; --task-border-color: #c3a6ff; --task-header-border-color: #b591ff;} body.theme-magicforest .task p.instructions {color: #4b0082;}
-        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1; --task-bg-color: #37474f; --task-border-color: #546e7a; --task-header-border-color: #455a64;} body.theme-tech .task p.instructions {color: #b0bec5;}
-        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa; --task-bg-color: #f0faff; --task-border-color: #b2ebf2; --task-header-border-color: #80deea;} body.theme-ocean .task p.instructions {color: #00695c;}
-        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f; --task-bg-color: #f0f7ff; --task-border-color: #bbdefb; --task-header-border-color: #90caf9;} body.theme-sport .task p.instructions {color: #0d47a1;}
-        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347; --task-bg-color: #fffdf5; --task-border-color: #ffe0b2; --task-header-border-color: #ffcc80;} body.theme-flowergarden .task p.instructions {color: #8b4513;}
-        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c; --task-bg-color: #fafafa; --task-border-color: #d7ccc8; --task-header-border-color: #bcaaa4;} body.theme-adventure .task p.instructions {color: #4e342e;}
-        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff; --task-bg-color: #f5fbff; --task-border-color: #bbdefb; --task-header-border-color: #90caf9;} body.theme-sky .task p.instructions {color: #5f9ea0;}
+        body.theme-magicforest { --theme-button-active-border-color: #8a2be2; --task-bg-color: #f0e6ff; --task-border-color: #c3a6ff; --task-header-border-color: #b591ff;} body.theme-magicforest .task p.instructions {color: #4b0082;}
+        body.theme-tech { --theme-button-active-border-color: #00acc1; --task-bg-color: #37474f; --task-border-color: #546e7a; --task-header-border-color: #455a64;} body.theme-tech .task p.instructions {color: #b0bec5;}
+        body.theme-ocean { --theme-button-active-border-color: #20b2aa; --task-bg-color: #f0faff; --task-border-color: #b2ebf2; --task-header-border-color: #80deea;} body.theme-ocean .task p.instructions {color: #00695c;}
+        body.theme-sport { --theme-button-active-border-color: #d32f2f; --task-bg-color: #f0f7ff; --task-border-color: #bbdefb; --task-header-border-color: #90caf9;} body.theme-sport .task p.instructions {color: #0d47a1;}
+        body.theme-flowergarden { --theme-button-active-border-color: #ff6347; --task-bg-color: #fffdf5; --task-border-color: #ffe0b2; --task-header-border-color: #ffcc80;} body.theme-flowergarden .task p.instructions {color: #8b4513;}
+        body.theme-adventure { --theme-button-active-border-color: #bf360c; --task-bg-color: #fafafa; --task-border-color: #d7ccc8; --task-header-border-color: #bcaaa4;} body.theme-adventure .task p.instructions {color: #4e342e;}
+        body.theme-sky { --theme-button-active-border-color: #1e90ff; --task-bg-color: #f5fbff; --task-border-color: #bbdefb; --task-header-border-color: #90caf9;} body.theme-sky .task p.instructions {color: #5f9ea0;}
 
     </style>
 </head>
@@ -419,10 +419,8 @@
         const bodyEl = document.body;
         const themeButtons = document.querySelectorAll('.theme-button');
         const rangeButtons = document.querySelectorAll('.range-button');
-        // Mode buttons removed from here
 
         let currentNumberRange = 10;
-        // ÚJ: allTasksSetup a két fő feladattípushoz
         let allTasksSetup = [
             {
                 mode: 'guided',
@@ -431,7 +429,7 @@
                 mainTaskTitleText: '1. Feladat: Felbontás Segítséggel',
                 mainInstructionsText: 'A táblázatokban a megadott számok egyik felbontott részét előre kitöltöttük. Írd be a hiányzó másik részt!',
                 feedbackAreaId: 'feedback_area_g',
-                tables: [ // Minden táblázatnak saját targetNumber és decompositions kell
+                tables: [ 
                     { targetNumber: 0, decompositions: [], containerId: 'decomposition_table_container_g1', inputPrefix: 'g_task1_input' },
                     { targetNumber: 0, decompositions: [], containerId: 'decomposition_table_container_g2', inputPrefix: 'g_task2_input' }
                 ]
@@ -481,7 +479,6 @@
             bodyEl.classList.add(themeClass);
             themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeClass));
             rangeButtons.forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange));
-            // Mode buttons are removed, so no need to update them here
             generateAllDecompositionTasks();
         }
 
@@ -528,7 +525,7 @@
                 }
                 renderDecompositionTable(tableDetail.containerId, tableDetail.targetNumber, tableDetail.decompositions, tableDetail.inputPrefix, taskSet.mode);
              });
-            setupSpecificInputFocusAndMaxlength(taskSetIndex);
+            setupAllInputFocusAndMaxlength();
         }
 
         function generateGuidedTasksForButton() {
@@ -539,33 +536,31 @@
         }
 
         function generateAllDecompositionTasks() {
-            // Clear all feedback areas
             allTasksSetup.forEach(taskSet => {
                 const feedbackEl = document.getElementById(taskSet.feedbackAreaId);
                 if (feedbackEl) {
                     feedbackEl.textContent = '';
                     feedbackEl.className = 'feedback';
                 }
-                // Set titles and instructions for each task block
                 document.getElementById(taskSet.mainTaskTitleElementId).textContent = taskSet.mainTaskTitleText;
                 document.getElementById(taskSet.mainInstructionsElementId).textContent = taskSet.mainInstructionsText;
 
             });
-            usedColorPairsForRowGeneration.clear(); // Reset for row colors
+            usedColorPairsForRowGeneration.clear(); 
 
-            let generatedTargetNumbers = new Set(); // To ensure variety across the 4 tables if possible
+            let generatedTargetNumbers = new Set();
 
             allTasksSetup.forEach(taskSet => {
                 taskSet.tables.forEach(tableDetail => {
                     let targetNum;
                     let attempts = 0;
-                    do { // Try to get a unique target number for each of the 4 tables if possible
+                    do { 
                         targetNum = getRandomInt(Math.max(1, Math.floor(currentNumberRange / 2)), currentNumberRange);
                         if (currentNumberRange === 5 && targetNum < 1) targetNum = getRandomInt(1,5);
                         else if (targetNum < 1 && currentNumberRange > 0) targetNum = 1;
                         else if (currentNumberRange === 0 ) targetNum = 0;
                         attempts++;
-                    } while (generatedTargetNumbers.has(targetNum) && attempts < 10 && generatedTargetNumbers.size < Math.min(4, currentNumberRange)); // Stop if we have enough unique or tried enough
+                    } while (generatedTargetNumbers.has(targetNum) && attempts < 10 && generatedTargetNumbers.size < Math.min(4, currentNumberRange));
 
                     generatedTargetNumbers.add(targetNum);
                     tableDetail.targetNumber = targetNum;
@@ -576,16 +571,6 @@
                         tableDetail.decompositions.push({ num1: 0, num2: 0 });
                     } else {
                         for (let i = 0; i <= tableDetail.targetNumber; i++) {
-							/*
-							const decomposition = { num1: i, num2: tableDetail.targetNumber - i }
-							const swticherForOdds = 
-								tableDetail.decompositions[tableDetail.decompositions.length-1] &&
-								tableDetail.decompositions[tableDetail.decompositions.length-1].num1 == decomposition.num2 &&
-								tableDetail.decompositions[tableDetail.decompositions.length-1].num2 == decomposition.num1
-							if(!swticherForOdds) {
-								tableDetail.decompositions.push(decomposition);
-							}
-							*/
                             tableDetail.decompositions.push({ num1: i, num2: tableDetail.targetNumber - i });
                         }
                     }
@@ -650,7 +635,7 @@
 												? 1 : 0
 										)
 									)
-									% 2 === 0); // Alternate pre-filling: num1 on even, num2 on odd except in case of odd middle turning point
+									% 2 === 0);
                     if (decompositionsArray.length === 1 && targetNum === 0) prefillNum1 = true;
                 }
 
@@ -698,47 +683,7 @@
             table.appendChild(tableBody);
             container.appendChild(table);
         }
-
-        function setupSpecificInputFocusAndMaxlength(taskSetIndex) {
-            const taskSet = allTasksSetup[taskSetIndex];
-            const inputsForThisSet = [];
-            taskSet.tables.forEach(tableDetail => {
-                const container = document.getElementById(tableDetail.containerId);
-                if (container) {
-                    const inputsInThisTable = Array.from(container.querySelectorAll('.table-input'));
-                    inputsInThisTable.forEach(inputEl => {
-                        inputEl.dataset.targetNumContext = tableDetail.targetNumber;
-                        inputsForThisSet.push(inputEl);
-                    });
-                }
-            });
-
-            inputsForThisSet.forEach((inputEl, index) => {
-                 inputEl.dataset.focusOrder = index;
-                const targetNumForThisInput = parseInt(inputEl.dataset.targetNumContext);
-                const targetNumStr = String(isNaN(targetNumForThisInput) ? currentNumberRange : targetNumForThisInput);
-                const fieldMaxLength = targetNumStr.length > 0 ? targetNumStr.length : 1;
-                inputEl.setAttribute('maxlength', fieldMaxLength);
-                inputEl.style.borderColor = `var(--input-border-color)`;
-                inputEl.style.borderWidth = `1px`;
-
-                inputEl.addEventListener('input', function() {
-                    if (this.value.length >= parseInt(this.getAttribute('maxlength'))) {
-                        const currentFocusOrder = parseInt(this.dataset.focusOrder);
-                        if (currentFocusOrder < inputsForThisSet.length - 1) {
-                            inputsForThisSet[currentFocusOrder + 1].focus();
-                        } else {
-                            const nextButton = this.closest('.task').querySelector('.task-button[onclick^="checkSpecificTasks"]');
-                            if (nextButton) nextButton.focus();
-                        }
-                    }
-                });
-            });
-             if (inputsForThisSet.length > 0) {
-                 setTimeout(() => inputsForThisSet[0].focus(), 100);
-            }
-        }
-
+        
         function setupAllInputFocusAndMaxlength() {
             const allInputsOnPage = [];
             allTasksSetup.forEach(taskSet => {
@@ -747,7 +692,6 @@
                     if (container) {
                         const inputsInThisTable = Array.from(container.querySelectorAll('.table-input'));
                         inputsInThisTable.forEach(inputEl => {
-                             // Store context for maxlength
                             inputEl.dataset.targetNumContext = tableDetail.targetNumber;
                             allInputsOnPage.push(inputEl);
                         });
@@ -755,8 +699,6 @@
                 });
             });
 
-            // Sort inputs by their visual order on the page (approximated by DOM scan)
-            // This simple push order should be sufficient if tables are static in HTML
             allInputsOnPage.forEach((inputEl, index) => {
                 inputEl.dataset.focusOrder = index;
 
@@ -769,23 +711,42 @@
                 inputEl.style.borderWidth = `1px`;
 
                 inputEl.addEventListener('input', function() {
-                    if (this.value.length >= parseInt(this.getAttribute('maxlength'))) {
-                        const currentFocusOrder = parseInt(this.dataset.focusOrder);
-                        if (currentFocusOrder < allInputsOnPage.length - 1) {
-                            allInputsOnPage[currentFocusOrder + 1].focus();
-                        } else {
-                            // Try to focus the next check button or the first one if multiple
-                            const nextButton = this.closest('.task').querySelector('.task-button[onclick^="checkSpecificTasks"]');
-                            if (nextButton) nextButton.focus();
+                    const currentInput = this;
+                    const maxLength = parseInt(currentInput.getAttribute('maxlength')) || 1;
+                    
+                    if (currentInput.value.length >= maxLength) {
+                        const currentFocusOrder = parseInt(currentInput.dataset.focusOrder);
+                        const totalInputs = allInputsOnPage.length;
+
+                        for (let i = 1; i < totalInputs; i++) {
+                            const nextIndex = (currentFocusOrder + i) % totalInputs;
+                            const nextInput = allInputsOnPage[nextIndex];
+                            
+                            if (nextInput) { // Győződjünk meg róla, hogy létezik a következő input
+                                const nextInputMaxLength = parseInt(nextInput.getAttribute('maxlength')) || 1;
+                                if (nextInput.value.length < nextInputMaxLength) {
+                                    nextInput.focus();
+                                    return; 
+                                }
+                            }
+                        }
+
+                        const taskBlock = currentInput.closest('.task');
+                        if (taskBlock) {
+                            const checkButton = taskBlock.querySelector('.task-button[onclick^="checkSpecificTasks"]');
+                            if (checkButton) {
+                                checkButton.focus();
+                            }
                         }
                     }
                 });
             });
 
             if (allInputsOnPage.length > 0) {
-                 setTimeout(() => allInputsOnPage[0].focus(), 100); // Slightly longer delay for complex render
+                setTimeout(() => allInputsOnPage[0].focus(), 100);
             }
         }
+
 
         function checkSpecificTasks(taskBlockIndex) {
             const taskSet = allTasksSetup[taskBlockIndex];
@@ -831,7 +792,7 @@
                 });
             });
 
-            if (!hasAnyInputsInThisBlock && taskSet.mode === 'guided') { // No inputs at all in the guided block (e.g. all 0+0 and prefilled)
+            if (!hasAnyInputsInThisBlock && taskSet.mode === 'guided') { 
                  allFilledOverall = true;
                  allCorrectOverall = true;
             }
@@ -843,7 +804,7 @@
             } else if (allCorrectOverall) {
                 feedbackEl.textContent = `Gratulálok! ${messagePrefix} minden megoldás helyes! 🎉`;
                 feedbackEl.className = 'feedback correct';
-            } else { // Implies filled but not correct
+            } else { 
                 feedbackEl.textContent = `${messagePrefix} van hibás megoldás. Nézd át a pirossal jelölteket!`;
                 feedbackEl.className = 'feedback incorrect';
             }
