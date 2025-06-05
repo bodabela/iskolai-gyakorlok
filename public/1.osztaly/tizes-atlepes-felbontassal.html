@@ -971,6 +971,12 @@
             `;
             document.getElementById('task1_final_answer_dec').max = currentNumberRange;
 
+            // ÚJ: Görgessünk a számegyeneshez tableten/mobilon
+            const additionNumberLine = document.getElementById('additionNumberLine');
+            addScrollListener('task1_dec_input1', additionNumberLine);
+            addScrollListener('task1_dec_input2', additionNumberLine);
+            addScrollListener('task1_final_answer_dec', additionNumberLine);
+
             setTimeout(() => {
                 drawAdditionLines(); 
                 drawAdditionNumberLine(); 
@@ -1040,6 +1046,12 @@
                 <input type="number" id="task2_final_answer_dec" style="width:60px;" min="0" max="${currentNumberRange}" placeholder="?">
             `;
             document.getElementById('task2_final_answer_dec').max = currentNumberRange;
+
+            // ÚJ: Görgessünk a számegyeneshez tableten/mobilon
+            const subtractionNumberLine = document.getElementById('subtractionNumberLine');
+            addScrollListener('task2_dec_input1', subtractionNumberLine);
+            addScrollListener('task2_dec_input2', subtractionNumberLine);
+            addScrollListener('task2_final_answer_dec', subtractionNumberLine);
 
             setTimeout(() => {
                 drawSubtractionLines(); 
@@ -1159,6 +1171,22 @@
                 feedbackEl.className = 'feedback'; 
             }, 10000); 
         }
+
+        const addScrollListener = (inputId, numberLineElement) => {
+            const input = document.getElementById(inputId);
+            if (input && numberLineElement) {
+                input.addEventListener('focus', () => {
+                    // Check for touch capability or smaller screen width to identify mobile/tablet
+                    const isMobileDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 1024);
+                    if (isMobileDevice) {
+                        // A timeout is necessary to wait for the virtual keyboard to appear and the layout to reflow
+                        setTimeout(() => {
+                            numberLineElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }, 500);
+                    }
+                });
+            }
+        };
 
         document.addEventListener('DOMContentLoaded', function() {
             generateAdditionTask();
