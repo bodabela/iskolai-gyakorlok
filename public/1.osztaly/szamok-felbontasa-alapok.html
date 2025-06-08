@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Számok Felbontása Golyókkal</title>
+    <style>
+        :root {
+            /* Fallback variables, a default theme will be applied on load */
+            --theme-bg: #f0f4f8; --theme-text: #333; --theme-container-bg: #ffffff;
+            --theme-container-border: #e0e0e0; --theme-task-bg: #f9f9f9; --theme-task-border: #ccc;
+            --theme-header-text: #333; --theme-button-bg: #4a90e2; --theme-button-active-border: #4a90e2;
+            --main-bowl-border: #6D4C41; --main-bowl-bg: #D7CCC8;
+            --small-bowl1-border: #0288D1; --small-bowl1-bg: #B3E5FC; --small-bowl2-border: #F57C00;
+            --small-bowl2-bg: #FFE0B2; --ball1-color: #03A9F4; --ball2-color: #FF9800;
+            --feedback-correct-text: #2E7D32; --feedback-correct-bg: #e8f5e9;
+            --feedback-incorrect-text: #D32F2F; --feedback-incorrect-bg: #ffebee;
+        }
+
+        body.theme-candy { --theme-bg: #fff0f5; --theme-text: #5c3b47; --theme-button-active-border: #da70d6; --theme-button-bg: #ff69b4; --theme-container-bg: #ffe4e1; --theme-container-border: #ffc0cb; --theme-task-bg: #fffafa; --theme-task-border: #ffb6c1; --theme-header-text: #da70d6; --main-bowl-border: #8D6E63; --main-bowl-bg: #D7CCC8; --small-bowl1-border: #EC407A; --small-bowl1-bg: #F8BBD0; --ball1-color: #F06292; --small-bowl2-border: #AB47BC; --small-bowl2-bg: #E1BEE7; --ball2-color: #BA68C8; }
+        body.theme-space { --theme-bg: #0f172a; --theme-text: #e2e8f0; --theme-button-active-border: #60a5fa; --theme-button-bg: #2563eb; --theme-container-bg: #1e293b; --theme-container-border: #334155; --theme-task-bg: #334155; --theme-task-border: #475569; --theme-header-text: #60a5fa; --main-bowl-border: #9E9E9E; --main-bowl-bg: #424242; --small-bowl1-border: #536DFE; --small-bowl1-bg: #303F9F; --ball1-color: #8C9EFF; --small-bowl2-border: #00BCD4; --small-bowl2-bg: #00838F; --ball2-color: #4DD0E1; }
+        body.theme-jungle { --theme-bg: #f0fff0; --theme-text: #1b5e20; --theme-button-active-border: #558b2f; --theme-button-bg: #7cb342; --theme-container-bg: #e8f5e9; --theme-container-border: #a5d6a7; --theme-task-bg: #dcedc8; --theme-task-border: #81c784; --theme-header-text: #388e3c; --main-bowl-border: #6D4C41; --main-bowl-bg: #A1887F; --small-bowl1-border: #7CB342; --small-bowl1-bg: #AED581; --ball1-color: #8BC34A; --small-bowl2-border: #D4E157; --small-bowl2-bg: #E6EE9C; --ball2-color: #CDDC39; }
+        body.theme-magicforest { --theme-bg: #e6e6fa; --theme-text: #483d8b; --theme-button-active-border: #8a2be2; --theme-container-bg: #d8bfd8; --theme-container-border: #dda0dd; --theme-task-bg: #f5f5f5; --theme-task-border: #ba55d3; --theme-header-text: #8a2be2; --theme-button-bg: #9370db; --main-bowl-border: #663399; --main-bowl-bg: #bca2d6; --small-bowl1-border: #8a2be2; --small-bowl1-bg: #e6e6fa; --ball1-color: #9966cc; --small-bowl2-border: #9932cc; --small-bowl2-bg: #f8f0ff; --ball2-color: #ae86de; }
+        body.theme-tech { --theme-bg: #263238; --theme-text: #eceff1; --theme-button-active-border: #00acc1; --theme-container-bg: #37474f; --theme-container-border: #546e7a; --theme-task-bg: #455a64; --theme-task-border: #78909c; --theme-header-text: #00acc1; --theme-button-bg: #0097a7; --main-bowl-border: #90a4ae; --main-bowl-bg: #546e7a; --small-bowl1-border: #00acc1; --small-bowl1-bg: #455a64; --ball1-color: #00e676; --small-bowl2-border: #00838f; --small-bowl2-bg: #37474f; --ball2-color: #76ff03; }
+        body.theme-ocean { --theme-bg: #e0f7fa; --theme-text: #00796b; --theme-button-active-border: #20b2aa; --theme-container-bg: #b2ebf2; --theme-container-border: #4dd0e1; --theme-task-bg: #e0f7fa; --theme-task-border: #80deea; --theme-header-text: #00897b; --theme-button-bg: #26a69a; --main-bowl-border: #00796b; --main-bowl-bg: #b2dfdb; --small-bowl1-border: #00bcd4; --small-bowl1-bg: #e0f7fa; --ball1-color: #26c6da; --small-bowl2-border: #ff7f50; --small-bowl2-bg: #fff3e0; --ball2-color: #ffa07a; }
+        body.theme-sport { --theme-bg: #e3f2fd; --theme-text: #0d47a1; --theme-button-active-border: #d32f2f; --theme-container-bg: #bbdefb; --theme-container-border: #64b5f6; --theme-task-bg: #e3f2fd; --theme-task-border: #42a5f5; --theme-header-text: #d32f2f; --theme-button-bg: #2196f3; --main-bowl-border: #1565c0; --main-bowl-bg: #90caf9; --small-bowl1-border: #d32f2f; --small-bowl1-bg: #ffcdd2; --ball1-color: #e57373; --small-bowl2-border: #ffc107; --small-bowl2-bg: #fff9c4; --ball2-color: #ffd54f; }
+        body.theme-flowergarden { --theme-bg: #fffaf0; --theme-text: #556b2f; --theme-button-active-border: #ff6347; --theme-container-bg: #fff5ee; --theme-container-border: #ffdab9; --theme-task-bg: #fffafa; --theme-task-border: #ffe4b5; --theme-header-text: #ff6347; --theme-button-bg: #ffa07a; --main-bowl-border: #cd853f; --main-bowl-bg: #f5deb3; --small-bowl1-border: #ff6347; --small-bowl1-bg: #ffccbc; --ball1-color: #ff8a65; --small-bowl2-border: #adff2f; --small-bowl2-bg: #f1f8e9; --ball2-color: #ccff90; }
+        body.theme-adventure { --theme-bg: #f5f5dc; --theme-text: #5d4037; --theme-button-active-border: #bf360c; --theme-container-bg: #efebe9; --theme-container-border: #a1887f; --theme-task-bg: #d7ccc8; --theme-task-border: #8d6e63; --theme-header-text: #bf360c; --theme-button-bg: #795548; --main-bowl-border: #6d4c41; --main-bowl-bg: #a1887f; --small-bowl1-border: #bf360c; --small-bowl1-bg: #ffccbc; --ball1-color: #ff8a65; --small-bowl2-border: #43a047; --small-bowl2-bg: #c8e6c9; --ball2-color: #81c784; }
+        body.theme-sky { --theme-bg: #f0f8ff; --theme-text: #4682b4; --theme-button-active-border: #1e90ff; --theme-container-bg: #e6f7ff; --theme-container-border: #b0e0e6; --theme-task-bg: #f5faff; --theme-task-border: #add8e6; --theme-header-text: #1e90ff; --theme-button-bg: #87cefa; --main-bowl-border: #708090; --main-bowl-bg: #b0c4de; --small-bowl1-border: #ffd700; --small-bowl1-bg: #fff9c4; --ball1-color: #ffeb3b; --small-bowl2-border: #ffffff; --small-bowl2-bg: #f5f5f5; --ball2-color: #e0e0e0; }
+
+        body { font-family: 'Arial', sans-serif; margin: 0; padding: 20px; background-color: var(--theme-bg); color: var(--theme-text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; transition: background-color 0.5s ease, color 0.5s ease; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+        .controls-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; padding: 10px; background-color: var(--control-bg, rgba(255, 255, 255, 0.9)); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); width: 100%; max-width: 900px; }
+        .selector-group { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .theme-selector, .range-selector { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+        .control-label { font-weight: bold; font-size: 0.95em; color: var(--control-label-color); }
+        .theme-button, .range-button { padding: 8px 12px; border: 1px solid transparent; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.9em; transition: all 0.3s ease; background-color: #e0e0e0; color: #333; }
+        .theme-button:hover, .range-button:hover { transform: translateY(-1px); opacity: 0.9; }
+        .theme-button.active, .range-button.active { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border, #4a90e2); transform: translateY(1px); }
+        .container { background-color: var(--theme-container-bg); padding: 20px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.15); width: 100%; max-width: 900px; text-align: center; border: 2px solid var(--theme-container-border, #e0e0e0); transition: all 0.5s ease; }
+        h1, h2 { text-align: center; color: var(--theme-header-text); transition: color 0.5s ease; }
+        h1 { font-size: clamp(1.8em, 5vw, 2.2em); margin-bottom: 15px; }
+        h2 { font-size: clamp(1.3em, 4vw, 1.6em); margin-bottom: 25px; }
+        .task { background-color: var(--theme-task-bg); border: 2px dashed var(--theme-task-border); margin-bottom: 30px; padding: 20px; border-radius: 10px; transition: all 0.5s ease; }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .task-header h3 { margin: 0; font-size: clamp(1.2em, 4vw, 1.5em); color: var(--theme-header-text); }
+        .instructions { font-size: clamp(1em, 3vw, 1.1em); margin-bottom: 20px; }
+        .bowls-area { display: flex; flex-direction: column; align-items: center; gap: 25px; margin: 20px 0; }
+        .main-bowl-container { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .small-bowls-container { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 20px; }
+        .bowl-label { font-size: 1.5em; font-weight: bold; }
+        .bowl { border: 3px solid; border-radius: 12px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; padding: 10px; transition: all 0.5s ease; min-height: 100px; }
+        #mainBowl { width: 250px; height: 180px; border-color: var(--main-bowl-border); background-color: var(--main-bowl-bg); }
+        .small-bowl { width: 150px; height: 120px; }
+        #smallBowl1 { border-color: var(--small-bowl1-border); background-color: var(--small-bowl1-bg); }
+        #smallBowl2 { border-color: var(--small-bowl2-border); background-color: var(--small-bowl2-bg); }
+        .ball { width: 22px; height: 22px; border-radius: 50%; cursor: grab; transition: background-color 0.5s, transform 0.2s ease-out; touch-action: none; }
+        .ball.dragging { cursor: grabbing; position: fixed; z-index: 1000; transform: scale(1.2); box-shadow: 0px 5px 15px rgba(0,0,0,0.3); }
+        .result-display { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 20px; font-size: clamp(1.8em, 5vw, 2.5em); font-weight: bold; }
+        .task-button { padding: 10px 20px; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: clamp(1em, 3vw, 1.1em); transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background-color: var(--theme-button-bg); }
+        .task-button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .new-task-button { padding: 6px 12px; font-size: 0.8em; margin-left: 10px; }
+        .feedback { margin-top: 15px; font-weight: bold; padding: 10px; border-radius: 6px; font-size: clamp(0.9em, 2.8vw, 1.05em); min-height: 1.5em; line-height: 1.4; }
+        .feedback.correct { color: var(--feedback-correct-text); background-color: var(--feedback-correct-bg); }
+        .feedback.incorrect { color: var(--feedback-incorrect-text); background-color: var(--feedback-incorrect-bg); }
+    </style>
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="selector-group">
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                <button class="theme-button" data-theme="theme-sky">Égbolt</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+        <div class="selector-group">
+            <p class="control-label">Számkör választó:</p>
+            <div class="range-selector">
+                <button class="range-button" data-range="5">5-ös</button>
+                <button class="range-button active" data-range="10">10-es</button>
+                <button class="range-button" data-range="20">20-as</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Számok Felbontása</h1>
+        <h2>Téma: Golyók átpakolása</h2>
+
+        <div class="task">
+            <div class="task-header">
+                <h3>Pakold szét a golyókat!</h3>
+                <button class="task-button new-task-button" onclick="generateTask()">Új feladat</button>
+            </div>
+            <p class="instructions">Húzd át a golyókat a nagy tálból a két kisebbe! Egy tálba csak egyforma színű golyó kerülhet.</p>
+
+            <div class="bowls-area">
+                <div class="main-bowl-container">
+                    <div id="mainBowlLabel" class="bowl-label"></div>
+                    <div id="mainBowl" class="bowl"></div>
+                </div>
+
+                <div class="small-bowls-container">
+                    <div id="smallBowl1" class="bowl small-bowl drop-target"></div>
+                    <div id="smallBowl2" class="bowl small-bowl drop-target"></div>
+                </div>
+            </div>
+            
+            <div class="result-display">
+                <span id="result1">0</span>
+                <span>+</span>
+                <span id="result2">0</span>
+                <span>=</span>
+                <span id="resultTotal">?</span>
+            </div>
+
+            <button class="task-button" onclick="checkAnswer()">Ellenőrzés</button>
+            <p id="feedbackArea" class="feedback"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentNumberRange = 10;
+        let taskData = { total: 0, part1: 0, part2: 0 };
+        let draggedElement = null;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function applyTheme(themeClass) {
+            document.body.className = '';
+            document.body.classList.add(themeClass);
+            document.querySelectorAll('.theme-button').forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeClass));
+            document.querySelectorAll('.range-button').forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange));
+            generateTask();
+        }
+        document.querySelectorAll('.theme-button').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.theme)));
+        document.querySelectorAll('.range-button').forEach(b => {
+            b.addEventListener('click', () => {
+                currentNumberRange = parseInt(b.dataset.range);
+                document.querySelectorAll('.range-button').forEach(btn => btn.classList.remove('active'));
+                b.classList.add('active');
+                generateTask();
+            });
+        });
+
+        function generateTask() {
+            taskData.total = Math.floor(Math.random() * (currentNumberRange - 1)) + 2;
+            taskData.part1 = Math.floor(Math.random() * (taskData.total - 1)) + 1;
+            taskData.part2 = taskData.total - taskData.part1;
+            
+            clearAndSetup();
+            renderBalls();
+            updateCounts();
+        }
+        
+        function clearAndSetup() {
+            ['mainBowl', 'smallBowl1', 'smallBowl2'].forEach(id => document.getElementById(id).innerHTML = '');
+            document.getElementById('mainBowlLabel').textContent = taskData.total;
+            document.getElementById('resultTotal').textContent = taskData.total;
+            const feedbackEl = document.getElementById('feedbackArea');
+            feedbackEl.textContent = '';
+            feedbackEl.className = 'feedback';
+        }
+
+        function renderBalls() {
+            const mainBowl = document.getElementById('mainBowl');
+            const ballColor1 = getComputedStyle(document.documentElement).getPropertyValue('--ball1-color').trim();
+            const ballColor2 = getComputedStyle(document.documentElement).getPropertyValue('--ball2-color').trim();
+
+            for (let i = 0; i < taskData.part1; i++) createBall(mainBowl, ballColor1, '1');
+            for (let i = 0; i < taskData.part2; i++) createBall(mainBowl, ballColor2, '2');
+        }
+        
+        // JAVÍTVA: A createBall kap egy 'colorId'-t is, amit adat attribútumként tárolunk
+        function createBall(parent, color, colorId) {
+            const ball = document.createElement('div');
+            ball.className = 'ball';
+            ball.style.backgroundColor = color;
+            ball.dataset.colorId = colorId; // Pl: '1' vagy '2'
+            parent.appendChild(ball);
+            addDragListeners(ball);
+        }
+
+        function updateCounts() {
+            document.getElementById('result1').textContent = document.getElementById('smallBowl1').children.length;
+            document.getElementById('result2').textContent = document.getElementById('smallBowl2').children.length;
+        }
+
+        // JAVÍTOTT checkAnswer FÜGGVÉNY
+        function checkAnswer() {
+            const feedbackEl = document.getElementById('feedbackArea');
+
+            if (document.getElementById('mainBowl').children.length > 0) {
+                feedbackEl.textContent = 'Még nem pakoltál át minden golyót!';
+                feedbackEl.className = 'feedback incorrect';
+                return;
+            }
+            
+            const ballsInBowl1 = Array.from(document.getElementById('smallBowl1').children);
+            const ballsInBowl2 = Array.from(document.getElementById('smallBowl2').children);
+
+            // JAVÍTVA: Számolás a megbízható adat attribútum alapján
+            const bowl1Color1Count = ballsInBowl1.filter(b => b.dataset.colorId === '1').length;
+            const bowl1Color2Count = ballsInBowl1.filter(b => b.dataset.colorId === '2').length;
+            const bowl2Color1Count = ballsInBowl2.filter(b => b.dataset.colorId === '1').length;
+            const bowl2Color2Count = ballsInBowl2.filter(b => b.dataset.colorId === '2').length;
+
+            const bowl1HasMixedColors = bowl1Color1Count > 0 && bowl1Color2Count > 0;
+            const bowl2HasMixedColors = bowl2Color1Count > 0 && bowl2Color2Count > 0;
+
+            if (bowl1HasMixedColors || bowl2HasMixedColors) {
+                feedbackEl.textContent = 'Egy tálba csak egyféle színű golyót tegyél!';
+                feedbackEl.className = 'feedback incorrect';
+                return;
+            }
+
+            const isDecompositionCorrect = 
+                (bowl1Color1Count === taskData.part1 && bowl2Color2Count === taskData.part2) ||
+                (bowl1Color2Count === taskData.part2 && bowl2Color1Count === taskData.part1);
+
+            if (isDecompositionCorrect) {
+                feedbackEl.textContent = 'Ügyes vagy, ez a helyes megoldás!';
+                feedbackEl.className = 'feedback correct';
+            } else {
+                feedbackEl.textContent = 'A golyók nincsenek jól szétosztva. Számold meg újra a színeket a tálakban!';
+                feedbackEl.className = 'feedback incorrect';
+            }
+        }
+
+        function addDragListeners(element) {
+            element.addEventListener('mousedown', e => handleDragStart(e, element));
+            element.addEventListener('touchstart', e => handleDragStart(e, element), { passive: false });
+        }
+
+        function handleDragStart(e, element) {
+            if (draggedElement) return;
+            e.preventDefault();
+            draggedElement = element;
+            
+            const eventPos = e.type === 'touchstart' ? e.touches[0] : e;
+            const rect = draggedElement.getBoundingClientRect();
+            offsetX = eventPos.clientX - rect.left;
+            offsetY = eventPos.clientY - rect.top;
+
+            draggedElement.classList.add('dragging');
+            draggedElement.style.left = `${eventPos.clientX - offsetX}px`;
+            draggedElement.style.top = `${eventPos.clientY - offsetY}px`;
+
+            document.addEventListener('mousemove', handleDragMove);
+            document.addEventListener('mouseup', handleDragEnd);
+            document.addEventListener('touchmove', handleDragMove, { passive: false });
+            document.addEventListener('touchend', handleDragEnd);
+        }
+
+        function handleDragMove(e) {
+            if (!draggedElement) return;
+            e.preventDefault();
+            
+            const eventPos = e.type === 'touchmove' ? e.touches[0] : e;
+            draggedElement.style.left = `${eventPos.clientX - offsetX}px`;
+            draggedElement.style.top = `${eventPos.clientY - offsetY}px`;
+        }
+
+        function handleDragEnd(e) {
+            if (!draggedElement) return;
+            
+            document.removeEventListener('mousemove', handleDragMove);
+            document.removeEventListener('mouseup', handleDragEnd);
+            document.removeEventListener('touchmove', handleDragMove);
+            document.removeEventListener('touchend', handleDragEnd);
+            
+            draggedElement.style.visibility = 'hidden';
+            const eventPos = e.type === 'touchend' ? e.changedTouches[0] : e;
+            const dropTarget = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
+            draggedElement.style.visibility = 'visible';
+
+            let droppedInBowl = false;
+            if (dropTarget) {
+                const bowl = dropTarget.closest('.drop-target');
+                if (bowl) {
+                    bowl.appendChild(draggedElement);
+                    droppedInBowl = true;
+                }
+            }
+
+            if (!droppedInBowl) {
+                document.getElementById('mainBowl').appendChild(draggedElement);
+            }
+            
+            draggedElement.classList.remove('dragging');
+            draggedElement.style.position = '';
+            draggedElement.style.left = '';
+            draggedElement.style.top = '';
+            
+            draggedElement = null;
+            offsetX = 0;
+            offsetY = 0;
+            updateCounts();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const defaultTheme = 'theme-candy';
+            applyTheme(defaultTheme);
+        });
+    </script>
+</body>
+</html>
