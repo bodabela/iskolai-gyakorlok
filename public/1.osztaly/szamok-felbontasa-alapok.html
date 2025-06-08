@@ -47,7 +47,7 @@
         .bowls-area { display: flex; flex-direction: column; align-items: center; gap: 25px; margin: 20px 0; }
         .main-bowl-container { display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .small-bowls-container { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 20px; }
-        .bowl-label { font-size: 1.5em; font-weight: bold; }
+        .bowl-label { font-size: 1.5em; font-weight: bold; min-height: 1.2em; }
         .bowl { position: relative; border: 3px solid; border-radius: 12px; transition: all 0.5s ease; min-height: 120px; }
         #mainBowl { width: 250px; height: 180px; border-color: var(--main-bowl-border); background-color: var(--main-bowl-bg); }
         .small-bowl { width: 180px; height: 140px; }
@@ -168,9 +168,10 @@
 
         function generateTask() { taskData.total = Math.floor(Math.random() * (currentNumberRange - 1)) + 2; taskData.part1 = Math.floor(Math.random() * (taskData.total - 1)) + 1; taskData.part2 = taskData.total - taskData.part1; clearAndSetup(); renderBalls(); updateCounts(); }
         
+        // JAVÍTVA: A clearAndSetup már nem állítja be a fő címke értékét
         function clearAndSetup() {
             ['mainBowl', 'smallBowl1', 'smallBowl2'].forEach(id => { document.getElementById(id).innerHTML = ''; });
-            document.getElementById('mainBowlLabel').textContent = taskData.total;
+            document.getElementById('mainBowlLabel').textContent = ''; 
             document.getElementById('resultTotal').textContent = taskData.total;
             const feedbackEl = document.getElementById('feedbackArea');
             feedbackEl.textContent = ''; feedbackEl.className = 'feedback';
@@ -186,7 +187,14 @@
         }
         
         function createBall(parent, color, colorId) { const ball = document.createElement('div'); ball.className = 'ball'; ball.style.backgroundColor = color; ball.dataset.colorId = colorId; parent.appendChild(ball); addDragListeners(ball); }
-        function updateCounts() { document.getElementById('result1').textContent = document.getElementById('smallBowl1').children.length; document.getElementById('result2').textContent = document.getElementById('smallBowl2').children.length; }
+        
+        // JAVÍTVA: Az updateCounts már a fő tál címkéjét is frissíti
+        function updateCounts() {
+            document.getElementById('result1').textContent = document.getElementById('smallBowl1').children.length;
+            document.getElementById('result2').textContent = document.getElementById('smallBowl2').children.length;
+            const mainBowlCount = document.getElementById('mainBowl').children.length;
+            document.getElementById('mainBowlLabel').textContent = mainBowlCount > 0 ? mainBowlCount : '';
+        }
 
         function checkAnswer() {
             const feedbackEl = document.getElementById('feedbackArea');
@@ -224,6 +232,7 @@
             draggedElement.style.left = `${rect.left}px`;
             
             layoutBalls(originalParent);
+            updateCounts(); // Frissítjük a számokat a mozgatás kezdetekor is
 
             document.addEventListener('mousemove', handleDragMove);
             document.addEventListener('mouseup', handleDragEnd);
@@ -258,7 +267,6 @@
             }
             
             draggedElement.classList.remove('dragging');
-            // Stílusok törlése a tiszta lappért az új tálban
             draggedElement.style.top = '';
             draggedElement.style.left = '';
             newParent.appendChild(draggedElement);
