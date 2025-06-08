@@ -6,7 +6,7 @@
     <title>Számok Felbontása Golyókkal</title>
     <style>
         :root {
-            /* Fallback variables, a default theme will be applied on load */
+            /* Fallback variables */
             --theme-bg: #f0f4f8; --theme-text: #333; --theme-container-bg: #ffffff;
             --theme-container-border: #e0e0e0; --theme-task-bg: #f9f9f9; --theme-task-border: #ccc;
             --theme-header-text: #333; --theme-button-bg: #4a90e2; --theme-button-active-border: #4a90e2;
@@ -48,13 +48,14 @@
         .main-bowl-container { display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .small-bowls-container { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 20px; }
         .bowl-label { font-size: 1.5em; font-weight: bold; }
-        .bowl { border: 3px solid; border-radius: 12px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; padding: 10px; transition: all 0.5s ease; min-height: 100px; }
+        .bowl { position: relative; border: 3px solid; border-radius: 12px; transition: all 0.5s ease; min-height: 120px; }
         #mainBowl { width: 250px; height: 180px; border-color: var(--main-bowl-border); background-color: var(--main-bowl-bg); }
-        .small-bowl { width: 150px; height: 120px; }
+        .small-bowl { width: 180px; height: 140px; }
         #smallBowl1 { border-color: var(--small-bowl1-border); background-color: var(--small-bowl1-bg); }
         #smallBowl2 { border-color: var(--small-bowl2-border); background-color: var(--small-bowl2-bg); }
-        .ball { width: 22px; height: 22px; border-radius: 50%; cursor: grab; transition: background-color 0.5s, transform 0.2s ease-out; touch-action: none; }
-        .ball.dragging { cursor: grabbing; position: fixed; z-index: 1000; transform: scale(1.2); box-shadow: 0px 5px 15px rgba(0,0,0,0.3); }
+        .ball { width: 33px; height: 33px; border-radius: 50%; cursor: grab; transition: background-color 0.5s, transform 0.2s ease-out; touch-action: none; }
+        .ball.idle-in-bowl { position: absolute; transition: background-color 0.5s, transform 0.2s ease-out, top 0.3s ease, left 0.3s ease; }
+        .ball.dragging { cursor: grabbing; position: fixed; z-index: 1000; transform: scale(1.2); box-shadow: 0px 5px 15px rgba(0,0,0,0.3); transition: none; }
         .result-display { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 20px; font-size: clamp(1.8em, 5vw, 2.5em); font-weight: bold; }
         .task-button { padding: 10px 20px; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: clamp(1em, 3vw, 1.1em); transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background-color: var(--theme-button-bg); }
         .task-button:hover { transform: translateY(-2px); filter: brightness(1.1); }
@@ -84,9 +85,8 @@
         <div class="selector-group">
             <p class="control-label">Számkör választó:</p>
             <div class="range-selector">
-                <button class="range-button" data-range="5">5-ös</button>
-                <button class="range-button active" data-range="10">10-es</button>
-                <button class="range-button" data-range="20">20-as</button>
+                <button class="range-button active" data-range="5">5-ös</button>
+                <button class="range-button" data-range="10">10-es</button>
             </div>
         </div>
     </div>
@@ -94,26 +94,22 @@
     <div class="container">
         <h1>Számok Felbontása</h1>
         <h2>Téma: Golyók átpakolása</h2>
-
         <div class="task">
             <div class="task-header">
                 <h3>Pakold szét a golyókat!</h3>
                 <button class="task-button new-task-button" onclick="generateTask()">Új feladat</button>
             </div>
             <p class="instructions">Húzd át a golyókat a nagy tálból a két kisebbe! Egy tálba csak egyforma színű golyó kerülhet.</p>
-
             <div class="bowls-area">
                 <div class="main-bowl-container">
                     <div id="mainBowlLabel" class="bowl-label"></div>
                     <div id="mainBowl" class="bowl"></div>
                 </div>
-
                 <div class="small-bowls-container">
                     <div id="smallBowl1" class="bowl small-bowl drop-target"></div>
                     <div id="smallBowl2" class="bowl small-bowl drop-target"></div>
                 </div>
             </div>
-            
             <div class="result-display">
                 <span id="result1">0</span>
                 <span>+</span>
@@ -121,138 +117,113 @@
                 <span>=</span>
                 <span id="resultTotal">?</span>
             </div>
-
             <button class="task-button" onclick="checkAnswer()">Ellenőrzés</button>
             <p id="feedbackArea" class="feedback"></p>
         </div>
     </div>
 
     <script>
-        let currentNumberRange = 10;
+        let currentNumberRange = 5;
         let taskData = { total: 0, part1: 0, part2: 0 };
         let draggedElement = null;
-        let offsetX = 0;
-        let offsetY = 0;
+        let offsetX = 0, offsetY = 0;
+        
+        const ballLayouts = {
+            1: [[0, 0]],
+            2: [[-0.5, 0], [0.5, 0]],
+            3: [[0, -0.4], [-0.5, 0.4], [0.5, 0.4]],
+            4: [[-0.5, -0.5], [0.5, -0.5], [-0.5, 0.5], [0.5, 0.5]],
+            5: [[-0.8, -0.8], [0.8, -0.8], [0, 0], [-0.8, 0.8], [0.8, 0.8]],
+            6: [[-0.5, -1], [-0.5, 0], [-0.5, 1], [0.5, -1], [0.5, 0], [0.5, 1]],
+            7: [[0,0], [0, -1], [0, 1], [-0.9, -0.5], [0.9, -0.5], [-0.9, 0.5], [0.9, 0.5]],
+            8: [[-0.5, -1.3], [0.5, -1.3], [-0.5, -0.4], [0.5, -0.4], [-0.5, 0.5], [0.5, 0.5], [-0.5, 1.4], [0.5, 1.4]],
+            9: [[-1, -1], [0, -1], [1, -1], [-1, 0], [0, 0], [1, 0], [-1, 1], [0, 1], [1, 1]],
+            10: [[0, -1.5*0.866], [-0.5, -0.5*0.866], [0.5, -0.5*0.866], [-1, 0.5*0.866], [0, 0.5*0.866], [1, 0.5*0.866], [-1.5, 1.5*0.866], [-0.5, 1.5*0.866], [0.5, 1.5*0.866], [1.5, 1.5*0.866]]
+        };
+        
+        function layoutBalls(container) {
+            const balls = Array.from(container.children);
+            const count = balls.length;
+            const ballDiameter = 33;
+            if (count === 0) return;
 
-        function applyTheme(themeClass) {
-            document.body.className = '';
-            document.body.classList.add(themeClass);
-            document.querySelectorAll('.theme-button').forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeClass));
-            document.querySelectorAll('.range-button').forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange));
-            generateTask();
-        }
-        document.querySelectorAll('.theme-button').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.theme)));
-        document.querySelectorAll('.range-button').forEach(b => {
-            b.addEventListener('click', () => {
-                currentNumberRange = parseInt(b.dataset.range);
-                document.querySelectorAll('.range-button').forEach(btn => btn.classList.remove('active'));
-                b.classList.add('active');
-                generateTask();
-            });
-        });
-
-        function generateTask() {
-            taskData.total = Math.floor(Math.random() * (currentNumberRange - 1)) + 2;
-            taskData.part1 = Math.floor(Math.random() * (taskData.total - 1)) + 1;
-            taskData.part2 = taskData.total - taskData.part1;
+            const layout = ballLayouts[count];
+            const containerRect = container.getBoundingClientRect();
+            const centerX = containerRect.width / 2;
+            const centerY = containerRect.height / 2;
             
-            clearAndSetup();
-            renderBalls();
-            updateCounts();
+            balls.forEach((ball, i) => {
+                ball.classList.add('idle-in-bowl');
+                if (layout && layout[i]) {
+                    const [xOffset, yOffset] = layout[i];
+                    ball.style.left = `${centerX + xOffset * ballDiameter - ballDiameter / 2}px`;
+                    ball.style.top = `${centerY + yOffset * ballDiameter - ballDiameter / 2}px`;
+                }
+            });
         }
         
+        function applyTheme(themeClass) { document.body.className = ''; document.body.classList.add(themeClass); document.querySelectorAll('.theme-button').forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeClass)); document.querySelectorAll('.range-button').forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange)); generateTask(); }
+        document.querySelectorAll('.theme-button').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.theme)));
+        document.querySelectorAll('.range-button').forEach(b => { b.addEventListener('click', () => { currentNumberRange = parseInt(b.dataset.range); document.querySelectorAll('.range-button').forEach(btn => btn.classList.remove('active')); b.classList.add('active'); generateTask(); }); });
+
+        function generateTask() { taskData.total = Math.floor(Math.random() * (currentNumberRange - 1)) + 2; taskData.part1 = Math.floor(Math.random() * (taskData.total - 1)) + 1; taskData.part2 = taskData.total - taskData.part1; clearAndSetup(); renderBalls(); updateCounts(); }
+        
         function clearAndSetup() {
-            ['mainBowl', 'smallBowl1', 'smallBowl2'].forEach(id => document.getElementById(id).innerHTML = '');
+            ['mainBowl', 'smallBowl1', 'smallBowl2'].forEach(id => { document.getElementById(id).innerHTML = ''; });
             document.getElementById('mainBowlLabel').textContent = taskData.total;
             document.getElementById('resultTotal').textContent = taskData.total;
             const feedbackEl = document.getElementById('feedbackArea');
-            feedbackEl.textContent = '';
-            feedbackEl.className = 'feedback';
+            feedbackEl.textContent = ''; feedbackEl.className = 'feedback';
         }
 
         function renderBalls() {
             const mainBowl = document.getElementById('mainBowl');
             const ballColor1 = getComputedStyle(document.documentElement).getPropertyValue('--ball1-color').trim();
             const ballColor2 = getComputedStyle(document.documentElement).getPropertyValue('--ball2-color').trim();
-
             for (let i = 0; i < taskData.part1; i++) createBall(mainBowl, ballColor1, '1');
             for (let i = 0; i < taskData.part2; i++) createBall(mainBowl, ballColor2, '2');
+            layoutBalls(mainBowl);
         }
         
-        // JAVÍTVA: A createBall kap egy 'colorId'-t is, amit adat attribútumként tárolunk
-        function createBall(parent, color, colorId) {
-            const ball = document.createElement('div');
-            ball.className = 'ball';
-            ball.style.backgroundColor = color;
-            ball.dataset.colorId = colorId; // Pl: '1' vagy '2'
-            parent.appendChild(ball);
-            addDragListeners(ball);
-        }
+        function createBall(parent, color, colorId) { const ball = document.createElement('div'); ball.className = 'ball'; ball.style.backgroundColor = color; ball.dataset.colorId = colorId; parent.appendChild(ball); addDragListeners(ball); }
+        function updateCounts() { document.getElementById('result1').textContent = document.getElementById('smallBowl1').children.length; document.getElementById('result2').textContent = document.getElementById('smallBowl2').children.length; }
 
-        function updateCounts() {
-            document.getElementById('result1').textContent = document.getElementById('smallBowl1').children.length;
-            document.getElementById('result2').textContent = document.getElementById('smallBowl2').children.length;
-        }
-
-        // JAVÍTOTT checkAnswer FÜGGVÉNY
         function checkAnswer() {
             const feedbackEl = document.getElementById('feedbackArea');
-
-            if (document.getElementById('mainBowl').children.length > 0) {
-                feedbackEl.textContent = 'Még nem pakoltál át minden golyót!';
-                feedbackEl.className = 'feedback incorrect';
-                return;
-            }
-            
+            if (document.getElementById('mainBowl').children.length > 0) { feedbackEl.textContent = 'Még nem pakoltál át minden golyót!'; feedbackEl.className = 'feedback incorrect'; return; }
             const ballsInBowl1 = Array.from(document.getElementById('smallBowl1').children);
             const ballsInBowl2 = Array.from(document.getElementById('smallBowl2').children);
-
-            // JAVÍTVA: Számolás a megbízható adat attribútum alapján
             const bowl1Color1Count = ballsInBowl1.filter(b => b.dataset.colorId === '1').length;
             const bowl1Color2Count = ballsInBowl1.filter(b => b.dataset.colorId === '2').length;
             const bowl2Color1Count = ballsInBowl2.filter(b => b.dataset.colorId === '1').length;
             const bowl2Color2Count = ballsInBowl2.filter(b => b.dataset.colorId === '2').length;
-
             const bowl1HasMixedColors = bowl1Color1Count > 0 && bowl1Color2Count > 0;
             const bowl2HasMixedColors = bowl2Color1Count > 0 && bowl2Color2Count > 0;
-
-            if (bowl1HasMixedColors || bowl2HasMixedColors) {
-                feedbackEl.textContent = 'Egy tálba csak egyféle színű golyót tegyél!';
-                feedbackEl.className = 'feedback incorrect';
-                return;
-            }
-
-            const isDecompositionCorrect = 
-                (bowl1Color1Count === taskData.part1 && bowl2Color2Count === taskData.part2) ||
-                (bowl1Color2Count === taskData.part2 && bowl2Color1Count === taskData.part1);
-
-            if (isDecompositionCorrect) {
-                feedbackEl.textContent = 'Ügyes vagy, ez a helyes megoldás!';
-                feedbackEl.className = 'feedback correct';
-            } else {
-                feedbackEl.textContent = 'A golyók nincsenek jól szétosztva. Számold meg újra a színeket a tálakban!';
-                feedbackEl.className = 'feedback incorrect';
-            }
+            if (bowl1HasMixedColors || bowl2HasMixedColors) { feedbackEl.textContent = 'Egy tálba csak egyféle színű golyót tegyél!'; feedbackEl.className = 'feedback incorrect'; return; }
+            const isDecompositionCorrect = (bowl1Color1Count === taskData.part1 && bowl2Color2Count === taskData.part2) || (bowl1Color2Count === taskData.part2 && bowl2Color1Count === taskData.part1);
+            if (isDecompositionCorrect) { feedbackEl.textContent = 'Ügyes vagy, ez a helyes megoldás!'; feedbackEl.className = 'feedback correct'; } else { feedbackEl.textContent = 'A golyók nincsenek jól szétosztva. Számold meg újra a színeket a tálakban!'; feedbackEl.className = 'feedback incorrect'; }
         }
 
-        function addDragListeners(element) {
-            element.addEventListener('mousedown', e => handleDragStart(e, element));
-            element.addEventListener('touchstart', e => handleDragStart(e, element), { passive: false });
-        }
+        function addDragListeners(element) { element.addEventListener('mousedown', e => handleDragStart(e, element)); element.addEventListener('touchstart', e => handleDragStart(e, element), { passive: false }); }
 
         function handleDragStart(e, element) {
             if (draggedElement) return;
             e.preventDefault();
             draggedElement = element;
+            const originalParent = element.parentElement;
             
-            const eventPos = e.type === 'touchstart' ? e.touches[0] : e;
             const rect = draggedElement.getBoundingClientRect();
+            const eventPos = e.type === 'touchstart' ? e.touches[0] : e;
             offsetX = eventPos.clientX - rect.left;
             offsetY = eventPos.clientY - rect.top;
 
+            document.body.appendChild(draggedElement);
+            draggedElement.classList.remove('idle-in-bowl');
             draggedElement.classList.add('dragging');
-            draggedElement.style.left = `${eventPos.clientX - offsetX}px`;
-            draggedElement.style.top = `${eventPos.clientY - offsetY}px`;
+            draggedElement.style.top = `${rect.top}px`;
+            draggedElement.style.left = `${rect.left}px`;
+            
+            layoutBalls(originalParent);
 
             document.addEventListener('mousemove', handleDragMove);
             document.addEventListener('mouseup', handleDragEnd);
@@ -263,15 +234,13 @@
         function handleDragMove(e) {
             if (!draggedElement) return;
             e.preventDefault();
-            
             const eventPos = e.type === 'touchmove' ? e.touches[0] : e;
-            draggedElement.style.left = `${eventPos.clientX - offsetX}px`;
             draggedElement.style.top = `${eventPos.clientY - offsetY}px`;
+            draggedElement.style.left = `${eventPos.clientX - offsetX}px`;
         }
 
         function handleDragEnd(e) {
             if (!draggedElement) return;
-            
             document.removeEventListener('mousemove', handleDragMove);
             document.removeEventListener('mouseup', handleDragEnd);
             document.removeEventListener('touchmove', handleDragMove);
@@ -281,35 +250,27 @@
             const eventPos = e.type === 'touchend' ? e.changedTouches[0] : e;
             const dropTarget = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
             draggedElement.style.visibility = 'visible';
-
-            let droppedInBowl = false;
+            
+            let newParent = document.getElementById('mainBowl');
             if (dropTarget) {
                 const bowl = dropTarget.closest('.drop-target');
-                if (bowl) {
-                    bowl.appendChild(draggedElement);
-                    droppedInBowl = true;
-                }
-            }
-
-            if (!droppedInBowl) {
-                document.getElementById('mainBowl').appendChild(draggedElement);
+                if (bowl) { newParent = bowl; }
             }
             
             draggedElement.classList.remove('dragging');
-            draggedElement.style.position = '';
-            draggedElement.style.left = '';
+            // Stílusok törlése a tiszta lappért az új tálban
             draggedElement.style.top = '';
+            draggedElement.style.left = '';
+            newParent.appendChild(draggedElement);
+
+            layoutBalls(newParent);
             
             draggedElement = null;
-            offsetX = 0;
-            offsetY = 0;
+            offsetX = 0; offsetY = 0;
             updateCounts();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const defaultTheme = 'theme-candy';
-            applyTheme(defaultTheme);
-        });
+        document.addEventListener('DOMContentLoaded', () => { applyTheme('theme-candy'); });
     </script>
 </body>
 </html>
