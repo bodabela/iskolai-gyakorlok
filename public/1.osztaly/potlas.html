@@ -206,30 +206,29 @@
             background-color: transparent !important;
         }
 
-        /* Új stílusok a szabályválasztóhoz */
         #task3_rule_options_container {
             margin-top: 20px;
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 oszlopos rács */
-            gap: 15px; /* Térköz a kártyák között */
-            max-width: 550px; /* Maximális szélesség a rácsnak */
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+            max-width: 550px;
             margin-left: auto;
-            margin-right: auto; /* Rács középre igazítása */
+            margin-right: auto;
         }
 
         .rule-card {
-            padding: clamp(10px, 2vw, 15px); /* Reszponzív padding */
+            padding: clamp(10px, 2vw, 15px);
             border: 2px solid var(--table-border-color, #ccc);
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
             display: flex;
-            flex-direction: row; /* Alapértelmezett, de biztosítjuk */
+            flex-direction: row;
             align-items: center;
             justify-content: center;
-            gap: clamp(5px, 1vw, 8px); /* Térköz az elemek között */
-            font-size: clamp(1.1em, 3.5vw, 1.3em); /* Nagyobb alap betűméret */
-            min-height: 60px; /* Minimális magasság */
+            gap: clamp(5px, 1vw, 8px);
+            font-size: clamp(1.1em, 3.5vw, 1.3em);
+            min-height: 60px;
         }
         .rule-card:hover {
             transform: translateY(-2px);
@@ -241,18 +240,18 @@
             box-shadow: 0 0 8px var(--theme-button-active-border-color, #007bff);
         }
         .rule-card .child-icon-rule {
-            width: clamp(28px, 5vw, 35px);  /* Nagyobb ikonok */
-            height: clamp(28px, 5vw, 35px); /* Nagyobb ikonok */
+            width: clamp(28px, 5vw, 35px);
+            height: clamp(28px, 5vw, 35px);
 			font-size: clamp(1.1em, 3.5vw, 1.3em);
         }
         .rule-card .rule-operator {
-            font-size: clamp(1.2em, 3vw, 1.5em); /* Nagyobb operátor */
+            font-size: clamp(1.2em, 3vw, 1.5em);
             font-weight: bold;
             margin: 0 clamp(4px, 0.8vw, 6px);
             color: var(--table-th-text-color, #333);
         }
         .rule-card .rule-sum {
-            font-size: clamp(1em, 2.8vw, 1.2em); /* Nagyobb összeg */
+            font-size: clamp(1em, 2.8vw, 1.2em);
             font-weight:bold;
             color:var(--table-th-text-color, #333);
             margin-left: clamp(4px, 0.8vw, 8px);
@@ -404,7 +403,7 @@
         <div class="task">
             <div class="task-header">
                 <h3>1. Feladat: Mennyit adjak hozzá, hogy ... legyen?</h3>
-                <button class="task-button new-task-button" onclick="generateTask1()">Új feladat</button>
+                <button class="task-button new-task-button" onclick="generateTask1(true)">Új feladat</button>
             </div>
             <p id="task1_description_p" class="instructions">A számokat pótold a táblázat elején megadott számra! Írd a hiányzó mennyiséget a megfelelő helyre!</p>
             <div id="task1_table_container" class="table-task-container table-task">
@@ -416,7 +415,7 @@
         <div class="task">
              <div class="task-header">
                 <h3>2. Feladat: Töltsd ki a táblázatot a szabály alapján!</h3>
-                <button class="task-button new-task-button" onclick="generateTask2()">Új feladat</button>
+                <button class="task-button new-task-button" onclick="generateTask2(true)">Új feladat</button>
             </div>
             <p id="task2_rule_p" class="instructions">Szabály: Y = X + ?</p>
             <div id="task2_table_container" class="table-task-container table-task">
@@ -428,7 +427,7 @@
         <div class="task" id="task3_container">
             <div class="task-header">
                 <h3>3. Feladat: Szöveges pótlás és szabályfelismerés</h3>
-                <button class="task-button new-task-button" onclick="generateTask3()">Új feladat</button>
+                <button class="task-button new-task-button" onclick="generateTask3(true)">Új feladat</button>
             </div>
             <p id="task3_description_p" class="instructions">Oldd meg a feladatot a táblázat kitöltésével, majd válaszd ki a helyes szabályt!</p>
             <div id="task3_text_instruction" style="font-size: 1.1em; margin-bottom: 15px; font-weight: bold;"></div>
@@ -490,7 +489,7 @@
                 { name: 'zöld kocka', svg: `<svg viewBox="0 0 100 100"><rect x="25" y="25" width="50" height="50" fill="#4CAF50" stroke="#388E3C" stroke-width="2"/><circle cx="37.5" cy="37.5" r="5" fill="white"/><circle cx="62.5" cy="37.5" r="5" fill="white"/><circle cx="37.5" cy="62.5" r="5" fill="white"/><circle cx="62.5" cy="62.5" r="5" fill="white"/><circle cx="50" cy="50" r="5" fill="white"/></svg>`},
                 { name: 'piros kocka', svg: `<svg viewBox="0 0 100 100"><polygon points="50,15 25,35 25,75 50,95 75,75 75,35" fill="#F44336" stroke="#D32F2F" stroke-width="2"/><line x1="25" y1="35" x2="75" y2="75" stroke="#D32F2F" stroke-width="1"/><line x1="75" y1="35" x2="25" y2="75" stroke="#D32F2F" stroke-width="1"/><line x1="50" y1="15" x2="50" y2="95" stroke="#D32F2F" stroke-width="1"/></svg>`}
             ],
-            "general": [ // Fallback icons and for Task 2
+            "general": [
                 { name: 'csillag', svg: `<svg viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 67,57 78,90 50,70 22,90 33,57 5,35 39,35" fill="#FFEB3B"/></svg>` },
                 { name: 'szív', svg: `<svg viewBox="0 0 100 100"><path d="M50,90 C-20,50 25,-10 50,30 C75,-10 120,50 50,90 Z" fill="#E91E63"/></svg>` },
                 { name: 'felhő', svg: `<svg viewBox="0 0 100 100"><path d="M20,70 A20,20 0 0,1 60,70 A15,15 0 0,1 80,55 A25,25 0 0,1 65,30 A20,20 0 0,1 35,30 A25,25 0 0,1 20,55 Z" fill="#ADD8E6"/></svg>` },
@@ -537,9 +536,10 @@
         function setupInputFocusAndMaxlength(inputElements, setInitialFocus = false) {
             inputElements.forEach((inputEl, index) => {
                 if (!inputEl) return;
-
-                const fieldMaxLengthBasedOnNumberRange = currentNumberRange > 9 ? 2 : 1;
-                inputEl.setAttribute('maxlength', fieldMaxLengthBasedOnNumberRange);
+                
+                const expectedValue = inputEl.dataset.expectedValue;
+                const fieldMaxLength = String(expectedValue).length;
+                inputEl.setAttribute('maxlength', fieldMaxLength);
 
                 inputEl.style.borderColor = `var(--input-border-color, #ccc)`;
                 inputEl.style.borderWidth = '1px';
@@ -547,17 +547,32 @@
 
                 inputEl.addEventListener('input', () => {
                     const value = inputEl.value;
-                    if (value.length >= fieldMaxLengthBasedOnNumberRange && index < inputElements.length - 1) {
-                         if(inputElements[index + 1]) inputElements[index + 1].focus();
+                    if (value.length >= fieldMaxLength) {
+                        let nextIndex = index + 1;
+                        while (nextIndex < inputElements.length &&
+                               inputElements[nextIndex] &&
+                               inputElements[nextIndex].value.length >= parseInt(inputElements[nextIndex].getAttribute('maxlength'))) {
+                            nextIndex++;
+                        }
+                        if (nextIndex < inputElements.length && inputElements[nextIndex]) {
+                            inputElements[nextIndex].focus();
+                        }
                     }
                 });
             });
-            if (setInitialFocus && inputElements.length > 0 && inputElements[0]) {
-                setTimeout(() => {
-                    if (inputElements[0]) inputElements[0].focus();
+
+            if (setInitialFocus && inputElements.length > 0) {
+                 setTimeout(() => {
+                    const firstEmptyInput = inputElements.find(el => el && el.value.length < parseInt(el.getAttribute('maxlength')));
+                    if (firstEmptyInput) {
+                        firstEmptyInput.focus();
+                    } else if (inputElements[0]) {
+                        inputElements[0].focus();
+                    }
                 }, 50);
             }
         }
+
 
         function applyTheme(themeClass) {
             bodyEl.className = '';
@@ -565,9 +580,9 @@
             themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeClass));
             rangeButtons.forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange));
             if (typeof generateTask1 === 'function' && typeof generateTask2 === 'function' && typeof generateTask3 === 'function') {
-                generateTask1();
-                generateTask2();
-                generateTask3();
+                generateTask1(true);
+                generateTask2(false);
+                generateTask3(false);
             }
         }
 
@@ -577,9 +592,9 @@
                 currentNumberRange = parseInt(button.dataset.range);
                 rangeButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
-                generateTask1();
-                generateTask2();
-                generateTask3();
+                generateTask1(true);
+                generateTask2(false);
+                generateTask3(false);
             });
         });
 
@@ -590,7 +605,7 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        function generateTask1() {
+        function generateTask1(shouldSetFocus = false) {
             task1Data.targetSum = getRandomInt(Math.max(1, Math.floor(currentNumberRange / 2) + 1), currentNumberRange);
             if (currentNumberRange === 5 && task1Data.targetSum < 2) task1Data.targetSum = getRandomInt(2,5);
             else if (task1Data.targetSum < 1 && currentNumberRange > 0) task1Data.targetSum = 1;
@@ -630,13 +645,13 @@
                     id: `task1_input_col${i}`
                 });
             }
-            renderTask1Table();
+            renderTask1Table(shouldSetFocus);
             document.getElementById('task1_feedback').textContent = '';
             document.getElementById('task1_feedback').className = 'feedback';
             document.getElementById('task1_description_p').textContent = `A számokat pótold a táblázat elején megadott ${task1Data.targetSum} számra! Írd a hiányzó mennyiséget a megfelelő helyre!`;
         }
 
-        function renderTask1Table() {
+        function renderTask1Table(shouldSetFocus = false) {
             const container = document.getElementById('task1_table_container');
             container.innerHTML = '';
             const table = document.createElement('table');
@@ -687,7 +702,7 @@
                 orderedInputs.push(inputEl);
             });
             container.appendChild(table);
-            setupInputFocusAndMaxlength(orderedInputs, true);
+            setupInputFocusAndMaxlength(orderedInputs, shouldSetFocus);
         }
 
         function checkTask1() {
@@ -728,7 +743,7 @@
             }
         }
 
-        function generateTask2() {
+        function generateTask2(shouldSetFocus = false) {
             const diff = getRandomInt(1, Math.min(5, currentNumberRange >=1 ? Math.max(1, currentNumberRange -1) : 1));
             const operations = ['+', '-'];
             const operation = operations[Math.floor(Math.random() * operations.length)];
@@ -822,12 +837,12 @@
                 task2Data.solutions[`x_col${i}`] = xVal;
                 task2Data.solutions[`y_col${i}`] = yVal;
             }
-            renderTask2Table();
+            renderTask2Table(shouldSetFocus);
             document.getElementById('task2_feedback').textContent = '';
             document.getElementById('task2_feedback').className = 'feedback';
         }
 
-        function renderTask2Table() {
+        function renderTask2Table(shouldSetFocus = false) {
             const container = document.getElementById('task2_table_container');
             container.innerHTML = '';
             if (task2Data.tablePairs.length === 0) return;
@@ -839,7 +854,7 @@
 
             const xRow = table.insertRow();
             const xHeaderCell = xRow.insertCell();
-            xHeaderCell.innerHTML = `<span class="child-icon">${task2Data.rule.variable2Icon}</span>`; // X icon
+            xHeaderCell.innerHTML = `<span class="child-icon">${task2Data.rule.variable2Icon}</span>`;
 
             task2Data.tablePairs.forEach((pair, i) => {
                 const cell = xRow.insertCell();
@@ -866,7 +881,7 @@
 
             const yRow = table.insertRow();
             const yHeaderCell = yRow.insertCell();
-            yHeaderCell.innerHTML = `<span class="child-icon">${task2Data.rule.variable1Icon}</span>`; // Y icon
+            yHeaderCell.innerHTML = `<span class="child-icon">${task2Data.rule.variable1Icon}</span>`;
 
 
             task2Data.tablePairs.forEach((pair, i) => {
@@ -896,16 +911,11 @@
             for (let i = 0; i < NUM_COLS_TASK1_TASK2; i++) {
                 const pair = task2Data.tablePairs[i];
                 if (pair) {
-                    if (pair.x === null && pair.xInputId) {
-                        const inputEl = document.getElementById(pair.xInputId);
-                        if (inputEl) orderedInputs.push(inputEl);
-                    } else if (pair.y === null && pair.yInputId) {
-                        const inputEl = document.getElementById(pair.yInputId);
-                        if (inputEl) orderedInputs.push(inputEl);
-                    }
+                    const inputEl = pair.xInputId ? document.getElementById(pair.xInputId) : document.getElementById(pair.yInputId);
+                    if (inputEl) orderedInputs.push(inputEl);
                 }
             }
-            setupInputFocusAndMaxlength(orderedInputs, false);
+            setupInputFocusAndMaxlength(orderedInputs, shouldSetFocus);
         }
 
 
@@ -952,7 +962,7 @@
             }
         }
 
-        function generateTask3() {
+        function generateTask3(shouldSetFocus = false) {
             const randomNounKey = itemNouns[Math.floor(Math.random() * itemNouns.length)];
 
             let iconSet = themedIcons[randomNounKey];
@@ -967,7 +977,6 @@
             } else {
                 const generalIcons = themedIcons.general || Object.values(themedIcons).flat();
                  if (generalIcons.length < 2) {
-                    console.error("Not enough icons for task 3 fallback.");
                     task3Data.itemType1 = {name: 'ikon1', svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="purple"></circle></svg>'};
                     task3Data.itemType2 = {name: 'ikon2', svg: '<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="orange"></rect></svg>'};
                 } else {
@@ -981,11 +990,9 @@
                 }
             }
 
-
             task3Data.targetSumPerColumn = getRandomInt(Math.max(2, Math.floor(currentNumberRange / 2)), currentNumberRange);
             if (task3Data.targetSumPerColumn < 2 && currentNumberRange >=2) task3Data.targetSumPerColumn = 2;
             if (currentNumberRange === 5 && task3Data.targetSumPerColumn > 5) task3Data.targetSumPerColumn = 5;
-
 
             document.getElementById('task3_text_instruction').textContent = `Összesen ${task3Data.targetSumPerColumn} db ${randomNounKey}t várunk minden oszlopban.`;
 
@@ -1012,28 +1019,23 @@
 
             task3Data.correctRuleString = `${task3Data.itemType1.name} + ${task3Data.itemType2.name} = ${task3Data.targetSumPerColumn}`;
             generateTask3RuleOptions();
-            renderTask3Table();
+            renderTask3Table(shouldSetFocus);
             renderTask3RuleOptions();
             document.getElementById('task3_feedback').textContent = '';
             document.getElementById('task3_feedback').className = 'feedback';
-            const firstInputTask3 = document.querySelector('#task3_table_container input.table-input');
-            if(firstInputTask3) setTimeout(()=> firstInputTask3.focus(), 50);
         }
 
-
-        function renderTask3Table() {
+        function renderTask3Table(shouldSetFocus = false) {
             const container = document.getElementById('task3_table_container');
             container.innerHTML = '';
             const table = document.createElement('table');
-            const orderedInputs = [];
+            const inputsByCol = new Array(task3Data.numCols).fill(null);
             let availableColors = [...columnBackgroundColors];
-
 
             const row1 = table.insertRow();
             const headerCell1 = row1.insertCell();
             headerCell1.innerHTML = `<span class="child-icon-cell">${task3Data.itemType1.svg}</span>`;
             const row1Colors = getUniqueColorPairFromArray(availableColors.length > 1 ? availableColors : [...columnBackgroundColors]);
-
 
             for (let col = 0; col < task3Data.numCols; col++) {
                 const cell = row1.insertCell();
@@ -1054,7 +1056,7 @@
                     input.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
                     input.dataset.expectedValue = task3Data.solutions[col].row0;
                     cell.appendChild(input);
-                    orderedInputs.push(input);
+                    inputsByCol[col] = input;
                 }
             }
 
@@ -1062,7 +1064,6 @@
             const headerCell2 = row2.insertCell();
             headerCell2.innerHTML = `<span class="child-icon-cell">${task3Data.itemType2.svg}</span>`;
             const row2Colors = getUniqueColorPairFromArray(availableColors.length > 0 ? availableColors : [...columnBackgroundColors]);
-
 
             for (let col = 0; col < task3Data.numCols; col++) {
                 const cell = row2.insertCell();
@@ -1083,87 +1084,73 @@
                     input.style.color = getComputedStyle(document.documentElement).getPropertyValue('--input-text-color').trim();
                     input.dataset.expectedValue = task3Data.solutions[col].row1;
                     cell.appendChild(input);
-                    orderedInputs.push(input);
+                    inputsByCol[col] = input;
                 }
             }
             container.appendChild(table);
-            setupInputFocusAndMaxlength(orderedInputs, true);
+            const orderedInputs = inputsByCol.filter(i => i);
+            setupInputFocusAndMaxlength(orderedInputs, shouldSetFocus);
         }
 
         function generateTask3RuleOptions() {
-            const ops = ['+', '-', '×', '÷'];
             const item1 = task3Data.itemType1;
             const item2 = task3Data.itemType2;
             task3Data.ruleOptions = [];
 
             task3Data.ruleOptions.push({
-                text: task3Data.correctRuleString,
+                text: `${item1.name} + ${item2.name} = ${task3Data.targetSumPerColumn}`,
                 svg1: item1.svg, op: '+', svg2: item2.svg,
                 sum: task3Data.targetSumPerColumn,
                 isCorrect: true
             });
 
-            while (task3Data.ruleOptions.length < 4) {
-                const randomOp = ops[Math.floor(Math.random() * ops.length)];
-                let operand1 = Math.random() < 0.5 ? item1 : item2;
-                let operand2Data = (operand1.name === item1.name ? item2 : item1);
-                let opForText = randomOp;
-                let displaySum;
+            let v1_val = (task3Data.solutions[0] && task3Data.solutions[0].row0 !== undefined) ? task3Data.solutions[0].row0 : getRandomInt(0, Math.floor(task3Data.targetSumPerColumn / 2));
+            let v2_val = task3Data.targetSumPerColumn - v1_val;
 
-                if (randomOp === '×' || randomOp === '÷') {
-                    const numVal = getRandomInt(1, currentNumberRange <= 5 ? 2 : 3);
-                    operand2Data = { name: String(numVal), svg: `<span style="font-weight:bold; color:var(--table-th-text-color); padding: 0 5px;">${numVal}</span>` };
-                }
+            const incorrectRuleTemplates = [
+                { op1: item1, op: '-', op2: item2, result: v1_val - v2_val },
+                { op1: item2, op: '-', op2: item1, result: v2_val - v1_val },
+                { op1: item1, op: '+', op2: item2, result: task3Data.targetSumPerColumn + getRandomInt(1, 3) },
+                { op1: item1, op: '+', op2: item2, result: task3Data.targetSumPerColumn > 1 ? task3Data.targetSumPerColumn - 1: 0 }
+            ];
 
-                let v1_val = (task3Data.solutions[0] && task3Data.solutions[0].row0 !== undefined) ? task3Data.solutions[0].row0 : getRandomInt(0, Math.floor(task3Data.targetSumPerColumn / 2));
-                let v2_val = (task3Data.solutions[0] && task3Data.solutions[0].row1 !== undefined) ? task3Data.solutions[0].row1 : getRandomInt(0, Math.floor(task3Data.targetSumPerColumn / 2));
-
-                if (operand1.name === item1.name) v1_val = task3Data.solutions[0]?.row0 ?? v1_val;
-                else if (operand1.name === item2.name) v1_val = task3Data.solutions[0]?.row1 ?? v1_val;
-
-                if (operand2Data.name === item1.name) v2_val = task3Data.solutions[0]?.row0 ?? v2_val;
-                else if (operand2Data.name === item2.name) v2_val = task3Data.solutions[0]?.row1 ?? v2_val;
-                else if (String(operand2Data.name).match(/^\d+$/)) v2_val = parseInt(operand2Data.name);
-
-
-                if (randomOp === '+') {
-                    displaySum = v1_val + v2_val;
-                    if (displaySum === task3Data.targetSumPerColumn && (operand1.name !== item1.name || operand2Data.name !== item2.name) && (operand1.name !== item2.name || operand2Data.name !== item1.name)) {
-                        displaySum += getRandomInt(1, 3);
-                    }
-                } else if (randomOp === '-') {
-                    displaySum = v1_val - v2_val;
-                } else if (randomOp === '×') {
-                    displaySum = v1_val * v2_val;
-                } else if (randomOp === '÷') {
-                    displaySum = v2_val === 0 ? v1_val : Math.floor(v1_val / v2_val);
-                }
-
-                displaySum = Math.max(0, Math.min(displaySum, currentNumberRange * 2 + 5));
-
-                if (displaySum === task3Data.targetSumPerColumn) {
-                    // If it's the correct sum, ensure the rule is actually different, or adjust sum
-                    const isCorrectCombination = (opForText === '+' && ((operand1.name === item1.name && operand2Data.name === item2.name) || (operand1.name === item2.name && operand2Data.name === item1.name)));
-                    if (!isCorrectCombination) {
-                        displaySum = (displaySum + getRandomInt(1,2)) % (currentNumberRange * 2 + 6);
-                        if (displaySum === task3Data.targetSumPerColumn) displaySum++; // Ensure difference
-                         displaySum = Math.max(0, displaySum);
-                    }
-                }
-
-
-                let newRuleText = `${operand1.name} ${opForText} ${operand2Data.name} = ${displaySum}`;
+            shuffleArray(incorrectRuleTemplates);
+            
+            while (task3Data.ruleOptions.length < 4 && incorrectRuleTemplates.length > 0) {
+                const template = incorrectRuleTemplates.shift();
+                
+                const newRuleText = `${template.op1.name} ${template.op} ${template.op2.name} = ${template.result}`;
                 const alreadyExists = task3Data.ruleOptions.some(opt => opt.text === newRuleText);
 
-                if (!alreadyExists) {
+                if (!alreadyExists && template.result >= 0) {
                     task3Data.ruleOptions.push({
                         text: newRuleText,
-                        svg1: operand1.svg, op: opForText, svg2: operand2Data.svg,
-                        sum: displaySum,
+                        svg1: template.op1.svg,
+                        op: template.op,
+                        svg2: template.op2.svg,
+                        sum: template.result,
                         isCorrect: false
                     });
                 }
             }
+             let fallbackAttempts = 0;
+             while(task3Data.ruleOptions.length < 4 && fallbackAttempts < 10) {
+                 const randomResult = getRandomInt(0, currentNumberRange * 1.5);
+                 if (randomResult !== task3Data.targetSumPerColumn) {
+                     const newRuleText = `${item1.name} + ${item2.name} = ${randomResult}`;
+                     const alreadyExists = task3Data.ruleOptions.some(opt => opt.text === newRuleText);
+                     if (!alreadyExists) {
+                         task3Data.ruleOptions.push({
+                            text: newRuleText,
+                            svg1: item1.svg, op: '+', svg2: item2.svg,
+                            sum: randomResult,
+                            isCorrect: false
+                        });
+                     }
+                 }
+                 fallbackAttempts++;
+             }
+
             shuffleArray(task3Data.ruleOptions);
         }
 
