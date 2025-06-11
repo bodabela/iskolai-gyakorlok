@@ -1,7 +1,7 @@
 document.getElementById('generatorGomb').addEventListener('click', () => {
     const teljesSzoveg = document.getElementById('teljesSzoveg').value;
     const kimenetDiv = document.getElementById('kimenet');
-    kimenetDiv.innerHTML = ''; 
+    kimenetDiv.innerHTML = '';
     generateHandwritingSVG(teljesSzoveg, kimenetDiv);
 });
 
@@ -29,7 +29,7 @@ function generateHandwritingSVG(text, outputContainer) {
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("width", "100%");
     outputContainer.appendChild(svg);
-    
+
     const lineContainer = document.createElementNS(svgNS, 'g');
     const textContainer = document.createElementNS(svgNS, 'g');
     svg.appendChild(lineContainer);
@@ -53,66 +53,73 @@ function generateHandwritingSVG(text, outputContainer) {
         segments = newSegments;
     });
 
-    // 2. Szavakká csoportosítás
+    // 2. Szavakká csoportosítás - JAVÍTOTT, ROBUSTUS LOGIKA
     const words = [];
     let currentWord = [];
     segments.forEach(segment => {
         const parts = segment.text.split(/(\s+)/);
-        parts.forEach(part => {
-            if (!part) return;
-            currentWord.push({ text: part, color: part.match(/\s+/) ? BLACK_COLOR : segment.color });
-            if (part.match(/\s+/)) {
-                words.push(currentWord);
-                currentWord = [];
+
+        parts.forEach(partText => {
+            if (!partText) return; // Üres stringek átugrása
+
+            if (partText.match(/^\s+$/)) {
+                // Ha a rész egy szóköz, csak akkor foglalkozunk vele, ha van előtte gyűjtött szó.
+                if (currentWord.length > 0) {
+                    currentWord.push({ text: partText, color: BLACK_COLOR }); // Hozzáadjuk a szóhoz a szóközt
+                    words.push(currentWord); // Lezárjuk a szót (szó+szóköz)
+                    currentWord = []; // Új szót kezdünk
+                }
+                // Ha nincs előtte szó (pl. több szóköz egymás után), a plusz szóközt eldobjuk.
+            } else {
+                // Ha a rész nem szóköz, egyszerűen hozzáadjuk az aktuális szóhoz.
+                currentWord.push({ text: partText, color: segment.color });
             }
         });
     });
-    if (currentWord.length > 0) words.push(currentWord);
+    // Az utolsó szó hozzáadása, ha maradt valami (pl. a szöveg vége nem szóköz).
+    if (currentWord.length > 0) {
+        words.push(currentWord);
+    }
+
 
     // --- VIZUÁLIS FELÉPÍTÉS (SZAVANKÉNT) ---
     let currentY = PADDING + FONT_SIZE;
     let currentTextElement = createTextElement(currentY);
     textContainer.appendChild(currentTextElement);
     createRulerForLine(currentY);
-    
-    // Külön, láthatatlan mérő elem a "mi lenne ha" teszteléshez
+
     const tempMeasureElement = createTextElement(0);
     tempMeasureElement.style.visibility = 'hidden';
     svg.appendChild(tempMeasureElement);
 
     words.forEach(word => {
-        // A jelenlegi sor tartalmát belemásoljuk a mérőbe
         tempMeasureElement.innerHTML = currentTextElement.innerHTML;
-        // Hozzáadjuk az új szót is a mérőhöz
         word.forEach(part => {
             tempMeasureElement.appendChild(createTspanElement(part.text, part.color));
         });
 
-        // Megmérjük, hogy a teljes tartalom (régi sor + új szó) kifér-e
         if (tempMeasureElement.getComputedTextLength() > SVG_WIDTH - PADDING * 2 && currentTextElement.children.length > 0) {
-            // NEM FÉR KI: Új sort kezdünk
             currentY += LINE_HEIGHT;
             currentTextElement = createTextElement(currentY);
             textContainer.appendChild(currentTextElement);
             createRulerForLine(currentY);
 
-            // És az új sorba írjuk be a szót (szóköz nélkül az elején)
-            word.forEach(part => {
-                if (!part.text.match(/^\s+$/)) {
-                    currentTextElement.appendChild(createTspanElement(part.text, part.color));
-                }
+            // Új sorba íráskor az esetleges vezető szóközt levágjuk
+            const firstPartIndex = word.findIndex(part => !part.text.match(/^\s+$/));
+            const wordToWrite = (firstPartIndex !== -1) ? word.slice(firstPartIndex) : [];
+            
+            wordToWrite.forEach(part => {
+                currentTextElement.appendChild(createTspanElement(part.text, part.color));
             });
         } else {
-            // ELFÉR: Hozzáadjuk a szót a valódi, látható sorhoz
             word.forEach(part => {
                 currentTextElement.appendChild(createTspanElement(part.text, part.color));
             });
         }
     });
 
-    // A láthatatlan mérő elem eltávolítása a végén
     svg.removeChild(tempMeasureElement);
-    
+
     const finalHeight = currentY + FONT_SIZE;
     svg.setAttribute("viewBox", `0 0 ${SVG_WIDTH} ${finalHeight}`);
 
@@ -123,7 +130,7 @@ function generateHandwritingSVG(text, outputContainer) {
         textElement.setAttribute('x', PADDING);
         textElement.setAttribute('y', y);
         textElement.setAttribute('font-family', FONT_FAMILY);
-        textElement.setAttribute('font-size', `${FONT_SIZE+30}px`);
+        textElement.setAttribute('font-size', `${FONT_SIZE + 30}px`);
         textElement.setAttribute('xml:space', 'preserve');
         return textElement;
     }
