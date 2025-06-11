@@ -15,13 +15,13 @@ function generateHandwritingSVG(text, outputContainer) {
     const BLACK_COLOR = '#333333';
     const RED_COLOR = '#d90000';
 
-    const ekezetesMaganhangzok = ['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'];
+    const ekezetesek = ['á', 'é', 'i', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű', 'j'];
     const ketjegyuMassalhangzok = ['cs', 'gy', 'ly', 'ny', 'sz', 'ty', 'zs'];
     const hosszuMassalhangzok = [
         'bb', 'cc', 'dd', 'ff', 'gg', 'jj', 'kk', 'll', 'mm', 'nn', 'pp', 'rr', 'ss', 'tt', 'vv', 'zz',
         'ccs', 'ggy', 'lly', 'nny', 'ssz', 'tty', 'zzs'
     ];
-    const highlights = [...ekezetesMaganhangzok, ...ketjegyuMassalhangzok, ...hosszuMassalhangzok]
+    const highlights = [...ekezetesek, ...ketjegyuMassalhangzok, ...hosszuMassalhangzok]
                         .sort((a, b) => b.length - a.length);
 
     // --- SVG LÉTREHOZÁSA ÉS BEILLESZTÉSE ---
