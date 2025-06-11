@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webes Iskolai Gyakorló</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .subject-card-icon svg {
+            width: 120px;
+            height: 120px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 font-inter min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 text-gray-800">
+
+    <div class="w-full max-w-4xl mx-auto">
+        <header class="text-center my-8 sm:my-12">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-500 to-red-500">
+                Webes Iskolai Gyakorló
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-600 mt-4">Válassz tantárgyat a kezdéshez!</p>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
+            
+            <a href="./matek/" class="bg-white/70 backdrop-blur-md p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
+                <div class="subject-card-icon w-32 h-32 mb-6 text-blue-500 group-hover:text-blue-600 transition-colors flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+                        <text x="10" y="15" font-size="10" fill-opacity="0.3" transform="rotate(-15 10 15)">7</text>
+                        <text x="85" y="20" font-size="9" fill-opacity="0.3" transform="rotate(10 85 20)">3</text>
+                        <text x="12" y="88" font-size="12" fill-opacity="0.3" transform="rotate(20 12 88)">9</text>
+                        <text x="90" y="90" font-size="10" fill-opacity="0.3" transform="rotate(-5 90 90)">1</text>
+                        <text x="50" y="10" font-size="8" fill-opacity="0.3" transform="rotate(5 50 10)">5</text>
+                        <text x="55" y="95" font-size="11" fill-opacity="0.3" transform="rotate(-12 55 95)">2</text>
+                        <text x="8" y="50" font-size="9" fill-opacity="0.3" transform="rotate(25 8 50)">4</text>
+                        <text x="92" y="55" font-size="10" fill-opacity="0.3" transform="rotate(-30 92 55)">8</text>
+                        <text x="30" y="50" font-size="7" fill-opacity="0.3" transform="rotate(15 30 50)">6</text>
+                         <text x="70" y="50" font-size="8" fill-opacity="0.3" transform="rotate(-10 70 50)">0</text>
+
+                        <text x="28" y="32" font-size="30" font-weight="bold" text-anchor="middle">+</text>
+                        <text x="72" y="32" font-size="30" font-weight="bold" text-anchor="middle">-</text>
+                        <text x="28" y="76" font-size="30" font-weight="bold" text-anchor="middle">×</text>
+                        <text x="72" y="76" font-size="30" font-weight="bold" text-anchor="middle">÷</text>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">Matek</h2>
+            </a>
+
+            <a href="./magyar/1. osztaly/iras-kiemeles.html" class="bg-white/70 backdrop-blur-md p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
+                <div class="subject-card-icon w-32 h-32 mb-6 text-red-500 group-hover:text-red-600 transition-colors flex items-center justify-center">
+                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V4C20 2.9 19.1 2 18 2Z" fill-opacity="0.2"></path>
+                        <path d="M12.5 5.5H15.5C16.33 5.5 17 6.17 17 7V11.5L15.25 10.75L13.5 11.5V7C13.5 6.17 12.83 5.5 12.5 5.5Z" fill-opacity="0.4"></path>
+                        <path d="M11.5 5.5H8.5C7.67 5.5 7 6.17 7 7V17L9.75 15.5L12.5 17V7C12.5 6.17 11.83 5.5 11.5 5.5Z"></path>
+                        
+                        <text x="8" y="8" font-size="1.2" fill-opacity="0.6" transform="rotate(10 8 8)">a</text>
+                        <text x="9.5" y="8.5" font-size="1.2" fill-opacity="0.6" transform="rotate(-5 9.5 8.5)">b</text>
+                        <text x="14" y="8" font-size="1.2" fill-opacity="0.6" transform="rotate(5 14 8)">c</text>
+                        <text x="15.5" y="8.2" font-size="1.2" fill-opacity="0.6" transform="rotate(15 15.5 8.2)">d</text>
+                        <text x="8.2" y="10" font-size="1.2" fill-opacity="0.6" transform="rotate(-8 8.2 10)">é</text>
+                        <text x="10" y="10.5" font-size="1.2" fill-opacity="0.6" transform="rotate(12 10 10.5)">f</text>
+                        <text x="14.5" y="10" font-size="1.2" fill-opacity="0.6" transform="rotate(-15 14.5 10)">g</text>
+                        <text x="16" y="10.5" font-size="1.2" fill-opacity="0.6" transform="rotate(8 16 10.5)">h</text>
+                        <text x="8.5" y="12" font-size="1.2" fill-opacity="0.6" transform="rotate(5 8.5 12)">í</text>
+                        <text x="10.5" y="12.5" font-size="1.2" fill-opacity="0.6" transform="rotate(-10 10.5 12.5)">j</text>
+                        <text x="8.5" y="14" font-size="1.2" fill-opacity="0.6" transform="rotate(15 8.5 14)">k</text>
+                        <text x="10.8" y="14.5" font-size="1.2" fill-opacity="0.6" transform="rotate(-2 10.8 14.5)">L</text>
+                   </svg>
+                </div>
+                <h2 class="text-3xl font-semibold text-gray-700 group-hover:text-red-600 transition-colors">Magyar</h2>
+            </a>
+
+        </main>
+
+        <footer class="text-center mt-12">
+            <p class="text-gray-500">Boda Béla &copy; 2025</p>
+        </footer>
+    </div>
+
+</body>
+</html>
