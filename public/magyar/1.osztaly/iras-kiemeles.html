@@ -32,23 +32,23 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             width: 100%;
-            max-width: 900px; 
+            max-width: 900px;
         }
 
         .theme-selector {
             display: flex;
-            flex-wrap: wrap; 
+            flex-wrap: wrap;
             justify-content: center;
             gap: 8px;
         }
-        
+
         .control-label {
             font-weight: bold;
             margin-bottom: 5px;
             font-size: 0.95em;
             transition: color 0.5s ease;
         }
-       
+
         .theme-button {
             padding: 8px 12px;
             border: 1px solid transparent;
@@ -63,68 +63,81 @@
             opacity: 0.9;
         }
         .theme-button.active {
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000); 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
             transform: translateY(1px);
         }
 
         .container {
             background-color: var(--container-bg);
-            padding: 20px; 
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 6px 15px rgba(0,0,0,0.15);
             width: 100%;
-            max-width: 900px; 
-            text-align: center;
+            max-width: 900px;
             border: 2px solid var(--container-border);
             transition: background-color 0.5s ease, border-color 0.5s ease;
         }
-        
+
         h1, h2 {
             text-align: center;
             color: var(--h1-color);
             transition: color 0.5s ease;
         }
         h1 {
-            font-size: clamp(1.8em, 5vw, 2.2em); 
+            font-size: clamp(1.8em, 5vw, 2.2em);
             margin-bottom: 15px;
         }
         h2 {
-            font-size: clamp(1.3em, 4vw, 1.6em); 
+            font-size: clamp(1.3em, 4vw, 1.6em);
             margin-bottom: 25px;
             color: var(--h2-color);
         }
         .task {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             padding: 20px;
             border-radius: 10px;
             background-color: var(--task-bg);
             border: 2px dashed var(--task-border);
             transition: background-color 0.5s ease, border-color 0.5s ease;
         }
-        
-        textarea { 
-            width: 100%; 
-            margin-bottom: 1em; 
-            padding: 8px; 
-            box-sizing: border-box; 
-            font-size: 1em; 
+
+        /* --- ÚJ GOMB ELRENDEZÉS STÍLUSOK --- */
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header p {
+            margin: 0;
+            flex-grow: 1; /* A szöveg kitölti a rendelkezésre álló helyet */
+        }
+
+        textarea {
+            width: 100%;
+            margin-bottom: 1em;
+            padding: 8px;
+            box-sizing: border-box;
+            font-size: 1em;
             border: 2px solid var(--task-border);
             border-radius: 8px;
             background-color: var(--container-bg);
             color: var(--text-color);
             transition: all 0.5s ease;
         }
-        button.task-button { 
-            padding: 10px 20px; 
+
+        button.task-button {
+            padding: 8px 16px;
             color: white;
             background-color: var(--button-bg);
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: clamp(1em, 3vw, 1.1em); 
+            font-size: clamp(0.9em, 2.5vw, 1em);
             transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 0;
+            flex-shrink: 0; /* Megakadályozza, hogy a gomb zsugorodjon */
         }
         button.task-button:hover {
             transform: translateY(-2px);
@@ -133,19 +146,20 @@
         button.task-button:active {
             transform: translateY(0px);
         }
-        #kimenet { 
-            border: 2px solid var(--task-border); 
+
+        #kimenet, #szavakKimenet {
+            border: 2px solid var(--task-border);
             background-color: white;
-            margin-top: 1em; 
-            width: 100%; 
-            min-height: 200px; 
+            margin-top: 1em;
+            width: 100%;
+            min-height: 150px;
             box-sizing: border-box;
             border-radius: 8px;
         }
-        label, p { 
-            display: block; 
-            margin-bottom: .5em; 
-            font-weight: bold; 
+        label, p {
+            display: block;
+            margin-bottom: .5em;
+            font-weight: bold;
             text-align: left;
             color: var(--text-color);
             transition: color 0.5s ease;
@@ -159,7 +173,7 @@
             --button-bg: #007bff; --button-hover-bg: #0056b3;
             --theme-button-active-border-color: #007bff;
         }
-        
+
         body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6; --text-color: #8a2be2; --h1-color: #da70d6; --h2-color: #ff69b4; --container-bg: #ffe4e1; --container-border: #ffc0cb; --task-bg: #fffafa; --task-border: #ffb6c1; --button-bg: #ff69b4; --button-hover-bg: #ff1493; }
         body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa; --text-color: #e2e8f0; --h1-color: #60a5fa; --h2-color: #93c5fd; --container-bg: #1e293b; --container-border: #334155; --task-bg: #334155; --task-border: #475569; --button-bg: #2563eb; --button-hover-bg: #1d4ed8; }
         body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f; --text-color: #1b5e20; --h1-color: #388e3c; --h2-color: #558b2f; --container-bg: #e8f5e9; --container-border: #a5d6a7; --task-bg: #dcedc8; --task-border: #81c784; --button-bg: #7cb342; --button-hover-bg: #689f38; }
@@ -197,17 +211,24 @@
         <h2>Kiemeléssel</h2>
 
         <div class="task">
-            <p>Írd be a szöveget, a program automatikusan kiemeli a kettős, kettőzött és hosszú mássalhangzókat, valamint az ékezetes magánhangzókat.</p>
+            <div class="task-header">
+                <p>1. Feladat: Írd le a szavakat! A program pirossal kiemeli a nehezebb betűket.</p>
+                <button id="wordGeneratorGomb" class="task-button">Új szavak</button>
+            </div>
+            <div id="szavakKimenet"></div>
+        </div>
 
+        <div class="task">
+             <div class="task-header">
+                <p>2. Feladat: Írd be a szöveget! A program automatikusan kiemeli a betűket.</p>
+                 <button id="generatorGomb" class="task-button">Szabad Szöveg Generálása</button>
+            </div>
             <label for="teljesSzoveg">Szöveg:</label>
             <textarea id="teljesSzoveg" rows="6">A hosszú folyóparton, a meggyfa alatt egy pöffeszkedő béka ücsörög, és egy bütykös hattyút néz a hűs vízben.
 
 A fiúk ujjal mutatnak a vízre, ahol két apró kavics koccan, majd egy loccsanás után egy fénylő, ősi gyűrű bukkan elő.
 
 Anyukájuk jobban örül a gyűrűnek, mint egy erre járt zsivány a rozzsal teli zsákjának, addig dicséri őket, míg a könnyű, mennyei süteményt eszik, és ezzel a szívből jövő örömmel zárul a nap.</textarea>
-
-            <button id="generatorGomb" class="task-button">SVG Generálása</button>
-
             <div id="kimenet"></div>
         </div>
     </div>
@@ -216,6 +237,55 @@ Anyukájuk jobban örül a gyűrűnek, mint egy erre járt zsivány a rozzsal te
         const bodyEl = document.body;
         const themeButtons = document.querySelectorAll('.theme-button');
 
+		const wordList = [
+            // j/ly
+            'papagáj', 'boglya', 'gólya', 'vályú', 'pikkely', 'gerely', 'keselyű', 
+            'pálya', 'folyó', 'folyosó', 'héja', 'karvaly', 'muszáj', 'sólyom',
+            'súly', 'tavaly', 'vaj', 'jég', 'játék', 'jel', 'juh', 'járda',
+
+            // Hosszú magánhangzók
+            'hosszú', 'hűséges', 'készít', 'tűz', 'víz', 'szép', 'jó',
+            'fű', 'út', 'árvíz', 'gyönyörű', 'búcsú', 'póráz', 'pózna', 
+            'tető', 'tér', 'szőlő', 'lufi', 'szív',
+
+            // Kétjegyű betűk (gy, ny, ty, sz, zs, cs)
+            'gyöngy', 'ágyú', 'betyár', 'kesztyű', 'hattyú', 'tyúk', 'kutya',
+            'anyja', 'nyúl', 'nyár', 'száll', 'szék', 'szem', 'száj', 'szín',
+            'zsivány', 'zseb', 'zsák', 'rózsa', 'pizsama', 'kulcs', 'papucs',
+            'csiga', 'csoki', 'ecset', 'kacsa', 'bocs',
+
+            // Dupla/hosszú mássalhangzók (pl. cc, dd, ff, gg)
+            'loccsan', 'loccsanás', 'pattog', 'pattanás', 'roppan', 'cseppen',
+            'koppan', 'durran', 'füttyent', 'fütty', 'hattyú', 'könnyű', 
+            'meggy', 'meggyfa', 'gally', 'asszony', 'pöttyös', 'brummog',
+            'szisszen', 'hosszú', 'rossz', 'váll', 'orra', 'orra', 'tolla',
+            'csekk', 'sakk', 'makk', 'hall', 'fullad', 'varr', 'forr', 'berreg',
+
+            // Vegyes példák
+            'barátság', 'figyelj', 'edző', 'meggyújt', 'pöffeszkedik', 'ücsörög', 
+            'bütykös', 'koccan', 'fénylő', 'gyűrű', 'rozzsal', 'könnyű', 'mennyei',
+            'szívből', 'folyóparton', 'ujj', 'pénz', 'cérna', 'dinnye', 'reggel'
+        ];
+		
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateWordTask() {
+            const szavakKimenetDiv = document.getElementById('szavakKimenet');
+            szavakKimenetDiv.innerHTML = '';
+            
+            shuffleArray(wordList);
+            const selectedWords = wordList.slice(0, 5).join(' ');
+
+            generateHandwritingSVG(selectedWords, szavakKimenetDiv);
+        }
+
+        document.getElementById('wordGeneratorGomb').addEventListener('click', generateWordTask);
+        
         function applyTheme(themeClass) {
             bodyEl.className = '';
             bodyEl.classList.add(themeClass);
@@ -223,11 +293,12 @@ Anyukájuk jobban örül a gyűrűnek, mint egy erre járt zsivány a rozzsal te
             themeButtons.forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.theme === themeClass);
             });
-            // Automatikusan újragenerálja az SVG-t a témaváltáskor
-            // A generator.js változatlan, így a kiemelés színe fix piros marad, de ez a kérés.
+            
             if (document.getElementById('teljesSzoveg').value) {
                 document.getElementById('generatorGomb').click();
             }
+            
+            generateWordTask();
         }
 
         themeButtons.forEach(button => {
@@ -237,9 +308,7 @@ Anyukájuk jobban örül a gyűrűnek, mint egy erre járt zsivány a rozzsal te
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Alkalmazza a kezdő témát (pl. Őserdő, hogy egyből látszódjon a javítás)
-            // és futtatja a generátort, ha van szöveg a mezőben
-            applyTheme('theme-jungle'); 
+            applyTheme('theme-jungle');
         });
     </script>
     <script src="generator.js"></script>
