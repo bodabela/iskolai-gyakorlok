@@ -3,33 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Írás Füzet Generátor</title>
+    <title>Írás Füzet Generátor Kiemeléssel</title>
     <style>
-        /* A letöltött betűtípus beágyazása */
         @font-face {
             font-family: 'IrottBetuk';
             src: url('IrottBetuk.ttf') format('truetype');
         }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px; 
+        }
+
+        .theme-selector {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center;
+            gap: 8px;
+        }
         
-        body { font-family: sans-serif; max-width: 800px; margin: 2em auto; padding: 0 1em; }
-        textarea { width: 100%; margin-bottom: 1em; padding: 8px; box-sizing: border-box; font-size: 1em; }
-        button { padding: 10px 20px; cursor: pointer; font-size: 1em; }
-        #kimenet { border: 1px solid #ccc; margin-top: 1em; width: 100%; min-height: 100px; }
-        label { display: block; margin-bottom: .5em; font-weight: bold; }
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+       
+        .theme-button {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .theme-button.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000); 
+            transform: translateY(1px);
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            padding: 20px; 
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px; 
+            text-align: center;
+            border: 2px solid var(--container-border);
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            color: var(--h1-color);
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em); 
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em); 
+            margin-bottom: 25px;
+            color: var(--h2-color);
+        }
+        .task {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--task-bg);
+            border: 2px dashed var(--task-border);
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        textarea { 
+            width: 100%; 
+            margin-bottom: 1em; 
+            padding: 8px; 
+            box-sizing: border-box; 
+            font-size: 1em; 
+            border: 2px solid var(--task-border);
+            border-radius: 8px;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            transition: all 0.5s ease;
+        }
+        button.task-button { 
+            padding: 10px 20px; 
+            color: white;
+            background-color: var(--button-bg);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em); 
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+            background-color: var(--button-hover-bg);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+        #kimenet { 
+            border: 2px solid var(--task-border); 
+            background-color: white;
+            margin-top: 1em; 
+            width: 100%; 
+            min-height: 200px; 
+            box-sizing: border-box;
+            border-radius: 8px;
+        }
+        label, p { 
+            display: block; 
+            margin-bottom: .5em; 
+            font-weight: bold; 
+            text-align: left;
+            color: var(--text-color);
+            transition: color 0.5s ease;
+        }
+
+        /* --- THEME DEFINITIONS --- */
+        body {
+            --text-color: #333; --h1-color: #007bff; --h2-color: #4A90E2;
+            --container-bg: #f8f9fa; --container-border: #dee2e6;
+            --task-bg: #ffffff; --task-border: #ced4da;
+            --button-bg: #007bff; --button-hover-bg: #0056b3;
+            --theme-button-active-border-color: #007bff;
+        }
+        
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6; --text-color: #8a2be2; --h1-color: #da70d6; --h2-color: #ff69b4; --container-bg: #ffe4e1; --container-border: #ffc0cb; --task-bg: #fffafa; --task-border: #ffb6c1; --button-bg: #ff69b4; --button-hover-bg: #ff1493; }
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa; --text-color: #e2e8f0; --h1-color: #60a5fa; --h2-color: #93c5fd; --container-bg: #1e293b; --container-border: #334155; --task-bg: #334155; --task-border: #475569; --button-bg: #2563eb; --button-hover-bg: #1d4ed8; }
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f; --text-color: #1b5e20; --h1-color: #388e3c; --h2-color: #558b2f; --container-bg: #e8f5e9; --container-border: #a5d6a7; --task-bg: #dcedc8; --task-border: #81c784; --button-bg: #7cb342; --button-hover-bg: #689f38; }
+        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2; --text-color: #483d8b; --h1-color: #8a2be2; --h2-color: #9932cc; --container-bg: #d8bfd8; --container-border: #dda0dd; --task-bg: #f5f5f5; --task-border: #ba55d3; --button-bg: #9370db; --button-hover-bg: #8a2be2; }
+        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1; --text-color: #eceff1; --h1-color: #00acc1; --h2-color: #26c6da; --container-bg: #37474f; --container-border: #546e7a; --task-bg: #455a64; --task-border: #78909c; --button-bg: #0097a7; --button-hover-bg: #00838f; }
+        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa; --text-color: #00796b; --h1-color: #00897b; --h2-color: #00acc1; --container-bg: #b2ebf2; --container-border: #4dd0e1; --task-bg: #e0f7fa; --task-border: #80deea; --button-bg: #26a69a; --button-hover-bg: #00897b; }
+        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f; --text-color: #0d47a1; --h1-color: #d32f2f; --h2-color: #1976d2; --container-bg: #bbdefb; --container-border: #64b5f6; --task-bg: #e3f2fd; --task-border: #42a5f5; --button-bg: #2196f3; --button-hover-bg: #1976d2; }
+        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347; --text-color: #556b2f; --h1-color: #ff6347; --h2-color: #ff7f50; --container-bg: #fff5ee; --container-border: #ffdab9; --task-bg: #fffafa; --task-border: #ffe4b5; --button-bg: #ffa07a; --button-hover-bg: #ff7f50; }
+        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c; --text-color: #5d4037; --h1-color: #bf360c; --h2-color: #6d4c41; --container-bg: #efebe9; --container-border: #a1887f; --task-bg: #d7ccc8; --task-border: #8d6e63; --button-bg: #795548; --button-hover-bg: #5d4037; }
+        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff; --text-color: #4682b4; --h1-color: #1e90ff; --h2-color: #00bfff; --container-bg: #e6f7ff; --container-border: #b0e0e6; --task-bg: #f5faff; --task-border: #add8e6; --button-bg: #87cefa; --button-hover-bg: #6495ed; }
+
     </style>
 </head>
-<body>
-    <h1>Írás Füzet Generátor</h1>
-    <p>Írja be a szöveget, a program automatikusan kiemeli a kettős, kettőzött és hosszú mássalhangzókat, valamint az ékezetes magánhangzókat.</p>
-
-    <label for="teljesSzoveg">Szöveg:</label>
-    <textarea id="teljesSzoveg" rows="6">Mögötte megy róka koma, vele tartott több rokona. Egész végig beszélgetnek, ebédre meg sajtot esznek. Asszonnyal és lánnyal mennek a nagy hegyre.</textarea>
-
-    <button id="generatorGomb">SVG Generálása</button>
-
-    <div id="kimenet">
+<body class="theme-jungle">
+    <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                <button class="theme-button" data-theme="theme-sky">Égbolt</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
         </div>
+    </div>
 
+    <div class="container">
+        <h1>Írás Füzet Generátor</h1>
+        <h2>Kiemeléssel</h2>
+
+        <div class="task">
+            <p>Írd be a szöveget, a program automatikusan kiemeli a kettős, kettőzött és hosszú mássalhangzókat, valamint az ékezetes magánhangzókat.</p>
+
+            <label for="teljesSzoveg">Szöveg:</label>
+            <textarea id="teljesSzoveg" rows="6">Mögötte megy róka koma, vele tartott több rokona. Egész végig beszélgetnek, ebédre meg sajtot esznek. Asszonnyal és lánnyal mennek a nagy hegyre.</textarea>
+
+            <button id="generatorGomb" class="task-button">SVG Generálása</button>
+
+            <div id="kimenet"></div>
+        </div>
+    </div>
+
+    <script>
+        const bodyEl = document.body;
+        const themeButtons = document.querySelectorAll('.theme-button');
+
+        function applyTheme(themeClass) {
+            bodyEl.className = '';
+            bodyEl.classList.add(themeClass);
+
+            themeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeClass);
+            });
+            // Automatikusan újragenerálja az SVG-t a témaváltáskor
+            // A generator.js változatlan, így a kiemelés színe fix piros marad, de ez a kérés.
+            if (document.getElementById('teljesSzoveg').value) {
+                document.getElementById('generatorGomb').click();
+            }
+        }
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                applyTheme(button.dataset.theme);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Alkalmazza a kezdő témát (pl. Őserdő, hogy egyből látszódjon a javítás)
+            // és futtatja a generátort, ha van szöveg a mezőben
+            applyTheme('theme-jungle'); 
+        });
+    </script>
     <script src="generator.js"></script>
 </body>
 </html>
