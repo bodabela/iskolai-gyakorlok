@@ -4,15 +4,14 @@
 // === KÖZPONTI FIREBASE KONFIGURÁCIÓ ÉS INICIALIZÁLÁS ===
 // ===================================================================================
 
-// TODO: Illeszd be ide a saját Firebase projekt konfigrációdat
-// Ezt a Firebase Console-ban találod: Projektbeállítások > Általános > Saját alkalmazások > SDK beállítás és konfigurálás
+// Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSy...Y0UR_AP1_K3Y",
-    authDomain: "your-project-id.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project-id.appspot.com",
-    messagingSenderId: "your-sender-id",
-    appId: "1:your-sender-id:web:your-app-id"
+  apiKey: "AIzaSyBejJmG-XUACzCNFq0N95dvRm6n7TRiXrw",
+  authDomain: "iskolai-gyakorlok.firebaseapp.com",
+  projectId: "iskolai-gyakorlok",
+  storageBucket: "iskolai-gyakorlok.firebasestorage.app",
+  messagingSenderId: "85023189432",
+  appId: "1:85023189432:web:184ad29cb39b9b68b5074d"
 };
 
 // Adatbázis referencia - globális a modulon belül
