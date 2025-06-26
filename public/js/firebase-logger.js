@@ -1,26 +1,69 @@
 // firebase-logger.js
 
-// Ellenőrizzük, hogy a Firebase és a Firestore inicializálva van-e már.
-// A feltételezés az, hogy a HTML fájlokban már szerepelnek a Firebase SDK betöltő szkriptek.
-if (typeof firebase === 'undefined' || typeof firebase.firestore === 'undefined') {
-    console.error("Firebase vagy Firestore nincs betöltve! Kérlek, győződj meg róla, hogy a Firebase szkriptek be vannak ágyazva a HTML fájlba.");
+// ===================================================================================
+// === KÖZPONTI FIREBASE KONFIGURÁCIÓ ÉS INICIALIZÁLÁS ===
+// ===================================================================================
+
+// TODO: Illeszd be ide a saját Firebase projekt konfigrációdat
+// Ezt a Firebase Console-ban találod: Projektbeállítások > Általános > Saját alkalmazások > SDK beállítás és konfigurálás
+const firebaseConfig = {
+    apiKey: "AIzaSy...Y0UR_AP1_K3Y",
+    authDomain: "your-project-id.firebaseapp.com",
+    projectId: "your-project-id",
+    storageBucket: "your-project-id.appspot.com",
+    messagingSenderId: "your-sender-id",
+    appId: "1:your-sender-id:web:your-app-id"
+};
+
+// Adatbázis referencia - globális a modulon belül
+let db;
+
+/**
+ * Inicializálja a Firebase kapcsolatot ÉS a logger adatbázis kapcsolatát.
+ * Ezt az egyetlen függvényt kell meghívni minden oldalról, ahol naplózni szeretnénk.
+ */
+function initializeFirebaseAndLogger() {
+    try {
+        // Firebase app inicializálása a fenti, központi konfigurációval
+        firebase.initializeApp(firebaseConfig);
+
+        // Az adatbázis objektumot a sikeres app inicializálás után kérjük le.
+        db = firebase.firestore();
+        console.log("Firebase & Logger sikeresen inicializálva.");
+
+        // Opcionális: Emulátor használata fejlesztés közben (csak localhost-on)
+        if (window.location.hostname === 'localhost') {
+            db.useEmulator('localhost', 8080);
+            console.log("Csatlakozva a helyi Firestore emulátorhoz.");
+        }
+
+    } catch (error) {
+        // Kezeli azt az esetet is, ha már inicializálva van
+        if (error.code !== 'app/duplicate-app') {
+            console.error("Hiba a Firebase & Logger inicializálása közben:", error);
+        } else {
+            // Ha az app már létezik, csak szerezzük be újra az adatbázis referenciát
+            db = firebase.firestore();
+        }
+    }
 }
 
-const db = firebase.firestore();
+
+// ===================================================================================
+// === NAPLÓZÓ FÜGGVÉNYEK (VÁLTOZATLAN) ===
+// ===================================================================================
 
 // Ideiglenes, beégetett email cím a naplózáshoz.
-// Később ezt a regisztrációs rendszerből kapott email címre kell cserélni.
 const HARDCODED_USER_EMAIL = "gyerek@teszt.hu";
 
 /**
  * Esemény naplózása a Firestore 'user_events' kollekciójába.
- * Az események a beégetett email cím alatt lesznek csoportosítva.
- * @param {string} eventType Az esemény típusa (pl. 'TASK_ENTRY', 'GENERATE_TASK', 'CHECK_TASK').
- * @param {object} eventDetails Az eseményhez kapcsolódó részletes adatok.
+ * @param {string} eventType Az esemény típusa.
+ * @param {object} eventDetails Az eseményhez kapcsolódó adatok.
  */
 async function logEvent(eventType, eventDetails) {
     if (!db) {
-        console.error("Firestore adatbázis nincs inicializálva. A naplózás nem lehetséges.");
+        console.error("Adatbázis nincs inicializálva. A naplózás nem lehetséges. Hívd meg az initializeFirebaseAndLogger() függvényt az oldal betöltődésekor.");
         return;
     }
 
@@ -29,8 +72,8 @@ async function logEvent(eventType, eventDetails) {
             userEmail: HARDCODED_USER_EMAIL,
             eventType: eventType,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            page: window.location.pathname, // Melyik oldalon történt az esemény
-            details: eventDetails // Az esemény-specifikus adatok
+            page: window.location.pathname,
+            details: eventDetails
         });
         console.log(`Esemény naplózva: ${eventType}`, eventDetails);
     } catch (error) {
@@ -40,35 +83,26 @@ async function logEvent(eventType, eventDetails) {
 
 /**
  * Naplózza, amikor a gyerek belép egy feladat oldalra.
- * Ezt a függvényt minden feladatot tartalmazó HTML oldal betöltődésekor meg kell hívni.
  * @param {string} taskName A feladat vagy az oldal neve.
  */
 function logTaskEntry(taskName) {
-    logEvent('TASK_ENTRY', {
-        taskName: taskName
-    });
+    logEvent('TASK_ENTRY', { taskName: taskName });
 }
 
 /**
  * Naplózza, amikor egy új feladatot generálnak.
- * @param {string} taskName A feladat neve (pl. "Római számok átírása").
- * @param {object} taskDetails A generált feladat részletei (pl. a számok, a helyes megoldás).
+ * @param {string} taskName A feladat neve.
+ * @param {object} taskDetails A generált feladat részletei.
  */
 function logNewTask(taskName, taskDetails) {
-    logEvent('GENERATE_TASK', {
-        taskName: taskName,
-        taskData: taskDetails
-    });
+    logEvent('GENERATE_TASK', { taskName: taskName, taskData: taskDetails });
 }
 
 /**
  * Naplózza, amikor egy feladatot ellenőriznek.
  * @param {string} taskName A feladat neve.
- * @param {object} checkDetails Az ellenőrzés eredményének részletei (felhasználó válaszai, helyes-e).
+ * @param {object} checkDetails Az ellenőrzés eredményének részletei.
  */
 function logTaskCheck(taskName, checkDetails) {
-    logEvent('CHECK_TASK', {
-        taskName: taskName,
-        checkData: checkDetails
-    });
+    logEvent('CHECK_TASK', { taskName: taskName, checkData: checkDetails });
 }
