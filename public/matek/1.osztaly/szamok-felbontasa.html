@@ -219,7 +219,12 @@
             margin: auto;
             display: block;
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-            transition: border-color 0.3s ease, border-width 0.3s ease;
+            transition: border-color 0.3s ease, border-width 0.3s ease, background-color 0.3s ease;
+        }
+        .decomposition-table .table-input:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.7;
         }
         .decomposition-table input[type=number]::-webkit-outer-spin-button,
         .decomposition-table input[type=number]::-webkit-inner-spin-button {
@@ -309,7 +314,7 @@
             --table-border-color: #475569; --table-cell-border-color: #334155;
             --table-th-bg-color: #1e3a8a; --table-th-text-color: #93c5fd;
             --column-header-text-color: #93c5fd; --column-header-bg-color: #1e3a8a;
-            --input-text-color: #e2e8f0; --input-border-color: #475569;
+            --input-text-color: #e2e8f0; --input-border-color: #475569; --input-bg-color: #1e293b;
             --plus-sign-color: #e2e8f0;
             --feedback-correct-border-color: #22c55e; --feedback-incorrect-border-color: #ef4444;
             --task-bg-color: #1e293b; --task-border-color: #334155; --task-header-border-color: #475569;
@@ -498,8 +503,8 @@
             }
 
             let generatedTargetNumbersForThisSet = new Set();
-             taskSet.tables.forEach(tableDetail => {
-                 let targetNum;
+              taskSet.tables.forEach(tableDetail => {
+                  let targetNum;
                 let attempts = 0;
                 do {
                     targetNum = getRandomInt(Math.max(1, Math.floor(currentNumberRange / 2)), currentNumberRange);
@@ -521,7 +526,7 @@
                     }
                 }
                 renderDecompositionTable(tableDetail.containerId, tableDetail.targetNumber, tableDetail.decompositions, tableDetail.inputPrefix, taskSet.mode);
-             });
+              });
             setupAllInputFocusAndMaxlength();
         }
 
@@ -625,14 +630,7 @@
                 const colors = getDifferentColorPairForRow();
                 let prefillNum1 = false;
                 if (mode === 'guided') {
-                    prefillNum1 = (
-									(index + 
-										(
-											(index > decompositionsArray.length / 2 && (decompositionsArray.length % 2) == 0) 
-												? 1 : 0
-										)
-									)
-									% 2 === 0);
+                    prefillNum1 = ((index + ((index > decompositionsArray.length / 2 && (decompositionsArray.length % 2) == 0) ? 1 : 0)) % 2 === 0);
                     if (decompositionsArray.length === 1 && targetNum === 0) prefillNum1 = true;
                 }
 
@@ -695,6 +693,22 @@
                     }
                 });
             });
+            
+            allInputsOnPage.forEach(inputEl => inputEl.disabled = true);
+
+            allTasksSetup.forEach(taskSet => {
+                taskSet.tables.forEach(tableDetail => {
+                    const container = document.getElementById(tableDetail.containerId);
+                    if (container) {
+                        const firstRowWithInput = container.querySelector('tbody tr:has(.table-input)');
+                        if(firstRowWithInput) {
+                            const firstRowInputs = firstRowWithInput.querySelectorAll('.table-input');
+                            firstRowInputs.forEach(inp => inp.disabled = false);
+                        }
+                    }
+                });
+            });
+
 
             allInputsOnPage.forEach((inputEl, index) => {
                 inputEl.dataset.focusOrder = index;
@@ -710,37 +724,62 @@
                 inputEl.addEventListener('input', function() {
                     const currentInput = this;
                     const maxLength = parseInt(currentInput.getAttribute('maxlength')) || 1;
+                    let focusMovedToNextRow = false;
                     
-                    if (currentInput.value.length >= maxLength) {
-                        const currentFocusOrder = parseInt(currentInput.dataset.focusOrder);
-                        const totalInputs = allInputsOnPage.length;
+                    const currentRow = currentInput.closest('tr');
+                    if (currentRow) {
+                        const inputsInCurrentRow = Array.from(currentRow.querySelectorAll('.table-input'));
+                        const isCurrentRowFilled = inputsInCurrentRow.every(inp => inp.value.trim() !== '');
 
-                        for (let i = 1; i < totalInputs; i++) {
-                            const nextIndex = (currentFocusOrder + i) % totalInputs;
-                            const nextInput = allInputsOnPage[nextIndex];
-                            
-                            if (nextInput) { // Győződjünk meg róla, hogy létezik a következő input
-                                const nextInputMaxLength = parseInt(nextInput.getAttribute('maxlength')) || 1;
-                                if (nextInput.value.length < nextInputMaxLength) {
-                                    nextInput.focus();
-                                    return; 
+                        if(isCurrentRowFilled) {
+                            let nextRow = currentRow.nextElementSibling;
+                            if (nextRow) {
+                                const inputsInNextRow = nextRow.querySelectorAll('.table-input');
+                                if (inputsInNextRow.length > 0 && inputsInNextRow[0].disabled) {
+                                    inputsInNextRow.forEach(inp => inp.disabled = false);
+                                    inputsInNextRow[0].focus();
+                                    focusMovedToNextRow = true;
                                 }
                             }
                         }
+                    }
 
+                    // --- KEZDŐDIK A MÓDOSÍTÁS ---
+                    if (!focusMovedToNextRow && currentInput.value.length >= maxLength) {
                         const taskBlock = currentInput.closest('.task');
                         if (taskBlock) {
-                            const checkButton = taskBlock.querySelector('.task-button[onclick^="checkSpecificTasks"]');
-                            if (checkButton) {
-                                checkButton.focus();
+                            // Csak az aktuális feladatblokkon belüli inputokat gyűjtjük
+                            const inputsInTask = Array.from(taskBlock.querySelectorAll('.table-input'));
+                            const currentIndexInTask = inputsInTask.indexOf(currentInput);
+
+                            let nextInputFound = false;
+                            // Keressük a következő engedélyezett inputot a feladaton belül
+                            for (let i = currentIndexInTask + 1; i < inputsInTask.length; i++) {
+                                if (!inputsInTask[i].disabled) {
+                                    inputsInTask[i].focus();
+                                    nextInputFound = true;
+                                    break;
+                                }
+                            }
+
+                            // Ha nincs több kitölthető input a feladatban, az ellenőrzés gombra ugrunk
+                            if (!nextInputFound) {
+                                const checkButton = taskBlock.querySelector('.task-button[onclick^="checkSpecificTasks"]');
+                                if (checkButton) {
+                                    checkButton.focus();
+                                }
                             }
                         }
                     }
+                    // --- VÉGE A MÓDOSÍTÁSNAK ---
                 });
             });
 
             if (allInputsOnPage.length > 0) {
-                setTimeout(() => allInputsOnPage[0].focus(), 100);
+                 const firstEnabledInput = allInputsOnPage.find(inp => !inp.disabled);
+                 if (firstEnabledInput) {
+                    setTimeout(() => firstEnabledInput.focus(), 100);
+                 }
             }
         }
 
@@ -768,8 +807,10 @@
                             hasInputInRow = true;
                             hasAnyInputsInThisBlock = true;
                             if (inputEl.value.trim() === "") {
-                                allFilledOverall = false; rowCorrect = false;
-                                inputEl.style.borderColor = `var(--feedback-incorrect-border-color)`;
+                                if (!inputEl.disabled) {
+                                    allFilledOverall = false; rowCorrect = false;
+                                    inputEl.style.borderColor = `var(--feedback-incorrect-border-color)`;
+                                }
                             } else {
                                 const val = parseInt(inputEl.value);
                                 const expectedVal = parseInt(inputEl.dataset.expected);
@@ -790,8 +831,8 @@
             });
 
             if (!hasAnyInputsInThisBlock && taskSet.mode === 'guided') { 
-                 allFilledOverall = true;
-                 allCorrectOverall = true;
+                allFilledOverall = true;
+                allCorrectOverall = true;
             }
 
 
