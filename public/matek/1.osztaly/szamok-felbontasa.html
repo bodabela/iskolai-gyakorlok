@@ -630,7 +630,7 @@
                 const colors = getDifferentColorPairForRow();
                 let prefillNum1 = false;
                 if (mode === 'guided') {
-                    prefillNum1 = ((index + ((index > decompositionsArray.length / 2 && (decompositionsArray.length % 2) == 0) ? 1 : 0)) % 2 === 0);
+                    prefillNum1 = ((index + ((index > (decompositionsArray.length / 2 - 1) && (decompositionsArray.length % 2) == 0) ? 1 : 0)) % 2 === 0);
                     if (decompositionsArray.length === 1 && targetNum === 0) prefillNum1 = true;
                 }
 
