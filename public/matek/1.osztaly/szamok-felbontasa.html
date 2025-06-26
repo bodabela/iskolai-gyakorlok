@@ -417,6 +417,12 @@
         </div>
     </div>
 
+    <script src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-auth-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <script src="../../js/firebase-logger.js"></script>
+
     <script>
         const bodyEl = document.body;
         const themeButtons = document.querySelectorAll('.theme-button');
@@ -497,14 +503,14 @@
         function generateSpecificTasksAndUpdate(taskSetIndex) {
             const taskSet = allTasksSetup[taskSetIndex];
             const feedbackEl = document.getElementById(taskSet.feedbackAreaId);
-             if (feedbackEl) {
-                feedbackEl.textContent = '';
-                feedbackEl.className = 'feedback';
-            }
+               if (feedbackEl) {
+                   feedbackEl.textContent = '';
+                   feedbackEl.className = 'feedback';
+               }
 
             let generatedTargetNumbersForThisSet = new Set();
-              taskSet.tables.forEach(tableDetail => {
-                  let targetNum;
+               taskSet.tables.forEach(tableDetail => {
+                    let targetNum;
                 let attempts = 0;
                 do {
                     targetNum = getRandomInt(Math.max(1, Math.floor(currentNumberRange / 2)), currentNumberRange);
@@ -514,20 +520,30 @@
                     attempts++;
                 } while (generatedTargetNumbersForThisSet.has(targetNum) && attempts < 10 && generatedTargetNumbersForThisSet.size < taskSet.tables.length);
                 generatedTargetNumbersForThisSet.add(targetNum);
-                tableDetail.targetNumber = targetNum;
+                   tableDetail.targetNumber = targetNum;
 
 
-                tableDetail.decompositions = [];
-                if (tableDetail.targetNumber === 0) {
-                    tableDetail.decompositions.push({ num1: 0, num2: 0 });
-                } else {
-                    for (let i = 0; i <= tableDetail.targetNumber; i++) {
-                        tableDetail.decompositions.push({ num1: i, num2: tableDetail.targetNumber - i });
-                    }
-                }
-                renderDecompositionTable(tableDetail.containerId, tableDetail.targetNumber, tableDetail.decompositions, tableDetail.inputPrefix, taskSet.mode);
-              });
+                   tableDetail.decompositions = [];
+                   if (tableDetail.targetNumber === 0) {
+                       tableDetail.decompositions.push({ num1: 0, num2: 0 });
+                   } else {
+                       for (let i = 0; i <= tableDetail.targetNumber; i++) {
+                           tableDetail.decompositions.push({ num1: i, num2: tableDetail.targetNumber - i });
+                       }
+                   }
+                   renderDecompositionTable(tableDetail.containerId, tableDetail.targetNumber, tableDetail.decompositions, tableDetail.inputPrefix, taskSet.mode);
+                 });
             setupAllInputFocusAndMaxlength();
+            
+            // Logolás
+            logNewTask('Számok felbontása feladat generálva (egyedi)', {
+                range: currentNumberRange,
+                mode: taskSet.mode,
+                tasks: taskSet.tables.map(t => ({
+                    target: t.targetNumber,
+                    decompositions: t.decompositions
+                }))
+            });
         }
 
         function generateGuidedTasksForButton() {
@@ -580,6 +596,18 @@
                 });
             });
             setupAllInputFocusAndMaxlength();
+            
+            // Logolás
+            logNewTask('Számok felbontása kezdeti feladatok', {
+                range: currentNumberRange,
+                tasks: allTasksSetup.map(ts => ({
+                    mode: ts.mode,
+                    tables: ts.tables.map(t => ({
+                        target: t.targetNumber,
+                        decompositions: t.decompositions
+                    }))
+                }))
+            });
         }
 
 
@@ -744,7 +772,6 @@
                         }
                     }
 
-                    // --- KEZDŐDIK A MÓDOSÍTÁS ---
                     if (!focusMovedToNextRow && currentInput.value.length >= maxLength) {
                         const taskBlock = currentInput.closest('.task');
                         if (taskBlock) {
@@ -771,14 +798,13 @@
                             }
                         }
                     }
-                    // --- VÉGE A MÓDOSÍTÁSNAK ---
                 });
             });
 
             if (allInputsOnPage.length > 0) {
                  const firstEnabledInput = allInputsOnPage.find(inp => !inp.disabled);
                  if (firstEnabledInput) {
-                    setTimeout(() => firstEnabledInput.focus(), 100);
+                     setTimeout(() => firstEnabledInput.focus(), 100);
                  }
             }
         }
@@ -846,9 +872,43 @@
                 feedbackEl.textContent = `${messagePrefix} van hibás megoldás. Nézd át a pirossal jelölteket!`;
                 feedbackEl.className = 'feedback incorrect';
             }
+            
+            // Felhasználói válaszok összegyűjtése a logoláshoz
+            let userAnswersForLog = {};
+            taskSet.tables.forEach(tableDetail => {
+                const tableId = tableDetail.containerId;
+                userAnswersForLog[tableId] = {};
+                tableDetail.decompositions.forEach((decomp, index) => {
+                    const rowId = `sor_${index}`;
+                    userAnswersForLog[tableId][rowId] = {};
+                    const input1 = document.getElementById(`${tableDetail.inputPrefix}-${index}-1`);
+                    const input2 = document.getElementById(`${tableDetail.inputPrefix}-${index}-2`);
+                    if (input1) {
+                        userAnswersForLog[tableId][rowId].input1 = input1.value;
+                    }
+                    if (input2) {
+                        userAnswersForLog[tableId][rowId].input2 = input2.value;
+                    }
+                });
+            });
+            
+            // Ellenőrzés logolása
+            logTaskCheck(`Számok felbontása ellenőrzés: ${taskSet.mode}`, {
+                range: currentNumberRange,
+                allCorrect: allCorrectOverall,
+                userAnswers: userAnswersForLog,
+                correctAnswers: taskSet.tables.map(t => ({ 
+                    target: t.targetNumber, 
+                    decompositions: t.decompositions 
+                }))
+            });
+            
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Logolás: Feladatba belépés
+            logTaskEntry('Számfelbontás Gyakorló');
+
             themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === 'theme-candy'));
             rangeButtons.forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRange));
             generateAllDecompositionTasks();
