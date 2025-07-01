@@ -1,0 +1,350 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.controls-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 900px;
+}
+.selector-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.theme-selector, .range-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.control-label {
+    font-weight: bold;
+    margin-bottom: 0;
+    font-size: 0.95em;
+    transition: color 0.5s ease;
+}
+
+.theme-button, .range-button {
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+.theme-button:hover, .range-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+.theme-button.active, .range-button.active {
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
+    transform: translateY(1px);
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
+    transition: background-color 0.5s ease, border-color 0.5s ease;
+}
+
+h1 {
+    font-size: clamp(1.8em, 5vw, 2.2em);
+    margin-bottom: 10px; /* Adjusted margin */
+}
+.global-new-task-button-container {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.task { /* Stílus a két fő feladatblokkhoz */
+    background-color: var(--task-bg-color, #f9f9f9);
+    border: 1px solid var(--task-border-color, #e0e0e0);
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 10px;
+    transition: background-color 0.5s ease, border-color 0.5s ease;
+}
+.task-header { /* Címek (1. Feladat, 2. Feladat) */
+    display: flex; /* Flexbox a cím és gomb egy sorba rendezéséhez */
+    justify-content: space-between; /* Cím balra, gomb jobbra */
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--task-header-border-color, #ccc);
+}
+.task-header h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: clamp(1.2em, 4vw, 1.5em);
+    transition: color 0.5s ease;
+    text-align: left; /* Cím balra igazítva */
+}
+.new-task-button { /* Stílus az "Új feladat" gombhoz a task headerben */
+    padding: 6px 12px;
+    font-size: 0.8em;
+    margin-left: 10px; /* Kis térköz a cím és a gomb között */
+}
+
+
+.task p.instructions {
+    line-height: 1.6;
+    font-size: clamp(0.95em, 3vw, 1.05em); /* Slightly smaller for instructions */
+    margin-bottom: 15px;
+    transition: color 0.5s ease;
+    text-align: left;
+}
+
+.decomposition-tasks-wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.decomposition-table-container {
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+    flex-basis: calc(50% - 10px);
+    min-width: 220px; /* Consistent minimum width for tables */
+}
+
+.decomposition-table {
+    width: auto;
+    min-width: 200px;
+    margin: 0;
+    border-collapse: collapse;
+    font-size: clamp(1.1em, 3.5vw, 1.3em);
+    border: 2px solid var(--table-border-color, #ccc);
+    border-radius: 8px;
+    transition: border-color 0.5s ease;
+    table-layout: fixed;
+    max-width: 100%;
+}
+
+.decomposition-table th, .decomposition-table td {
+    border: 1px solid var(--table-cell-border-color, #ddd);
+    padding: clamp(3px, 0.8vw, 5px);
+    text-align: center;
+    height: clamp(45px, 9vw, 60px);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.decomposition-table th {
+    font-weight: bold;
+    background-color: var(--table-th-bg-color, #f0f0f0);
+    color: var(--table-th-text-color, #333);
+}
+
+.decomposition-table th.merged-header {
+    padding: 5px;
+    border: none;
+    background-color: transparent;
+    height: auto;
+    text-align: center;
+    border-radius: 0;
+    vertical-align: middle;
+}
+
+.task-number-display {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 40px;
+    width: auto;
+    height: 40px;
+    padding: 0 8px;
+    font-weight: bold;
+    font-size: 1.7em;
+    border-radius: 6px;
+    color: #000000;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+
+.decomposition-table .column-header {
+    font-size: clamp(0.9em, 2.8vw, 1.1em);
+    font-weight: bold;
+    color: var(--column-header-text-color, #555);
+    background-color: var(--column-header-bg-color, #f0f0f0);
+}
+
+.decomposition-table .table-input {
+    width: clamp(40px, 8vw, 50px);
+    height: clamp(38px, 7.5vw, 45px);
+    padding: clamp(6px, 1vw, 8px);
+    text-align: center;
+    font-size: clamp(0.9em, 2.8vw, 1.1em);
+    font-weight: normal;
+    border-radius: 6px;
+    border: 1px solid var(--input-border-color, #ccc);
+    -moz-appearance: textfield;
+    box-sizing: border-box;
+    margin: auto;
+    display: block;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    transition: border-color 0.3s ease, border-width 0.3s ease, background-color 0.3s ease;
+}
+.decomposition-table .table-input:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+.decomposition-table input[type=number]::-webkit-outer-spin-button,
+.decomposition-table input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.decomposition-table .plus-sign {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--plus-sign-color, #333);
+}
+
+button.task-button { /* General task button style */
+    padding: 10px 15px; /* Adjusted padding */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: clamp(0.9em, 2.8vw, 1em); /* Adjusted font size */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 15px; /* Increased margin-top */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+button.task-button.global-new-task { /* Specific style for global new task button if needed */
+    font-size: clamp(1em, 3vw, 1.1em);
+    padding: 10px 20px;
+}
+
+button.task-button:hover {
+    transform: translateY(-2px);
+}
+button.task-button:active {
+    transform: translateY(0px);
+}
+.feedback {
+    margin-top: 10px;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: clamp(0.9em, 2.8vw, 1.05em);
+    transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+    min-height: 1.5em;
+    text-align: center; /* Center feedback text */
+}
+
+:root {
+    --table-border-color: #dee2e6;
+    --table-cell-border-color: #e9ecef;
+    --table-th-bg-color: #f8f9fa;
+    --table-th-text-color: #495057;
+    --column-header-text-color: #555;
+    --column-header-bg-color: #e9ecef;
+    --input-bg-color: #fff;
+    --input-text-color: #212529;
+    --input-border-color: #ced4da;
+    --plus-sign-color: #333;
+    --feedback-correct-border-color: green;
+    --feedback-incorrect-border-color: red;
+    --feedback-border-width: 2.5px;
+    --main-number-bg-color: #FFD700;
+    --main-number-text-color: #000000;
+    --task-bg-color: #ffffff; /* Default task block background */
+    --task-border-color: #e0e0e0;
+    --task-header-border-color: #d1d1d1;
+}
+
+body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;
+    --table-border-color: #ffb6c1; --table-cell-border-color: #ffc0cb;
+    --table-th-bg-color: #ffdae9; --table-th-text-color: #c71585;
+    --column-header-text-color: #a52a2a; --column-header-bg-color: #ffe4e1;
+    --input-text-color: #8a2be2; --input-border-color: #ffb6c1;
+    --plus-sign-color: #9932cc;
+    --feedback-correct-border-color: #90ee90; --feedback-incorrect-border-color: #ffb6c1;
+    --task-bg-color: #fffafa; --task-border-color: #ffc0cb; --task-header-border-color: #ffb6c1;
+}
+body.theme-candy .control-label { color: #c71585; }
+body.theme-candy .theme-button.active, body.theme-candy .range-button.active { background-color: #ffb6c1; color: #7c3c60; }
+body.theme-candy .container { background-color: #ffe4e1; border-color: #ffc0cb; }
+body.theme-candy h1 { color: #da70d6; }
+body.theme-candy .task-header h3 { color: #ff69b4; }
+body.theme-candy .task p.instructions { color: #8a2be2; }
+body.theme-candy button.task-button { background-color: #ff69b4; }
+body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border-color: #90ee90; }
+body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border-color: #ffb6c1; }
+
+body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;
+    --table-border-color: #475569; --table-cell-border-color: #334155;
+    --table-th-bg-color: #1e3a8a; --table-th-text-color: #93c5fd;
+    --column-header-text-color: #93c5fd; --column-header-bg-color: #1e3a8a;
+    --input-text-color: #e2e8f0; --input-border-color: #475569; --input-bg-color: #1e293b;
+    --plus-sign-color: #e2e8f0;
+    --feedback-correct-border-color: #22c55e; --feedback-incorrect-border-color: #ef4444;
+    --task-bg-color: #1e293b; --task-border-color: #334155; --task-header-border-color: #475569;
+}
+body.theme-space .control-label { color: #93c5fd; }
+body.theme-space .theme-button.active, body.theme-space .range-button.active { background-color: #1e3a8a; color: #93c5fd; }
+body.theme-space .container { background-color: #1a2330; border-color: #334155; } /* slightly darker container for space */
+body.theme-space h1 { color: #60a5fa; }
+body.theme-space .task-header h3 { color: #93c5fd; }
+body.theme-space .task p.instructions { color: #cbd5e1; }
+body.theme-space button.task-button { background-color: #2563eb; }
+body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border-color: #22c55e; }
+body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border-color: #ef4444; }
+
+body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;
+    --table-border-color: #558b2f; --table-cell-border-color: #81c784;
+    --table-th-bg-color: #a5d6a7; --table-th-text-color: #2e7d32;
+    --column-header-text-color: #2e7d32; --column-header-bg-color: #a5d6a7;
+    --input-text-color: #1b5e20; --input-border-color: #81c784;
+    --plus-sign-color: #2e7d32;
+    --feedback-correct-border-color: #a5d6a7; --feedback-incorrect-border-color: #ef9a9a;
+    --task-bg-color: #e8f5e9; --task-border-color: #a5d6a7; --task-header-border-color: #81c784;
+}
+body.theme-jungle .control-label { color: #558b2f; }
+body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active { background-color: #689f38; color: #dcedc8; }
+body.theme-jungle .container { background-color: #dcedc8; border-color: #a5d6a7; }
+body.theme-jungle h1 { color: #388e3c; }
+body.theme-jungle .task-header h3 { color: #558b2f; }
+body.theme-jungle .task p.instructions { color: #2e7d32; }
+body.theme-jungle button.task-button { background-color: #7cb342; }
+body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border-color: #a5d6a7; }
+body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border-color: #ef9a9a; }
+
+body.theme-magicforest { --theme-button-active-border-color: #8a2be2; --task-bg-color: #f0e6ff; --task-border-color: #c3a6ff; --task-header-border-color: #b591ff;} body.theme-magicforest .task p.instructions {color: #4b0082;}
+body.theme-tech { --theme-button-active-border-color: #00acc1; --task-bg-color: #37474f; --task-border-color: #546e7a; --task-header-border-color: #455a64;} body.theme-tech .task p.instructions {color: #b0bec5;}
+body.theme-ocean { --theme-button-active-border-color: #20b2aa; --task-bg-color: #f0faff; --task-border-color: #b2ebf2; --task-header-border-color: #80deea;} body.theme-ocean .task p.instructions {color: #00695c;}
+body.theme-sport { --theme-button-active-border-color: #d32f2f; --task-bg-color: #f0f7ff; --task-border-color: #bbdefb; --task-header-border-color: #90caf9;} body.theme-sport .task p.instructions {color: #0d47a1;}
+body.theme-flowergarden { --theme-button-active-border-color: #ff6347; --task-bg-color: #fffdf5; --task-border-color: #ffe0b2; --task-header-border-color: #ffcc80;} body.theme-flowergarden .task p.instructions {color: #8b4513;}
+body.theme-adventure { --theme-button-active-border-color: #bf360c; --task-bg-color: #fafafa; --task-border-color: #d7ccc8; --task-header-border-color: #bcaaa4;} body.theme-adventure .task p.instructions {color: #4e342e;}
+body.theme-sky { --theme-button-active-border-color: #1e90ff; --task-bg-color: #f5fbff; --task-border-color: #bbdefb; --task-header-border-color: #90caf9;} body.theme-sky .task p.instructions {color: #5f9ea0;}
