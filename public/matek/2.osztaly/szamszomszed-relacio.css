@@ -1,0 +1,84 @@
+/* --- ALAP STÍLUSOK (ugyanaz, mint a Halmaz-válogatónál) --- */
+:root {
+    --font-family: 'Fredoka One', cursive;
+    --feedback-correct-color: #008000;
+    --feedback-incorrect-color: #D8000C;
+    --feedback-correct-bg: #DFF2BF;
+    --feedback-incorrect-bg: #FFD2D2;
+}
+body { font-family: var(--font-family); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: calc(100vh - 40px); transition: background-color 0.5s ease, color 0.5s ease; }
+.controls-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px; padding: 10px 15px; background-color: rgba(255, 255, 255, 0.7); border-radius: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: auto; }
+.settings-group { display: flex; align-items: center; gap: 10px; }
+.theme-selector, .range-selector { display: flex; gap: 8px; }
+.control-label { font-weight: normal; font-size: 1.1em; color: var(--text-color); }
+.setting-button { padding: 8px 16px; border-width: 3px; border-style: solid; border-radius: 15px; cursor: pointer; font-family: var(--font-family); font-size: 1em; transition: all 0.2s ease-out; }
+.setting-button:hover { transform: translateY(-2px) scale(1.05); }
+.setting-button.active { transform: scale(1.05); font-weight: bold; }
+.container { padding: 10px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); width: 100%; max-width: 900px; text-align: center; border: 4px solid var(--container-border-color); background-color: var(--container-bg-color); }
+.task-title-box { padding: 10px 20px; border-radius: 15px 15px 0 0; }
+h1 { font-size: clamp(2em, 5vw, 2.8em); margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+.task { padding: 20px; border-radius: 10px; }
+.task-header { display: flex; justify-content: space-between; align-items: center; margin: 10px 0 20px 0; padding: 15px; border-radius: 15px; background-color: var(--task-header-bg-color); color: var(--task-header-text-color); }
+h3 { font-size: clamp(1.1em, 3.5vw, 1.4em); margin: 0; font-weight: normal; }
+.new-task-button { padding: 10px 20px; font-size: 0.9em; }
+button.task-button { padding: 12px 30px; border-radius: 20px; cursor: pointer; color: white; font-family: var(--font-family); font-size: clamp(1.1em, 3vw, 1.3em); border: 3px solid; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: all 0.2s ease-out; }
+button.task-button:hover { transform: translateY(-2px) scale(1.02); }
+.feedback { margin-top: 20px; font-weight: normal; padding: 12px; border-radius: 12px; font-size: 1.2em; min-height: 1.5em; line-height: 1.4; transition: all 0.3s; }
+
+/* --- FELADAT-SPECIFIKUS STÍLUSOK --- */
+#task-container { display: flex; flex-direction: column; gap: 15px; margin: 25px 0; }
+.task-row {
+    padding: 15px; background-color: var(--row-bg-color); border: 3px solid var(--row-border-color);
+    border-radius: 15px; display: flex; justify-content: center; align-items: center;
+    gap: 15px; font-size: clamp(1.8em, 4vw, 2.4em); transition: all 0.3s;
+}
+.number-display { min-width: 70px; text-align: center; color: var(--number-color); }
+input.solution-input {
+    width: 90px; height: 80px; font-size: inherit; font-family: inherit;
+    text-align: center; border: 3px solid var(--input-border-color); border-radius: 12px;
+    background-color: var(--input-bg-color); color: inherit; transition: all 0.3s;
+}
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
+input.solution-input:focus { outline: none; transform: scale(1.05); }
+input.correct { border-color: var(--feedback-correct-color); background-color: var(--feedback-correct-bg); }
+input.incorrect { border-color: var(--feedback-incorrect-color); background-color: var(--feedback-incorrect-bg); }
+
+.relation-selector { display: flex; gap: 10px; }
+.relation-btn {
+    width: 70px; height: 70px; font-size: 1em; font-family: 'Arial Black', sans-serif;
+    border: 3px solid var(--input-border-color); border-radius: 12px; cursor: pointer;
+    display: flex; justify-content: center; align-items: center;
+    background-color: var(--input-bg-color); color: inherit; transition: all 0.2s ease-out;
+}
+.relation-btn:hover { transform: scale(1.05); }
+.relation-btn.selected { transform: scale(1.1); border-width: 4px; }
+.relation-btn.correct-choice { border-color: var(--feedback-correct-color) !important; background-color: var(--feedback-correct-bg); }
+.relation-btn.incorrect-choice { border-color: var(--feedback-incorrect-color) !important; background-color: var(--feedback-incorrect-bg); }
+
+/* --- TÉMÁK --- */
+/* 1. Cukorka (Candy) */
+body.theme-candy { background: #fdf2f8; color: #522546; --container-bg-color: #fff1f2; --container-border-color: #fda4af; }
+body.theme-candy h1 { color: #db2777; }
+body.theme-candy .task-header { background-color: #fce7f3; color: #831843; }
+body.theme-candy .setting-button { background-color: #fff; border-color: #f9a8d4; color: #db2777; }
+body.theme-candy .setting-button.active { background-color: #f9a8d4; border-color: #db2777; color: white; text-shadow: 1px 1px 2px #831843; }
+body.theme-candy .task-button { background-color: #eb4899; border-color: #c026d3; }
+body.theme-candy .feedback.correct { background-color: var(--feedback-correct-bg); color: var(--feedback-correct-color); }
+body.theme-candy .feedback.incorrect { background-color: var(--feedback-incorrect-bg); color: var(--feedback-incorrect-color); }
+body.theme-candy .task-row { --row-bg-color: #fae8ff; --row-border-color: #f5d0fe; }
+body.theme-candy .number-display { --number-color: #c026d3; }
+body.theme-candy input.solution-input, body.theme-candy .relation-btn { --input-bg-color: #fff; --input-border-color: #e879f9; }
+
+/* 2. Varázserdő (Magic Forest) */
+body.theme-magicforest { background: #f0fdf4; color: #14532d; --container-bg-color: #f0fdf4; --container-border-color: #6ee7b7; }
+body.theme-magicforest h1 { color: #059669; }
+body.theme-magicforest .task-header { background-color: #dcfce7; color: #166534; }
+body.theme-magicforest .setting-button { background-color: #fff; border-color: #6ee7b7; color: #059669; }
+body.theme-magicforest .setting-button.active { background-color: #34d399; border-color: #047857; color: white; text-shadow: 1px 1px 2px #14532d; }
+body.theme-magicforest .task-button { background-color: #10b981; border-color: #059669; }
+body.theme-magicforest .feedback.correct { background-color: var(--feedback-correct-bg); color: var(--feedback-correct-color); }
+body.theme-magicforest .feedback.incorrect { background-color: var(--feedback-incorrect-bg); color: var(--feedback-incorrect-color); }
+body.theme-magicforest .task-row { --row-bg-color: #d1fae5; --row-border-color: #a7f3d0; }
+body.theme-magicforest .number-display { --number-color: #047857; }
+body.theme-magicforest input.solution-input, body.theme-magicforest .relation-btn { --input-bg-color: #fff; --input-border-color: #34d399; }

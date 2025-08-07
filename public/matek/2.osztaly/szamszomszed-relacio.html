@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Számszomszéd és Reláció - 2. Osztály</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="szamszomszed-relacio.css">
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="settings-group">
+            <p class="control-label">Téma:</p>
+            <div id="themeSelector" class="theme-selector">
+                <button class="setting-button theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="setting-button theme-button" data-theme="theme-magicforest">Varázserdő</button>
+            </div>
+        </div>
+        <div class="settings-group">
+            <p class="control-label">Számkör:</p>
+            <div id="rangeSelector" class="range-selector">
+                <button class="setting-button" data-range="20">20</button>
+                <button class="setting-button active" data-range="100">100</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="task-title-box">
+            <h1>Számszomszéd és Reláció</h1>
+        </div>
+        
+        <div class="task">
+            <div class="task-header">
+                <h3>Pótold a hiányzó részeket a sorokban!</h3>
+                <button id="new-task-btn" class="task-button new-task-button">Új feladat</button>
+            </div>
+            
+            <div id="task-container"></div>
+
+            <button id="check-btn" class="task-button">Ellenőrzés</button>
+            <p id="feedback" class="feedback">&nbsp;</p>
+        </div>
+    </div>
+
+    <script src="../../js/firebase-logger.js"></script>
+    <script src="szamszomszed-relacio.js"></script>
+</body>
+</html>

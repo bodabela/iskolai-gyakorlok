@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halmaz-válogató - 2. Osztály</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="halmaz-valogato.css">
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="settings-group">
+            <p class="control-label">Téma:</p>
+            <div id="themeSelector" class="theme-selector">
+                <button class="setting-button theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="setting-button theme-button" data-theme="theme-magicforest">Varázserdő</button>
+            </div>
+        </div>
+        <div class="settings-group">
+            <p class="control-label">Számkör:</p>
+            <div id="rangeSelector" class="range-selector">
+                <button class="setting-button" data-range="20">20</button>
+                <button class="setting-button active" data-range="100">100</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="task-title-box">
+            <h1>Halmaz-válogató</h1>
+        </div>
+        
+        <div class="task">
+            <div class="task-header">
+                <h3>Válogasd szét a számokat a tulajdonságuk alapján!</h3>
+                <button id="new-task-btn" class="task-button new-task-button">Új feladat</button>
+            </div>
+            
+            <div id="main-content">
+                <div id="source-container" class="element-box">
+                    <h4 class="container-title">Számok</h4>
+                    <div id="source-elements" class="drop-zone"></div>
+                </div>
+    
+                <div id="target-containers">
+                    <div class="element-box">
+                        <h4 class="container-title">Páros</h4>
+                        <div id="set1" class="drop-zone" data-rule="even"></div>
+                    </div>
+                    <div class="element-box">
+                        <h4 class="container-title">Páratlan</h4>
+                        <div id="set2" class="drop-zone" data-rule="odd"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="check-btn" class="task-button">Ellenőrzés</button>
+            <p id="feedback" class="feedback">&nbsp;</p>
+        </div>
+    </div>
+
+    <script src="../../js/firebase-logger.js"></script>
+    <script src="halmaz-valogato.js"></script>
+</body>
+</html>
