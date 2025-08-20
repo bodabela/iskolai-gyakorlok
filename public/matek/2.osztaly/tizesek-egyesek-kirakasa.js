@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ÁLLAPOT VÁLTOZÓK ---
     let draggedItem = null;
+    let offsetX = 0, offsetY = 0; // Touch eseményekhez
     let currentTask = {
         id: null,
         number: 0
@@ -107,13 +108,15 @@ document.addEventListener('DOMContentLoaded', () => {
         parent.appendChild(rect);
     };
 
-
     // --- DRAG & DROP LOGIKA ---
     function addDragAndDropListeners() {
         const items = document.querySelectorAll('.rectangle');
         items.forEach(item => {
+            // Mouse events
             item.addEventListener('dragstart', handleDragStart);
             item.addEventListener('dragend', handleDragEnd);
+            // Touch events
+            item.addEventListener('touchstart', handleTouchStart, { passive: false });
         });
 
         const allDropZones = document.querySelectorAll('.source-zone, .drop-zone, #source-tens, #source-ones');
@@ -123,6 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
             zone.addEventListener('dragleave', handleDragLeave);
             zone.addEventListener('drop', handleDrop);
         });
+        
+        // Touch move and end listeners on the whole document
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+        document.addEventListener('touchend', handleTouchEnd);
     }
 
     const handleDragStart = (e) => {
@@ -130,7 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => e.target.classList.add('dragging'), 0);
     };
     const handleDragEnd = (e) => {
-        e.target.classList.remove('dragging');
+        if(draggedItem) {
+            draggedItem.classList.remove('dragging');
+        }
+        draggedItem = null;
     };
     const handleDragOver = (e) => e.preventDefault();
     const handleDragEnter = (e) => {
@@ -148,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (targetZone && draggedItem) {
             targetZone.classList.remove('drag-over');
              
-            if (targetZone.id === 'source-tens' || targetZone.id === 'source-ones') {
+            if (targetZone.id === 'source-tens' || targetZone.id === 'source-ones' || (targetZone.parentElement && (targetZone.parentElement.id === 'source-tens' || targetZone.parentElement.id === 'source-ones')) || targetZone.id === 'source-elements') {
                 if (draggedItem.dataset.value === '10') {
                     document.getElementById('source-tens').appendChild(draggedItem);
                 } else {
@@ -157,10 +167,75 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 targetZone.appendChild(draggedItem);
             }
-             
-            draggedItem = null;
             updateSum();
         }
+    };
+    
+    // --- TOUCH EVENT HANDLERS ---
+    const handleTouchStart = (e) => {
+        e.preventDefault();
+        draggedItem = e.target;
+        const touch = e.touches[0];
+        const rect = draggedItem.getBoundingClientRect();
+        
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+
+        document.body.appendChild(draggedItem);
+        draggedItem.style.position = 'fixed';
+        draggedItem.style.zIndex = '1000';
+        draggedItem.classList.add('dragging');
+        
+        draggedItem.style.left = `${touch.clientX - offsetX}px`;
+        draggedItem.style.top = `${touch.clientY - offsetY}px`;
+    };
+
+    const handleTouchMove = (e) => {
+        if (!draggedItem) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        draggedItem.style.left = `${touch.clientX - offsetX}px`;
+        draggedItem.style.top = `${touch.clientY - offsetY}px`;
+    };
+
+    const handleTouchEnd = (e) => {
+        if (!draggedItem) return;
+        
+        draggedItem.style.visibility = 'hidden'; // Hide the element to find what's underneath
+        const touch = e.changedTouches[0];
+        const dropTargetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+        draggedItem.style.visibility = 'visible'; // Show it again
+
+        const targetZone = dropTargetElement ? dropTargetElement.closest('.drop-zone, #source-tens, #source-ones') : null;
+        
+        if (targetZone) {
+             if (targetZone.id === 'source-tens' || targetZone.id === 'source-ones' || (targetZone.parentElement && (targetZone.parentElement.id === 'source-tens' || targetZone.parentElement.id === 'source-ones')) || targetZone.id === 'source-elements' ) {
+                 if (draggedItem.dataset.value === '10') {
+                    document.getElementById('source-tens').appendChild(draggedItem);
+                } else {
+                    document.getElementById('source-ones').appendChild(draggedItem);
+                }
+             } else {
+                  targetZone.appendChild(draggedItem);
+             }
+        } else {
+            // If not dropped in a valid zone, return to appropriate source
+            if (draggedItem.dataset.value === '10') {
+                document.getElementById('source-tens').appendChild(draggedItem);
+            } else {
+                document.getElementById('source-ones').appendChild(draggedItem);
+            }
+        }
+
+        // Cleanup styles
+        draggedItem.style.position = '';
+        draggedItem.style.left = '';
+        draggedItem.style.top = '';
+        draggedItem.style.zIndex = '';
+        draggedItem.classList.remove('dragging');
+        
+        draggedItem = null;
+        updateSum();
     };
     
     const updateSum = () => {
