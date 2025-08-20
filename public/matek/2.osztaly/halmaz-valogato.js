@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeFirebaseAndLogger();
     // --- DOM ELEMEK ---
     const sourceElements = document.getElementById('source-elements');
-    const set1 = document.getElementById('set1');
-    const set2 = document.getElementById('set2');
+    const set1 = document.getElementById('set1'); // DOM id marad set1, a páros halmaz
+    const set2 = document.getElementById('set2'); // DOM id marad set2, a páratlan halmaz
     const checkBtn = document.getElementById('check-btn');
     const newTaskBtn = document.getElementById('new-task-btn');
     const feedback = document.getElementById('feedback');
@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FELADAT GENERÁLÁS ---
     const generateNewTask = () => {
         currentTaskID = `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        logNewTask('halmaz-valogato', { taskId: currentTaskID, details: { range: currentSettings.range } });
         
         sourceElements.innerHTML = '';
         document.querySelectorAll('.drop-zone').forEach(zone => zone.innerHTML = '');
@@ -55,6 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
         feedback.className = 'feedback';
         
         const numbers = generateUniqueNumbers(8, 1, currentSettings.range);
+        
+        logNewTask('halmaz-valogato', { 
+            taskId: currentTaskID, 
+            details: { 
+                range: currentSettings.range,
+                numbers: numbers // A generált számok hozzáadása a loghoz
+            } 
+        });
+
         numbers.forEach(num => {
             const item = document.createElement('div');
             item.className = 'number-item';
@@ -117,7 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ELLENŐRZÉS ---
     const checkSolution = () => {
         let allCorrect = true;
-        const userSolution = { set1: [], set2: [], source: [] };
+        // A userSolution objektum kulcsainak átnevezése a "Clean Code" szerint
+        const userSolution = { setEven: [], setOdd: [], source: [] };
         
         document.querySelectorAll('.number-item').forEach(item => item.classList.remove('correct', 'incorrect'));
         
@@ -132,8 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
         
-        checkZone(set1, 'even', userSolution.set1);
-        checkZone(set2, 'odd', userSolution.set2);
+        // A checkZone hívása a módosított userSolution kulcsokkal
+        checkZone(set1, 'even', userSolution.setEven);
+        checkZone(set2, 'odd', userSolution.setOdd);
 
         sourceElements.querySelectorAll('.number-item').forEach(item => {
             userSolution.source.push(parseInt(item.dataset.number, 10));
