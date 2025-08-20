@@ -135,18 +135,34 @@ button.task-button:hover { transform: translateY(-2px) scale(1.02); }
     gap: 20px;
 }
 
-.drop-zone {
+/* === MÓDOSÍTÁS ITT KEZDŐDIK === */
+#drop-zone {
     min-height: 200px;
     padding: 10px;
-    display: flex;
-    flex-wrap: wrap;
+    display: flex; /* A két belső tárolót rendezi egymás mellé */
     gap: 12px;
     justify-content: center;
-    align-content: flex-start;
+    align-items: flex-start;
     border-radius: 10px;
     background-color: var(--dropzone-bg-color);
     transition: background-color 0.3s;
 }
+
+#drop-zone-tens {
+    display: flex; /* A tízeseket rendezi */
+    flex-wrap: wrap;
+    gap: 12px;
+    align-content: flex-start;
+}
+
+#drop-zone-ones {
+    display: grid; /* Az egyeseket rácsba rendezi */
+    grid-template-columns: repeat(3, auto);
+    gap: 12px;
+    align-content: flex-start;
+}
+/* === MÓDOSÍTÁS VÉGE === */
+
 
 #source-tens {
     display: flex;
@@ -192,16 +208,15 @@ button.task-button:hover { transform: translateY(-2px) scale(1.02); }
     border-top: none;
 }
 
-/* === MÓDOSÍTÁS ITT === */
+
 .rectangle.dragging {
     opacity: 0.6;
     transform: scale(1.1);
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    transition: none; /* Ezzel lesz azonnali a húzás kezdete */
+    transition: none;
 }
-/* ===================== */
 
-.drop-zone.drag-over {
+.element-box.drag-over {
     background-color: var(--dropzone-hover-bg-color);
 }
 
@@ -220,7 +235,7 @@ body.theme-candy .setting-button.active { background-color: #f9a8d4; border-colo
 body.theme-candy .task-button { background-color: #eb4899; border-color: #c026d3; }
 body.theme-candy .feedback.correct { background-color: var(--feedback-correct-bg); color: var(--feedback-correct-color); }
 body.theme-candy .feedback.incorrect { background-color: var(--feedback-incorrect-bg); color: var(--feedback-incorrect-color); }
-body.theme-candy .drop-zone { --dropzone-bg-color: #fae8ff; --dropzone-hover-bg-color: #f5d0fe; }
+body.theme-candy .element-box { --dropzone-bg-color: #fae8ff; --dropzone-hover-bg-color: #f5d0fe; }
 body.theme-candy .task-number-display { --task-number-bg-color: #f9a8d4; --task-number-text-color: #701a75; }
 body.theme-candy .rectangle { --item-border-color: #e879f9; }
 body.theme-candy .ten-block { --ten-block-bg-color: #f5d0fe; }
@@ -232,7 +247,7 @@ body.theme-magicforest .task-header { background-color: #dcfce7; color: #166534;
 body.theme-magicforest .setting-button { background-color: #fff; border-color: #6ee7b7; color: #059669; }
 body.theme-magicforest .setting-button.active { background-color: #34d399; border-color: #047857; color: white; text-shadow: 1px 1px 2px #14532d; }
 body.theme-magicforest .task-button { background-color: #10b981; border-color: #059669; }
-body.theme-magicforest .drop-zone { --dropzone-bg-color: #d1fae5; --dropzone-hover-bg-color: #a7f3d0; }
+body.theme-magicforest .element-box { --dropzone-bg-color: #d1fae5; --dropzone-hover-bg-color: #a7f3d0; }
 body.theme-magicforest .task-number-display { --task-number-bg-color: #6ee7b7; --task-number-text-color: #064e3b; }
 body.theme-magicforest .rectangle { --item-border-color: #34d399; }
 body.theme-magicforest .ten-block { --ten-block-bg-color: #a7f3d0; }
@@ -244,7 +259,7 @@ body.theme-ocean .task-header { background-color: #bfdbfe; color: #1e40af; }
 body.theme-ocean .setting-button { background-color: #fff; border-color: #93c5fd; color: #2563eb; }
 body.theme-ocean .setting-button.active { background-color: #60a5fa; border-color: #2563eb; color: white; text-shadow: 1px 1px 2px #1e3a8a; }
 body.theme-ocean .task-button { background-color: #3b82f6; border-color: #1d4ed8; }
-body.theme-ocean .drop-zone { --dropzone-bg-color: #e0f2fe; --dropzone-hover-bg-color: #bae6fd; }
+body.theme-ocean .element-box { --dropzone-bg-color: #e0f2fe; --dropzone-hover-bg-color: #bae6fd; }
 body.theme-ocean .task-number-display { --task-number-bg-color: #93c5fd; --task-number-text-color: #1e3a8a; }
 body.theme-ocean .rectangle { --item-border-color: #7dd3fc; }
 body.theme-ocean .ten-block { --ten-block-bg-color: #bae6fd; }
@@ -256,7 +271,7 @@ body.theme-sunset .task-header { background-color: #fee2e2; color: #9a3412; }
 body.theme-sunset .setting-button { background-color: #fff; border-color: #fdba74; color: #f97316; }
 body.theme-sunset .setting-button.active { background-color: #fb923c; border-color: #ea580c; color: white; text-shadow: 1px 1px 2px #7c2d12; }
 body.theme-sunset .task-button { background-color: #f97316; border-color: #c2410c; }
-body.theme-sunset .drop-zone { --dropzone-bg-color: #fff1e6; --dropzone-hover-bg-color: #ffe4cc; }
+body.theme-sunset .element-box { --dropzone-bg-color: #fff1e6; --dropzone-hover-bg-color: #ffe4cc; }
 body.theme-sunset .task-number-display { --task-number-bg-color: #fdba74; --task-number-text-color: #7c2d12; }
 body.theme-sunset .rectangle { --item-border-color: #fb923c; }
 body.theme-sunset .ten-block { --ten-block-bg-color: #fed7aa; }
@@ -268,7 +283,7 @@ body.theme-space .task-header { background-color: #374151; color: #d1d5db; }
 body.theme-space .setting-button { background-color: #374151; border-color: #6b7280; color: #e5e7eb; }
 body.theme-space .setting-button.active { background-color: #6366f1; border-color: #a5b4fc; color: white; text-shadow: 1px 1px 2px #111827; }
 body.theme-space .task-button { background-color: #8b5cf6; border-color: #a78bfa; }
-body.theme-space .drop-zone { --dropzone-bg-color: #4b5563; --dropzone-hover-bg-color: #525c6a; }
+body.theme-space .element-box { --dropzone-bg-color: #4b5563; --dropzone-hover-bg-color: #525c6a; }
 body.theme-space .task-number-display { --task-number-bg-color: #4f46e5; --task-number-text-color: #e0e7ff; }
 body.theme-space .rectangle { --item-border-color: #9ca3af; }
 body.theme-space .ten-block { --ten-block-bg-color: #374151; }
@@ -280,7 +295,7 @@ body.theme-oserd .task-header { background-color: #daddb1; color: #484a3b; }
 body.theme-oserd .setting-button { background-color: #fff; border-color: #a0a66d; color: #5c5d4e; }
 body.theme-oserd .setting-button.active { background-color: #a0a66d; border-color: #5c5d4e; color: white; text-shadow: 1px 1px 2px #3b3a30; }
 body.theme-oserd .task-button { background-color: #8b923f; border-color: #5c5d4e; }
-body.theme-oserd .drop-zone { --dropzone-bg-color: #e4e6c3; --dropzone-hover-bg-color: #daddb1; }
+body.theme-oserd .element-box { --dropzone-bg-color: #e4e6c3; --dropzone-hover-bg-color: #daddb1; }
 body.theme-oserd .task-number-display { --task-number-bg-color: #a0a66d; --task-number-text-color: #3b3a30; }
 body.theme-oserd .rectangle { --item-border-color: #8b923f; }
 body.theme-oserd .ten-block { --ten-block-bg-color: #daddb1; }
@@ -292,7 +307,7 @@ body.theme-techno .task-header { background-color: #291c44; color: #a2e2ef; }
 body.theme-techno .setting-button { background-color: #291c44; border-color: #00f5ff; color: #c0d1dd; }
 body.theme-techno .setting-button.active { background-color: #f038ff; border-color: #00f5ff; color: white; text-shadow: 1px 1px 2px #0d0221; }
 body.theme-techno .task-button { background-color: #2a7f9a; border-color: #00f5ff; }
-body.theme-techno .drop-zone { --dropzone-bg-color: #1d1135; --dropzone-hover-bg-color: #291c44; }
+body.theme-techno .element-box { --dropzone-bg-color: #1d1135; --dropzone-hover-bg-color: #291c44; }
 body.theme-techno .task-number-display { --task-number-bg-color: #f038ff; --task-number-text-color: #f0f8ff; }
 body.theme-techno .rectangle { --item-border-color: #00f5ff; }
 body.theme-techno .ten-block { --ten-block-bg-color: #291c44; }
@@ -304,7 +319,7 @@ body.theme-sport .task-header { background-color: #e8f5e9; color: #2e7d32; }
 body.theme-sport .setting-button { background-color: #fff; border-color: #ffc107; color: #212121; }
 body.theme-sport .setting-button.active { background-color: #ffc107; border-color: #f57f17; color: #212121; }
 body.theme-sport .task-button { background-color: #f44336; border-color: #b71c1c; }
-body.theme-sport .drop-zone { --dropzone-bg-color: #e3f2fd; --dropzone-hover-bg-color: #bbdefb; }
+body.theme-sport .element-box { --dropzone-bg-color: #e3f2fd; --dropzone-hover-bg-color: #bbdefb; }
 body.theme-sport .task-number-display { --task-number-bg-color: #f44336; --task-number-text-color: #fff; }
 body.theme-sport .rectangle { --item-border-color: #ffc107; }
 body.theme-sport .ten-block { --ten-block-bg-color: #bbdefb; }
@@ -316,7 +331,7 @@ body.theme-kaland .task-header { background-color: #e9edc9; color: #585c30; }
 body.theme-kaland .setting-button { background-color: #fff; border-color: #b08968; color: #6b4f4b; }
 body.theme-kaland .setting-button.active { background-color: #b08968; border-color: #808000; color: white; }
 body.theme-kaland .task-button { background-color: #c97941; border-color: #808000; }
-body.theme-kaland .drop-zone { --dropzone-bg-color: #f5e9d3; --dropzone-hover-bg-color: #e9edc9; }
+body.theme-kaland .element-box { --dropzone-bg-color: #f5e9d3; --dropzone-hover-bg-color: #e9edc9; }
 body.theme-kaland .task-number-display { --task-number-bg-color: #808000; --task-number-text-color: #fdf6e3; }
 body.theme-kaland .rectangle { --item-border-color: #b08968; }
 body.theme-kaland .ten-block { --ten-block-bg-color: #e9edc9; }

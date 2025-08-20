@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DOM ELEMEK ---
     const sourceElements = document.getElementById('source-elements');
     const dropZone = document.getElementById('drop-zone');
+    const dropZoneTens = document.getElementById('drop-zone-tens');
+    const dropZoneOnes = document.getElementById('drop-zone-ones');
     const checkBtn = document.getElementById('check-btn');
     const newTaskBtn = document.getElementById('new-task-btn');
     const feedback = document.getElementById('feedback');
@@ -13,14 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ÁLLAPOT VÁLTOZÓK ---
     let draggedItem = null;
-    let currentTask = {
-        id: null,
-        number: 0
-    };
-    let currentSettings = {
-        theme: 'theme-candy',
-        range: 100
-    };
+    let currentTask = { id: null, number: 0 };
+    let currentSettings = { theme: 'theme-candy', range: 100 };
     let offsetX = 0, offsetY = 0;
     
     // --- TÉMA- ÉS BEÁLLÍTÁSKEZELÉS ---
@@ -55,22 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTask.number = getRandomInt(11, currentSettings.range);
         
         taskNumberEl.textContent = currentTask.number;
-        dropZone.innerHTML = '';
+        dropZoneTens.innerHTML = '';
+        dropZoneOnes.innerHTML = '';
         feedback.innerHTML = '&nbsp;';
         feedback.className = 'feedback';
-        dropZone.style.borderColor = '';
-        updateSum();
-
+        
         logNewTask('tizesek-egyesek-kirakasa', { 
             taskId: currentTask.id, 
-            details: { 
-                range: currentSettings.range,
-                number: currentTask.number
-            } 
+            details: { range: currentSettings.range, number: currentTask.number } 
         });
 
         createRectangles();
         addDragAndDropListeners();
+        updateSum();
     };
 
     const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -90,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const createRectangle = (value, parent) => {
         const rect = document.createElement('div');
         rect.className = `rectangle ${value === 10 ? 'ten-block' : 'one-block'}`;
-        rect.draggable = false; // Natív D&D kikapcsolása
+        rect.draggable = false;
         rect.dataset.value = value;
         for (let i = 0; i < value; i++) {
             rect.appendChild(document.createElement('div')).className = 'unit-cell';
@@ -116,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.type === 'mousedown' && e.button !== 0) return;
         if (draggedItem) return;
         e.preventDefault();
-
         draggedItem = element;
 
         const rect = draggedItem.getBoundingClientRect();
@@ -125,25 +117,22 @@ document.addEventListener('DOMContentLoaded', () => {
         offsetX = eventPos.clientX - rect.left;
         offsetY = eventPos.clientY - rect.top;
         
-        // Elem áthelyezése a body-ba a rétegezés miatt
         document.body.appendChild(draggedItem);
         draggedItem.classList.add('dragging');
         draggedItem.style.position = 'fixed';
         draggedItem.style.left = `${rect.left}px`;
         draggedItem.style.top = `${rect.top}px`;
         draggedItem.style.zIndex = '1000';
-        updateSum();
     }
     
     function handleDragMove(e) {
         if (!draggedItem) return;
         e.preventDefault();
         const eventPos = e.type === 'touchmove' ? e.touches[0] : e;
-
-        // Vizuális visszajelzés a célzónák felett
+        
         draggedItem.style.pointerEvents = 'none';
-        const allDropZones = document.querySelectorAll('.source-zone, .drop-zone');
-        allDropZones.forEach(zone => {
+        const allZones = document.querySelectorAll('.source-zone, .element-box[data-droptarget]');
+        allZones.forEach(zone => {
             const targetUnder = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
             zone.classList.toggle('drag-over', zone.contains(targetUnder));
         });
@@ -156,22 +145,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleDragEnd(e) {
         if (!draggedItem) return;
         
-        document.querySelectorAll('.source-zone, .drop-zone').forEach(zone => zone.classList.remove('drag-over'));
-
+        document.querySelectorAll('.source-zone, .element-box').forEach(zone => zone.classList.remove('drag-over'));
+        
         draggedItem.style.pointerEvents = 'none';
         const eventPos = e.type === 'touchend' ? e.changedTouches[0] : e;
         const dropTarget = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
         draggedItem.style.pointerEvents = 'auto';
         
-        const targetZone = dropTarget ? dropTarget.closest('.drop-zone, .source-zone') : null;
+        const targetDropBox = dropTarget ? dropTarget.closest('.element-box[data-droptarget]') : null;
+        const targetSourceZone = dropTarget ? dropTarget.closest('.source-zone') : null;
 
         let newParent = null;
-        if (targetZone) {
-            newParent = targetZone;
+
+        if (targetDropBox) {
+            newParent = draggedItem.dataset.value === '10' ? dropZoneTens : dropZoneOnes;
+        } else if (targetSourceZone) {
+            newParent = targetSourceZone;
         } else {
-            // Ha nem zónára esik, visszatesszük a saját kiindulási helyére
-            const targetId = draggedItem.dataset.value === '10' ? 'source-tens' : 'source-ones';
-            newParent = document.getElementById(targetId);
+            const sourceId = draggedItem.dataset.value === '10' ? 'source-tens' : 'source-ones';
+            newParent = document.getElementById(sourceId);
         }
         
         draggedItem.classList.remove('dragging');
@@ -185,50 +177,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         draggedItem = null;
-        offsetX = 0;
-        offsetY = 0;
         updateSum();
     }
     
-    // --- ÖSSZEGZÉS ---
     const updateSum = () => {
         const rectanglesInDropZone = dropZone.querySelectorAll('.rectangle');
-        
-        if (rectanglesInDropZone.length === 0) {
-            currentSumEl.textContent = '0';
-            return;
-        }
-
         let totalSum = 0;
-        const tens = [];
-        const ones = [];
-
         rectanglesInDropZone.forEach(rect => {
-            const value = parseInt(rect.dataset.value, 10);
-            totalSum += value;
-            if (value === 10) tens.push(value); else ones.push(value);
+            totalSum += parseInt(rect.dataset.value, 10);
         });
-
-        const expressionParts = [];
-        if (tens.length > 0) expressionParts.push(...tens);
-        const sumOfOnes = ones.reduce((sum, current) => sum + current, 0);
-        if (sumOfOnes > 0) expressionParts.push(sumOfOnes);
-
-        currentSumEl.textContent = `${expressionParts.join(' + ')} = ${totalSum}`;
+        currentSumEl.textContent = totalSum;
     };
 
-    // --- ELLENŐRZÉS ---
     const checkSolution = () => {
-        const sumText = currentSumEl.textContent;
-        const sum = parseInt(sumText.split('=')[1]?.trim(), 10);
-
-        if (isNaN(sum)) return;
-
+        const sum = parseInt(currentSumEl.textContent, 10);
         const isCorrect = sum === currentTask.number;
+        
         feedback.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
         feedback.textContent = isCorrect ? 'Helyes! Ügyes vagy!' : 'Nem jó. Próbáld újra!';
-        dropZone.style.borderColor = isCorrect ? 'var(--feedback-correct-color)' : 'var(--feedback-incorrect-color)';
-
+        
         logTaskCheck('tizesek-egyesek-kirakasa', { 
             taskId: currentTask.id, 
             correct: isCorrect, 
@@ -237,7 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // --- INDÍTÁS ---
     newTaskBtn.addEventListener('click', generateNewTask);
     checkBtn.addEventListener('click', checkSolution);
     logTaskEntry('tizesek-egyesek-kirakasa');
