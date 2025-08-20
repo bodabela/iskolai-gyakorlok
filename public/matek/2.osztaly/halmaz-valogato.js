@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         theme: 'theme-candy',
         range: 100
     };
+    let offsetX = 0, offsetY = 0;
     
     // --- TÉMA- ÉS BEÁLLÍTÁSKEZELÉS ---
     function applySettings() {
@@ -92,109 +93,99 @@ document.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('dragend', handleDragEnd);
 
             // Touch events
-            item.addEventListener('touchstart', handleTouchStart, { passive: false });
+            item.addEventListener('touchstart', (e) => handleDragStart(e, item), { passive: false });
         });
 
-        const allDropZones = document.querySelectorAll('.drop-zone, .source-zone');
+        const allDropZones = document.querySelectorAll('.drop-zone');
         allDropZones.forEach(zone => {
             zone.addEventListener('dragover', handleDragOver);
             zone.addEventListener('dragenter', handleDragEnter);
             zone.addEventListener('dragleave', handleDragLeave);
             zone.addEventListener('drop', handleDrop);
         });
+
+        // Touch move and end listeners on the document to handle dragging anywhere
+        document.addEventListener('mousemove', handleDragMove);
+        document.addEventListener('mouseup', handleDragEnd);
+        document.addEventListener('touchmove', handleDragMove, { passive: false });
+        document.addEventListener('touchend', handleDragEnd);
+    }
+    
+    function handleDragStart(e, element) {
+        if (draggedItem) return; // Prevent starting a new drag if one is in progress
+        e.preventDefault();
+        draggedItem = element;
+
+        const rect = draggedItem.getBoundingClientRect();
+        const eventPos = e.type === 'touchstart' ? e.touches[0] : e;
+        
+        offsetX = eventPos.clientX - rect.left;
+        offsetY = eventPos.clientY - rect.top;
+
+        // Move the original element for dragging
+        document.body.appendChild(draggedItem); 
+        draggedItem.classList.add('dragging');
+        draggedItem.style.position = 'fixed';
+        draggedItem.style.left = `${rect.left}px`;
+        draggedItem.style.top = `${rect.top}px`;
+        draggedItem.style.zIndex = '1000';
     }
 
-    // --- EGÉR ESEMÉNYEK ---
-    const handleDragStart = (e) => {
-        draggedItem = e.target;
-        setTimeout(() => e.target.classList.add('dragging'), 0);
-    };
-    const handleDragEnd = () => {
-        if (draggedItem) draggedItem.classList.remove('dragging');
+    function handleDragMove(e) {
+        if (!draggedItem) return;
+        e.preventDefault();
+        const eventPos = e.type === 'touchmove' ? e.touches[0] : e;
+        draggedItem.style.top = `${eventPos.clientY - offsetY}px`;
+        draggedItem.style.left = `${eventPos.clientX - offsetX}px`;
+    }
+
+    function handleDragEnd(e) {
+        if (!draggedItem) return;
+        
+        draggedItem.style.visibility = 'hidden';
+        const eventPos = e.type === 'touchend' ? e.changedTouches[0] : e;
+        const dropTarget = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
+        draggedItem.style.visibility = 'visible';
+
+        let newParent = sourceElements; // Default to returning to the source
+        if (dropTarget) {
+            const bowl = dropTarget.closest('.drop-zone');
+            if (bowl) {
+                newParent = bowl;
+            }
+        }
+        
+        draggedItem.classList.remove('dragging');
+        draggedItem.style.position = '';
+        draggedItem.style.top = '';
+        draggedItem.style.left = '';
+        draggedItem.style.zIndex = '';
+        
+        newParent.appendChild(draggedItem);
+        
         draggedItem = null;
-    };
+        offsetX = 0;
+        offsetY = 0;
+    }
+
+    // --- EGÉR-SPECIFIKUS ESEMÉNYKEZELŐK (A touch-tól függetlenül) ---
     const handleDragOver = (e) => e.preventDefault();
     const handleDragEnter = (e) => {
-        const targetZone = e.target.closest('.drop-zone, .source-zone');
+        const targetZone = e.target.closest('.drop-zone');
         if (targetZone) targetZone.classList.add('drag-over');
     };
     const handleDragLeave = (e) => {
-        const targetZone = e.target.closest('.drop-zone, .source-zone');
+        const targetZone = e.target.closest('.drop-zone');
         if (targetZone) targetZone.classList.remove('drag-over');
     };
     const handleDrop = (e) => {
         e.preventDefault();
-        const targetZone = e.target.closest('.drop-zone, .source-zone');
+        const targetZone = e.target.closest('.drop-zone');
         if (targetZone && draggedItem) {
              targetZone.classList.remove('drag-over');
              targetZone.appendChild(draggedItem);
         }
     };
-
-    // --- ÉRINTÉS ESEMÉNYEK (JAVÍTOTT) ---
-    let touchClone = null;
-    let offsetX = 0, offsetY = 0;
-
-    const handleTouchStart = (e) => {
-        e.preventDefault();
-        draggedItem = e.target;
-        
-        const touch = e.touches[0];
-        const rect = draggedItem.getBoundingClientRect();
-
-        touchClone = draggedItem.cloneNode(true);
-        document.body.appendChild(touchClone);
-        touchClone.classList.add('dragging');
-        touchClone.style.position = 'fixed';
-        touchClone.style.zIndex = '1000';
-        
-        offsetX = touch.clientX - rect.left;
-        offsetY = touch.clientY - rect.top;
-
-        touchClone.style.left = `${touch.clientX - offsetX}px`;
-        touchClone.style.top = `${touch.clientY - offsetY}px`;
-
-        draggedItem.style.visibility = 'hidden';
-
-        document.addEventListener('touchmove', handleTouchMove, { passive: false });
-        document.addEventListener('touchend', handleTouchEnd);
-    };
-
-    const handleTouchMove = (e) => {
-        e.preventDefault();
-        if (!draggedItem || !touchClone) return;
-        
-        const touch = e.touches[0];
-        touchClone.style.left = `${touch.clientX - offsetX}px`;
-        touchClone.style.top = `${touch.clientY - offsetY}px`;
-    };
-
-    const handleTouchEnd = (e) => {
-        if (!draggedItem || !touchClone) return;
-
-        // A klón ideiglenes elrejtése a célpont meghatározásához
-        touchClone.style.visibility = 'hidden';
-        const endTouch = e.changedTouches[0];
-        const dropTarget = document.elementFromPoint(endTouch.clientX, endTouch.clientY);
-        // A klón azonnali visszaállítása láthatóvá
-        touchClone.style.visibility = 'visible';
-        
-        const targetZone = dropTarget ? dropTarget.closest('.drop-zone, .source-zone') : null;
-
-        if (targetZone) {
-            targetZone.appendChild(draggedItem);
-        }
-        
-        draggedItem.style.visibility = 'visible';
-        document.body.removeChild(touchClone);
-        
-        draggedItem = null;
-        touchClone = null;
-
-        document.removeEventListener('touchmove', handleTouchMove);
-        document.removeEventListener('touchend', handleTouchEnd);
-    };
-
 
     // --- ELLENŐRZÉS ---
     const checkSolution = () => {

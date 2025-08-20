@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         theme: 'theme-candy',
         range: 100
     };
+    let offsetX = 0, offsetY = 0;
     
     // --- TÉMA- ÉS BEÁLLÍTÁSKEZELÉS ---
     function applySettings() {
@@ -75,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
     const createRectangles = () => {
-        // A sourceElements innerHTML-jét a generateNewTask már törölte, de a biztonság kedvéért itt is lehetne.
         sourceElements.innerHTML = `
             <div id="source-tens" class="source-zone"></div>
             <div id="source-ones" class="source-zone"></div>
@@ -102,9 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function addDragAndDropListeners() {
         const items = document.querySelectorAll('.rectangle');
         items.forEach(item => {
-            item.addEventListener('dragstart', handleDragStart);
-            item.addEventListener('dragend', handleDragEnd);
-            item.addEventListener('touchstart', handleTouchStart, { passive: false });
+            item.addEventListener('dragstart', (e) => handleDragStart(e, item));
+            item.addEventListener('touchstart', (e) => handleDragStart(e, item), { passive: false });
         });
 
         const allDropZones = document.querySelectorAll('.source-zone, .drop-zone');
@@ -114,17 +113,75 @@ document.addEventListener('DOMContentLoaded', () => {
             zone.addEventListener('dragleave', handleDragLeave);
             zone.addEventListener('drop', handleDrop);
         });
+        
+        document.addEventListener('mousemove', handleDragMove);
+        document.addEventListener('mouseup', handleDragEnd);
+        document.addEventListener('touchmove', handleDragMove, { passive: false });
+        document.addEventListener('touchend', handleDragEnd);
     }
 
-    // --- EGÉR ESEMÉNYEK ---
-    const handleDragStart = (e) => {
-        draggedItem = e.target;
-        setTimeout(() => e.target.classList.add('dragging'), 0);
-    };
-    const handleDragEnd = () => {
-        if(draggedItem) draggedItem.classList.remove('dragging');
+    function handleDragStart(e, element) {
+        if (draggedItem) return;
+        e.preventDefault();
+        draggedItem = element;
+
+        const rect = draggedItem.getBoundingClientRect();
+        const eventPos = e.type === 'touchstart' ? e.touches[0] : e;
+        
+        offsetX = eventPos.clientX - rect.left;
+        offsetY = eventPos.clientY - rect.top;
+        
+        document.body.appendChild(draggedItem);
+        draggedItem.classList.add('dragging');
+        draggedItem.style.position = 'fixed';
+        draggedItem.style.left = `${rect.left}px`;
+        draggedItem.style.top = `${rect.top}px`;
+        draggedItem.style.zIndex = '1000';
+        updateSum();
+    }
+    
+    function handleDragMove(e) {
+        if (!draggedItem) return;
+        e.preventDefault();
+        const eventPos = e.type === 'touchmove' ? e.touches[0] : e;
+        draggedItem.style.top = `${eventPos.clientY - offsetY}px`;
+        draggedItem.style.left = `${eventPos.clientX - offsetX}px`;
+    }
+
+    function handleDragEnd(e) {
+        if (!draggedItem) return;
+
+        draggedItem.style.visibility = 'hidden';
+        const eventPos = e.type === 'touchend' ? e.changedTouches[0] : e;
+        const dropTarget = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
+        draggedItem.style.visibility = 'visible';
+        
+        const targetZone = dropTarget ? dropTarget.closest('.drop-zone, .source-zone') : null;
+
+        let newParent = null;
+        if (targetZone && targetZone.classList.contains('drop-zone')) {
+            newParent = targetZone;
+        } else {
+            const targetId = draggedItem.dataset.value === '10' ? 'source-tens' : 'source-ones';
+            newParent = document.getElementById(targetId);
+        }
+        
+        draggedItem.classList.remove('dragging');
+        draggedItem.style.position = '';
+        draggedItem.style.top = '';
+        draggedItem.style.left = '';
+        draggedItem.style.zIndex = '';
+        
+        if (newParent) {
+            newParent.appendChild(draggedItem);
+        }
+        
         draggedItem = null;
-    };
+        offsetX = 0;
+        offsetY = 0;
+        updateSum();
+    }
+
     const handleDragOver = (e) => e.preventDefault();
     const handleDragEnter = (e) => {
         const targetZone = e.target.closest('.drop-zone, .source-zone');
@@ -139,82 +196,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetZone = e.target.closest('.drop-zone, .source-zone');
         if (targetZone && draggedItem) {
             targetZone.classList.remove('drag-over');
-            // Logika, ami a megfelelő helyre teszi az elemet
-            if (targetZone.classList.contains('drop-zone')) {
-                targetZone.appendChild(draggedItem);
-            } else { // Visszavitel a forrásba
-                const targetId = draggedItem.dataset.value === '10' ? 'source-tens' : 'source-ones';
-                document.getElementById(targetId).appendChild(draggedItem);
-            }
+            targetZone.appendChild(draggedItem);
             updateSum();
         }
     };
     
-    // --- ÉRINTÉS ESEMÉNYEK (JAVÍTOTT) ---
-    let touchClone = null;
-    let offsetX = 0, offsetY = 0;
-
-    const handleTouchStart = (e) => {
-        e.preventDefault(); // Megakadályozza a kontext menüt
-        draggedItem = e.target;
-        
-        const touch = e.touches[0];
-        const rect = draggedItem.getBoundingClientRect();
-
-        touchClone = draggedItem.cloneNode(true);
-        document.body.appendChild(touchClone);
-        touchClone.classList.add('dragging');
-        touchClone.style.position = 'fixed';
-        touchClone.style.zIndex = '1000';
-        
-        offsetX = touch.clientX - rect.left;
-        offsetY = touch.clientY - rect.top;
-
-        touchClone.style.left = `${touch.clientX - offsetX}px`;
-        touchClone.style.top = `${touch.clientY - offsetY}px`;
-        draggedItem.style.visibility = 'hidden';
-
-        document.addEventListener('touchmove', handleTouchMove, { passive: false });
-        document.addEventListener('touchend', handleTouchEnd);
-    };
-
-    const handleTouchMove = (e) => {
-        e.preventDefault();
-        if (!touchClone) return;
-        const touch = e.touches[0];
-        touchClone.style.left = `${touch.clientX - offsetX}px`;
-        touchClone.style.top = `${touch.clientY - offsetY}px`;
-    };
-
-    const handleTouchEnd = (e) => {
-        if (!draggedItem || !touchClone) return;
-
-        touchClone.style.visibility = 'hidden';
-        const endTouch = e.changedTouches[0];
-        const dropTarget = document.elementFromPoint(endTouch.clientX, endTouch.clientY);
-        touchClone.style.visibility = 'visible';
-        
-        const targetZone = dropTarget ? dropTarget.closest('.drop-zone, .source-zone') : null;
-
-        if (targetZone && targetZone.classList.contains('drop-zone')) {
-            targetZone.appendChild(draggedItem);
-        } else {
-            // Ha nem a célzónába vagy a forrászónába esik, akkor is visszakerül a saját forrásába
-            const targetId = draggedItem.dataset.value === '10' ? 'source-tens' : 'source-ones';
-            document.getElementById(targetId).appendChild(draggedItem);
-        }
-        
-        draggedItem.style.visibility = 'visible';
-        document.body.removeChild(touchClone);
-        draggedItem = null;
-        touchClone = null;
-
-        document.removeEventListener('touchmove', handleTouchMove);
-        document.removeEventListener('touchend', handleTouchEnd);
-        updateSum();
-    };
-    
-    // --- ÖSSZEGZÉS (VISSZAÁLLÍTOTT) ---
+    // --- ÖSSZEGZÉS ---
     const updateSum = () => {
         const rectanglesInDropZone = dropZone.querySelectorAll('.rectangle');
         
