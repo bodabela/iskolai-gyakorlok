@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const item = document.createElement('div');
             item.className = 'number-item';
             item.textContent = num;
-            item.draggable = true;
+            item.draggable = false; // Kikapcsoljuk a natív drag funkciót
             item.setAttribute('data-number', num);
             sourceElements.appendChild(item);
         });
@@ -84,27 +84,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return Array.from(numbers);
     };
 
-    // --- DRAG & DROP LOGIKA ---
+    // --- EGYSÉGESÍTETT DRAG & DROP LOGIKA ---
     function addDragAndDropListeners() {
         const items = document.querySelectorAll('.number-item');
         items.forEach(item => {
-            // Mouse events
-            item.addEventListener('dragstart', handleDragStart);
-            item.addEventListener('dragend', handleDragEnd);
-
-            // Touch events
+            // Egységes eseménykezelő egérre és érintésre
+            item.addEventListener('mousedown', (e) => handleDragStart(e, item));
             item.addEventListener('touchstart', (e) => handleDragStart(e, item), { passive: false });
         });
 
-        const allDropZones = document.querySelectorAll('.drop-zone');
-        allDropZones.forEach(zone => {
-            zone.addEventListener('dragover', handleDragOver);
-            zone.addEventListener('dragenter', handleDragEnter);
-            zone.addEventListener('dragleave', handleDragLeave);
-            zone.addEventListener('drop', handleDrop);
-        });
-
-        // Touch move and end listeners on the document to handle dragging anywhere
+        // A dokumentumra helyezett figyelők kezelik a húzást és az elengedést
         document.addEventListener('mousemove', handleDragMove);
         document.addEventListener('mouseup', handleDragEnd);
         document.addEventListener('touchmove', handleDragMove, { passive: false });
@@ -112,7 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function handleDragStart(e, element) {
-        if (draggedItem) return; // Prevent starting a new drag if one is in progress
+        // Csak a bal egérgombbal való húzást engedélyezzük
+        if (e.type === 'mousedown' && e.button !== 0) return;
+        if (draggedItem) return; // Megakadályozzuk új húzás indítását, ha már van folyamatban
+
         e.preventDefault();
         draggedItem = element;
 
@@ -122,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         offsetX = eventPos.clientX - rect.left;
         offsetY = eventPos.clientY - rect.top;
 
-        // Move the original element for dragging
+        // Az eredeti elemet mozgatjuk
         document.body.appendChild(draggedItem); 
         draggedItem.classList.add('dragging');
         draggedItem.style.position = 'fixed';
@@ -135,19 +127,36 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!draggedItem) return;
         e.preventDefault();
         const eventPos = e.type === 'touchmove' ? e.touches[0] : e;
-        draggedItem.style.top = `${eventPos.clientY - offsetY}px`;
+
+        // Vizuális visszajelzés a célzónák felett
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+             // Elrejtjük az elemet, hogy megtaláljuk alatta a zónát
+            draggedItem.style.pointerEvents = 'none';
+            const targetUnder = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
+            draggedItem.style.pointerEvents = 'auto';
+
+            const isHovering = zone.contains(targetUnder);
+            zone.classList.toggle('drag-over', isHovering);
+        });
+
         draggedItem.style.left = `${eventPos.clientX - offsetX}px`;
+        draggedItem.style.top = `${eventPos.clientY - offsetY}px`;
     }
 
     function handleDragEnd(e) {
         if (!draggedItem) return;
         
+        // Eltávolítjuk a vizuális visszajelzést
+        document.querySelectorAll('.drop-zone').forEach(zone => zone.classList.remove('drag-over'));
+
+        // Ideiglenesen elrejtjük a húzott elemet, hogy az 'elementFromPoint'
+        // a mögötte lévő elemet adja vissza.
         draggedItem.style.visibility = 'hidden';
         const eventPos = e.type === 'touchend' ? e.changedTouches[0] : e;
         const dropTarget = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
         draggedItem.style.visibility = 'visible';
 
-        let newParent = sourceElements; // Default to returning to the source
+        let newParent = sourceElements; // Alapértelmezett cél a kiindulási zóna
         if (dropTarget) {
             const bowl = dropTarget.closest('.drop-zone');
             if (bowl) {
@@ -155,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
+        // Visszaállítjuk az elem stílusait és elhelyezzük az új szülőbe
         draggedItem.classList.remove('dragging');
         draggedItem.style.position = '';
         draggedItem.style.top = '';
@@ -163,29 +173,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         newParent.appendChild(draggedItem);
         
+        // Változók alaphelyzetbe állítása
         draggedItem = null;
         offsetX = 0;
         offsetY = 0;
     }
-
-    // --- EGÉR-SPECIFIKUS ESEMÉNYKEZELŐK (A touch-tól függetlenül) ---
-    const handleDragOver = (e) => e.preventDefault();
-    const handleDragEnter = (e) => {
-        const targetZone = e.target.closest('.drop-zone');
-        if (targetZone) targetZone.classList.add('drag-over');
-    };
-    const handleDragLeave = (e) => {
-        const targetZone = e.target.closest('.drop-zone');
-        if (targetZone) targetZone.classList.remove('drag-over');
-    };
-    const handleDrop = (e) => {
-        e.preventDefault();
-        const targetZone = e.target.closest('.drop-zone');
-        if (targetZone && draggedItem) {
-             targetZone.classList.remove('drag-over');
-             targetZone.appendChild(draggedItem);
-        }
-    };
 
     // --- ELLENŐRZÉS ---
     const checkSolution = () => {
@@ -210,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sourceElements.querySelectorAll('.number-item').forEach(item => {
             userSolution.source.push(parseInt(item.dataset.number, 10));
-            allCorrect = false;
+            allCorrect = false; // Ha maradt a kiindulási helyen, az hiba
         });
 
         if (sourceElements.children.length > 0) {
