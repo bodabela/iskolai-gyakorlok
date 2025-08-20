@@ -1,6 +1,6 @@
 /* --- ALAP STÍLUSOK ÉS KERETRENDSZER --- */
 :root {
-    --font-family: 'Fredoka One', cursive;
+    --font-family: 'Arial', sans-serif;
     --feedback-correct-color: #008000;
     --feedback-incorrect-color: #D8000C;
     --feedback-correct-bg: #DFF2BF;
@@ -19,16 +19,45 @@ body {
 }
 
 .controls-container {
-    display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px;
-    margin-bottom: 20px; padding: 10px 15px; background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: auto;
+    max-width: 95%;
 }
-.settings-group { display: flex; align-items: center; gap: 10px; }
-.theme-selector, .range-selector { display: flex; gap: 8px; }
-.control-label { font-weight: normal; font-size: 1.1em; color: var(--text-color); }
+.selector-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.theme-selector, .range-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+.control-label {
+    font-weight: normal;
+    font-size: 1.1em;
+    color: var(--text-color);
+    margin: 0;
+}
 .setting-button {
-    padding: 8px 16px; border-width: 3px; border-style: solid; border-radius: 15px; cursor: pointer;
-    font-family: var(--font-family); font-size: 1em; transition: all 0.2s ease-out;
+    padding: 8px 16px;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-size: 1em;
+    transition: all 0.2s ease-out;
 }
 .setting-button:hover { transform: translateY(-2px) scale(1.05); }
 .setting-button.active { transform: scale(1.05); font-weight: bold; }
@@ -40,7 +69,11 @@ body {
 }
 .task-title-box { padding: 10px 20px; border-radius: 15px 15px 0 0; }
 h1 { font-size: clamp(2em, 5vw, 2.8em); margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
-.task { padding: 20px; border-radius: 10px; }
+.task {
+    padding: 20px;
+    border: 3px dashed var(--task-border-color);
+    border-radius: 10px;
+}
 .task-header {
     display: flex; justify-content: space-between; align-items: center;
     margin: 10px 0 20px 0; padding: 15px; border-radius: 15px;
@@ -86,9 +119,10 @@ button.task-button:hover { transform: translateY(-2px) scale(1.02); }
 .number-item.correct { border-color: var(--feedback-correct-color) !important; background-color: var(--feedback-correct-bg); color: #000; }
 .number-item.incorrect { border-color: var(--feedback-incorrect-color) !important; background-color: var(--feedback-incorrect-bg); color: #000; }
 
+
 /* --- TÉMÁK --- */
 /* 1. Cukorka (Candy) */
-body.theme-candy { background: #fdf2f8; color: #522546; --container-bg-color: #fff1f2; --container-border-color: #fda4af; }
+body.theme-candy { background: #fdf2f8; color: #522546; --text-color: #522546; --container-bg-color: #fff1f2; --container-border-color: #fda4af; --task-border-color: #f9a8d4;}
 body.theme-candy h1, body.theme-candy .container-title { color: #db2777; }
 body.theme-candy .task-header { background-color: #fce7f3; color: #831843; }
 body.theme-candy .setting-button { background-color: #fff; border-color: #f9a8d4; color: #db2777; }
@@ -100,7 +134,7 @@ body.theme-candy .drop-zone { --dropzone-bg-color: #fae8ff; --dropzone-hover-bg-
 body.theme-candy .number-item { --item-bg-color: #f5d0fe; --item-border-color: #e879f9; --item-text-color: #701a75; }
 
 /* 2. Varázserdő (Magic Forest) */
-body.theme-magicforest { background: #f0fdf4; color: #14532d; --container-bg-color: #f0fdf4; --container-border-color: #6ee7b7; }
+body.theme-magicforest { background: #f0fdf4; color: #14532d; --text-color: #14532d; --container-bg-color: #f0fdf4; --container-border-color: #6ee7b7; --task-border-color: #a7f3d0;}
 body.theme-magicforest h1, body.theme-magicforest .container-title { color: #059669; }
 body.theme-magicforest .task-header { background-color: #dcfce7; color: #166534; }
 body.theme-magicforest .setting-button { background-color: #fff; border-color: #6ee7b7; color: #059669; }
@@ -110,3 +144,87 @@ body.theme-magicforest .feedback.correct { background-color: var(--feedback-corr
 body.theme-magicforest .feedback.incorrect { background-color: var(--feedback-incorrect-bg); color: var(--feedback-incorrect-color); }
 body.theme-magicforest .drop-zone { --dropzone-bg-color: #d1fae5; --dropzone-hover-bg-color: #a7f3d0; }
 body.theme-magicforest .number-item { --item-bg-color: #a7f3d0; --item-border-color: #6ee7b7; --item-text-color: #065f46; }
+
+/* 3. Óceán (Ocean) */
+body.theme-ocean { background: #eff6ff; color: #1e3a8a; --text-color: #1e3a8a; --container-bg-color: #dbeafe; --container-border-color: #93c5fd; --task-border-color: #bfdbfe;}
+body.theme-ocean h1, body.theme-ocean .container-title { color: #2563eb; }
+body.theme-ocean .task-header { background-color: #bfdbfe; color: #1e40af; }
+body.theme-ocean .setting-button { background-color: #fff; border-color: #93c5fd; color: #2563eb; }
+body.theme-ocean .setting-button.active { background-color: #60a5fa; border-color: #2563eb; color: white; text-shadow: 1px 1px 2px #1e3a8a; }
+body.theme-ocean .task-button { background-color: #3b82f6; border-color: #1d4ed8; }
+body.theme-ocean .feedback.correct { background-color: var(--feedback-correct-bg); color: var(--feedback-correct-color); }
+body.theme-ocean .feedback.incorrect { background-color: var(--feedback-incorrect-bg); color: var(--feedback-incorrect-color); }
+body.theme-ocean .drop-zone { --dropzone-bg-color: #e0f2fe; --dropzone-hover-bg-color: #bae6fd; }
+body.theme-ocean .number-item { --item-bg-color: #bae6fd; --item-border-color: #7dd3fc; --item-text-color: #0c4a6e; }
+
+/* 4. Naplemente (Sunset) */
+body.theme-sunset { background: #fff7ed; color: #7c2d12; --text-color: #7c2d12; --container-bg-color: #ffedd5; --container-border-color: #fdba74; --task-border-color: #fed7aa;}
+body.theme-sunset h1, body.theme-sunset .container-title { color: #f97316; }
+body.theme-sunset .task-header { background-color: #fee2e2; color: #9a3412; }
+body.theme-sunset .setting-button { background-color: #fff; border-color: #fdba74; color: #f97316; }
+body.theme-sunset .setting-button.active { background-color: #fb923c; border-color: #ea580c; color: white; text-shadow: 1px 1px 2px #7c2d12; }
+body.theme-sunset .task-button { background-color: #f97316; border-color: #c2410c; }
+body.theme-sunset .feedback.correct { background-color: var(--feedback-correct-bg); color: var(--feedback-correct-color); }
+body.theme-sunset .feedback.incorrect { background-color: var(--feedback-incorrect-bg); color: var(--feedback-incorrect-color); }
+body.theme-sunset .drop-zone { --dropzone-bg-color: #fff1e6; --dropzone-hover-bg-color: #ffe4cc; }
+body.theme-sunset .number-item { --item-bg-color: #fed7aa; --item-border-color: #fdba74; --item-text-color: #9a3412; }
+
+/* 5. Űr (Space) */
+body.theme-space { background: #111827; color: #e5e7eb; --text-color: #e5e7eb; --container-bg-color: #1f2937; --container-border-color: #4b5563; --task-border-color: #6b7280;}
+body.theme-space h1, body.theme-space .container-title { color: #818cf8; }
+body.theme-space .task-header { background-color: #374151; color: #d1d5db; }
+body.theme-space .setting-button { background-color: #374151; border-color: #6b7280; color: #e5e7eb; }
+body.theme-space .setting-button.active { background-color: #6366f1; border-color: #a5b4fc; color: white; text-shadow: 1px 1px 2px #111827; }
+body.theme-space .task-button { background-color: #8b5cf6; border-color: #a78bfa; }
+body.theme-space .feedback.correct { background-color: #166534; color: #dcfce7; }
+body.theme-space .feedback.incorrect { background-color: #991b1b; color: #fee2e2; }
+body.theme-space .drop-zone { --dropzone-bg-color: #4b5563; --dropzone-hover-bg-color: #525c6a; }
+body.theme-space .number-item { --item-bg-color: #374151; --item-border-color: #9ca3af; --item-text-color: #f3f4f6; }
+
+/* 6. Őserdő (Jungle) */
+body.theme-oserd { background: #f4f1e9; color: #3b3a30; --text-color: #3b3a30; --container-bg-color: #e4e6c3; --container-border-color: #a0a66d; --task-border-color: #c9cba3;}
+body.theme-oserd h1, body.theme-oserd .container-title { color: #5c5d4e; }
+body.theme-oserd .task-header { background-color: #daddb1; color: #484a3b; }
+body.theme-oserd .setting-button { background-color: #fff; border-color: #a0a66d; color: #5c5d4e; }
+body.theme-oserd .setting-button.active { background-color: #a0a66d; border-color: #5c5d4e; color: white; text-shadow: 1px 1px 2px #3b3a30; }
+body.theme-oserd .task-button { background-color: #8b923f; border-color: #5c5d4e; }
+body.theme-oserd .feedback.correct { background-color: var(--feedback-correct-bg); color: var(--feedback-correct-color); }
+body.theme-oserd .feedback.incorrect { background-color: var(--feedback-incorrect-bg); color: var(--feedback-incorrect-color); }
+body.theme-oserd .drop-zone { --dropzone-bg-color: #e4e6c3; --dropzone-hover-bg-color: #daddb1; }
+body.theme-oserd .number-item { --item-bg-color: #daddb1; --item-border-color: #a0a66d; --item-text-color: #484a3b; }
+
+/* 7. Techno */
+body.theme-techno { background: #0d0221; color: #c0d1dd; --text-color: #c0d1dd; --container-bg-color: #1d1135; --container-border-color: #f038ff; --task-border-color: #00f5ff;}
+body.theme-techno h1, body.theme-techno .container-title { color: #00f5ff; }
+body.theme-techno .task-header { background-color: #291c44; color: #a2e2ef; }
+body.theme-techno .setting-button { background-color: #291c44; border-color: #00f5ff; color: #c0d1dd; }
+body.theme-techno .setting-button.active { background-color: #f038ff; border-color: #00f5ff; color: white; text-shadow: 1px 1px 2px #0d0221; }
+body.theme-techno .task-button { background-color: #2a7f9a; border-color: #00f5ff; }
+body.theme-techno .feedback.correct { background-color: #053808; color: #c5fcd0; }
+body.theme-techno .feedback.incorrect { background-color: #540b0b; color: #ffcaca; }
+body.theme-techno .drop-zone { --dropzone-bg-color: #1d1135; --dropzone-hover-bg-color: #291c44; }
+body.theme-techno .number-item { --item-bg-color: #291c44; --item-border-color: #00f5ff; --item-text-color: #a2e2ef; }
+
+/* 8. Sport */
+body.theme-sport { background: #f5f5f5; color: #212121; --text-color: #212121; --container-bg-color: #ffffff; --container-border-color: #f44336; --task-border-color: #2196f3;}
+body.theme-sport h1, body.theme-sport .container-title { color: #1976d2; }
+body.theme-sport .task-header { background-color: #e8f5e9; color: #2e7d32; }
+body.theme-sport .setting-button { background-color: #fff; border-color: #ffc107; color: #212121; }
+body.theme-sport .setting-button.active { background-color: #ffc107; border-color: #f57f17; color: #212121; }
+body.theme-sport .task-button { background-color: #f44336; border-color: #b71c1c; }
+body.theme-sport .feedback.correct { background-color: var(--feedback-correct-bg); color: var(--feedback-correct-color); }
+body.theme-sport .feedback.incorrect { background-color: var(--feedback-incorrect-bg); color: var(--feedback-incorrect-color); }
+body.theme-sport .drop-zone { --dropzone-bg-color: #e3f2fd; --dropzone-hover-bg-color: #bbdefb; }
+body.theme-sport .number-item { --item-bg-color: #fff; --item-border-color: #2196f3; --item-text-color: #1976d2; }
+
+/* 9. Kaland (Adventure) */
+body.theme-kaland { background: #fdf6e3; color: #6b4f4b; --text-color: #6b4f4b; --container-bg-color: #f5e9d3; --container-border-color: #808000; --task-border-color: #b08968;}
+body.theme-kaland h1, body.theme-kaland .container-title { color: #c97941; }
+body.theme-kaland .task-header { background-color: #e9edc9; color: #585c30; }
+body.theme-kaland .setting-button { background-color: #fff; border-color: #b08968; color: #6b4f4b; }
+body.theme-kaland .setting-button.active { background-color: #b08968; border-color: #808000; color: white; }
+body.theme-kaland .task-button { background-color: #c97941; border-color: #808000; }
+body.theme-kaland .feedback.correct { background-color: var(--feedback-correct-bg); color: var(--feedback-correct-color); }
+body.theme-kaland .feedback.incorrect { background-color: var(--feedback-incorrect-bg); color: var(--feedback-incorrect-color); }
+body.theme-kaland .drop-zone { --dropzone-bg-color: #f5e9d3; --dropzone-hover-bg-color: #e9edc9; }
+body.theme-kaland .number-item { --item-bg-color: #e9edc9; --item-border-color: #b08968; --item-text-color: #585c30; }

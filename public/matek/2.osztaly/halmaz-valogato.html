@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halmaz-válogató - 2. Osztály</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="halmaz-valogato.css">
 </head>
 <body class="theme-candy">
     <div class="controls-container">
-        <div class="settings-group">
-            <p class="control-label">Téma:</p>
+        <div class="selector-group">
+            <p class="control-label">Téma választó:</p>
             <div id="themeSelector" class="theme-selector">
-                <button class="setting-button theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="setting-button theme-button active" data-theme="theme-candy">Cukorka</button>
                 <button class="setting-button theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="setting-button theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="setting-button theme-button" data-theme="theme-sunset">Naplemente</button>
+                <button class="setting-button theme-button" data-theme="theme-space">Űr</button>
+                <button class="setting-button theme-button" data-theme="theme-oserd">Őserdő</button>
+                <button class="setting-button theme-button" data-theme="theme-techno">Techno</button>
+                <button class="setting-button theme-button" data-theme="theme-sport">Sport</button>
+                <button class="setting-button theme-button" data-theme="theme-kaland">Kaland</button>
             </div>
         </div>
-        <div class="settings-group">
-            <p class="control-label">Számkör:</p>
+        <div class="selector-group">
+            <p class="control-label">Számkör választó:</p>
             <div id="rangeSelector" class="range-selector">
                 <button class="setting-button" data-range="20">20</button>
                 <button class="setting-button active" data-range="100">100</button>
