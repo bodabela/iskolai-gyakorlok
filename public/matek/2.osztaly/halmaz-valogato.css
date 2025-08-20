@@ -96,15 +96,25 @@ button.task-button:hover { transform: translateY(-2px) scale(1.02); }
 /* --- FELADAT-SPECIFIKUS STÍLUSOK --- */
 #main-content { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 20px; margin-top: 25px; }
 #source-container { width: 100%; max-width: 800px; }
-#target-containers { display: flex; justify-content: center; gap: 20px; width: 100%; flex-wrap: wrap; }
+
+/* === MÓDOSÍTÁS ITT KEZDŐDIK === */
+#target-containers { 
+    display: flex; 
+    justify-content: center; 
+    gap: 20px; 
+    width: 100%; 
+    /* A "flex-wrap: wrap;" tulajdonság eltávolítva, hogy ne törjön több sorba */
+}
+
 .element-box {
     background-color: var(--task-header-bg-color);
     border: 3px solid var(--container-title-color);
     border-radius: 15px;
     padding: 15px;
-    flex-grow: 1;
-    min-width: 300px;
+    flex: 1; /* A "flex-grow: 1" és "min-width" helyett ez biztosítja az 50-50%-os elosztást */
 }
+/* === MÓDOSÍTÁS VÉGE === */
+
 .container-title { font-size: 1.5em; margin: 0 0 15px 0; color: var(--container-title-color); }
 .drop-zone { min-height: 100px; padding: 10px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-content: flex-start; border-radius: 10px; background-color: var(--dropzone-bg-color); transition: background-color 0.3s; }
 .number-item {
