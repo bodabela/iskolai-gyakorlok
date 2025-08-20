@@ -64,12 +64,12 @@ input.solution-input:focus { outline: none; transform: scale(1.05); }
 .relation-selector { display: flex; gap: 10px; }
 .relation-btn {
     width: 70px; height: 70px; font-size: 1em; font-family: 'Arial Black', sans-serif;
-    border: 3px solid var(--input-border-color); border-radius: 12px; cursor: pointer;
+    border: 2px solid var(--input-border-color); border-radius: 12px; cursor: pointer;
     display: flex; justify-content: center; align-items: center;
     background-color: var(--input-bg-color); color: inherit; transition: all 0.2s ease-out;
 }
 .relation-btn:hover { transform: scale(1.05); }
-.relation-btn.selected { transform: scale(1.1); border-width: 4px; }
+.relation-btn.selected { transform: scale(1.1); border-width: 6px; }
 .relation-btn.correct-choice { border-color: var(--feedback-correct-color) !important; background-color: var(--feedback-correct-bg); }
 .relation-btn.incorrect-choice { border-color: var(--feedback-incorrect-color) !important; background-color: var(--feedback-incorrect-bg); }
 
