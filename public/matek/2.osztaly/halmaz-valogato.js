@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    initializeFirebaseAndLogger();
     // --- DOM ELEMEK ---
     const sourceElements = document.getElementById('source-elements');
     const set1 = document.getElementById('set1');
@@ -16,9 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         theme: 'theme-candy',
         range: 100
     };
-    let sessionID = `local-${Date.now()}`;
-    let isLoggerAvailable = false;
-
+    
     // --- TÉMA- ÉS BEÁLLÍTÁSKEZELÉS ---
     function applySettings() {
         document.body.className = '';
@@ -45,22 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- LOGGER INICIALIZÁLÁS ---
-    if (window.logger && typeof window.logger.getSessionId === 'function') {
-        sessionID = window.logger.getSessionId();
-        isLoggerAvailable = true;
-    } else {
-        console.warn("Firebase logger nem elérhető.");
-    }
-    const logEvent = (eventName, eventData) => {
-        if (isLoggerAvailable) { window.logger.log(eventName, eventData); }
-    };
-
     // --- FELADAT GENERÁLÁS ---
     const generateNewTask = () => {
-        currentTaskID = `task-${Date.now()}`;
-        logEvent('feladvany_generalasa', { sessionId: sessionID, taskId: currentTaskID, taskType: 'halmaz-valogato', details: { range: currentSettings.range } });
+        currentTaskID = `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        logNewTask('halmaz-valogato', { taskId: currentTaskID, details: { range: currentSettings.range } });
         
+        sourceElements.innerHTML = '';
         document.querySelectorAll('.drop-zone').forEach(zone => zone.innerHTML = '');
         feedback.innerHTML = '&nbsp;';
         feedback.className = 'feedback';
@@ -163,13 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback.className = 'feedback incorrect';
         }
         
-        logEvent('feladvany_ellenorzese', { sessionId: sessionID, taskId: currentTaskID, correct: allCorrect, solution: userSolution });
+        logTaskCheck('halmaz-valogato', { taskId: currentTaskID, correct: allCorrect, solution: userSolution });
     };
 
     // --- INDÍTÁS ---
     newTaskBtn.addEventListener('click', generateNewTask);
     checkBtn.addEventListener('click', checkSolution);
-    logEvent('belepes_feladatba', { sessionId: sessionID, taskType: 'halmaz-valogato' });
+    logTaskEntry('halmaz-valogato');
     applySettings();
     generateNewTask();
 });

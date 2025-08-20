@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    initializeFirebaseAndLogger();
     // --- DOM ELEMEK ---
     const taskContainer = document.getElementById('task-container');
     const checkBtn = document.getElementById('check-btn');
@@ -13,9 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         theme: 'theme-candy',
         range: 100
     };
-    let sessionID = `local-${Date.now()}`;
-    let isLoggerAvailable = false;
-
+    
     // --- TÉMA- ÉS BEÁLLÍTÁSKEZELÉS ---
     function applySettings() {
         document.body.className = '';
@@ -42,21 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- LOGGER ---
-    if (window.logger && typeof window.logger.getSessionId === 'function') {
-        sessionID = window.logger.getSessionId();
-        isLoggerAvailable = true;
-    } else {
-        console.warn("Firebase logger nem elérhető.");
-    }
-    const logEvent = (eventName, eventData) => {
-        if (isLoggerAvailable) { window.logger.log(eventName, eventData); }
-    };
-
     // --- FELADAT GENERÁLÁS ---
     const generateNewTask = () => {
-        currentTaskID = `task-${Date.now()}`;
-        logEvent('feladvany_generalasa', { sessionId: sessionID, taskId: currentTaskID, taskType: 'szamszomszed-relacio', details: { range: currentSettings.range } });
+        currentTaskID = `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        logNewTask('szamszomszed-relacio', { taskId: currentTaskID, details: { range: currentSettings.range } });
 
         taskContainer.innerHTML = '';
         feedback.innerHTML = '&nbsp;';
@@ -111,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ESEMÉNYKEZELŐK ---
     const addEventListeners = () => {
         taskContainer.querySelectorAll('.relation-btn').forEach(btn => btn.addEventListener('click', handleRelationClick));
-        taskContainer.querySelectorAll('.solution-input').forEach(input => input.addEventListener('input', autoTab));
+        taskContainer.querySelectorAll('.solution-input').forEach(input => input.addEventListener('input', (e) => autoTab(e.target)));
     };
 
     const handleRelationClick = (e) => {
@@ -138,21 +126,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const allTasks = taskContainer.querySelectorAll('.task-row');
         const userSolution = [];
 
-        allTasks.forEach(row => {
+        allTasks.forEach((row, index) => {
             let isRowCorrect = true;
+            let rowSolution = { type: '', correct: false, inputs: [] };
             row.querySelectorAll('.solution-input, .relation-btn').forEach(el => el.classList.remove('correct', 'incorrect', 'correct-choice', 'incorrect-choice'));
 
             // Számszomszéd ellenőrzés
-            row.querySelectorAll('.solution-input').forEach(input => {
-                const isCorrect = input.value === input.dataset.correct;
-                input.classList.toggle('correct', isCorrect);
-                input.classList.toggle('incorrect', !isCorrect);
-                if (!isCorrect) isRowCorrect = false;
-            });
+            const neighborInputs = row.querySelectorAll('.solution-input');
+            if (neighborInputs.length > 0) {
+                rowSolution.type = 'neighbor';
+                neighborInputs.forEach(input => {
+                    const isCorrect = input.value === input.dataset.correct;
+                    input.classList.toggle('correct', isCorrect);
+                    input.classList.toggle('incorrect', !isCorrect);
+                    if (!isCorrect) isRowCorrect = false;
+                    rowSolution.inputs.push({ provided: input.value, correct: input.dataset.correct });
+                });
+            }
 
             // Reláció ellenőrzés
             const relationSelector = row.querySelector('.relation-selector');
             if (relationSelector) {
+                rowSolution.type = 'relation';
                 const selected = relationSelector.getAttribute('data-selected-relation');
                 const correct = row.getAttribute('data-correct-relation');
                 const selectedBtn = relationSelector.querySelector('.relation-btn.selected');
@@ -163,12 +158,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     isRowCorrect = false;
                 }
                 if (!selected) isRowCorrect = false; // Ha nincs választás, nem helyes
+                rowSolution.inputs.push({ provided: selected, correct: correct });
             }
             
+            rowSolution.correct = isRowCorrect;
+            userSolution.push(rowSolution);
             if (isRowCorrect) correctCount++;
         });
 
-        if (correctCount === allTasks.length) {
+        const allCorrect = correctCount === allTasks.length;
+        if (allCorrect) {
             feedback.textContent = 'Szép munka! Minden megoldásod helyes!';
             feedback.className = 'feedback correct';
         } else {
@@ -176,13 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback.className = 'feedback incorrect';
         }
 
-        logEvent('feladvany_ellenorzese', { sessionId: sessionID, taskId: currentTaskID, correct: correctCount === allTasks.length });
+        logTaskCheck('szamszomszed-relacio', { taskId: currentTaskID, correct: allCorrect, details: userSolution });
     };
 
     // --- INDÍTÁS ---
     newTaskBtn.addEventListener('click', generateNewTask);
     checkBtn.addEventListener('click', checkSolution);
-    logEvent('belepes_feladatba', { sessionId: sessionID, taskType: 'szamszomszed-relacio' });
+    logTaskEntry('szamszomszed-relacio');
     applySettings();
     generateNewTask();
 });
