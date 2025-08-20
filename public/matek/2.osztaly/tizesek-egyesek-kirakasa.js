@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const createRectangle = (value, parent) => {
         const rect = document.createElement('div');
         rect.className = `rectangle ${value === 10 ? 'ten-block' : 'one-block'}`;
-        rect.draggable = true;
+        rect.draggable = false; // Natív D&D kikapcsolása
         rect.dataset.value = value;
         for (let i = 0; i < value; i++) {
             rect.appendChild(document.createElement('div')).className = 'unit-cell';
@@ -98,20 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
         parent.appendChild(rect);
     };
 
-    // --- DRAG & DROP LOGIKA ---
+    // --- EGYSÉGESÍTETT DRAG & DROP LOGIKA ---
     function addDragAndDropListeners() {
         const items = document.querySelectorAll('.rectangle');
         items.forEach(item => {
-            item.addEventListener('dragstart', (e) => handleDragStart(e, item));
+            item.addEventListener('mousedown', (e) => handleDragStart(e, item));
             item.addEventListener('touchstart', (e) => handleDragStart(e, item), { passive: false });
-        });
-
-        const allDropZones = document.querySelectorAll('.source-zone, .drop-zone');
-        allDropZones.forEach(zone => {
-            zone.addEventListener('dragover', handleDragOver);
-            zone.addEventListener('dragenter', handleDragEnter);
-            zone.addEventListener('dragleave', handleDragLeave);
-            zone.addEventListener('drop', handleDrop);
         });
         
         document.addEventListener('mousemove', handleDragMove);
@@ -121,8 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleDragStart(e, element) {
+        if (e.type === 'mousedown' && e.button !== 0) return;
         if (draggedItem) return;
         e.preventDefault();
+
         draggedItem = element;
 
         const rect = draggedItem.getBoundingClientRect();
@@ -131,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         offsetX = eventPos.clientX - rect.left;
         offsetY = eventPos.clientY - rect.top;
         
+        // Elem áthelyezése a body-ba a rétegezés miatt
         document.body.appendChild(draggedItem);
         draggedItem.classList.add('dragging');
         draggedItem.style.position = 'fixed';
@@ -144,24 +139,37 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!draggedItem) return;
         e.preventDefault();
         const eventPos = e.type === 'touchmove' ? e.touches[0] : e;
+
+        // Vizuális visszajelzés a célzónák felett
+        draggedItem.style.pointerEvents = 'none';
+        const allDropZones = document.querySelectorAll('.source-zone, .drop-zone');
+        allDropZones.forEach(zone => {
+            const targetUnder = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
+            zone.classList.toggle('drag-over', zone.contains(targetUnder));
+        });
+        draggedItem.style.pointerEvents = 'auto';
+
         draggedItem.style.top = `${eventPos.clientY - offsetY}px`;
         draggedItem.style.left = `${eventPos.clientX - offsetX}px`;
     }
 
     function handleDragEnd(e) {
         if (!draggedItem) return;
+        
+        document.querySelectorAll('.source-zone, .drop-zone').forEach(zone => zone.classList.remove('drag-over'));
 
-        draggedItem.style.visibility = 'hidden';
+        draggedItem.style.pointerEvents = 'none';
         const eventPos = e.type === 'touchend' ? e.changedTouches[0] : e;
         const dropTarget = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
-        draggedItem.style.visibility = 'visible';
+        draggedItem.style.pointerEvents = 'auto';
         
         const targetZone = dropTarget ? dropTarget.closest('.drop-zone, .source-zone') : null;
 
         let newParent = null;
-        if (targetZone && targetZone.classList.contains('drop-zone')) {
+        if (targetZone) {
             newParent = targetZone;
         } else {
+            // Ha nem zónára esik, visszatesszük a saját kiindulási helyére
             const targetId = draggedItem.dataset.value === '10' ? 'source-tens' : 'source-ones';
             newParent = document.getElementById(targetId);
         }
@@ -181,25 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
         offsetY = 0;
         updateSum();
     }
-
-    const handleDragOver = (e) => e.preventDefault();
-    const handleDragEnter = (e) => {
-        const targetZone = e.target.closest('.drop-zone, .source-zone');
-        if (targetZone) targetZone.classList.add('drag-over');
-    };
-    const handleDragLeave = (e) => {
-        const targetZone = e.target.closest('.drop-zone, .source-zone');
-        if (targetZone) targetZone.classList.remove('drag-over');
-    };
-    const handleDrop = (e) => {
-        e.preventDefault();
-        const targetZone = e.target.closest('.drop-zone, .source-zone');
-        if (targetZone && draggedItem) {
-            targetZone.classList.remove('drag-over');
-            targetZone.appendChild(draggedItem);
-            updateSum();
-        }
-    };
     
     // --- ÖSSZEGZÉS ---
     const updateSum = () => {
