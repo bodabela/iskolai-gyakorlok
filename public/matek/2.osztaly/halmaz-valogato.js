@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const item = document.createElement('div');
             item.className = 'number-item';
             item.textContent = num;
-            item.draggable = false; // Kikapcsoljuk a natív drag funkciót
+            item.draggable = false;
             item.setAttribute('data-number', num);
             sourceElements.appendChild(item);
         });
@@ -88,12 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function addDragAndDropListeners() {
         const items = document.querySelectorAll('.number-item');
         items.forEach(item => {
-            // Egységes eseménykezelő egérre és érintésre
             item.addEventListener('mousedown', (e) => handleDragStart(e, item));
             item.addEventListener('touchstart', (e) => handleDragStart(e, item), { passive: false });
         });
 
-        // A dokumentumra helyezett figyelők kezelik a húzást és az elengedést
         document.addEventListener('mousemove', handleDragMove);
         document.addEventListener('mouseup', handleDragEnd);
         document.addEventListener('touchmove', handleDragMove, { passive: false });
@@ -101,9 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function handleDragStart(e, element) {
-        // Csak a bal egérgombbal való húzást engedélyezzük
         if (e.type === 'mousedown' && e.button !== 0) return;
-        if (draggedItem) return; // Megakadályozzuk új húzás indítását, ha már van folyamatban
+        if (draggedItem) return;
 
         e.preventDefault();
         draggedItem = element;
@@ -114,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
         offsetX = eventPos.clientX - rect.left;
         offsetY = eventPos.clientY - rect.top;
 
-        // Az eredeti elemet mozgatjuk
         document.body.appendChild(draggedItem); 
         draggedItem.classList.add('dragging');
         draggedItem.style.position = 'fixed';
@@ -128,16 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const eventPos = e.type === 'touchmove' ? e.touches[0] : e;
 
-        // Vizuális visszajelzés a célzónák felett
+        draggedItem.style.pointerEvents = 'none';
         document.querySelectorAll('.drop-zone').forEach(zone => {
-             // Elrejtjük az elemet, hogy megtaláljuk alatta a zónát
-            draggedItem.style.pointerEvents = 'none';
             const targetUnder = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
-            draggedItem.style.pointerEvents = 'auto';
-
-            const isHovering = zone.contains(targetUnder);
-            zone.classList.toggle('drag-over', isHovering);
+            zone.classList.toggle('drag-over', zone.contains(targetUnder));
         });
+        draggedItem.style.pointerEvents = 'auto';
 
         draggedItem.style.left = `${eventPos.clientX - offsetX}px`;
         draggedItem.style.top = `${eventPos.clientY - offsetY}px`;
@@ -145,17 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleDragEnd(e) {
         if (!draggedItem) return;
-        
-        // Eltávolítjuk a vizuális visszajelzést
+    
         document.querySelectorAll('.drop-zone').forEach(zone => zone.classList.remove('drag-over'));
-
-        // Ideiglenesen elrejtjük a húzott elemet, hogy az 'elementFromPoint'
-        // a mögötte lévő elemet adja vissza.
-        draggedItem.style.visibility = 'hidden';
+    
+        // A 'pointer-events: none' megbízhatóbb módszer a célpont azonosítására.
+        draggedItem.style.pointerEvents = 'none';
         const eventPos = e.type === 'touchend' ? e.changedTouches[0] : e;
         const dropTarget = document.elementFromPoint(eventPos.clientX, eventPos.clientY);
-        draggedItem.style.visibility = 'visible';
-
+        draggedItem.style.pointerEvents = 'auto';
+    
         let newParent = sourceElements; // Alapértelmezett cél a kiindulási zóna
         if (dropTarget) {
             const bowl = dropTarget.closest('.drop-zone');
@@ -164,7 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Visszaállítjuk az elem stílusait és elhelyezzük az új szülőbe
         draggedItem.classList.remove('dragging');
         draggedItem.style.position = '';
         draggedItem.style.top = '';
@@ -173,7 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         newParent.appendChild(draggedItem);
         
-        // Változók alaphelyzetbe állítása
         draggedItem = null;
         offsetX = 0;
         offsetY = 0;
@@ -202,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sourceElements.querySelectorAll('.number-item').forEach(item => {
             userSolution.source.push(parseInt(item.dataset.number, 10));
-            allCorrect = false; // Ha maradt a kiindulási helyen, az hiba
+            allCorrect = false;
         });
 
         if (sourceElements.children.length > 0) {
