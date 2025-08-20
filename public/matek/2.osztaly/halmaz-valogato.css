@@ -124,7 +124,7 @@ button.task-button:hover { transform: translateY(-2px) scale(1.02); }
     background-color: var(--item-bg-color); border-color: var(--item-border-color);
     transition: all 0.3s ease;
 }
-.number-item.dragging { opacity: 0.6; transform: scale(1.1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.number-item.dragging { opacity: 0.6; transform: scale(1.1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: none;}
 .drop-zone.drag-over { background-color: var(--dropzone-hover-bg-color); }
 .number-item.correct { border-color: var(--feedback-correct-color) !important; background-color: var(--feedback-correct-bg); color: #000; }
 .number-item.incorrect { border-color: var(--feedback-incorrect-color) !important; background-color: var(--feedback-incorrect-bg); color: #000; }
