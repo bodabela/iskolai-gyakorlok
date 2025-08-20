@@ -54,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTask.number = getRandomInt(11, currentSettings.range);
         
         taskNumberEl.textContent = currentTask.number;
-        sourceElements.innerHTML = '';
         dropZone.innerHTML = '';
         feedback.innerHTML = '&nbsp;';
         feedback.className = 'feedback';
@@ -76,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
     const createRectangles = () => {
+        // A sourceElements innerHTML-jét a generateNewTask már törölte, de a biztonság kedvéért itt is lehetne.
         sourceElements.innerHTML = `
             <div id="source-tens" class="source-zone"></div>
             <div id="source-ones" class="source-zone"></div>
@@ -92,23 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
         rect.className = `rectangle ${value === 10 ? 'ten-block' : 'one-block'}`;
         rect.draggable = true;
         rect.dataset.value = value;
-
         for (let i = 0; i < value; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'unit-cell';
-            rect.appendChild(cell);
+            rect.appendChild(document.createElement('div')).className = 'unit-cell';
         }
         parent.appendChild(rect);
     };
 
-    // --- DRAG & DROP LOGIKA (JAVÍTOTT) ---
+    // --- DRAG & DROP LOGIKA ---
     function addDragAndDropListeners() {
         const items = document.querySelectorAll('.rectangle');
         items.forEach(item => {
-            // Mouse events
             item.addEventListener('dragstart', handleDragStart);
             item.addEventListener('dragend', handleDragEnd);
-            // Touch events
             item.addEventListener('touchstart', handleTouchStart, { passive: false });
         });
 
@@ -127,9 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => e.target.classList.add('dragging'), 0);
     };
     const handleDragEnd = () => {
-        if(draggedItem) {
-            draggedItem.classList.remove('dragging');
-        }
+        if(draggedItem) draggedItem.classList.remove('dragging');
         draggedItem = null;
     };
     const handleDragOver = (e) => e.preventDefault();
@@ -146,17 +139,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetZone = e.target.closest('.drop-zone, .source-zone');
         if (targetZone && draggedItem) {
             targetZone.classList.remove('drag-over');
-            targetZone.appendChild(draggedItem);
+            // Logika, ami a megfelelő helyre teszi az elemet
+            if (targetZone.classList.contains('drop-zone')) {
+                targetZone.appendChild(draggedItem);
+            } else { // Visszavitel a forrásba
+                const targetId = draggedItem.dataset.value === '10' ? 'source-tens' : 'source-ones';
+                document.getElementById(targetId).appendChild(draggedItem);
+            }
             updateSum();
         }
     };
     
-    // --- ÉRINTÉS ESEMÉNYEK (AZ ALAKZATOK.HTML MINTÁJÁRA) ---
+    // --- ÉRINTÉS ESEMÉNYEK (JAVÍTOTT) ---
     let touchClone = null;
     let offsetX = 0, offsetY = 0;
 
     const handleTouchStart = (e) => {
-        e.preventDefault(); // <-- A LEGFONTOSABB VÁLTOZTATÁS!
+        e.preventDefault(); // Megakadályozza a kontext menüt
         draggedItem = e.target;
         
         const touch = e.touches[0];
@@ -173,7 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         touchClone.style.left = `${touch.clientX - offsetX}px`;
         touchClone.style.top = `${touch.clientY - offsetY}px`;
-
         draggedItem.style.visibility = 'hidden';
 
         document.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -182,8 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const handleTouchMove = (e) => {
         e.preventDefault();
-        if (!draggedItem || !touchClone) return;
-        
+        if (!touchClone) return;
         const touch = e.touches[0];
         touchClone.style.left = `${touch.clientX - offsetX}px`;
         touchClone.style.top = `${touch.clientY - offsetY}px`;
@@ -199,17 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const targetZone = dropTarget ? dropTarget.closest('.drop-zone, .source-zone') : null;
 
-        if (targetZone) {
+        if (targetZone && targetZone.classList.contains('drop-zone')) {
             targetZone.appendChild(draggedItem);
         } else {
-            // Ha nem érvényes zónába esik, visszakerül a kiindulási helyére
-            const originalSourceId = draggedItem.dataset.value === '10' ? 'source-tens' : 'source-ones';
-            document.getElementById(originalSourceId).appendChild(draggedItem);
+            // Ha nem a célzónába vagy a forrászónába esik, akkor is visszakerül a saját forrásába
+            const targetId = draggedItem.dataset.value === '10' ? 'source-tens' : 'source-ones';
+            document.getElementById(targetId).appendChild(draggedItem);
         }
         
         draggedItem.style.visibility = 'visible';
         document.body.removeChild(touchClone);
-        
         draggedItem = null;
         touchClone = null;
 
@@ -217,35 +213,45 @@ document.addEventListener('DOMContentLoaded', () => {
         document.removeEventListener('touchend', handleTouchEnd);
         updateSum();
     };
-
-    // --- ÖSSZEGZÉS ÉS ELLENŐRZÉS ---
+    
+    // --- ÖSSZEGZÉS (VISSZAÁLLÍTOTT) ---
     const updateSum = () => {
         const rectanglesInDropZone = dropZone.querySelectorAll('.rectangle');
+        
         if (rectanglesInDropZone.length === 0) {
             currentSumEl.textContent = '0';
             return;
         }
 
-        let totalSum = Array.from(rectanglesInDropZone).reduce((sum, rect) => sum + parseInt(rect.dataset.value, 10), 0);
-        currentSumEl.textContent = totalSum;
+        let totalSum = 0;
+        const tens = [];
+        const ones = [];
+
+        rectanglesInDropZone.forEach(rect => {
+            const value = parseInt(rect.dataset.value, 10);
+            totalSum += value;
+            if (value === 10) tens.push(value); else ones.push(value);
+        });
+
+        const expressionParts = [];
+        if (tens.length > 0) expressionParts.push(...tens);
+        const sumOfOnes = ones.reduce((sum, current) => sum + current, 0);
+        if (sumOfOnes > 0) expressionParts.push(sumOfOnes);
+
+        currentSumEl.textContent = `${expressionParts.join(' + ')} = ${totalSum}`;
     };
 
+    // --- ELLENŐRZÉS ---
     const checkSolution = () => {
-        const sum = parseInt(currentSumEl.textContent, 10);
+        const sumText = currentSumEl.textContent;
+        const sum = parseInt(sumText.split('=')[1]?.trim(), 10);
 
         if (isNaN(sum)) return;
 
         const isCorrect = sum === currentTask.number;
-        
-        if (isCorrect) {
-            feedback.textContent = 'Helyes! Ügyes vagy!';
-            feedback.className = 'feedback correct';
-            dropZone.style.borderColor = 'var(--feedback-correct-color)';
-        } else {
-            feedback.textContent = 'Nem jó. Próbáld újra!';
-            feedback.className = 'feedback incorrect';
-            dropZone.style.borderColor = 'var(--feedback-incorrect-color)';
-        }
+        feedback.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+        feedback.textContent = isCorrect ? 'Helyes! Ügyes vagy!' : 'Nem jó. Próbáld újra!';
+        dropZone.style.borderColor = isCorrect ? 'var(--feedback-correct-color)' : 'var(--feedback-incorrect-color)';
 
         logTaskCheck('tizesek-egyesek-kirakasa', { 
             taskId: currentTask.id, 

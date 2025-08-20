@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return Array.from(numbers);
     };
 
-    // --- DRAG & DROP LOGIKA (JAVÍTOTT) ---
+    // --- DRAG & DROP LOGIKA ---
     function addDragAndDropListeners() {
         const items = document.querySelectorAll('.number-item');
         items.forEach(item => {
@@ -110,9 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => e.target.classList.add('dragging'), 0);
     };
     const handleDragEnd = () => {
-        if (draggedItem) {
-            draggedItem.classList.remove('dragging');
-        }
+        if (draggedItem) draggedItem.classList.remove('dragging');
         draggedItem = null;
     };
     const handleDragOver = (e) => e.preventDefault();
@@ -133,12 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- ÉRINTÉS ESEMÉNYEK (AZ ALAKZATOK.HTML MINTÁJÁRA) ---
+    // --- ÉRINTÉS ESEMÉNYEK (JAVÍTOTT) ---
     let touchClone = null;
     let offsetX = 0, offsetY = 0;
 
     const handleTouchStart = (e) => {
-        e.preventDefault(); // <-- A LEGFONTOSABB VÁLTOZTATÁS!
+        e.preventDefault();
         draggedItem = e.target;
         
         const touch = e.touches[0];
@@ -174,9 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleTouchEnd = (e) => {
         if (!draggedItem || !touchClone) return;
 
+        // A klón ideiglenes elrejtése a célpont meghatározásához
         touchClone.style.visibility = 'hidden';
         const endTouch = e.changedTouches[0];
         const dropTarget = document.elementFromPoint(endTouch.clientX, endTouch.clientY);
+        // A klón azonnali visszaállítása láthatóvá
         touchClone.style.visibility = 'visible';
         
         const targetZone = dropTarget ? dropTarget.closest('.drop-zone, .source-zone') : null;
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sourceElements.querySelectorAll('.number-item').forEach(item => {
             userSolution.source.push(parseInt(item.dataset.number, 10));
-            allCorrect = false; // Ha maradt a forrásban, nem lehet jó.
+            allCorrect = false;
         });
 
         if (sourceElements.children.length > 0) {
