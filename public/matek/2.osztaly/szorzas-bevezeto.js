@@ -3,17 +3,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Task 1 elements
     const taskRowsContainer = document.getElementById('task-rows-container');
-    const feedbackEl = document.getElementById('feedback');
+    const feedback1El = document.getElementById('feedback-1');
+    const newTask1Button = document.getElementById('new-task-1-button');
+    const check1Button = document.getElementById('check-1-button');
     let taskData = []; // Task 1 data
 
     // Task 2 elements
     const task2Container = document.getElementById('task-2-container');
     const feedback2El = document.getElementById('feedback-2');
+    const newTask2Button = document.getElementById('new-task-2-button');
+    const check2Button = document.getElementById('check-2-button');
     let task2Data = {}; // Task 2 data
 
     // Common elements
-    const checkButton = document.getElementById('check-button');
-    const newTaskButton = document.getElementById('new-task-button');
     const bodyEl = document.body;
     const themeButtons = document.querySelectorAll('.theme-button');
     const rangeButtons = document.querySelectorAll('.range-button');
@@ -28,8 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateTask1() {
         taskData = [];
         taskRowsContainer.innerHTML = '';
-        feedbackEl.textContent = '';
-        feedbackEl.className = 'feedback';
+        feedback1El.textContent = '';
+        feedback1El.className = 'feedback';
         
         const generatedTasksForLogging = [];
 
@@ -98,7 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
             row.appendChild(equationContainer);
             taskRowsContainer.appendChild(row);
         }
-        return generatedTasksForLogging;
+        logNewTask('szorzas-bevezeto-1-osszeadas', {
+            range: currentNumberRange,
+            tasks: generatedTasksForLogging
+        });
     }
 
     function checkTask1() {
@@ -134,13 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (allCorrect) {
-            feedbackEl.textContent = 'Nagyszerű! Minden sor helyes!';
-            feedbackEl.className = 'feedback correct';
+            feedback1El.textContent = 'Nagyszerű! Minden sor helyes!';
+            feedback1El.className = 'feedback correct';
         } else {
-            feedbackEl.textContent = 'Van néhány hiba. Nézd át a pirossal jelölt mezőket!';
-            feedbackEl.className = 'feedback incorrect';
+            feedback1El.textContent = 'Van néhány hiba. Nézd át a pirossal jelölt mezőket!';
+            feedback1El.className = 'feedback incorrect';
         }
-        return { correct: allCorrect, solutions: userSolutions };
+        logTaskCheck('szorzas-bevezeto-1-osszeadas', {
+            correct: allCorrect,
+            solutions: userSolutions
+        });
     }
 
 
@@ -247,7 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
         task2Container.appendChild(gridWrapper);
         task2Container.appendChild(multiplicationContainer);
         
-        return { rows, cols, total };
+        logNewTask('szorzas-bevezeto-2-szorzas', {
+            range: currentNumberRange,
+            task: { rows, cols, total }
+        });
     }
     
     function checkTask2() {
@@ -278,33 +289,13 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback2El.className = 'feedback incorrect';
         }
 
-        return { correct: allCorrect, solutions: userSolutions };
+        logTaskCheck('szorzas-bevezeto-2-szorzas', {
+            correct: allCorrect,
+            solutions: userSolutions
+        });
     }
 
     // --- MAIN LOGIC ---
-    function generateTasks() {
-        const task1LogData = generateTask1();
-        const task2LogData = generateTask2();
-        logNewTask('szorzas-bevezeto', { 
-            range: currentNumberRange, 
-            task1_addition: task1LogData,
-            task2_multiplication: task2LogData
-        });
-    }
-
-    function checkTasks() {
-        const task1Result = checkTask1();
-        const task2Result = checkTask2();
-        
-        const allCorrect = task1Result.correct && task2Result.correct;
-
-        logTaskCheck('szorzas-bevezeto', {
-             correct: allCorrect, 
-             task1_solutions: task1Result.solutions,
-             task2_solutions: task2Result.solutions 
-        });
-    }
-
     function applyTheme(themeClass) {
         bodyEl.className = ''; 
         bodyEl.classList.add(themeClass); 
@@ -332,14 +323,18 @@ document.addEventListener('DOMContentLoaded', () => {
             rangeButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
-            generateTasks();
+            generateTask1();
+            generateTask2();
         });
     });
     
-    newTaskButton.addEventListener('click', generateTasks);
-    checkButton.addEventListener('click', checkTasks);
+    newTask1Button.addEventListener('click', generateTask1);
+    check1Button.addEventListener('click', checkTask1);
+    newTask2Button.addEventListener('click', generateTask2);
+    check2Button.addEventListener('click', checkTask2);
 
     logTaskEntry('szorzas-bevezeto');
-    generateTasks();
+    generateTask1();
+    generateTask2();
     applyTheme('theme-candy');
 });
