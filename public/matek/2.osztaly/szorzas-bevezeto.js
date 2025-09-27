@@ -195,12 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
             highlight.style.left = `${padding}px`;
             highlight.style.width = `${cols * cellWidthWithGap - 5}px`;
             highlight.style.height = `${cellHeightWithGap - 5}px`;
-            if (i === 0) {
-                highlight.addEventListener('click', () => {
-                    rowHighlights.forEach(h => h.classList.remove('hidden'));
-                    colHighlights.forEach(h => h.classList.add('hidden'));
-                });
-            }
             rowHighlights.push(highlight);
             highlightOverlay.appendChild(highlight);
         }
@@ -213,15 +207,24 @@ document.addEventListener('DOMContentLoaded', () => {
             highlight.style.left = `${i * cellWidthWithGap + padding}px`;
             highlight.style.width = `${cellWidthWithGap - 5}px`;
             highlight.style.height = `${rows * cellHeightWithGap - 5}px`;
-            if (i === 0) {
-                highlight.addEventListener('click', () => {
-                    colHighlights.forEach(h => h.classList.remove('hidden'));
-                    rowHighlights.forEach(h => h.classList.add('hidden'));
-                });
-            }
             colHighlights.push(highlight);
             highlightOverlay.appendChild(highlight);
         }
+        
+        let showingRows = true;
+        // Set initial state: show rows, hide columns
+        colHighlights.forEach(h => h.classList.add('hidden'));
+
+        gridWrapper.addEventListener('click', () => {
+            showingRows = !showingRows;
+            if (showingRows) {
+                rowHighlights.forEach(h => h.classList.remove('hidden'));
+                colHighlights.forEach(h => h.classList.add('hidden'));
+            } else {
+                rowHighlights.forEach(h => h.classList.add('hidden'));
+                colHighlights.forEach(h => h.classList.remove('hidden'));
+            }
+        });
         
         gridWrapper.appendChild(gridContainer);
         gridWrapper.appendChild(highlightOverlay);
