@@ -1,0 +1,23 @@
+{
+  "type": "app",
+  "tierName": "web",
+  "description": "Ez a fájl egy interaktív matematikai gyakorlófelületet valósít meg számszomszéd és szám-reláció (kisebb-nagyobb) feladatokkal, téma- és számhatár beállításokkal, valamint naplózza a felhasználói interakciókat Firebase-en keresztül.",
+  "keywords": [
+    "Javascript",
+    "DOM",
+    "interaktív gyakorló",
+    "matek",
+    "számszomszéd",
+    "szám összehasonlítás",
+    "UI",
+    "feladatgenerálás",
+    "megoldás ellenőrzés",
+    "téma",
+    "Firebase",
+    "naplózás",
+    "2. osztály"
+  ],
+  "dependencies": [
+    "public/utils/firebase-logger.js"
+  ]
+}

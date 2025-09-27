@@ -1,0 +1,21 @@
+{
+  "dependencies": [
+    "https://cdn.tailwindcss.com",
+    "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700\u0026display=swap",
+    "./matek/index.html",
+    "./magyar/index.html"
+  ],
+  "description": "Ez a fájl az Iskolai Gyakorló alkalmazás fő, felhasználói felületét megjelenítő HTML belépési pontja, amely lehetővé teszi a tantárgyak (Matek, Magyar) kiválasztását a gyakorláshoz.",
+  "keywords": [
+    "html",
+    "frontend",
+    "landing page",
+    "navigation",
+    "iskolai gyakorló",
+    "webes",
+    "tantárgyválasztás",
+    "tailwind css"
+  ],
+  "tierName": "web réteg",
+  "type": "app"
+}

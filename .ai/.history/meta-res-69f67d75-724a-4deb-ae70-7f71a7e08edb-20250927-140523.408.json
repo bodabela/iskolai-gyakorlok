@@ -1,0 +1,21 @@
+{
+  "dependencies": [],
+  "description": "Ez a fájl egy interaktív, kliensoldali webalkalmazást valósít meg harmadik osztályosoknak írásbeli osztás gyakorlására, testreszabható nehézségi szintekkel, maradékkal és vizuális témákkal.",
+  "keywords": [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "matematika",
+    "osztás",
+    "írásbeli osztás",
+    "gyakorló",
+    "3. osztály",
+    "interaktív",
+    "oktatás",
+    "frontend",
+    "téma",
+    "tanulás"
+  ],
+  "tierName": "web réteg",
+  "type": "app"
+}

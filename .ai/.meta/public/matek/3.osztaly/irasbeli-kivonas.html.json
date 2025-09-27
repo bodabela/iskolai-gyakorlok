@@ -1,0 +1,19 @@
+{
+  "type": "app",
+  "tierName": "web réteg",
+  "description": "Ez a fájl egy interaktív weboldal, amely írásbeli kivonás gyakorlására szolgál 3. osztályos tanulók számára, különböző nehézségi szintekkel (számjegyek száma), segítségi módokkal (önálló/lépésenként) és vizuális témákkal.",
+  "keywords": [
+    "matek",
+    "kivonás",
+    "írásbeli kivonás",
+    "gyakorló",
+    "3. osztály",
+    "HTML",
+    "JavaScript",
+    "CSS",
+    "interaktív",
+    "oktatás",
+    "gyerekek",
+    "számolás"
+  ]
+}

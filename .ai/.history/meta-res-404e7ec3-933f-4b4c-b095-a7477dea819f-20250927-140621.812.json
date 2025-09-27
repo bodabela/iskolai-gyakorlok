@@ -1,0 +1,21 @@
+{
+  "dependencies": [],
+  "description": "Ez az interaktív HTML fájl egy 3. osztályos matematikai gyakorló, amely törtek (azonos nevezőjű, egységtörtek, vegyes törtek) növekvő és csökkenő sorrendbe rendezését tanítja kördiagramok és testre szabható témák segítségével.",
+  "keywords": [
+    "html",
+    "javascript",
+    "css",
+    "matematika",
+    "törtek",
+    "sorbarendezés",
+    "gyakorló",
+    "oktatás",
+    "3. osztály",
+    "interaktív",
+    "frontend",
+    "web-réteg",
+    "SVG"
+  ],
+  "tierName": "web",
+  "type": "app"
+}

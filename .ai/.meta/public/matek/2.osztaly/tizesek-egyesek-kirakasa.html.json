@@ -1,0 +1,23 @@
+{
+  "type": "app",
+  "tierName": "web",
+  "description": "Ez a HTML fájl az 'Iskolai Gyakorlók' projekt 'Tízesek és Egyesek Kirakása' elnevezésű interaktív matematikai feladatának felhasználói felületét definiálja, ahol a második osztályos diákok tízesek és egyesek segítségével rakhatnak ki számokat, testreszabható témákkal és számkörökkel, Firebase eseménynaplózás támogatással.",
+  "keywords": [
+    "HTML",
+    "felhasználói felület",
+    "front-end",
+    "matek",
+    "oktatás",
+    "tízesek",
+    "egyesek",
+    "második osztály",
+    "interaktív feladat",
+    "web",
+    "iskolai gyakorló"
+  ],
+  "dependencies": [
+    "public/matek/2.osztaly/tizesek-egyesek-kirakasa.css",
+    "public/js/firebase-logger.js",
+    "public/matek/2.osztaly/tizesek-egyesek-kirakasa.js"
+  ]
+}

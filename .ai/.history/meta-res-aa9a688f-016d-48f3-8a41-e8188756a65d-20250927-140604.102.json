@@ -1,0 +1,19 @@
+{
+  "dependencies": [],
+  "description": "Ez a fájl egy interaktív weboldal, amely római számok gyakorlására szolgál, lehetőséget biztosítva arab számok római számmá és római számok arab számmá alakítására, testreszabható témákkal és számkörökkel.",
+  "keywords": [
+    "római számok",
+    "matematika",
+    "gyakorló",
+    "oktatás",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "weboldal",
+    "konverzió",
+    "számolás",
+    "3. osztály"
+  ],
+  "tierName": "web",
+  "type": "app"
+}

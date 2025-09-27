@@ -1,0 +1,21 @@
+{
+  "dependencies": [],
+  "description": "Ez a fájl egy interaktív, testreszabható webes felületet biztosít 1. osztályos diákoknak láncszámolás gyakorlására, témák, számkörök és lánchossz kiválasztásával, valamint azonnali visszajelzéssel.",
+  "keywords": [
+    "html",
+    "css",
+    "javascript",
+    "matek",
+    "matematika",
+    "gyakorló",
+    "láncszámolás",
+    "számolás",
+    "1. osztály",
+    "oktatás",
+    "interaktív",
+    "összeadás",
+    "kivonás"
+  ],
+  "tierName": "web réteg",
+  "type": "app"
+}

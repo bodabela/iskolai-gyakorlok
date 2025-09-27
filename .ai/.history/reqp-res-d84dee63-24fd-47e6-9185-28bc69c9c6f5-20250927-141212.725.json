@@ -1,0 +1,30 @@
+{
+  "relevant_files": [
+    "public/404.html",
+    "public/index.html",
+    "public/magyar/1.osztaly/iras-kiemeles.html",
+    "public/magyar/index.html",
+    "public/matek/1.osztaly/alakzatok.html",
+    "public/matek/1.osztaly/hianyos-muveletek.html",
+    "public/matek/1.osztaly/lanc-szamolas.html",
+    "public/matek/1.osztaly/potlas.html",
+    "public/matek/1.osztaly/relacios-intervallumok.html",
+    "public/matek/1.osztaly/romai-szamok.html",
+    "public/matek/1.osztaly/szamok-felbontasa-golyokkal.html",
+    "public/matek/1.osztaly/szamsorozatok.html",
+    "public/matek/1.osztaly/szomszedok.html",
+    "public/matek/1.osztaly/szoveges-feladatok.html",
+    "public/matek/1.osztaly/tizes-atlepes-felbontassal.html",
+    "public/matek/3.osztaly/buvos-negyzet.html",
+    "public/matek/3.osztaly/irasbeli-kivonas.html",
+    "public/matek/3.osztaly/irasbeli-osszeadas.html",
+    "public/matek/3.osztaly/irasbeli-osztas.html",
+    "public/matek/3.osztaly/irasbeli-szorzas.html",
+    "public/matek/3.osztaly/mertekegyseg-atvaltas.html",
+    "public/matek/3.osztaly/negativ-szamok-intro.html",
+    "public/matek/3.osztaly/romai-szamok.html",
+    "public/matek/3.osztaly/tortek-felismerese.html",
+    "public/matek/3.osztaly/tortek-rendezese.html",
+    "public/matek/index.html"
+  ]
+}

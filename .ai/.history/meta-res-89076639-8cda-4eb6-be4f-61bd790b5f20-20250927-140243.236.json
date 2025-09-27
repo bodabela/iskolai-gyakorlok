@@ -1,0 +1,20 @@
+{
+  "dependencies": [],
+  "description": "Ez a CSS fájl a 'halmaz-válogató' interaktív, 2. osztályos matematikai feladat vizuális megjelenéséért felelős, magában foglalva az általános elrendezést, a drag-and-drop elemek stílusait, valamint több testreszabható témát.",
+  "keywords": [
+    "CSS",
+    "stílusok",
+    "téma",
+    "iskolai",
+    "matematika",
+    "halmaz-válogató",
+    "2. osztály",
+    "interaktív feladat",
+    "drag-and-drop",
+    "frontend",
+    "web",
+    "felhasználói felület"
+  ],
+  "tierName": "web",
+  "type": "app"
+}

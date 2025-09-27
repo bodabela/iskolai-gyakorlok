@@ -1,0 +1,18 @@
+firebase-data-layer:
+    name: firebase-data-layer
+    text: Az alkalmazás eseményeit firebase adatbázisba rögzítjük.
+    type: app
+    kind: tier
+    tier_name: data
+html-js-css-separation:
+    name: html-js-css-separation
+    text: Az oldalak három össze tevőből állank .html, .css és .js fájl.
+    type: app
+    kind: tier
+    tier_name: web
+vanilla-stack:
+    name: vanilla-stack
+    text: Vanilla HTML, Javascript és CSS stacken dolgozunk.
+    type: app
+    kind: tier
+    tier_name: web

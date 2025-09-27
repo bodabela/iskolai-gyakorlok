@@ -1,0 +1,23 @@
+{
+  "type": "app",
+  "tierName": "web",
+  "description": "Ez a fájl tartalmazza a számfelbontás gyakorló alkalmazás felhasználói felületét, amely témaválasztást, számkörválasztást és interaktív feladatblokkokat biztosít a felhasználóknak.",
+  "keywords": [
+    "HTML",
+    "front-end",
+    "iskolai",
+    "matek",
+    "gyakorló",
+    "számfelbontás",
+    "felhasználói felület",
+    "1.osztály"
+  ],
+  "dependencies": [
+    "szamok-felbontasa.css",
+    "/__/firebase/11.7.3/firebase-app-compat.js",
+    "/__/firebase/11.7.3/firebase-auth-compat.js",
+    "/__/firebase/11.7.3/firebase-firestore-compat.js",
+    "../../js/firebase-logger.js",
+    "szamok-felbontasa.js"
+  ]
+}

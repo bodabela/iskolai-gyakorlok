@@ -1,0 +1,22 @@
+{
+  "type": "app",
+  "tierName": "web",
+  "description": "Ez a fájl egy interaktív, első osztályos matek feladatlapot jelenít meg, ahol a diákok számkörön belül gyakorolhatják a számok egyes, páros és páratlan szomszédait, testreszabható témákkal és számkörrel.",
+  "keywords": [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "matek",
+    "matematika",
+    "1. osztály",
+    "szám szomszédok",
+    "gyakorló",
+    "feladatlap",
+    "frontend",
+    "interaktív",
+    "számkör",
+    "téma",
+    "páros számok",
+    "páratlan számok"
+  ]
+}

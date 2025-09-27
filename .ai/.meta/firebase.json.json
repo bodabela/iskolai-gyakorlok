@@ -1,0 +1,14 @@
+{
+  "type": "infra",
+  "tierName": "web réteg",
+  "description": "Ez a fájl a Firebase Hosting konfigurációját tartalmazza, meghatározva a publikus könyvtárat a statikus weboldal fájljai számára és az figyelmen kívül hagyandó elemeket, ezzel biztosítva az 'iskolai-gyakorlok' webalkalmazás megfelelő kiszolgálását.",
+  "keywords": [
+    "firebase",
+    "hosting",
+    "configuration",
+    "deployment",
+    "web",
+    "infrastructure",
+    "static assets"
+  ]
+}

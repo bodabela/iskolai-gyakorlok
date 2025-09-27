@@ -1,0 +1,12 @@
+{
+  "type": "devops",
+  "description": "Ez a GitHub Actions workflow fájl automatizálja az `iskolai-gyakorlok` projekt web frontendjének Firebase Hostingra történő telepítését a `main` ágba történő egyesítések esetén, biztosítva a folyamatos integrációt és szállítási folyamatot.",
+  "keywords": [
+    "github actions",
+    "ci/cd",
+    "deployment",
+    "firebase hosting",
+    "workflow",
+    "iskolai-gyakorlok"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "dependencies": [],
+  "description": "Ez a fájl egy interaktív webes alkalmazást valósít meg számok felbontásának gyakorlására golyók áthúzásával különböző tálakba, támogatva a téma- és számkörválasztást.",
+  "keywords": [
+    "matek",
+    "iskolai gyakorló",
+    "számfelbontás",
+    "golyós feladat",
+    "interaktív",
+    "webalkalmazás",
+    "frontend",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "oktatás",
+    "1. osztály",
+    "számok",
+    "vizuális tanulás",
+    "drag-and-drop"
+  ],
+  "tierName": "web réteg",
+  "type": "app"
+}

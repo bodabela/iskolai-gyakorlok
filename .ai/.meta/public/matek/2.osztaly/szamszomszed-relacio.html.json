@@ -1,0 +1,23 @@
+{
+  "type": "app",
+  "tierName": "web",
+  "description": "Ez a fájl az iskolai gyakorló alkalmazás 2. osztályos számszomszéd és reláció feladatának felhasználói felületét definiálja, lehetővé téve a feladatok generálását, ellenőrzését és a témák, számkörök kiválasztását, valamint Firebase logolást is integrál.",
+  "keywords": [
+    "html",
+    "matek",
+    "2. osztály",
+    "számszomszéd",
+    "reláció",
+    "gyakorló",
+    "feladat",
+    "interaktív",
+    "web",
+    "frontend",
+    "firebase"
+  ],
+  "dependencies": [
+    "szamszomszed-relacio.css",
+    "../../js/firebase-logger.js",
+    "szamszomszed-relacio.js"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "dependencies": [],
+  "description": "Ez a fájl határozza meg a Git által figyelmen kívül hagyandó fájlokat és könyvtárakat, mint például a build-artefaktok, naplók, függőségek (pl. node_modules), cache fájlok és futásidejű adatok, beleértve a Firebase specifikus elemeket is, a tiszta verziókövetés érdekében.",
+  "keywords": [
+    "gitignore",
+    "git",
+    "verziókövetés",
+    "kizárás",
+    "build-artefaktok",
+    "naplók",
+    "függőségek",
+    "firebase",
+    "node_modules",
+    "npm",
+    "yarn",
+    "cache",
+    "környezeti változók"
+  ],
+  "tierName": null,
+  "type": "devops"
+}

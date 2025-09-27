@@ -1,0 +1,16 @@
+{
+  "type": "app",
+  "tierName": "data réteg",
+  "description": "Ez a JavaScript fájl inicializálja a Firebase-t és a Firestore adatbázis kapcsolatot, lehetővé téve a felhasználói és feladat események központosított naplózását az 'iskolai-gyakorlok' alkalmazásban.",
+  "keywords": [
+    "firebase",
+    "firestore",
+    "logger",
+    "eseménynaplózás",
+    "adatbázis",
+    "javascript",
+    "alkalmazás",
+    "gyakorló",
+    "frontend"
+  ]
+}

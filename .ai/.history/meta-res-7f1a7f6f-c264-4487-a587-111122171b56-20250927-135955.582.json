@@ -1,0 +1,20 @@
+{
+  "dependencies": [],
+  "description": "Ez a fájl az iskolai gyakorló alkalmazás magyar feladatainak fő belépési pontja, amely interaktív felhasználói felületet biztosít a különböző osztályok feladatainak böngészéséhez és eléréséhez, Firebase és Tailwind CSS felhasználásával.",
+  "keywords": [
+    "HTML",
+    "JavaScript",
+    "CSS",
+    "Vanilla HTML",
+    "Tailwind CSS",
+    "Firebase",
+    "frontend",
+    "iskolai gyakorló",
+    "magyar feladatok",
+    "felhasználói felület",
+    "feladatlista",
+    "navigáció"
+  ],
+  "tierName": "web réteg",
+  "type": "app"
+}

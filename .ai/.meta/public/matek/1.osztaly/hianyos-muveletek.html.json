@@ -1,0 +1,26 @@
+{
+  "type": "app",
+  "tierName": "web réteg",
+  "description": "Ez a Vanilla HTML, CSS és JavaScript alapú webes alkalmazás interaktív feladatokat kínál első osztályosoknak hiányos összeadási és kivonási műveletek gyakorlására számegyenes vizualizációval, testreszabható témákkal és számkörökkel, miközben a felhasználói eseményeket Firebase adatbázisba naplózza.",
+  "keywords": [
+    "web app",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "matek",
+    "első osztály",
+    "hiányos műveletek",
+    "összeadás",
+    "kivonás",
+    "számegyenes",
+    "oktatás",
+    "Firebase",
+    "téma"
+  ],
+  "dependencies": [
+    "/__/firebase/11.7.3/firebase-app-compat.js",
+    "/__/firebase/11.7.3/firebase-auth-compat.js",
+    "/__/firebase/11.7.3/firebase-firestore-compat.js",
+    "../../js/firebase-logger.js"
+  ]
+}

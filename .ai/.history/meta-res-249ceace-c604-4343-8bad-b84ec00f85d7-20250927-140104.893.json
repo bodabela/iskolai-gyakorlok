@@ -1,0 +1,20 @@
+{
+  "dependencies": [],
+  "description": "Ez a fájl egy interaktív, kliensoldali webes alkalmazás, amely római számok arabra és arab számok rómaira való átírásának gyakorlására szolgál, testreszabható számkörökkel és vizuális témákkal, azonnali visszajelzést adva a felhasználó válaszaira.",
+  "keywords": [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "római számok",
+    "matematika",
+    "gyakorló",
+    "oktatás",
+    "1. osztály",
+    "interaktív",
+    "téma",
+    "számátalakítás",
+    "Vanilla JS"
+  ],
+  "tierName": "web réteg",
+  "type": "app"
+}

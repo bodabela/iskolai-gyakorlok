@@ -1,0 +1,15 @@
+{
+  "type": "app",
+  "tierName": "web réteg",
+  "description": "Ez a fájl egy statikus HTML oldal, amely a nem található (404-es) oldalak hibáját jeleníti meg a felhasználóknak, a Firebase CLI által generált alapértelmezett beállítások szerint.",
+  "keywords": [
+    "html",
+    "css",
+    "404",
+    "error page",
+    "not found",
+    "public",
+    "firebase",
+    "vanilla"
+  ]
+}

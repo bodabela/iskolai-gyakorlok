@@ -1,0 +1,20 @@
+{
+  "dependencies": [],
+  "description": "Ez a fájl egy interaktív weboldalt biztosít iskolások számára bűvös négyzet feladatok gyakorlásához, ahol a felhasználók választhatnak témát, négyzetméretet és számérték tartományt, majd kitölthetik és ellenőrizhetik a generált bűvös négyzetek megoldásait.",
+  "keywords": [
+    "bűvös négyzet",
+    "matematika",
+    "gyakorló",
+    "feladat",
+    "interaktív",
+    "weboldal",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "frontend",
+    "oktatás",
+    "3. osztály"
+  ],
+  "tierName": "web réteg",
+  "type": "app"
+}

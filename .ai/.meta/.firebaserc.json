@@ -1,0 +1,13 @@
+{
+  "type": "app",
+  "tierName": "data réteg",
+  "description": "Ez a Firebase konfigurációs fájl az 'iskolai-gyakorlok' alkalmazás default Firebase projektjét határozza meg, amely az üzleti adatok tárolására szolgáló Firebase adatbázis kapcsolatát biztosítja.",
+  "keywords": [
+    "firebase",
+    "config",
+    "project",
+    "data-layer",
+    "iskolai-gyakorlok",
+    "configuration"
+  ]
+}

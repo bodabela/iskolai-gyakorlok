@@ -1,0 +1,20 @@
+{
+  "type": "app",
+  "tierName": "web",
+  "description": "Ez a Vanilla HTML, CSS és JavaScript alapú fájl egy interaktív weboldal, amely 3. osztályosoknak szóló, negatív számokkal kapcsolatos hőmérsékleti gyakorló feladatokat (sorbarendezés, összeadás, kivonás) kínál, dinamikus számegyenessel és testreszabható témákkal.",
+  "keywords": [
+    "matek",
+    "negatív számok",
+    "gyakorló",
+    "3. osztály",
+    "hőmérséklet",
+    "számegyenes",
+    "frontend",
+    "interaktív",
+    "oktatás",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "web"
+  ]
+}

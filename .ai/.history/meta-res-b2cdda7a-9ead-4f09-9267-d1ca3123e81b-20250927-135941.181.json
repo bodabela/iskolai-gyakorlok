@@ -1,0 +1,21 @@
+{
+  "dependencies": [
+    "public/magyar/1.osztaly/generator.js"
+  ],
+  "description": "Ez a fájl a felhasználói felületet implementálja egy iskolai írás gyakorló alkalmazásban, amely lehetővé teszi a témaválasztást, valamint szavak és szövegek generálását és kiemelését írásgyakorlat céljából, elsősorban az 1. osztályosok számára.",
+  "keywords": [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "UI",
+    "frontend",
+    "handwriting practice",
+    "writing generator",
+    "text highlighting",
+    "themes",
+    "educational app",
+    "1st grade"
+  ],
+  "tierName": "web",
+  "type": "app"
+}
