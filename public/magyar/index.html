@@ -1,12 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="hu">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Magyar Feladatok Gyűjteménye</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Magyar Feladatok Gyűjteménye</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -17,109 +17,59 @@
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <script defer src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-performance-compat.js"></script>
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style>
-        .task-card-icon svg {
-            width: 100px;
-            height: 100px;
-        }
-        .section-toggle-button svg.chevron-icon { /* Specific class for the chevron */
-            transition: transform 0.3s ease;
-        }
-    </style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script defer="" src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-auth-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-database-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-functions-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-messaging-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-storage-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-analytics-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-remote-config-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-performance-compat.js"></script>
+<script defer="" src="/__/firebase/init.js?useEmulator=true"></script>
+<link href="index.css" rel="stylesheet"/>
 </head>
 <body class="bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 font-inter min-h-screen flex flex-col items-center p-4 sm:p-8 text-gray-800">
-
-    <div class="w-full max-w-5xl mx-auto">
-        <header class="text-center my-8 sm:my-12">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500">
+<div class="w-full max-w-5xl mx-auto">
+<header class="text-center my-8 sm:my-12">
+<h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500">
                 Magyar Feladatok
             </h1>
-            <p class="text-lg sm:text-xl text-gray-600 mt-3">Válassz egy feladatot a gyakorláshoz!</p>
-        </header>
-
-        <main class="space-y-12">
-            <section class="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl">
-                <button class="section-toggle-button w-full flex justify-between items-center text-left focus:outline-none mb-8 pb-3 border-b-2 border-pink-300" data-target="section-1-content">
-                    <h2 class="text-3xl sm:text-4xl font-semibold text-pink-600 flex items-center">
-                        <svg class="w-8 h-8 mr-3 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.25278C12 6.25278 11.0909 3.74998 8.33333 3.74998C5.57576 3.74998 4.16667 7.49998 4.16667 9.99998C4.16667 16.25 12 20.25 12 20.25C12 20.25 19.8333 16.25 19.8333 9.99998C19.8333 7.49998 18.4242 3.74998 15.6667 3.74998C12.9091 3.74998 12 6.25278 12 6.25278Z"></path></svg>
+<p class="text-lg sm:text-xl text-gray-600 mt-3">Válassz egy feladatot a gyakorláshoz!</p>
+</header>
+<main class="space-y-12">
+<section class="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl">
+<button class="section-toggle-button w-full flex justify-between items-center text-left focus:outline-none mb-8 pb-3 border-b-2 border-pink-300" data-target="section-1-content">
+<h2 class="text-3xl sm:text-4xl font-semibold text-pink-600 flex items-center">
+<svg class="w-8 h-8 mr-3 text-pink-500" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 6.25278C12 6.25278 11.0909 3.74998 8.33333 3.74998C5.57576 3.74998 4.16667 7.49998 4.16667 9.99998C4.16667 16.25 12 20.25 12 20.25C12 20.25 19.8333 16.25 19.8333 9.99998C19.8333 7.49998 18.4242 3.74998 15.6667 3.74998C12.9091 3.74998 12 6.25278 12 6.25278Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                         1. Osztály
                     </h2>
-                    <svg class="w-8 h-8 text-pink-500 transform chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="section-1-content" class="section-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <a href="1.osztaly/iras-kiemeles.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-red-500 group-hover:text-red-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg">
-                                <line x1="10" y1="30" x2="130" y2="30" stroke="#cccccc" stroke-width="1.5"/>
-                                <line x1="10" y1="48" x2="130" y2="48" stroke="#cccccc" stroke-width="1" stroke-dasharray="2 2"/>
-                                <line x1="10" y1="66" x2="130" y2="66" stroke="#cccccc" stroke-width="1" stroke-dasharray="2 2"/>
-                                <line x1="10" y1="84" x2="130" y2="84" stroke="#cccccc" stroke-width="1.5"/>
-
-                                <text x="15" y="75" font-family="'Comic Sans MS', cursive, sans-serif" font-size="32" font-weight="bold" letter-spacing="2">
-                                    <tspan fill="#d90000">í</tspan>
-                                    <tspan fill="#333333">r</tspan>
-                                    <tspan fill="#d90000">á</tspan>
-                                    <tspan fill="#333333">s</tspan>
-                                </text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-red-600 transition-colors">Írás gyakorlás kiemeléssel</h3>
-                    </a>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const toggleButtons = document.querySelectorAll('.section-toggle-button');
-        toggleButtons.forEach(button => {
-            const targetId = button.dataset.target;
-            const targetContent = document.getElementById(targetId);
-            const chevron = button.querySelector('svg.chevron-icon');
-
-            let sectionOpen = sessionStorage.getItem(targetId + '_open') === 'true';
-
-            if (targetContent) {
-                 if (!sectionOpen) {
-                    targetContent.classList.add('hidden');
-                 }
-            }
-            if (chevron) {
-                 if(!sectionOpen) {
-                    chevron.classList.add('rotate-[-90deg]');
-                 } else {
-                    chevron.classList.remove('rotate-[-90deg]'); // Ensure it's not rotated if open
-                 }
-            }
-
-            button.addEventListener('click', () => {
-                let isOpen = false;
-                if (targetContent) {
-                    targetContent.classList.toggle('hidden');
-                    isOpen = !targetContent.classList.contains('hidden');
-                    sessionStorage.setItem(targetId + '_open', isOpen);
-                }
-                if (chevron) {
-                    chevron.classList.toggle('rotate-[-90deg]');
-                }
-            });
-        });
-      });
-    </script>
+<svg class="w-8 h-8 text-pink-500 transform chevron-icon" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="section-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="section-1-content">
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/iras-kiemeles.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-red-500 group-hover:text-red-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 140 100" xmlns="http://www.w3.org/2000/svg">
+<line stroke="#cccccc" stroke-width="1.5" x1="10" x2="130" y1="30" y2="30"></line>
+<line stroke="#cccccc" stroke-dasharray="2 2" stroke-width="1" x1="10" x2="130" y1="48" y2="48"></line>
+<line stroke="#cccccc" stroke-dasharray="2 2" stroke-width="1" x1="10" x2="130" y1="66" y2="66"></line>
+<line stroke="#cccccc" stroke-width="1.5" x1="10" x2="130" y1="84" y2="84"></line>
+<text font-family="'Comic Sans MS', cursive, sans-serif" font-size="32" font-weight="bold" letter-spacing="2" x="15" y="75">
+<tspan fill="#d90000">í</tspan>
+<tspan fill="#333333">r</tspan>
+<tspan fill="#d90000">á</tspan>
+<tspan fill="#333333">s</tspan>
+</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-red-600 transition-colors">Írás gyakorlás kiemeléssel</h3>
+</a>
+</div>
+</section>
+</main>
+</div>
+<script src="index.js"></script>
 </body>
 </html>

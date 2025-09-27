@@ -1,0 +1,7 @@
+.task-card-icon svg {
+            width: 100px;
+            height: 100px;
+        }
+        .section-toggle-button svg.chevron-icon { /* Specific class for the chevron */
+            transition: transform 0.3s ease;
+        }

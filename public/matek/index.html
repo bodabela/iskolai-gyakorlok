@@ -1,12 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="hu">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Matematika Feladatok Gyűjteménye</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Matematika Feladatok Gyűjteménye</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -17,494 +17,431 @@
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <script defer src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/11.7.3/firebase-performance-compat.js"></script>
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style>
-        .task-card-icon svg {
-            width: 100px;
-            height: 100px;
-        }
-        .section-toggle-button svg.chevron-icon { /* Specific class for the chevron */
-            transition: transform 0.3s ease;
-        }
-    </style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script defer="" src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-auth-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-database-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-functions-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-messaging-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-storage-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-analytics-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-remote-config-compat.js"></script>
+<script defer="" src="/__/firebase/11.7.3/firebase-performance-compat.js"></script>
+<script defer="" src="/__/firebase/init.js?useEmulator=true"></script>
+<link href="index.css" rel="stylesheet"/>
 </head>
 <body class="bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 font-inter min-h-screen flex flex-col items-center p-4 sm:p-8 text-gray-800">
-
-    <div class="w-full max-w-5xl mx-auto">
-        <header class="text-center my-8 sm:my-12">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500">
+<div class="w-full max-w-5xl mx-auto">
+<header class="text-center my-8 sm:my-12">
+<h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500">
                 Matematika Feladatok
             </h1>
-            <p class="text-lg sm:text-xl text-gray-600 mt-3">Válassz egy feladatot a gyakorláshoz!</p>
-        </header>
-
-        <main class="space-y-12">
-            <section class="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl">
-                <button class="section-toggle-button w-full flex justify-between items-center text-left focus:outline-none mb-8 pb-3 border-b-2 border-pink-300" data-target="section-1-content">
-                    <h2 class="text-3xl sm:text-4xl font-semibold text-pink-600 flex items-center">
-                        <svg class="w-8 h-8 mr-3 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.25278C12 6.25278 11.0909 3.74998 8.33333 3.74998C5.57576 3.74998 4.16667 7.49998 4.16667 9.99998C4.16667 16.25 12 20.25 12 20.25C12 20.25 19.8333 16.25 19.8333 9.99998C19.8333 7.49998 18.4242 3.74998 15.6667 3.74998C12.9091 3.74998 12 6.25278 12 6.25278Z"></path></svg>
+<p class="text-lg sm:text-xl text-gray-600 mt-3">Válassz egy feladatot a gyakorláshoz!</p>
+</header>
+<main class="space-y-12">
+<section class="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl">
+<button class="section-toggle-button w-full flex justify-between items-center text-left focus:outline-none mb-8 pb-3 border-b-2 border-pink-300" data-target="section-1-content">
+<h2 class="text-3xl sm:text-4xl font-semibold text-pink-600 flex items-center">
+<svg class="w-8 h-8 mr-3 text-pink-500" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 6.25278C12 6.25278 11.0909 3.74998 8.33333 3.74998C5.57576 3.74998 4.16667 7.49998 4.16667 9.99998C4.16667 16.25 12 20.25 12 20.25C12 20.25 19.8333 16.25 19.8333 9.99998C19.8333 7.49998 18.4242 3.74998 15.6667 3.74998C12.9091 3.74998 12 6.25278 12 6.25278Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                         1. Osztály
                     </h2>
-                    <svg class="w-8 h-8 text-pink-500 transform chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="section-1-content" class="section-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <a href="1.osztaly/szomszedok.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-blue-500 group-hover:text-blue-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="5" y="18" width="12" height="14" fill="#D1D5DB" rx="2"/>
-                                <text x="11" y="28" font-family="Inter, sans-serif" font-size="8" fill="#4B5563">?</text>
-                                <rect x="19" y="15" width="12" height="20" fill="#93C5FD" stroke="#60A5FA" stroke-width="2" rx="3"/>
-                                <text x="25" y="28" font-family="Inter, sans-serif" font-size="10" fill="#1E40AF" font-weight="bold">5</text>
-                                <rect x="33" y="18" width="12" height="14" fill="#D1D5DB" rx="2"/>
-                                <text x="39" y="28" font-family="Inter, sans-serif" font-size="8" fill="#4B5563">?</text>
-                                <path d="M17 25 L19 25" stroke="#60A5FA" stroke-width="2" stroke-dasharray="2 2"/>
-                                <path d="M31 25 L33 25" stroke="#60A5FA" stroke-width="2" stroke-dasharray="2 2"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">Számok szomszédai</h3>
-                    </a>
-                    <a href="1.osztaly/szamok-felbontasa-golyokkal.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-rose-400 group-hover:text-rose-500 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="25" cy="15" r="10" fill="#FECDD3" stroke="#F43F5E" stroke-width="2"/>
-                                <circle cx="15" cy="35" r="7" fill="#E9D5FF" stroke="#A855F7" stroke-width="2"/>
-                                <circle cx="35" cy="35" r="7" fill="#E9D5FF" stroke="#A855F7" stroke-width="2"/>
-                                <path d="M25 25 L18 28 M25 25 L32 28" stroke="#A855F7" stroke-width="1.5" fill="none" stroke-dasharray="2 2"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-rose-500 transition-colors">Számok felbontás golyókkal</h3>
-                    </a>
-                    <a href="1.osztaly/szamok-felbontasa.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-orange-500 group-hover:text-orange-600 transition-colors flex items-center justify-center">
-                           <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="12" y="5" width="26" height="13" fill="#FDE68A" stroke="#FDBA74" stroke-width="2" rx="3"/>
-                                <text x="25" y="15" font-family="Inter, sans-serif" font-size="9" fill="#B45309" text-anchor="middle" font-weight="bold">7</text>
-                                <line x1="25" y1="18" x2="15" y2="28" stroke="#FDBA74" stroke-width="2"/>
-                                <line x1="25" y1="18" x2="35" y2="28" stroke="#FDBA74" stroke-width="2"/>
-                                <rect x="8" y="28" width="14" height="14" fill="#FEF3C7" stroke="#FDBA74" stroke-width="2" rx="2"/>
-                                <text x="15" y="38" font-family="Inter, sans-serif" font-size="8" fill="#92400E" text-anchor="middle">3</text>
-                                <rect x="28" y="28" width="14" height="14" fill="#FFFFFF" stroke="#FDBA74" stroke-width="2" rx="2"/>
-                                <text x="35" y="38" font-family="Inter, sans-serif" font-size="9" fill="#B45309" text-anchor="middle" font-weight="bold">?</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-orange-600 transition-colors">Számok felbontása</h3>
-                    </a>
-                    <a href="1.osztaly/hianyos-muveletek.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-indigo-500 group-hover:text-indigo-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="2" y="18" width="12" height="14" fill="#C7D2FE" stroke="#818CF8" stroke-width="2" rx="2"/>
-                                <text x="8" y="28" font-family="Inter, sans-serif" font-size="8" fill="#4338CA">3</text>
-                                <text x="18" y="28" font-family="Inter, sans-serif" font-weight="bold" font-size="16" fill="#4338CA">+</text>
-                                <rect x="24" y="18" width="12" height="14" fill="#FFFFFF" stroke="#818CF8" stroke-width="2" rx="2"/>
-                                <text x="30" y="28" font-family="Inter, sans-serif" font-weight="bold" font-size="10" fill="#A78BFA">?</text>
-                                <text x="39" y="28" font-family="Inter, sans-serif" font-weight="bold" font-size="16" fill="#4338CA">=</text>
-                                <text x="37" y="14" font-family="Inter, sans-serif" font-size="10" fill="#4338CA" font-weight="bold">7</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-indigo-600 transition-colors">Hiányos műveletek</h3>
-                    </a>
-                    <a href="1.osztaly/potlas.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-green-500 group-hover:text-green-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="5" y="10" width="40" height="30" fill="#E0F2F1" stroke="#4DB6AC" stroke-width="2" rx="3"/>
-                                <line x1="5" y1="20" x2="45" y2="20" stroke="#A7D8D4" stroke-width="1.5"/>
-                                <line x1="5" y1="30" x2="45" y2="30" stroke="#A7D8D4" stroke-width="1.5"/>
-                                <line x1="18" y1="10" x2="18" y2="40" stroke="#A7D8D4" stroke-width="1.5"/>
-                                <line x1="32" y1="10" x2="32" y2="40" stroke="#A7D8D4" stroke-width="1.5"/>
-                                <text x="11.5" y="17" font-family="Inter, sans-serif" font-size="7" fill="#00796B">A</text>
-                                <text x="25" y="17" font-family="Inter, sans-serif" font-size="7" fill="#00796B">3</text>
-                                <text x="38.5" y="17" font-family="Inter, sans-serif" font-size="7" fill="#00796B">5</text>
-                                <text x="11.5" y="27" font-family="Inter, sans-serif" font-size="7" fill="#00796B">B</text>
-                                <text x="25" y="27" font-family="Inter, sans-serif" font-size="9" fill="#004D40" font-weight="bold">?</text>
-                                <text x="38.5" y="27" font-family="Inter, sans-serif" font-size="7" fill="#00796B">2</text>
-                                 <text x="11.5" y="37" font-family="Inter, sans-serif" font-size="7" fill="#00796B" font-weight="bold">Cél: 7</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-green-600 transition-colors">Pótlás</h3>
-                    </a>
-                    <a href="1.osztaly/relacios-intervallumok.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-pink-500 group-hover:text-pink-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <line x1="5" y1="25" x2="45" y2="25" stroke="#F472B6" stroke-width="3"/>
-                                <circle cx="12" cy="25" r="4" fill="white" stroke="#DB2777" stroke-width="2.5"/>
-                                <text x="25" y="22" font-family="Inter, sans-serif" font-weight="bold" font-size="12" fill="#D946EF">X</text>
-                                <text x="20" y="34" font-family="Inter, sans-serif" font-weight="bold" font-size="12" fill="#D946EF">&lt; &gt;</text>
-                                <circle cx="38" cy="25" r="4" fill="#F472B6" stroke="#DB2777" stroke-width="2.5"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-pink-600 transition-colors">Relációs intervallumok</h3>
-                    </a>
-                    <a href="1.osztaly/tizes-atlepes-felbontassal.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-teal-500 group-hover:text-teal-600 transition-colors flex items-center justify-center">
-                             <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <text x="5" y="16" font-family="Inter, sans-serif" font-weight="bold" font-size="11" fill="#0D9488">7+5</text>
-                                <path d="M7 25 C 15 15, 25 15, 33 25" stroke="#14B8A6" stroke-width="2.5" fill="none" stroke-dasharray="3 3"/>
-                                <text x="36" y="16" font-family="Inter, sans-serif" font-weight="bold" font-size="11" fill="#0D9488">=12</text>
-                                <text x="19" y="35" font-family="Inter, sans-serif" font-size="9" fill="#0F766E">10</text>
-                                <rect x="2" y="38" width="22" height="8" fill="#A7F3D0" rx="2"/>
-                                <text x="5" y="44" font-family="Inter, sans-serif" font-size="8" fill="#047857">7+3</text>
-                                <rect x="26" y="38" width="12" height="8" fill="#A7F3D0" rx="2"/>
-                                <text x="28" y="44" font-family="Inter, sans-serif" font-size="8" fill="#047857">+2</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-teal-600 transition-colors">Tízes átlépés</h3>
-                    </a>
-                    <a href="1.osztaly/romai-szamok.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-amber-500 group-hover:text-amber-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <text x="8" y="30" font-family="Inter, sans-serif" font-weight="bold" font-size="16" fill="currentColor">X</text>
-                                <text x="20" y="30" font-family="Inter, sans-serif" font-weight="bold" font-size="16" fill="currentColor">V</text>
-                                <text x="32" y="30" font-family="Inter, sans-serif" font-weight="bold" font-size="16" fill="currentColor">I</text>
-                                <path d="M10 15 L15 10 L20 15 M15 10 L15 40 M30 15 L35 10 L40 15 M35 10 L35 40" stroke="currentColor" stroke-width="2" fill="none" opacity="0.4"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-amber-600 transition-colors">Római számok (Alap)</h3>
-                    </a>
-                    <a href="1.osztaly/lanc-szamolas.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-purple-400 group-hover:text-purple-500 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="3" y="20" width="10" height="10" fill="#DDD6FE" rx="2"></rect>
-                                <text x="8" y="27.5" font-family="Inter, sans-serif" font-size="7" fill="#5B21B6" text-anchor="middle">2</text>
-                                <path d="M13 25 L19 25" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"></path>
-                                <text x="16" y="18" font-family="Inter, sans-serif" font-size="5" fill="#6D28D9">+3</text>
-                                <rect x="19" y="20" width="10" height="10" fill="#DDD6FE" rx="2"></rect>
-                                <text x="24" y="27.5" font-family="Inter, sans-serif" font-size="7" fill="#5B21B6" text-anchor="middle">?</text>
-                                <path d="M29 25 L35 25" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"></path>
-                                <text x="32" y="18" font-family="Inter, sans-serif" font-size="5" fill="#6D28D9">-1</text>
-                                <rect x="35" y="20" width="10" height="10" fill="#DDD6FE" rx="2"></rect>
-                                <text x="40" y="27.5" font-family="Inter, sans-serif" font-size="7" fill="#5B21B6" text-anchor="middle">?</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-purple-500 transition-colors">Láncszámolás</h3>
-                    </a>
-                    <a href="1.osztaly/alakzatok.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-purple-500 group-hover:text-purple-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="18" cy="18" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
-                                <rect x="25" y="25" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" rx="2"/>
-                                <polygon points="10,40 18,25 26,40" fill="none" stroke="currentColor" stroke-width="2.5"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">Alakzatfelismerés</h3>
-                    </a>
-                    <a href="1.osztaly/szamsorozatok.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-cyan-500 group-hover:text-cyan-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="4" y="20" width="10" height="10" fill="#CFFAFE" rx="2"/> 
-                                <text x="9" y="27" font-family="Inter, sans-serif" font-size="7" fill="#0891B2" text-anchor="middle">1</text> 
-                                <path d="M14 25 L20 25" stroke="#67E8F9" stroke-width="2" stroke-linecap="round"/> 
-                                <text x="17" y="18" font-family="Inter, sans-serif" font-size="4.5" fill="#0E7490">+?</text> 
-                                <rect x="20" y="20" width="10" height="10" fill="#CFFAFE" rx="2"/>
-                                <text x="25" y="27" font-family="Inter, sans-serif" font-size="7" fill="#0891B2" text-anchor="middle">?</text>
-                                <path d="M30 25 L36 25" stroke="#67E8F9" stroke-width="2" stroke-linecap="round"/>
-                                <text x="33" y="18" font-family="Inter, sans-serif" font-size="4.5" fill="#0E7490">+?</text>
-                                <rect x="36" y="20" width="10" height="10" fill="#CFFAFE" rx="2"/>
-                                <text x="41" y="27" font-family="Inter, sans-serif" font-size="7" fill="#0891B2" text-anchor="middle">3</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-cyan-600 transition-colors">Számsorozatok</h3>
-                    </a>
-                    <a href="1.osztaly/szoveges-feladatok.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-orange-400 group-hover:text-orange-500 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 8 H42 Q45 8 45 11 V39 Q45 42 42 42 H8 Q5 42 5 39 V11 Q5 8 8 8 Z" fill="#FFF3E0" stroke="#FFB74D" stroke-width="2"/>
-                                <line x1="22" y1="8" x2="22" y2="42" stroke="#FFCC80" stroke-width="1.5"/>
-                                <line x1="10" y1="15" x2="20" y2="15" stroke="#FFB74D" stroke-width="1.5" stroke-linecap="round"/>
-                                <line x1="25" y1="15" x2="40" y2="15" stroke="#FFB74D" stroke-width="1.5" stroke-linecap="round"/>
-                                <line x1="10" y1="22" x2="20" y2="22" stroke="#FFB74D" stroke-width="1.5" stroke-linecap="round"/>
-                                <line x1="25" y1="22" x2="40" y2="22" stroke="#FFB74D" stroke-width="1.5" stroke-linecap="round"/>
-                                <line x1="10" y1="29" x2="20" y2="29" stroke="#FFB74D" stroke-width="1.5" stroke-linecap="round"/>
-                                <line x1="25" y1="29" x2="40" y2="29" stroke="#FFB74D" stroke-width="1.5" stroke-linecap="round"/>
-                                <text x="16" y="18" font-family="Inter, sans-serif" font-size="6" fill="#D97706" text-anchor="middle">A+B</text>
-                                <text x="32.5" y="25" font-family="Inter, sans-serif" font-size="6" fill="#D97706" text-anchor="middle">=?</text>
-                                <rect x="33" y="32" width="4" height="12" fill="#FDBA74" rx="1.5" transform="rotate(-20 35 37)"/>
-                                <polygon points="33,32 37,32 35,28" fill="#B45309"  transform="rotate(-20 35 30)"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-orange-500 transition-colors">Szöveges feladatok</h3>
-                    </a>
-                </div>
-            </section>
-
-            <section class="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl">
-                <button class="section-toggle-button w-full flex justify-between items-center text-left focus:outline-none mb-8 pb-3 border-b-2 border-cyan-300" data-target="section-2-content">
-                    <h2 class="text-3xl sm:text-4xl font-semibold text-cyan-600 flex items-center">
-                        <svg class="w-8 h-8 mr-3 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
+<svg class="w-8 h-8 text-pink-500 transform chevron-icon" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="section-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="section-1-content">
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/szomszedok.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-blue-500 group-hover:text-blue-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#D1D5DB" height="14" rx="2" width="12" x="5" y="18"></rect>
+<text fill="#4B5563" font-family="Inter, sans-serif" font-size="8" x="11" y="28">?</text>
+<rect fill="#93C5FD" height="20" rx="3" stroke="#60A5FA" stroke-width="2" width="12" x="19" y="15"></rect>
+<text fill="#1E40AF" font-family="Inter, sans-serif" font-size="10" font-weight="bold" x="25" y="28">5</text>
+<rect fill="#D1D5DB" height="14" rx="2" width="12" x="33" y="18"></rect>
+<text fill="#4B5563" font-family="Inter, sans-serif" font-size="8" x="39" y="28">?</text>
+<path d="M17 25 L19 25" stroke="#60A5FA" stroke-dasharray="2 2" stroke-width="2"></path>
+<path d="M31 25 L33 25" stroke="#60A5FA" stroke-dasharray="2 2" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">Számok szomszédai</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/szamok-felbontasa-golyokkal.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-rose-400 group-hover:text-rose-500 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<circle cx="25" cy="15" fill="#FECDD3" r="10" stroke="#F43F5E" stroke-width="2"></circle>
+<circle cx="15" cy="35" fill="#E9D5FF" r="7" stroke="#A855F7" stroke-width="2"></circle>
+<circle cx="35" cy="35" fill="#E9D5FF" r="7" stroke="#A855F7" stroke-width="2"></circle>
+<path d="M25 25 L18 28 M25 25 L32 28" fill="none" stroke="#A855F7" stroke-dasharray="2 2" stroke-width="1.5"></path>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-rose-500 transition-colors">Számok felbontás golyókkal</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/szamok-felbontasa.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-orange-500 group-hover:text-orange-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#FDE68A" height="13" rx="3" stroke="#FDBA74" stroke-width="2" width="26" x="12" y="5"></rect>
+<text fill="#B45309" font-family="Inter, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" x="25" y="15">7</text>
+<line stroke="#FDBA74" stroke-width="2" x1="25" x2="15" y1="18" y2="28"></line>
+<line stroke="#FDBA74" stroke-width="2" x1="25" x2="35" y1="18" y2="28"></line>
+<rect fill="#FEF3C7" height="14" rx="2" stroke="#FDBA74" stroke-width="2" width="14" x="8" y="28"></rect>
+<text fill="#92400E" font-family="Inter, sans-serif" font-size="8" text-anchor="middle" x="15" y="38">3</text>
+<rect fill="#FFFFFF" height="14" rx="2" stroke="#FDBA74" stroke-width="2" width="14" x="28" y="28"></rect>
+<text fill="#B45309" font-family="Inter, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" x="35" y="38">?</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-orange-600 transition-colors">Számok felbontása</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/hianyos-muveletek.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-indigo-500 group-hover:text-indigo-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#C7D2FE" height="14" rx="2" stroke="#818CF8" stroke-width="2" width="12" x="2" y="18"></rect>
+<text fill="#4338CA" font-family="Inter, sans-serif" font-size="8" x="8" y="28">3</text>
+<text fill="#4338CA" font-family="Inter, sans-serif" font-size="16" font-weight="bold" x="18" y="28">+</text>
+<rect fill="#FFFFFF" height="14" rx="2" stroke="#818CF8" stroke-width="2" width="12" x="24" y="18"></rect>
+<text fill="#A78BFA" font-family="Inter, sans-serif" font-size="10" font-weight="bold" x="30" y="28">?</text>
+<text fill="#4338CA" font-family="Inter, sans-serif" font-size="16" font-weight="bold" x="39" y="28">=</text>
+<text fill="#4338CA" font-family="Inter, sans-serif" font-size="10" font-weight="bold" x="37" y="14">7</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-indigo-600 transition-colors">Hiányos műveletek</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/potlas.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-green-500 group-hover:text-green-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#E0F2F1" height="30" rx="3" stroke="#4DB6AC" stroke-width="2" width="40" x="5" y="10"></rect>
+<line stroke="#A7D8D4" stroke-width="1.5" x1="5" x2="45" y1="20" y2="20"></line>
+<line stroke="#A7D8D4" stroke-width="1.5" x1="5" x2="45" y1="30" y2="30"></line>
+<line stroke="#A7D8D4" stroke-width="1.5" x1="18" x2="18" y1="10" y2="40"></line>
+<line stroke="#A7D8D4" stroke-width="1.5" x1="32" x2="32" y1="10" y2="40"></line>
+<text fill="#00796B" font-family="Inter, sans-serif" font-size="7" x="11.5" y="17">A</text>
+<text fill="#00796B" font-family="Inter, sans-serif" font-size="7" x="25" y="17">3</text>
+<text fill="#00796B" font-family="Inter, sans-serif" font-size="7" x="38.5" y="17">5</text>
+<text fill="#00796B" font-family="Inter, sans-serif" font-size="7" x="11.5" y="27">B</text>
+<text fill="#004D40" font-family="Inter, sans-serif" font-size="9" font-weight="bold" x="25" y="27">?</text>
+<text fill="#00796B" font-family="Inter, sans-serif" font-size="7" x="38.5" y="27">2</text>
+<text fill="#00796B" font-family="Inter, sans-serif" font-size="7" font-weight="bold" x="11.5" y="37">Cél: 7</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-green-600 transition-colors">Pótlás</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/relacios-intervallumok.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-pink-500 group-hover:text-pink-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<line stroke="#F472B6" stroke-width="3" x1="5" x2="45" y1="25" y2="25"></line>
+<circle cx="12" cy="25" fill="white" r="4" stroke="#DB2777" stroke-width="2.5"></circle>
+<text fill="#D946EF" font-family="Inter, sans-serif" font-size="12" font-weight="bold" x="25" y="22">X</text>
+<text fill="#D946EF" font-family="Inter, sans-serif" font-size="12" font-weight="bold" x="20" y="34">&lt; &gt;</text>
+<circle cx="38" cy="25" fill="#F472B6" r="4" stroke="#DB2777" stroke-width="2.5"></circle>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-pink-600 transition-colors">Relációs intervallumok</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/tizes-atlepes-felbontassal.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-teal-500 group-hover:text-teal-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<text fill="#0D9488" font-family="Inter, sans-serif" font-size="11" font-weight="bold" x="5" y="16">7+5</text>
+<path d="M7 25 C 15 15, 25 15, 33 25" fill="none" stroke="#14B8A6" stroke-dasharray="3 3" stroke-width="2.5"></path>
+<text fill="#0D9488" font-family="Inter, sans-serif" font-size="11" font-weight="bold" x="36" y="16">=12</text>
+<text fill="#0F766E" font-family="Inter, sans-serif" font-size="9" x="19" y="35">10</text>
+<rect fill="#A7F3D0" height="8" rx="2" width="22" x="2" y="38"></rect>
+<text fill="#047857" font-family="Inter, sans-serif" font-size="8" x="5" y="44">7+3</text>
+<rect fill="#A7F3D0" height="8" rx="2" width="12" x="26" y="38"></rect>
+<text fill="#047857" font-family="Inter, sans-serif" font-size="8" x="28" y="44">+2</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-teal-600 transition-colors">Tízes átlépés</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/romai-szamok.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-amber-500 group-hover:text-amber-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="16" font-weight="bold" x="8" y="30">X</text>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="16" font-weight="bold" x="20" y="30">V</text>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="16" font-weight="bold" x="32" y="30">I</text>
+<path d="M10 15 L15 10 L20 15 M15 10 L15 40 M30 15 L35 10 L40 15 M35 10 L35 40" fill="none" opacity="0.4" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-amber-600 transition-colors">Római számok (Alap)</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/lanc-szamolas.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-purple-400 group-hover:text-purple-500 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#DDD6FE" height="10" rx="2" width="10" x="3" y="20"></rect>
+<text fill="#5B21B6" font-family="Inter, sans-serif" font-size="7" text-anchor="middle" x="8" y="27.5">2</text>
+<path d="M13 25 L19 25" stroke="#A78BFA" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6D28D9" font-family="Inter, sans-serif" font-size="5" x="16" y="18">+3</text>
+<rect fill="#DDD6FE" height="10" rx="2" width="10" x="19" y="20"></rect>
+<text fill="#5B21B6" font-family="Inter, sans-serif" font-size="7" text-anchor="middle" x="24" y="27.5">?</text>
+<path d="M29 25 L35 25" stroke="#A78BFA" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6D28D9" font-family="Inter, sans-serif" font-size="5" x="32" y="18">-1</text>
+<rect fill="#DDD6FE" height="10" rx="2" width="10" x="35" y="20"></rect>
+<text fill="#5B21B6" font-family="Inter, sans-serif" font-size="7" text-anchor="middle" x="40" y="27.5">?</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-purple-500 transition-colors">Láncszámolás</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/alakzatok.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-purple-500 group-hover:text-purple-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<circle cx="18" cy="18" fill="none" r="8" stroke="currentColor" stroke-width="2.5"></circle>
+<rect fill="none" height="15" rx="2" stroke="currentColor" stroke-width="2.5" width="15" x="25" y="25"></rect>
+<polygon fill="none" points="10,40 18,25 26,40" stroke="currentColor" stroke-width="2.5"></polygon>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">Alakzatfelismerés</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/szamsorozatok.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-cyan-500 group-hover:text-cyan-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#CFFAFE" height="10" rx="2" width="10" x="4" y="20"></rect>
+<text fill="#0891B2" font-family="Inter, sans-serif" font-size="7" text-anchor="middle" x="9" y="27">1</text>
+<path d="M14 25 L20 25" stroke="#67E8F9" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#0E7490" font-family="Inter, sans-serif" font-size="4.5" x="17" y="18">+?</text>
+<rect fill="#CFFAFE" height="10" rx="2" width="10" x="20" y="20"></rect>
+<text fill="#0891B2" font-family="Inter, sans-serif" font-size="7" text-anchor="middle" x="25" y="27">?</text>
+<path d="M30 25 L36 25" stroke="#67E8F9" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#0E7490" font-family="Inter, sans-serif" font-size="4.5" x="33" y="18">+?</text>
+<rect fill="#CFFAFE" height="10" rx="2" width="10" x="36" y="20"></rect>
+<text fill="#0891B2" font-family="Inter, sans-serif" font-size="7" text-anchor="middle" x="41" y="27">3</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-cyan-600 transition-colors">Számsorozatok</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="1.osztaly/szoveges-feladatok.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-orange-400 group-hover:text-orange-500 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 8 H42 Q45 8 45 11 V39 Q45 42 42 42 H8 Q5 42 5 39 V11 Q5 8 8 8 Z" fill="#FFF3E0" stroke="#FFB74D" stroke-width="2"></path>
+<line stroke="#FFCC80" stroke-width="1.5" x1="22" x2="22" y1="8" y2="42"></line>
+<line stroke="#FFB74D" stroke-linecap="round" stroke-width="1.5" x1="10" x2="20" y1="15" y2="15"></line>
+<line stroke="#FFB74D" stroke-linecap="round" stroke-width="1.5" x1="25" x2="40" y1="15" y2="15"></line>
+<line stroke="#FFB74D" stroke-linecap="round" stroke-width="1.5" x1="10" x2="20" y1="22" y2="22"></line>
+<line stroke="#FFB74D" stroke-linecap="round" stroke-width="1.5" x1="25" x2="40" y1="22" y2="22"></line>
+<line stroke="#FFB74D" stroke-linecap="round" stroke-width="1.5" x1="10" x2="20" y1="29" y2="29"></line>
+<line stroke="#FFB74D" stroke-linecap="round" stroke-width="1.5" x1="25" x2="40" y1="29" y2="29"></line>
+<text fill="#D97706" font-family="Inter, sans-serif" font-size="6" text-anchor="middle" x="16" y="18">A+B</text>
+<text fill="#D97706" font-family="Inter, sans-serif" font-size="6" text-anchor="middle" x="32.5" y="25">=?</text>
+<rect fill="#FDBA74" height="12" rx="1.5" transform="rotate(-20 35 37)" width="4" x="33" y="32"></rect>
+<polygon fill="#B45309" points="33,32 37,32 35,28" transform="rotate(-20 35 30)"></polygon>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-orange-500 transition-colors">Szöveges feladatok</h3>
+</a>
+</div>
+</section>
+<section class="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl">
+<button class="section-toggle-button w-full flex justify-between items-center text-left focus:outline-none mb-8 pb-3 border-b-2 border-cyan-300" data-target="section-2-content">
+<h2 class="text-3xl sm:text-4xl font-semibold text-cyan-600 flex items-center">
+<svg class="w-8 h-8 mr-3 text-cyan-500" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                         2. Osztály
                     </h2>
-                    <svg class="w-8 h-8 text-cyan-500 transform chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="section-2-content" class="section-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-					<a href="2.osztaly/tizesek-egyesek-kirakasa.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-						<div class="task-card-icon w-28 h-28 mb-4 text-emerald-500 group-hover:text-emerald-600 transition-colors flex items-center justify-center">
-							<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-								<rect x="10" y="5" width="8" height="40" fill="#A7F3D0" stroke="#10B981" stroke-width="1.5" rx="1"/>
-								<rect x="25" y="20" width="8" height="8" fill="#FDE68A" stroke="#FBBF24" stroke-width="1.5" rx="1"/>
-								<rect x="35" y="20" width="8" height="8" fill="#FDE68A" stroke="#FBBF24" stroke-width="1.5" rx="1"/>
-								<rect x="25" y="30" width="8" height="8" fill="#FDE68A" stroke="#FBBF24" stroke-width="1.5" rx="1"/>
-							</svg>
-						</div>
-						<h3 class="text-lg font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors">Tízesek és egyesek kirakása</h3>
-					</a>
-                    <a href="2.osztaly/szamszomszed-relacio.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-sky-500 group-hover:text-sky-600 transition-colors flex items-center justify-center">
-							<svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
-								<rect x="4" y="18" width="14" height="14" fill="#E5E7EB" rx="2"/>
-								<text x="11" y="28" font-family="Inter, sans-serif" font-size="10" fill="#4B5563" text-anchor="middle">?</text>
-								
-								<rect x="23" y="15" width="14" height="20" fill="#BAE6FD" stroke="#38BDF8" stroke-width="2" rx="3"/>
-								<text x="30" y="28" font-family="Inter, sans-serif" font-size="9" fill="#0369A1" font-weight="bold" text-anchor="middle">15</text>
-								
-								<rect x="42" y="18" width="14" height="14" fill="#E5E7EB" rx="2"/>
-								<text x="49" y="28" font-family="Inter, sans-serif" font-size="10" fill="#4B5563" text-anchor="middle">?</text>
-								
-								<text x="30" y="10" font-family="Inter, sans-serif" font-weight="bold" font-size="10" fill="#0EA5E9" text-anchor="middle">&lt; &gt;</text>
-								
-								<path d="M18 25 L23 25" stroke="#A5B4FC" stroke-width="1.5" stroke-dasharray="2 2"/>
-								<path d="M37 25 L42 25" stroke="#A5B4FC" stroke-width="1.5" stroke-dasharray="2 2"/>
-							</svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-sky-600 transition-colors">Számszomszéd és Reláció</h3>
-                    </a>
-                    <a href="2.osztaly/halmaz-valogato.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-fuchsia-500 group-hover:text-fuchsia-600 transition-colors flex items-center justify-center">
-							<svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
-								<text x="10" y="15" font-family="Inter, sans-serif" font-size="7" fill="#075985" font-weight="bold" text-anchor="middle">Páros</text>
-								<circle cx="15" cy="32" r="13" fill="#E0F2FE" stroke="#38BDF8" stroke-width="2"/>
-								<text x="15" y="34" font-family="Inter, sans-serif" font-size="9" fill="#0C4A6E" font-weight="bold" text-anchor="middle">24</text>
-								
-								<text x="45" y="15" font-family="Inter, sans-serif" font-size="7" fill="#881337" font-weight="bold" text-anchor="middle">Páratlan</text>
-								<circle cx="45" cy="32" r="13" fill="#FFE4E6" stroke="#F43F5E" stroke-width="2"/>
-								<text x="45" y="34" font-family="Inter, sans-serif" font-size="9" fill="#9F1239" font-weight="bold" text-anchor="middle">37</text>
-							</svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-fuchsia-600 transition-colors">Halmaz válogató</h3>
-                    </a>
-                </div>
-            </section>
-            <section class="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl">
-                 <button class="section-toggle-button w-full flex justify-between items-center text-left focus:outline-none mb-8 pb-3 border-b-2 border-green-300" data-target="section-3-content">
-                    <h2 class="text-3xl sm:text-4xl font-semibold text-green-600 flex items-center">
-                         <svg class="w-8 h-8 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+<svg class="w-8 h-8 text-cyan-500 transform chevron-icon" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="section-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="section-2-content">
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="2.osztaly/tizesek-egyesek-kirakasa.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-emerald-500 group-hover:text-emerald-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#A7F3D0" height="40" rx="1" stroke="#10B981" stroke-width="1.5" width="8" x="10" y="5"></rect>
+<rect fill="#FDE68A" height="8" rx="1" stroke="#FBBF24" stroke-width="1.5" width="8" x="25" y="20"></rect>
+<rect fill="#FDE68A" height="8" rx="1" stroke="#FBBF24" stroke-width="1.5" width="8" x="35" y="20"></rect>
+<rect fill="#FDE68A" height="8" rx="1" stroke="#FBBF24" stroke-width="1.5" width="8" x="25" y="30"></rect>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors">Tízesek és egyesek kirakása</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="2.osztaly/szamszomszed-relacio.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-sky-500 group-hover:text-sky-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#E5E7EB" height="14" rx="2" width="14" x="4" y="18"></rect>
+<text fill="#4B5563" font-family="Inter, sans-serif" font-size="10" text-anchor="middle" x="11" y="28">?</text>
+<rect fill="#BAE6FD" height="20" rx="3" stroke="#38BDF8" stroke-width="2" width="14" x="23" y="15"></rect>
+<text fill="#0369A1" font-family="Inter, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" x="30" y="28">15</text>
+<rect fill="#E5E7EB" height="14" rx="2" width="14" x="42" y="18"></rect>
+<text fill="#4B5563" font-family="Inter, sans-serif" font-size="10" text-anchor="middle" x="49" y="28">?</text>
+<text fill="#0EA5E9" font-family="Inter, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" x="30" y="10">&lt; &gt;</text>
+<path d="M18 25 L23 25" stroke="#A5B4FC" stroke-dasharray="2 2" stroke-width="1.5"></path>
+<path d="M37 25 L42 25" stroke="#A5B4FC" stroke-dasharray="2 2" stroke-width="1.5"></path>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-sky-600 transition-colors">Számszomszéd és Reláció</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="2.osztaly/halmaz-valogato.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-fuchsia-500 group-hover:text-fuchsia-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+<text fill="#075985" font-family="Inter, sans-serif" font-size="7" font-weight="bold" text-anchor="middle" x="10" y="15">Páros</text>
+<circle cx="15" cy="32" fill="#E0F2FE" r="13" stroke="#38BDF8" stroke-width="2"></circle>
+<text fill="#0C4A6E" font-family="Inter, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" x="15" y="34">24</text>
+<text fill="#881337" font-family="Inter, sans-serif" font-size="7" font-weight="bold" text-anchor="middle" x="45" y="15">Páratlan</text>
+<circle cx="45" cy="32" fill="#FFE4E6" r="13" stroke="#F43F5E" stroke-width="2"></circle>
+<text fill="#9F1239" font-family="Inter, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" x="45" y="34">37</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-fuchsia-600 transition-colors">Halmaz válogató</h3>
+</a>
+</div>
+</section>
+<section class="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl">
+<button class="section-toggle-button w-full flex justify-between items-center text-left focus:outline-none mb-8 pb-3 border-b-2 border-green-300" data-target="section-3-content">
+<h2 class="text-3xl sm:text-4xl font-semibold text-green-600 flex items-center">
+<svg class="w-8 h-8 mr-3 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                         3. Osztály
                     </h2>
-                    <svg class="w-8 h-8 text-green-500 transform chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="section-3-content" class="section-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <a href="3.osztaly/romai-szamok.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-amber-500 group-hover:text-amber-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <text x="8" y="30" font-family="Inter, sans-serif" font-weight="bold" font-size="16" fill="currentColor">C</text>
-                                <text x="20" y="30" font-family="Inter, sans-serif" font-weight="bold" font-size="16" fill="currentColor">L</text>
-                                <text x="32" y="30" font-family="Inter, sans-serif" font-weight="bold" font-size="16" fill="currentColor">X</text>
-                                <path d="M10 15 L15 10 L20 15 M15 10 L15 40 M30 15 L35 10 L40 15 M35 10 L35 40" stroke="currentColor" stroke-width="2" fill="none" opacity="0.4"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-amber-600 transition-colors">Római számok</h3>
-                    </a>
-                    <a href="3.osztaly/irasbeli-osszeadas.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-lime-500 group-hover:text-lime-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="stroke-current">
-                                <text x="45" y="18" font-family="Inter, sans-serif" font-size="10" font-weight="bold" class="fill-current text-lime-700">1</text>
-                                <text x="60" y="35" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end">123</text>
-                                <text x="60" y="55" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end">45</text>
-                                <text x="15" y="55" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="middle">+</text>
-                                <line x1="10" y1="65" x2="70" y2="65" stroke-width="2"/>
-                                <text x="60" y="85" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end">168</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-lime-600 transition-colors">Írásbeli összeadás</h3>
-                    </a>
-                    <a href="3.osztaly/irasbeli-kivonas.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-red-500 group-hover:text-red-600 transition-colors flex items-center justify-center">
-                           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="stroke-current">
-                                <text x="45" y="35" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end" style="text-decoration: line-through;">2</text>
-                                <text x="45" y="18" font-family="Inter, sans-serif" font-size="10" font-weight="bold" class="fill-current text-red-700">1</text>
-                                <text x="60" y="18" font-family="Inter, sans-serif" font-size="10" font-weight="bold" class="fill-current text-red-700">1</text>
-                                <text x="60" y="35" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end">3</text>
-                                <text x="75" y="35" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end">5</text>
-
-                                <text x="60" y="55" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end"> </text>
-                                <text x="75" y="55" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end">8</text>
-                                <text x="15" y="55" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="middle">-</text>
-                                <line x1="10" y1="65" x2="85" y2="65" stroke-width="2"/>
-                                <text x="60" y="85" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end">1</text>
-                                <text x="75" y="85" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end">7</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-red-600 transition-colors">Írásbeli kivonás</h3>
-                    </a>
-                    <a href="3.osztaly/irasbeli-szorzas.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-yellow-500 group-hover:text-yellow-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="stroke-current">
-                                <text x="60" y="30" font-family="Inter, sans-serif" font-size="12" font-weight="bold" class="fill-current" text-anchor="end">123</text>
-                                <text x="60" y="45" font-family="Inter, sans-serif" font-size="12" font-weight="bold" class="fill-current" text-anchor="end">45</text>
-                                <text x="20" y="45" font-family="Inter, sans-serif" font-size="12" font-weight="bold" class="fill-current" text-anchor="middle">×</text>
-                                <line x1="25" y1="52" x2="70" y2="52" stroke-width="2"/>
-
-                                <text x="70" y="65" font-family="Inter, sans-serif" font-size="10" class="fill-current" text-anchor="end">615</text>
-                                <text x="70" y="78" font-family="Inter, sans-serif" font-size="10" class="fill-current" text-anchor="end">492</text>
-                                <line x1="25" y1="82" x2="80" y2="82" stroke-width="2"/>
-                                <text x="80" y="95" font-family="Inter, sans-serif" font-size="12" font-weight="bold" class="fill-current" text-anchor="end">5535</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-yellow-600 transition-colors">Írásbeli szorzás</h3>
-                    </a>
-                    <a href="3.osztaly/irasbeli-osztas.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-orange-500 group-hover:text-orange-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="stroke-current">
-                                <text x="25" y="20" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current" text-anchor="end">127</text>
-                                <text x="51" y="20" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current">: 5</text>
-
-                                <line x1="48" y1="5" x2="48" y2="28" stroke-width="2"/>
-                                <line x1="48" y1="28" x2="90" y2="28" stroke-width="2"/>
-
-                                <text x="65" y="20" font-family="Inter, sans-serif" font-size="14" font-weight="bold" class="fill-current">25</text>
-
-                                <text x="35" y="40" font-family="Inter, sans-serif" font-size="12" class="fill-current" text-anchor="end">-10</text>
-                                <line x1="15" y1="45" x2="35" y2="45" stroke-width="1.5"/>
-
-                                <text x="35" y="60" font-family="Inter, sans-serif" font-size="12" class="fill-current" text-anchor="end">27</text>
-
-                                <text x="35" y="75" font-family="Inter, sans-serif" font-size="12" class="fill-current" text-anchor="end">-25</text>
-                                <line x1="15" y1="80" x2="35" y2="80" stroke-width="1.5"/>
-
-                                <text x="35" y="95" font-family="Inter, sans-serif" font-size="12" font-weight="bold" class="fill-current" text-anchor="end">2</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-orange-600 transition-colors">Írásbeli osztás</h3>
-                    </a>
-                    <a href="3.osztaly/mertekegyseg-atvaltas.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-emerald-500 group-hover:text-emerald-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 25 L40 25 M10 25 L15 20 M10 25 L15 30 M40 25 L35 20 M40 25 L35 30" stroke="currentColor" stroke-width="2.5" fill="none"/>
-                                <text x="8" y="38" font-family="Inter, sans-serif" font-size="10" fill="currentColor" font-weight="bold">m</text>
-                                <text x="22" y="38" font-family="Inter, sans-serif" font-size="10" fill="currentColor" font-weight="bold">→</text>
-                                <text x="32" y="38" font-family="Inter, sans-serif" font-size="10" fill="currentColor" font-weight="bold">cm</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors">Mértékegység átváltás</h3>
-                    </a>
-                    <a href="3.osztaly/buvos-negyzet.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-purple-500 group-hover:text-purple-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="8" y="8" width="34" height="34" stroke="#A855F7" stroke-width="2.5" fill="#F3E8FF" rx="3"/>
-                                <line x1="8" y1="20" x2="42" y2="20" stroke="#C084FC" stroke-width="2"/>
-                                <line x1="8" y1="31" x2="42" y2="31" stroke="#C084FC" stroke-width="2"/>
-                                <line x1="20" y1="8" x2="20" y2="42" stroke="#C084FC" stroke-width="2"/>
-                                <line x1="31" y1="8" x2="31" y2="42" stroke="#C084FC" stroke-width="2"/>
-                                <text x="14" y="17" font-family="Inter, sans-serif" font-size="8" fill="#7E22CE">2</text>
-                                <text x="25" y="28" font-family="Inter, sans-serif" font-size="8" fill="#7E22CE">5</text>
-                                <text x="36" y="38" font-family="Inter, sans-serif" font-size="8" fill="#7E22CE">8</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">Bűvös négyzet</h3>
-                    </a>
-                    <a href="3.osztaly/negativ-szamok-intro.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-sky-500 group-hover:text-sky-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="20" y="5" width="10" height="38" rx="5" ry="5" fill="#E0E7FF" stroke="#A5B4FC" stroke-width="2"/>
-                                <rect x="22.5" y="12" width="5" height="12" fill="#F87171"/>
-                                <rect x="22.5" y="24" width="5" height="8" fill="#60A5FA"/>
-                                <circle cx="25" y="43" r="6" fill="#E0E7FF" stroke="#A5B4FC" stroke-width="2"/>
-                                <circle cx="25" y="43" r="4" fill="#F87171"/>
-                                <line x1="15" y1="12" x2="20" y2="12" stroke="#A5B4FC" stroke-width="1.5"/>
-                                <line x1="15" y1="18" x2="20" y2="18" stroke="#A5B4FC" stroke-width="1.5"/>
-                                <line x1="15" y1="24" x2="20" y2="24" stroke="#A5B4FC" stroke-width="2"/> <line x1="15" y1="30" x2="20" y2="30" stroke="#A5B4FC" stroke-width="1.5"/>
-                                <text x="12" y="26" font-family="Inter, sans-serif" font-size="7" fill="#4338CA">0</text>
-                                <text x="33" y="15" font-family="Inter, sans-serif" font-size="7" fill="#EF4444">+</text>
-                                <text x="33" y="33" font-family="Inter, sans-serif" font-size="8" fill="#3B82F6">-</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-sky-600 transition-colors">Negatív számok</h3>
-                    </a>
-                    <a href="3.osztaly/tortek-felismerese.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-violet-500 group-hover:text-violet-600 transition-colors flex items-center justify-center">
-                           <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="25" cy="25" r="18" class="fill-current opacity-20" stroke="currentColor" stroke-width="2.5"/>
-                                <path d="M25 25 L25 7 A18 18 0 0 1 40.58 15.42 Z" class="fill-current opacity-60" stroke="currentColor" stroke-width="2"/>
-                                <line x1="25" y1="25" x2="25" y2="7" stroke="currentColor" stroke-width="2"/>
-                                <line x1="25" y1="25" x2="40.58" y2="15.42" stroke="currentColor" stroke-width="2"/>
-                                <line x1="25" y1="25" x2="9.42" y2="15.42" stroke="currentColor" stroke-width="2"/>
-                                <text x="25" y="42" font-family="Inter, sans-serif" font-size="9" class="fill-current" text-anchor="middle" font-weight="bold">1/4</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-violet-600 transition-colors">Törtek felismerése</h3>
-                    </a>
-                    <a href="3.osztaly/tortek-rendezese.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group">
-                        <div class="task-card-icon w-28 h-28 mb-4 text-cyan-500 group-hover:text-cyan-600 transition-colors flex items-center justify-center">
-                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <g transform="translate(30, 40) scale(1.2)">
-                                    <circle r="15" fill="none" stroke="currentColor" stroke-width="2.5" />
-                                    <path d="M 0,0 L 0,-15 A 15,15 0 0,1 10.6,-10.6 Z" fill="currentColor" opacity="0.5"/>
-                                    <text y="25" font-family="Inter, sans-serif" font-size="10" fill="currentColor" text-anchor="middle">1/8</text>
-                                </g>
-                                <g transform="translate(70, 40) scale(1.2)">
-                                    <circle r="15" fill="none" stroke="currentColor" stroke-width="2.5"/>
-                                    <path d="M 0,0 L 0,-15 A 15,15 0 0,1 15,0 L 10.6,10.6 A 15,15 0 0,1 0,15 Z" fill="currentColor" opacity="0.7"/>
-                                    <text y="25" font-family="Inter, sans-serif" font-size="10" fill="currentColor" text-anchor="middle">3/8</text>
-                                </g>
-                                <line x1="20" y1="80" x2="80" y2="80" stroke="currentColor" stroke-width="3" />
-                                <polyline points="72,75 80,80 72,85" stroke="currentColor" stroke-width="3" fill="none"/>
-                                <text x="50" y="95" font-family="Inter, sans-serif" font-size="12" font-weight="bold" fill="currentColor" text-anchor="middle">Sorrend</text>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700 group-hover:text-cyan-600 transition-colors">Törtek sorba rendezése</h3>
-                    </a>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const toggleButtons = document.querySelectorAll('.section-toggle-button');
-        toggleButtons.forEach(button => {
-            const targetId = button.dataset.target;
-            const targetContent = document.getElementById(targetId);
-            const chevron = button.querySelector('svg.chevron-icon');
-
-            let sectionOpen = sessionStorage.getItem(targetId + '_open') === 'true';
-
-            if (targetContent) {
-                 if (!sectionOpen) {
-                    targetContent.classList.add('hidden');
-                 }
-            }
-            if (chevron) {
-                 if(!sectionOpen) {
-                    chevron.classList.add('rotate-[-90deg]');
-                 } else {
-                    chevron.classList.remove('rotate-[-90deg]'); // Ensure it's not rotated if open
-                 }
-            }
-
-            button.addEventListener('click', () => {
-                let isOpen = false;
-                if (targetContent) {
-                    targetContent.classList.toggle('hidden');
-                    isOpen = !targetContent.classList.contains('hidden');
-                    sessionStorage.setItem(targetId + '_open', isOpen);
-                }
-                if (chevron) {
-                    chevron.classList.toggle('rotate-[-90deg]');
-                }
-            });
-        });
-      });
-    </script>
+<svg class="w-8 h-8 text-green-500 transform chevron-icon" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="section-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="section-3-content">
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/romai-szamok.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-amber-500 group-hover:text-amber-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="16" font-weight="bold" x="8" y="30">C</text>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="16" font-weight="bold" x="20" y="30">L</text>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="16" font-weight="bold" x="32" y="30">X</text>
+<path d="M10 15 L15 10 L20 15 M15 10 L15 40 M30 15 L35 10 L40 15 M35 10 L35 40" fill="none" opacity="0.4" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-amber-600 transition-colors">Római számok</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/irasbeli-osszeadas.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-lime-500 group-hover:text-lime-600 transition-colors flex items-center justify-center">
+<svg class="stroke-current" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<text class="fill-current text-lime-700" font-family="Inter, sans-serif" font-size="10" font-weight="bold" x="45" y="18">1</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="60" y="35">123</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="60" y="55">45</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" x="15" y="55">+</text>
+<line stroke-width="2" x1="10" x2="70" y1="65" y2="65"></line>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="60" y="85">168</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-lime-600 transition-colors">Írásbeli összeadás</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/irasbeli-kivonas.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-red-500 group-hover:text-red-600 transition-colors flex items-center justify-center">
+<svg class="stroke-current" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" style="text-decoration: line-through;" text-anchor="end" x="45" y="35">2</text>
+<text class="fill-current text-red-700" font-family="Inter, sans-serif" font-size="10" font-weight="bold" x="45" y="18">1</text>
+<text class="fill-current text-red-700" font-family="Inter, sans-serif" font-size="10" font-weight="bold" x="60" y="18">1</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="60" y="35">3</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="75" y="35">5</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="60" y="55"> </text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="75" y="55">8</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" x="15" y="55">-</text>
+<line stroke-width="2" x1="10" x2="85" y1="65" y2="65"></line>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="60" y="85">1</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="75" y="85">7</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-red-600 transition-colors">Írásbeli kivonás</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/irasbeli-szorzas.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-yellow-500 group-hover:text-yellow-600 transition-colors flex items-center justify-center">
+<svg class="stroke-current" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<text class="fill-current" font-family="Inter, sans-serif" font-size="12" font-weight="bold" text-anchor="end" x="60" y="30">123</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="12" font-weight="bold" text-anchor="end" x="60" y="45">45</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" x="20" y="45">×</text>
+<line stroke-width="2" x1="25" x2="70" y1="52" y2="52"></line>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="10" text-anchor="end" x="70" y="65">615</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="10" text-anchor="end" x="70" y="78">492</text>
+<line stroke-width="2" x1="25" x2="80" y1="82" y2="82"></line>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="12" font-weight="bold" text-anchor="end" x="80" y="95">5535</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-yellow-600 transition-colors">Írásbeli szorzás</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/irasbeli-osztas.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-orange-500 group-hover:text-orange-600 transition-colors flex items-center justify-center">
+<svg class="stroke-current" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" text-anchor="end" x="25" y="20">127</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" x="51" y="20">: 5</text>
+<line stroke-width="2" x1="48" x2="48" y1="5" y2="28"></line>
+<line stroke-width="2" x1="48" x2="90" y1="28" y2="28"></line>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="14" font-weight="bold" x="65" y="20">25</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="12" text-anchor="end" x="35" y="40">-10</text>
+<line stroke-width="1.5" x1="15" x2="35" y1="45" y2="45"></line>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="12" text-anchor="end" x="35" y="60">27</text>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="12" text-anchor="end" x="35" y="75">-25</text>
+<line stroke-width="1.5" x1="15" x2="35" y1="80" y2="80"></line>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="12" font-weight="bold" text-anchor="end" x="35" y="95">2</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-orange-600 transition-colors">Írásbeli osztás</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/mertekegyseg-atvaltas.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-emerald-500 group-hover:text-emerald-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 25 L40 25 M10 25 L15 20 M10 25 L15 30 M40 25 L35 20 M40 25 L35 30" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="10" font-weight="bold" x="8" y="38">m</text>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="10" font-weight="bold" x="22" y="38">→</text>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="10" font-weight="bold" x="32" y="38">cm</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors">Mértékegység átváltás</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/buvos-negyzet.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-purple-500 group-hover:text-purple-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#F3E8FF" height="34" rx="3" stroke="#A855F7" stroke-width="2.5" width="34" x="8" y="8"></rect>
+<line stroke="#C084FC" stroke-width="2" x1="8" x2="42" y1="20" y2="20"></line>
+<line stroke="#C084FC" stroke-width="2" x1="8" x2="42" y1="31" y2="31"></line>
+<line stroke="#C084FC" stroke-width="2" x1="20" x2="20" y1="8" y2="42"></line>
+<line stroke="#C084FC" stroke-width="2" x1="31" x2="31" y1="8" y2="42"></line>
+<text fill="#7E22CE" font-family="Inter, sans-serif" font-size="8" x="14" y="17">2</text>
+<text fill="#7E22CE" font-family="Inter, sans-serif" font-size="8" x="25" y="28">5</text>
+<text fill="#7E22CE" font-family="Inter, sans-serif" font-size="8" x="36" y="38">8</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">Bűvös négyzet</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/negativ-szamok-intro.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-sky-500 group-hover:text-sky-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#E0E7FF" height="38" rx="5" ry="5" stroke="#A5B4FC" stroke-width="2" width="10" x="20" y="5"></rect>
+<rect fill="#F87171" height="12" width="5" x="22.5" y="12"></rect>
+<rect fill="#60A5FA" height="8" width="5" x="22.5" y="24"></rect>
+<circle cx="25" fill="#E0E7FF" r="6" stroke="#A5B4FC" stroke-width="2" y="43"></circle>
+<circle cx="25" fill="#F87171" r="4" y="43"></circle>
+<line stroke="#A5B4FC" stroke-width="1.5" x1="15" x2="20" y1="12" y2="12"></line>
+<line stroke="#A5B4FC" stroke-width="1.5" x1="15" x2="20" y1="18" y2="18"></line>
+<line stroke="#A5B4FC" stroke-width="2" x1="15" x2="20" y1="24" y2="24"></line> <line stroke="#A5B4FC" stroke-width="1.5" x1="15" x2="20" y1="30" y2="30"></line>
+<text fill="#4338CA" font-family="Inter, sans-serif" font-size="7" x="12" y="26">0</text>
+<text fill="#EF4444" font-family="Inter, sans-serif" font-size="7" x="33" y="15">+</text>
+<text fill="#3B82F6" font-family="Inter, sans-serif" font-size="8" x="33" y="33">-</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-sky-600 transition-colors">Negatív számok</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/tortek-felismerese.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-violet-500 group-hover:text-violet-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<circle class="fill-current opacity-20" cx="25" cy="25" r="18" stroke="currentColor" stroke-width="2.5"></circle>
+<path class="fill-current opacity-60" d="M25 25 L25 7 A18 18 0 0 1 40.58 15.42 Z" stroke="currentColor" stroke-width="2"></path>
+<line stroke="currentColor" stroke-width="2" x1="25" x2="25" y1="25" y2="7"></line>
+<line stroke="currentColor" stroke-width="2" x1="25" x2="40.58" y1="25" y2="15.42"></line>
+<line stroke="currentColor" stroke-width="2" x1="25" x2="9.42" y1="25" y2="15.42"></line>
+<text class="fill-current" font-family="Inter, sans-serif" font-size="9" font-weight="bold" text-anchor="middle" x="25" y="42">1/4</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-violet-600 transition-colors">Törtek felismerése</h3>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center group" href="3.osztaly/tortek-rendezese.html">
+<div class="task-card-icon w-28 h-28 mb-4 text-cyan-500 group-hover:text-cyan-600 transition-colors flex items-center justify-center">
+<svg viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(30, 40) scale(1.2)">
+<circle fill="none" r="15" stroke="currentColor" stroke-width="2.5"></circle>
+<path d="M 0,0 L 0,-15 A 15,15 0 0,1 10.6,-10.6 Z" fill="currentColor" opacity="0.5"></path>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="10" text-anchor="middle" y="25">1/8</text>
+</g>
+<g transform="translate(70, 40) scale(1.2)">
+<circle fill="none" r="15" stroke="currentColor" stroke-width="2.5"></circle>
+<path d="M 0,0 L 0,-15 A 15,15 0 0,1 15,0 L 10.6,10.6 A 15,15 0 0,1 0,15 Z" fill="currentColor" opacity="0.7"></path>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="10" text-anchor="middle" y="25">3/8</text>
+</g>
+<line stroke="currentColor" stroke-width="3" x1="20" x2="80" y1="80" y2="80"></line>
+<polyline fill="none" points="72,75 80,80 72,85" stroke="currentColor" stroke-width="3"></polyline>
+<text fill="currentColor" font-family="Inter, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" x="50" y="95">Sorrend</text>
+</svg>
+</div>
+<h3 class="text-lg font-semibold text-gray-700 group-hover:text-cyan-600 transition-colors">Törtek sorba rendezése</h3>
+</a>
+</div>
+</section>
+</main>
+</div>
+<script src="index.js"></script>
 </body>
 </html>

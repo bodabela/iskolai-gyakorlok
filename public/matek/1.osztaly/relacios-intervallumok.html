@@ -1,1585 +1,192 @@
 <!DOCTYPE html>
+
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relációs Feladatok Gyakorló</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
-
-        .controls-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 900px;
-        }
-
-        .theme-selector, .range-selector {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .control-label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 0.95em;
-            transition: color 0.5s ease;
-        }
-        
-        .theme-button, .range-button {
-            padding: 8px 12px;
-            border: 1px solid transparent;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
-        }
-        .theme-button:hover, .range-button:hover {
-            transform: translateY(-1px);
-            opacity: 0.9;
-        }
-        .theme-button.active, .range-button.active {
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000); 
-            transform: translateY(1px);
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 20px; 
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 900px; 
-            text-align: center;
-            transition: background-color 0.5s ease, border-color 0.5s ease;
-        }
-        
-        h1, h2 {
-            text-align: center;
-            transition: color 0.5s ease;
-        }
-        h1 {
-            font-size: clamp(1.8em, 5vw, 2.2em); 
-            margin-bottom: 15px;
-        }
-        h2 {
-            font-size: clamp(1.3em, 4vw, 1.6em); 
-            margin-bottom: 25px;
-        }
-        .task {
-            margin-bottom: 30px; 
-            padding: 20px;
-            border-radius: 10px;
-            transition: background-color 0.5s ease, border-color 0.5s ease;
-        }
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .task-header h3 {
-            margin-top: 0;
-            margin-bottom: 0; 
-            font-size: clamp(1.1em, 3.5vw, 1.3em); 
-            transition: color 0.5s ease;
-        }
-        .new-task-button {
-            padding: 6px 12px;
-            font-size: 0.8em;
-            margin-left: 10px; 
-        }
-
-        .task p.instructions { 
-            line-height: 1.6; 
-            font-size: clamp(1em, 3vw, 1.1em); 
-            margin-bottom: 15px; 
-            transition: color 0.5s ease;
-        }
-        
-        .operation-display-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; 
-            gap: 10px; 
-            margin-bottom: 15px;
-            flex-wrap: wrap; 
-        }
-        
-        .single-expression-wrapper { 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px; 
-        }
-
-        .result-input-above { 
-            width: 70px; 
-            padding: 8px;
-            text-align: center;
-            font-size: clamp(0.9em, 2.8vw, 1.1em); 
-            font-weight: bold;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            margin-bottom: 2px; 
-            transition: border-color 0.5s ease, background-color 0.5s ease, color 0.5s ease;
-        }
-
-        .expression-text-below, .relation-symbol, .variable-symbol { 
-            font-size: clamp(1.2em, 3.8vw, 1.5em);
-            font-weight: bold;
-            padding: 0 5px;
-            transition: color 0.5s ease;
-            line-height: 1.5em; 
-        }
-         .relation-symbol, .variable-symbol {
-             margin-bottom: 2px; 
-         }
-
-
-        .variable-input-container {
-            margin-top: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .variable-input-container label {
-            font-size: clamp(1.1em, 3.5vw, 1.3em);
-            font-weight: bold;
-            transition: color 0.5s ease;
-        }
-        .dynamic-inputs {
-            display: flex;
-            gap: 5px; 
-            flex-wrap: wrap; 
-            justify-content: center;
-        }
-        .variable-value-input {
-            width: 50px;
-            padding: 8px;
-            text-align: center;
-            font-size: clamp(1em, 3vw, 1.1em);
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            transition: border-color 0.5s ease;
-        }
-        
-        input[type=number]::-webkit-outer-spin-button,
-        input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-
-        button.task-button { 
-            padding: 10px 20px; 
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: clamp(1em, 3vw, 1.1em); 
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        button.task-button:hover {
-            transform: translateY(-2px);
-        }
-        button.task-button:active {
-            transform: translateY(0px);
-        }
-        .feedback {
-            margin-top: 15px; 
-            font-weight: bold;
-            padding: 10px; 
-            border-radius: 6px;
-            font-size: clamp(0.9em, 2.8vw, 1.05em); 
-            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
-            min-height: 1.5em; 
-            line-height: 1.4;
-        }
-        .feedback ul {
-            list-style-type: none;
-            padding-left: 0;
-            margin-top: 5px;
-        }
-        .feedback li {
-            margin-bottom: 3px;
-        }
-
-        /* Number Line Styles - Updated for consistency */
-        .number-line-relational-container {
-            margin-top: 20px;
-            margin-bottom: 15px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            overflow-x: auto; 
-        }
-        .number-line-relational {
-            max-width: 100%;
-            display: block;
-            margin: 0 auto;
-        }
-        .number-line-relational .axis { 
-            stroke: var(--numberline-axis-color, #333);
-            stroke-width: 2.5; 
-        }
-        .number-line-relational .tick { 
-            stroke: var(--numberline-tick-color, #888);
-            stroke-width: 1.5; 
-        }
-        .number-line-relational .number-text { 
-            /* fill is set dynamically */
-            font-size: 11px; 
-            font-weight: bold; 
-            text-anchor: middle; 
-            dominant-baseline: hanging; 
-        }
-        .number-line-relational .interval-line { 
-            stroke-width: 4; 
-            stroke-linecap: round;
-        }
-        .number-line-relational .interval-line.primary {
-            stroke: var(--numberline-interval-color, blue);
-        }
-         .number-line-relational .interval-line.secondary {
-            stroke: var(--numberline-interval-secondary-color, darkorange);
-        }
-        .number-line-relational .interval-endpoint { 
-            stroke-width: 2; 
-        }
-        .number-line-relational .interval-endpoint.primary {
-            stroke: var(--numberline-interval-color, blue);
-        }
-        .number-line-relational .interval-endpoint.secondary {
-             stroke: var(--numberline-interval-secondary-color, darkorange);
-        }
-        .number-line-relational .interval-endpoint.open { 
-            fill: var(--numberline-endpoint-open-fill, white); 
-        }
-        .number-line-relational .interval-endpoint.closed.primary { 
-            fill: var(--numberline-interval-color, blue); 
-        }
-        .number-line-relational .interval-endpoint.closed.secondary { 
-            fill: var(--numberline-interval-secondary-color, darkorange); 
-        }
-        .number-line-relational path.arrow-head { 
-            stroke: none; 
-        }
-        .number-line-relational path.arrow-head.primary {
-             fill: var(--numberline-arrowhead-fill-primary, var(--numberline-axis-color, #333)); 
-        }
-         .number-line-relational path.arrow-head.secondary {
-             fill: var(--numberline-arrowhead-fill-secondary, var(--numberline-axis-color, #333)); 
-        }
-        .number-line-relational .value-label {
-            fill: var(--numberline-text-color, #333);
-            font-size: 10px;
-            font-weight: bold;
-            text-anchor: middle;
-        }
-        
-        /* --- THEME DEFINITIONS --- */
-        .theme-button, .range-button {
-            background-color: #e0e0e0;
-            color: #333;
-            border: 1px solid #ccc;
-        }
-        
-        /* 1. Candy Theme (Girlish) */
-        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;
-            --numberline-axis-color: #E089B5; --numberline-tick-color: #F0A8CE; --numberline-text-color: #8a2be2;
-            --numberline-interval-color: #ff69b4; --numberline-endpoint-open-fill: #fff0f5;
-            --numberline-interval-secondary-color: #da70d6; 
-            --numberline-arrowhead-fill-primary: #c71585; 
-            --numberline-arrowhead-fill-secondary: #9932cc; 
-        }
-        body.theme-candy .control-label { color: #c71585; }
-        body.theme-candy .theme-button.active, body.theme-candy .range-button.active { background-color: #ffb6c1; color: #7c3c60; }
-        body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
-        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
-        body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
-        body.theme-candy .task-header h3 { color: #ff69b4; }
-        body.theme-candy .task p.instructions { color: #8a2be2; }
-        body.theme-candy .expression-text-below, body.theme-candy .relation-symbol, body.theme-candy .variable-symbol, body.theme-candy .variable-input-container label { color: #9932cc; }
-        body.theme-candy .result-input-above, body.theme-candy .variable-value-input { border: 2px solid #ffb6c1; } 
-        body.theme-candy button.task-button { background-color: #ff69b4; }
-        body.theme-candy button.task-button:hover { background-color: #ff1493; }
-        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border: 1px solid #90ee90; }
-        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border: 1px solid #ffb6c1; }
-
-
-        /* 2. Space Theme (Boyish) */
-        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;
-            --numberline-axis-color: #60a5fa; --numberline-tick-color: #475569; --numberline-text-color: #e2e8f0;
-            --numberline-interval-color: #facc15; --numberline-endpoint-open-fill: #0f172a; 
-            --numberline-interval-secondary-color: #fb923c;
-            --numberline-arrowhead-fill-primary: #93c5fd; 
-            --numberline-arrowhead-fill-secondary: #fde047; 
-        }
-        body.theme-space .control-label { color: #93c5fd; }
-        body.theme-space .theme-button.active, body.theme-space .range-button.active { background-color: #1e3a8a; color: #93c5fd; }
-        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
-        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
-        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
-        body.theme-space .task-header h3 { color: #93c5fd; }
-        body.theme-space .task p.instructions { color: #cbd5e1; }
-        body.theme-space .expression-text-below, body.theme-space .relation-symbol, body.theme-space .variable-symbol, body.theme-space .variable-input-container label { color: #e2e8f0; }
-        body.theme-space .result-input-above, body.theme-space .variable-value-input { border: 2px solid #475569; background-color: #1e293b; color: #e2e8f0;}
-        body.theme-space button.task-button { background-color: #2563eb; }
-        body.theme-space button.task-button:hover { background-color: #1d4ed8; }
-        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
-        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
-
-        /* 3. Jungle Theme (Boyish) */
-        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;
-            --numberline-axis-color: #558b2f; --numberline-tick-color: #81c784; --numberline-text-color: #1b5e20;
-            --numberline-interval-color: #ff8f00; --numberline-endpoint-open-fill: #f0fff0;
-            --numberline-interval-secondary-color: #f4511e;
-            --numberline-arrowhead-fill-primary: #388e3c; 
-            --numberline-arrowhead-fill-secondary: #bf360c; 
-        }
-        body.theme-jungle .control-label { color: #558b2f; }
-        body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active { background-color: #689f38; color: #dcedc8; }
-        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
-        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
-        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
-        body.theme-jungle .task-header h3 { color: #558b2f; }
-        body.theme-jungle .task p.instructions { color: #2e7d32; }
-        body.theme-jungle .expression-text-below, body.theme-jungle .relation-symbol, body.theme-jungle .variable-symbol, body.theme-jungle .variable-input-container label { color: #1b5e20; }
-        body.theme-jungle .result-input-above, body.theme-jungle .variable-value-input { border: 2px solid #81c784; }
-        body.theme-jungle button.task-button { background-color: #7cb342; }
-        body.theme-jungle button.task-button:hover { background-color: #689f38; }
-        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
-        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
-
-        /* 4. Magic Forest Theme (Girlish) */
-        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;
-            --numberline-axis-color: #8a2be2; --numberline-tick-color: #ba55d3; --numberline-text-color: #483d8b;
-            --numberline-interval-color: #9932cc; --numberline-endpoint-open-fill: #e6e6fa;
-            --numberline-interval-secondary-color: #dda0dd;
-            --numberline-arrowhead-fill-primary: #4b0082; 
-            --numberline-arrowhead-fill-secondary: #800080; 
-        }
-        body.theme-magicforest .control-label { color: #9932cc; }
-        body.theme-magicforest .theme-button.active, body.theme-magicforest .range-button.active { background-color: #9370db; color: #f8f0ff; }
-        body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
-        body.theme-magicforest h1, body.theme-magicforest h2 { color: #8a2be2; }
-        body.theme-magicforest .task { background-color: #f5f5f5; border: 2px dashed #ba55d3; }
-        body.theme-magicforest .task-header h3 { color: #9932cc; }
-        body.theme-magicforest .task p.instructions { color: #4b0082; }
-        body.theme-magicforest .expression-text-below, body.theme-magicforest .relation-symbol, body.theme-magicforest .variable-symbol, body.theme-magicforest .variable-input-container label { color: #483d8b; }
-        body.theme-magicforest .result-input-above, body.theme-magicforest .variable-value-input { border: 2px solid #ba55d3; }
-        body.theme-magicforest button.task-button { background-color: #9370db; }
-        body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
-
-        /* 5. Robo/Tech Theme (Boyish) */
-        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;
-            --numberline-axis-color: #00acc1; --numberline-tick-color: #78909c; --numberline-text-color: #eceff1;
-            --numberline-interval-color: #ffab00; --numberline-endpoint-open-fill: #263238;
-            --numberline-interval-secondary-color: #00e676;
-            --numberline-arrowhead-fill-primary: #00838f; 
-            --numberline-arrowhead-fill-secondary: #00bfa5; 
-        }
-        body.theme-tech .control-label { color: #26c6da; }
-        body.theme-tech .theme-button.active, body.theme-tech .range-button.active { background-color: #00838f; color: #e0f7fa; }
-        body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
-        body.theme-tech h1, body.theme-tech h2 { color: #00acc1; }
-        body.theme-tech .task { background-color: #455a64; border: 2px dashed #78909c; }
-        body.theme-tech .task-header h3 { color: #26c6da; }
-        body.theme-tech .task p.instructions { color: #b0bec5; }
-        body.theme-tech .expression-text-below, body.theme-tech .relation-symbol, body.theme-tech .variable-symbol, body.theme-tech .variable-input-container label { color: #eceff1; }
-        body.theme-tech .result-input-above, body.theme-tech .variable-value-input { border: 2px solid #78909c; background-color: #37474f; color: #eceff1; }
-        body.theme-tech button.task-button { background-color: #0097a7; }
-        body.theme-tech button.task-button:hover { background-color: #00838f; }
-
-        /* 6. Ocean Theme (Girlish) */
-        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;
-            --numberline-axis-color: #20b2aa; --numberline-tick-color: #80deea; --numberline-text-color: #00796b;
-            --numberline-interval-color: #ff7f50; --numberline-endpoint-open-fill: #e0f7fa;
-            --numberline-interval-secondary-color: #f0e68c;
-            --numberline-arrowhead-fill-primary: #00897b; 
-            --numberline-arrowhead-fill-secondary: #b0e0e6; 
-        }
-        body.theme-ocean .control-label { color: #00acc1; }
-        body.theme-ocean .theme-button.active, body.theme-ocean .range-button.active { background-color: #4db6ac; color: #e0f2f1; }
-        body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
-        body.theme-ocean h1, body.theme-ocean h2 { color: #00897b; }
-        body.theme-ocean .task { background-color: #e0f7fa; border: 2px dashed #80deea; }
-        body.theme-ocean .task-header h3 { color: #00acc1; }
-        body.theme-ocean .task p.instructions { color: #00695c; }
-        body.theme-ocean .expression-text-below, body.theme-ocean .relation-symbol, body.theme-ocean .variable-symbol, body.theme-ocean .variable-input-container label { color: #004d40; }
-        body.theme-ocean .result-input-above, body.theme-ocean .variable-value-input { border: 2px solid #80deea; }
-        body.theme-ocean button.task-button { background-color: #26a69a; }
-        body.theme-ocean button.task-button:hover { background-color: #00897b; }
-
-        /* 7. Sport Theme (Boyish) */
-        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;
-            --numberline-axis-color: #d32f2f; --numberline-tick-color: #42a5f5; --numberline-text-color: #0d47a1;
-            --numberline-interval-color: #fbc02d; --numberline-endpoint-open-fill: #e3f2fd;
-            --numberline-interval-secondary-color: #ff7043;
-            --numberline-arrowhead-fill-primary: #1976d2; 
-            --numberline-arrowhead-fill-secondary: #bf360c; 
-        }
-        body.theme-sport .control-label { color: #1976d2; }
-        body.theme-sport .theme-button.active, body.theme-sport .range-button.active { background-color: #1976d2; color: #e3f2fd; }
-        body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
-        body.theme-sport h1, body.theme-sport h2 { color: #d32f2f; }
-        body.theme-sport .task { background-color: #e3f2fd; border: 2px dashed #42a5f5; }
-        body.theme-sport .task-header h3 { color: #1976d2; }
-        body.theme-sport .task p.instructions { color: #0d47a1; }
-        body.theme-sport .expression-text-below, body.theme-sport .relation-symbol, body.theme-sport .variable-symbol, body.theme-sport .variable-input-container label { color: #01579b; }
-        body.theme-sport .result-input-above, body.theme-sport .variable-value-input { border: 2px solid #42a5f5; }
-        body.theme-sport button.task-button { background-color: #2196f3; }
-        body.theme-sport button.task-button:hover { background-color: #1976d2; }
-
-        /* 8. Flower Garden Theme (Girlish) */
-        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;
-            --numberline-axis-color: #ff6347; --numberline-tick-color: #ffe4b5; --numberline-text-color: #556b2f;
-            --numberline-interval-color: #ffd700; --numberline-endpoint-open-fill: #fffaf0;
-            --numberline-interval-secondary-color: #adff2f;
-            --numberline-arrowhead-fill-primary: #ff7f50; 
-            --numberline-arrowhead-fill-secondary: #8fbc8f; 
-        }
-        body.theme-flowergarden .control-label { color: #ff7f50; }
-        body.theme-flowergarden .theme-button.active, body.theme-flowergarden .range-button.active { background-color: #ffdab9; color: #8b4513; }
-        body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
-        body.theme-flowergarden h1, body.theme-flowergarden h2 { color: #ff6347; }
-        body.theme-flowergarden .task { background-color: #fffafa; border: 2px dashed #ffe4b5; }
-        body.theme-flowergarden .task-header h3 { color: #ff7f50; }
-        body.theme-flowergarden .task p.instructions { color: #8b4513; }
-        body.theme-flowergarden .expression-text-below, body.theme-flowergarden .relation-symbol, body.theme-flowergarden .variable-symbol, body.theme-flowergarden .variable-input-container label { color: #a0522d; }
-        body.theme-flowergarden .result-input-above, body.theme-flowergarden .variable-value-input { border: 2px solid #ffdab9; }
-        body.theme-flowergarden button.task-button { background-color: #ffa07a; }
-        body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
-
-        /* 9. Adventure Theme (Boyish) */
-        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;
-            --numberline-axis-color: #bf360c; --numberline-tick-color: #8d6e63; --numberline-text-color: #5d4037;
-            --numberline-interval-color: #ffab40; --numberline-endpoint-open-fill: #f5f5dc;
-            --numberline-interval-secondary-color: #8bc34a;
-            --numberline-arrowhead-fill-primary: #795548; 
-            --numberline-arrowhead-fill-secondary: #558b2f; 
-        }
-        body.theme-adventure .control-label { color: #6d4c41; }
-        body.theme-adventure .theme-button.active, body.theme-adventure .range-button.active { background-color: #a1887f; color: #efebe9; }
-        body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
-        body.theme-adventure h1, body.theme-adventure h2 { color: #bf360c; }
-        body.theme-adventure .task { background-color: #d7ccc8; border: 2px dashed #8d6e63; }
-        body.theme-adventure .task-header h3 { color: #6d4c41; }
-        body.theme-adventure .task p.instructions { color: #4e342e; }
-        body.theme-adventure .expression-text-below, body.theme-adventure .relation-symbol, body.theme-adventure .variable-symbol, body.theme-adventure .variable-input-container label { color: #3e2723; }
-        body.theme-adventure .result-input-above, body.theme-adventure .variable-value-input { border: 2px solid #8d6e63; }
-        body.theme-adventure button.task-button { background-color: #795548; }
-        body.theme-adventure button.task-button:hover { background-color: #5d4037; }
-
-        /* 10. Sky Theme (Girlish) */
-        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;
-            --numberline-axis-color: #1e90ff; --numberline-tick-color: #add8e6; --numberline-text-color: #4682b4;
-            --numberline-interval-color: #ffd700; --numberline-endpoint-open-fill: #f0f8ff;
-            --numberline-interval-secondary-color: #b0c4de;
-            --numberline-arrowhead-fill-primary: #87ceeb; 
-            --numberline-arrowhead-fill-secondary: #778899; 
-        }
-        body.theme-sky .control-label { color: #00bfff; }
-        body.theme-sky .theme-button.active, body.theme-sky .range-button.active { background-color: #add8e6; color: #005a9c; }
-        body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
-        body.theme-sky h1, body.theme-sky h2 { color: #1e90ff; }
-        body.theme-sky .task { background-color: #f5faff; border: 2px dashed #add8e6; }
-        body.theme-sky .task-header h3 { color: #00bfff; }
-        body.theme-sky .task p.instructions { color: #5f9ea0; }
-        body.theme-sky .expression-text-below, body.theme-sky .relation-symbol, body.theme-sky .variable-symbol, body.theme-sky .variable-input-container label { color: #4682b4; }
-        body.theme-sky .result-input-above, body.theme-sky .variable-value-input { border: 2px solid #b0e0e6; }
-        body.theme-sky button.task-button { background-color: #87cefa; }
-        body.theme-sky button.task-button:hover { background-color: #6495ed; }
-
-    </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Relációs Feladatok Gyakorló</title>
+<link href="relacios-intervallumok.css" rel="stylesheet"/>
 </head>
 <body class="theme-candy">
-    <div class="controls-container">
-        <div>
-            <p class="control-label">Téma választó:</p>
-            <div class="theme-selector">
-                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
-                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
-                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
-                <button class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
-                <button class="theme-button" data-theme="theme-sky">Égbolt</button>
-                <button class="theme-button" data-theme="theme-space">Űr</button>
-                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
-                <button class="theme-button" data-theme="theme-tech">Techno</button>
-                <button class="theme-button" data-theme="theme-sport">Sport</button>
-                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
-            </div>
-        </div>
-        <div>
-            <p class="control-label">Számkör választó:</p>
-            <div class="range-selector">
-                <button class="range-button" data-range="5">5-ös számkör</button>
-                <button class="range-button" data-range="10">10-es számkör</button>
-                <button class="range-button active" data-range="20">20-as számkör</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <h1>Relációs Feladatok</h1>
-        <h2>Gyakorló 1. osztály</h2>
-
-        <div class="task" id="task_0_container">
-            <div class="task-header">
-                <h3 id="task_0_title">1. Feladat: Melyik szám teszi igazzá?</h3>
-                <button class="task-button new-task-button" onclick="generateNewSimpleTask(0)">Új feladat</button>
-            </div>
-            <p class="instructions">Számítsd ki a kifejezés értékét, majd írd be a megfelelő <span class="task_var_name_placeholder">[VÁLTOZÓ]</span> értékeket! Az összes lehetséges <span class="task_var_name_placeholder">[VÁLTOZÓ]</span> értéket meg kell adnod (<span id="task_0_range_info">0-20</span> között).</p>
-            <div class="operation-display-container">
-                <div class="single-expression-wrapper">
-                    <input type="number" id="task_0_user_res" class="result-input-above">
-                    <span id="task_0_expr_text" class="expression-text-below"></span>
-                </div>
-                <span id="task_0_rel" class="relation-symbol"></span>
-                <span id="task_0_var_name_display" class="variable-symbol"></span>
-            </div>
-            <div class="variable-input-container">
-                <label id="task_0_var_input_label" for="task_0_var_inputs_container"></label>
-                <div id="task_0_var_inputs_container" class="dynamic-inputs">
-                    <input type="number" class="variable-value-input" oninput="handleVariableInput(event, 0)">
-                </div>
-            </div>
-            <button class="task-button check-button" onclick="checkNewSimpleTask(0)">Ellenőrzés</button>
-            <p id="task_0_feedback" class="feedback"></p>
-            <div class="number-line-relational-container">
-                <svg id="numberLine_task_0" class="number-line-relational" viewBox="0 0 500 100"></svg>
-            </div>
-        </div>
-
-
-        <div class="task" id="task_1_container">
-            <div class="task-header">
-                <h3 id="task_1_title">2. Feladat: X meghatározása</h3>
-                <button class="task-button new-task-button" onclick="generateSingleTask(1)">Új feladat</button>
-            </div>
-            <p class="instructions">Számítsd ki a kifejezések értékeit, majd írd be a megfelelő X értékeket! Az összes lehetséges X értéket meg kell adnod (<span id="task_1_range_info">0-20</span> között).</p>
-            <div class="operation-display-container">
-                <div class="single-expression-wrapper">
-                    <input type="number" id="task_1_user_res1" class="result-input-above">
-                    <span id="task_1_expr1_text" class="expression-text-below"></span>
-                </div>
-                <span id="task_1_rel1" class="relation-symbol">&lt;</span>
-                <span class="variable-symbol">X</span>
-                <span id="task_1_rel2" class="relation-symbol">&lt;</span>
-                <div class="single-expression-wrapper">
-                    <input type="number" id="task_1_user_res2" class="result-input-above">
-                    <span id="task_1_expr2_text" class="expression-text-below"></span>
-                </div>
-            </div>
-            <div class="variable-input-container">
-                <label for="task_1_var_inputs_container">X:</label>
-                <div id="task_1_var_inputs_container" class="dynamic-inputs">
-                    <input type="number" class="variable-value-input" oninput="handleVariableInput(event, 1)">
-                </div>
-            </div>
-            <button class="task-button check-button" onclick="checkTask(1)">Ellenőrzés</button>
-            <p id="task_1_feedback" class="feedback"></p>
-            <div class="number-line-relational-container">
-                <svg id="numberLine_task_1" class="number-line-relational" viewBox="0 0 500 100"></svg>
-            </div>
-        </div>
-
-        <div class="task" id="task_2_container">
-            <div class="task-header">
-                <h3 id="task_2_title">3. Feladat: Y meghatározása</h3>
-                <button class="task-button new-task-button" onclick="generateSingleTask(2)">Új feladat</button>
-            </div>
-            <p class="instructions">Számítsd ki a kifejezések értékeit, majd írd be a megfelelő Y értékeket! Az összes lehetséges Y értéket meg kell adnod (<span id="task_2_range_info">0-20</span> között).</p>
-            <div class="operation-display-container">
-                <div class="single-expression-wrapper">
-                    <input type="number" id="task_2_user_res1" class="result-input-above">
-                    <span id="task_2_expr1_text" class="expression-text-below"></span>
-                </div>
-                <span id="task_2_rel1" class="relation-symbol">&gt;</span>
-                <span class="variable-symbol">Y</span>
-                <span id="task_2_rel2" class="relation-symbol">&gt;</span>
-                <div class="single-expression-wrapper">
-                    <input type="number" id="task_2_user_res2" class="result-input-above">
-                    <span id="task_2_expr2_text" class="expression-text-below"></span>
-                </div>
-            </div>
-            <div class="variable-input-container">
-                <label for="task_2_var_inputs_container">Y:</label>
-                <div id="task_2_var_inputs_container" class="dynamic-inputs">
-                    <input type="number" class="variable-value-input" oninput="handleVariableInput(event, 2)">
-                </div>
-            </div>
-            <button class="task-button check-button" onclick="checkTask(2)">Ellenőrzés</button>
-            <p id="task_2_feedback" class="feedback"></p>
-            <div class="number-line-relational-container">
-                <svg id="numberLine_task_2" class="number-line-relational" viewBox="0 0 500 100"></svg>
-            </div>
-        </div>
-
-        <div class="task" id="task_3_container">
-            <div class="task-header">
-                <h3 id="task_3_title">4. Feladat: Z meghatározása</h3>
-                <button class="task-button new-task-button" onclick="generateSingleTask(3)">Új feladat</button>
-            </div>
-            <p class="instructions">Számítsd ki a kifejezések értékeit, majd írd be a megfelelő Z értékeket (<span id="task_3_range_info">0-20</span> között)!</p>
-            <div class="operation-display-container">
-                <div class="single-expression-wrapper">
-                    <input type="number" id="task_3_user_res1" class="result-input-above">
-                    <span id="task_3_expr1_text" class="expression-text-below"></span>
-                </div>
-                <span id="task_3_rel1" class="relation-symbol">&lt;</span>
-                <span class="variable-symbol">Z</span>
-                <span id="task_3_rel2" class="relation-symbol">&gt;</span>
-                <div class="single-expression-wrapper">
-                    <input type="number" id="task_3_user_res2" class="result-input-above">
-                    <span id="task_3_expr2_text" class="expression-text-below"></span>
-                </div>
-            </div>
-            <div class="variable-input-container">
-                <label for="task_3_var_inputs_container">Z:</label>
-                <div id="task_3_var_inputs_container" class="dynamic-inputs">
-                    <input type="number" class="variable-value-input" oninput="handleVariableInput(event, 3)">
-                </div>
-            </div>
-            <button class="task-button check-button" onclick="checkTask(3)">Ellenőrzés</button>
-            <p id="task_3_feedback" class="feedback"></p>
-            <div class="number-line-relational-container">
-                <svg id="numberLine_task_3" class="number-line-relational" viewBox="0 0 500 120"></svg> 
-            </div>
-        </div>
-
-        <div class="task" id="task_4_container">
-            <div class="task-header">
-                <h3 id="task_4_title">5. Feladat: W meghatározása</h3>
-                <button class="task-button new-task-button" onclick="generateSingleTask(4)">Új feladat</button>
-            </div>
-            <p class="instructions">Számítsd ki a kifejezések értékeit, majd írd be a megfelelő W értékeket (<span id="task_4_range_info">0-20</span> között)!</p>
-            <div class="operation-display-container">
-                <div class="single-expression-wrapper">
-                    <input type="number" id="task_4_user_res1" class="result-input-above">
-                    <span id="task_4_expr1_text" class="expression-text-below"></span>
-                </div>
-                <span id="task_4_rel1" class="relation-symbol">&gt;</span>
-                <span class="variable-symbol">W</span>
-                <span id="task_4_rel2" class="relation-symbol">&lt;</span>
-                <div class="single-expression-wrapper">
-                    <input type="number" id="task_4_user_res2" class="result-input-above">
-                    <span id="task_4_expr2_text" class="expression-text-below"></span>
-                </div>
-            </div>
-            <div class="variable-input-container">
-                <label for="task_4_var_inputs_container">W:</label>
-                <div id="task_4_var_inputs_container" class="dynamic-inputs">
-                    <input type="number" class="variable-value-input" oninput="handleVariableInput(event, 4)">
-                </div>
-            </div>
-            <button class="task-button check-button" onclick="checkTask(4)">Ellenőrzés</button>
-            <p id="task_4_feedback" class="feedback"></p>
-            <div class="number-line-relational-container">
-                <svg id="numberLine_task_4" class="number-line-relational" viewBox="0 0 500 120"></svg>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        let currentNumberRangeMax = 20;
-        const SVG_NS = "http://www.w3.org/2000/svg";
-        const problemColors = ["#FFD700", "#87CEEB", "#90EE90", "#FFA07A", "#3DE836", "#fFE03B"];
-
-        // --- Színkezelő segédfüggvények ---
-        function isColorLight(hex) {
-            if (!hex || hex.length < 7) return true;
-            const r = parseInt(hex.substring(1, 3), 16);
-            const g = parseInt(hex.substring(3, 5), 16);
-            const b = parseInt(hex.substring(5, 7), 16);
-            const hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
-            return hsp > 127.5;
-        }
-
-        function darkenColor(hex, percent) {
-            if (!hex || hex.length < 7) return "#000000";
-            let r = parseInt(hex.substring(1, 3), 16);
-            let g = parseInt(hex.substring(3, 5), 16);
-            let b = parseInt(hex.substring(5, 7), 16);
-            r = Math.floor(r * (100 - percent) / 100);
-            g = Math.floor(g * (100 - percent) / 100);
-            b = Math.floor(b * (100 - percent) / 100);
-            r = (r < 0) ? 0 : r;
-            g = (g < 0) ? 0 : g;
-            b = (b < 0) ? 0 : b;
-            const toHex = (c) => ("0" + c.toString(16)).slice(-2);
-            return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-        }
-
-
-        function getRandomInt(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            if (min > max) {
-                return min;
-            }
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        // --- Feladatok adatstruktúrái ---
-        let simpleTaskData = {
-            taskIndex: 0,
-            variableName: 'A',
-            relation: '<',
-            expr: { num1: 0, operator: '+', num2: 0, color1: '', color2: '', resultColor: '', trueResult: 0 },
-            correctSolutions: []
-        };
-
-        const tasks = [
-            null,
-            { variableName: 'X', relation1: '<', relation2: '<', expr1: {}, expr2: {} },
-            { variableName: 'Y', relation1: '>', relation2: '>', expr1: {}, expr2: {} },
-            { variableName: 'Z', relation1: '<', relation2: '>', expr1: {}, expr2: {} },
-            { variableName: 'W', relation1: '>', relation2: '<', expr1: {}, expr2: {} }
-        ];
-
-        // --- Kezelőfelület vezérlése ---
-        const bodyEl = document.body;
-        const themeButtons = document.querySelectorAll('.theme-button');
-        const rangeButtons = document.querySelectorAll('.range-button');
-
-        function updateRangeInfo() {
-            for (let i = 0; i <= 4; i++) {
-                const rangeInfoEl = document.getElementById(`task_${i}_range_info`);
-                if (rangeInfoEl) {
-                    rangeInfoEl.textContent = `0-${currentNumberRangeMax}`;
-                }
-            }
-        }
-
-        function applyTheme(themeClass) {
-            bodyEl.className = '';
-            bodyEl.classList.add(themeClass);
-            themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeClass));
-            rangeButtons.forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.range) === currentNumberRangeMax));
-            
-            // Újrarajzolás a témaváltás után
-            if (simpleTaskData && simpleTaskData.expr && typeof simpleTaskData.expr.trueResult !== 'undefined') {
-                 drawSimpleRelationNumberLine(0, simpleTaskData.expr.trueResult, simpleTaskData.relation, simpleTaskData.variableName, simpleTaskData.correctSolutions, [{value: simpleTaskData.expr.trueResult, color: simpleTaskData.expr.resultColor}]);
-            }
-            for (let i = 1; i < tasks.length; i++) {
-                 if (tasks[i] && tasks[i].expr1 && typeof tasks[i].expr1.trueResult !== 'undefined' && tasks[i].expr2 && typeof tasks[i].expr2.trueResult !== 'undefined') {
-                    const highlightedNumbers = [
-                        { value: tasks[i].expr1.trueResult, color: tasks[i].expr1.resultColor },
-                        { value: tasks[i].expr2.trueResult, color: tasks[i].expr2.resultColor }
-                    ];
-                    drawRelationNumberLine(i, tasks[i].expr1.trueResult, tasks[i].expr2.trueResult, tasks[i].relation1, tasks[i].relation2, highlightedNumbers);
-                }
-            }
-        }
-
-        themeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                applyTheme(button.dataset.theme);
-            });
-        });
-
-        rangeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                currentNumberRangeMax = parseInt(button.dataset.range);
-                rangeButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                updateRangeInfo();
-                generateAllTasks();
-            });
-        });
-        
-        // --- Feladatgenerálás ---
-
-        function evaluateExpression(num1, operator, num2) {
-            if (operator === '+') return num1 + num2;
-            if (operator === '-') return num1 - num2;
-            return NaN;
-        }
-
-        function generateExpression(exprObj, color1, color2, resultColor) {
-            const operators = ['+', '-'];
-            exprObj.operator = operators[Math.floor(Math.random() * operators.length)];
-            
-            let num1, num2;
-            if (exprObj.operator === '+') {
-                num1 = getRandomInt(0, Math.max(0, currentNumberRangeMax - 1)); 
-                num2 = getRandomInt(0, Math.max(0, currentNumberRangeMax - num1));
-            } else { // '-'
-                num1 = getRandomInt(0, currentNumberRangeMax);
-                num2 = getRandomInt(0, num1);
-            }
-            exprObj.num1 = num1;
-            exprObj.num2 = num2;
-            exprObj.color1 = color1;
-            exprObj.color2 = color2;
-            exprObj.resultColor = resultColor;
-            exprObj.trueResult = evaluateExpression(exprObj.num1, exprObj.operator, exprObj.num2);
-            if(exprObj.trueResult < 0 || exprObj.trueResult > currentNumberRangeMax) {
-                return generateExpression(exprObj, color1, color2, resultColor);
-            }
-        }
-
-        function generateNewSimpleTask() {
-            const taskIndex = 0;
-            simpleTaskData.variableName = ['A', 'B', 'C', 'D'][Math.floor(Math.random() * 4)];
-            simpleTaskData.relation = ['<', '>'][Math.floor(Math.random() * 2)];
-
-            do {
-                generateExpression(simpleTaskData.expr, problemColors[0], problemColors[1], problemColors[4]);
-                simpleTaskData.correctSolutions = [];
-                if (simpleTaskData.relation === '<') {
-                    for (let i = simpleTaskData.expr.trueResult + 1; i <= currentNumberRangeMax; i++) simpleTaskData.correctSolutions.push(i);
-                } else {
-                    for (let i = 0; i < simpleTaskData.expr.trueResult; i++) simpleTaskData.correctSolutions.push(i);
-                }
-            } while (simpleTaskData.correctSolutions.length === 0);
-
-            const exprTextEl = document.getElementById(`task_${taskIndex}_expr_text`);
-            const textColor1 = isColorLight(simpleTaskData.expr.color1) ? '#000' : '#fff';
-            const spanStyle1 = `background-color:${simpleTaskData.expr.color1}; color:${textColor1}; border:1.5px solid ${darkenColor(simpleTaskData.expr.color1, 20)}; padding: 1px 6px; border-radius: 5px; display: inline-block;`;
-            const textColor2 = isColorLight(simpleTaskData.expr.color2) ? '#000' : '#fff';
-            const spanStyle2 = `background-color:${simpleTaskData.expr.color2}; color:${textColor2}; border:1.5px solid ${darkenColor(simpleTaskData.expr.color2, 20)}; padding: 1px 6px; border-radius: 5px; display: inline-block;`;
-            exprTextEl.innerHTML = `<span style="${spanStyle1}">${simpleTaskData.expr.num1}</span> ${simpleTaskData.expr.operator} <span style="${spanStyle2}">${simpleTaskData.expr.num2}</span>`;
-            
-            const userResInput = document.getElementById(`task_${taskIndex}_user_res`);
-            userResInput.value = '';
-            userResInput.style.backgroundColor = simpleTaskData.expr.resultColor;
-            userResInput.style.color = isColorLight(simpleTaskData.expr.resultColor) ? '#000' : '#fff';
-
-            document.getElementById(`task_${taskIndex}_rel`).textContent = simpleTaskData.relation;
-            document.querySelectorAll(`#task_${taskIndex}_container .task_var_name_placeholder`).forEach(el => el.textContent = simpleTaskData.variableName);
-            document.getElementById(`task_${taskIndex}_var_name_display`).textContent = simpleTaskData.variableName;
-            document.getElementById(`task_${taskIndex}_var_input_label`).textContent = `${simpleTaskData.variableName}:`;
-            
-            const varInputsContainer = document.getElementById(`task_${taskIndex}_var_inputs_container`);
-            varInputsContainer.innerHTML = `<input type="number" class="variable-value-input" oninput="handleVariableInput(event, ${taskIndex})">`;
-            
-            document.getElementById(`task_${taskIndex}_feedback`).innerHTML = '';
-            document.getElementById(`task_${taskIndex}_feedback`).className = 'feedback';
-            varInputsContainer.querySelectorAll('.variable-value-input').forEach(input => input.style.borderColor = '');
-
-            drawSimpleRelationNumberLine(taskIndex, simpleTaskData.expr.trueResult, simpleTaskData.relation, simpleTaskData.variableName, simpleTaskData.correctSolutions, [{ value: simpleTaskData.expr.trueResult, color: simpleTaskData.expr.resultColor }]);
-            setTimeout(() => userResInput.focus(), 0);
-        }
-
-        function generateSingleTask(taskIndex) {
-            const currentTask = tasks[taskIndex];
-            if (!currentTask) return;
-
-            let solvable = false;
-            while (!solvable) {
-                generateExpression(currentTask.expr1, problemColors[0], problemColors[1], problemColors[4]);
-                generateExpression(currentTask.expr2, problemColors[2], problemColors[3], problemColors[5]);
-                
-                const res1 = currentTask.expr1.trueResult, res2 = currentTask.expr2.trueResult;
-                let tempSolutions = [];
-                if (taskIndex === 1) { for (let i = res1 + 1; i < res2; i++) tempSolutions.push(i); } 
-                else if (taskIndex === 2) { for (let i = res2 + 1; i < res1; i++) tempSolutions.push(i); } 
-                else if (taskIndex === 3) { for (let i = Math.max(res1, res2) + 1; i <= currentNumberRangeMax; i++) { if (i > res1 && i > res2) tempSolutions.push(i); } }
-                else if (taskIndex === 4) { for (let i = 0; i < Math.min(res1, res2); i++) { if (i < res1 && i < res2) tempSolutions.push(i); } }
-                solvable = tempSolutions.length > 0;
-            }
-            
-            const expr1El = document.getElementById(`task_${taskIndex}_expr1_text`);
-            const textColor1_1 = isColorLight(currentTask.expr1.color1) ? '#000' : '#fff';
-            const spanStyle1_1 = `background-color:${currentTask.expr1.color1}; color:${textColor1_1}; border:1.5px solid ${darkenColor(currentTask.expr1.color1, 20)}; padding: 1px 6px; border-radius: 5px; display: inline-block;`;
-            const textColor1_2 = isColorLight(currentTask.expr1.color2) ? '#000' : '#fff';
-            const spanStyle1_2 = `background-color:${currentTask.expr1.color2}; color:${textColor1_2}; border:1.5px solid ${darkenColor(currentTask.expr1.color2, 20)}; padding: 1px 6px; border-radius: 5px; display: inline-block;`;
-            expr1El.innerHTML = `<span style="${spanStyle1_1}">${currentTask.expr1.num1}</span> ${currentTask.expr1.operator} <span style="${spanStyle1_2}">${currentTask.expr1.num2}</span>`;
-            
-            const expr2El = document.getElementById(`task_${taskIndex}_expr2_text`);
-            const textColor2_1 = isColorLight(currentTask.expr2.color1) ? '#000' : '#fff';
-            const spanStyle2_1 = `background-color:${currentTask.expr2.color1}; color:${textColor2_1}; border:1.5px solid ${darkenColor(currentTask.expr2.color1, 20)}; padding: 1px 6px; border-radius: 5px; display: inline-block;`;
-            const textColor2_2 = isColorLight(currentTask.expr2.color2) ? '#000' : '#fff';
-            const spanStyle2_2 = `background-color:${currentTask.expr2.color2}; color:${textColor2_2}; border:1.5px solid ${darkenColor(currentTask.expr2.color2, 20)}; padding: 1px 6px; border-radius: 5px; display: inline-block;`;
-            expr2El.innerHTML = `<span style="${spanStyle2_1}">${currentTask.expr2.num1}</span> ${currentTask.expr2.operator} <span style="${spanStyle2_2}">${currentTask.expr2.num2}</span>`;
-
-            const userRes1Input = document.getElementById(`task_${taskIndex}_user_res1`);
-            userRes1Input.value = '';
-            userRes1Input.style.backgroundColor = currentTask.expr1.resultColor;
-            userRes1Input.style.color = isColorLight(currentTask.expr1.resultColor) ? '#000' : '#fff';
-
-            const userRes2Input = document.getElementById(`task_${taskIndex}_user_res2`);
-            userRes2Input.value = '';
-            userRes2Input.style.backgroundColor = currentTask.expr2.resultColor;
-            userRes2Input.style.color = isColorLight(currentTask.expr2.resultColor) ? '#000' : '#fff';
-
-            document.getElementById(`task_${taskIndex}_rel1`).innerHTML = currentTask.relation1.replace('<=', '&le;').replace('>=', '&ge;');
-            document.getElementById(`task_${taskIndex}_rel2`).innerHTML = currentTask.relation2.replace('<=', '&le;').replace('>=', '&ge;');
-
-            const varInputsContainer = document.getElementById(`task_${taskIndex}_var_inputs_container`);
-            varInputsContainer.innerHTML = `<input type="number" class="variable-value-input" oninput="handleVariableInput(event, ${taskIndex})">`;
-            
-            document.getElementById(`task_${taskIndex}_feedback`).innerHTML = '';
-            document.getElementById(`task_${taskIndex}_feedback`).className = 'feedback';
-            varInputsContainer.querySelectorAll('.variable-value-input').forEach(input => input.style.borderColor = '');
-            
-            const highlightedNumbers = [
-                { value: currentTask.expr1.trueResult, color: currentTask.expr1.resultColor },
-                { value: currentTask.expr2.trueResult, color: currentTask.expr2.resultColor }
-            ];
-            drawRelationNumberLine(taskIndex, currentTask.expr1.trueResult, currentTask.expr2.trueResult, currentTask.relation1, currentTask.relation2, highlightedNumbers);
-            setTimeout(() => userRes1Input.focus(), 0);
-        }
-
-        function generateAllTasks() {
-            generateNewSimpleTask();
-            for (let i = 1; i < tasks.length; i++) {
-                if (tasks[i]) generateSingleTask(i);
-            }
-            const initialFocusElement = document.getElementById('task_0_user_res');
-            if (initialFocusElement) {
-                setTimeout(() => initialFocusElement.focus(), 0);
-            }
-        }
-        
-        // --- Input kezelés és ellenőrzés (NINCS VÁLTOZÁS) ---
-        function handleVariableInput(event, taskIndex) {
-            const currentInput = event.target;
-            const parentDiv = currentInput.parentElement;
-            const inputsSnapshot = Array.from(parentDiv.querySelectorAll('input.variable-value-input'));
-            const currentIndex = inputsSnapshot.indexOf(currentInput);
-
-            if (currentInput.value.trim() !== '' && currentIndex === inputsSnapshot.length - 1) {
-                const newInput = document.createElement('input');
-                newInput.type = 'number';
-                newInput.classList.add('variable-value-input');
-                newInput.oninput = (e) => handleVariableInput(e, taskIndex);
-                parentDiv.appendChild(newInput);
-            }
-
-            if (currentInput.value.length >= String(currentNumberRangeMax).length) {
-                const nextInput = inputsSnapshot[currentIndex + 1];
-                if (nextInput) {
-                    setTimeout(() => nextInput.focus(), 0);
-                }
-            }
-        }
-
-        function checkNewSimpleTask(taskIndex) { /* ... A kód ezen része nem változott ... */ }
-        function checkTask(taskIndex) { /* ... A kód ezen része nem változott ... */ }
-        function setupFocusHandlers() { /* ... A kód ezen része nem változott ... */ }
-
-        // --- Számegyenes rajzolás ---
-        function drawSimpleRelationNumberLine(taskIndex, boundaryValue, relation, varName, validSolutions, highlightedNumbers) {
-             const svgId = `numberLine_task_${taskIndex}`; 
-            const svg = document.getElementById(svgId);
-            if (!svg || typeof boundaryValue === 'undefined') return;
-            svg.innerHTML = '';
-
-            const viewBoxWidth = 500;
-            const viewBoxHeight = 100;
-            svg.setAttribute('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`);
-
-            const padding = 35;
-            const yAxis = viewBoxHeight / 2 + 10;
-            const yNumbers = yAxis + 23;
-            const yInterval = yAxis - 15; 
-            const tickHeight = 6;
-            const endpointRadius = 5;
-            const intervalArrowHeadSize = 4;
-
-            const defs = document.createElementNS(SVG_NS, 'defs');
-            const marker = document.createElementNS(SVG_NS, 'marker');
-            const markerId = `simple_interval_arrow_${taskIndex}`;
-            marker.setAttribute('id', markerId);
-            marker.setAttribute('viewBox', `0 0 ${intervalArrowHeadSize*2} ${intervalArrowHeadSize*2}`);
-            marker.setAttribute('refX', intervalArrowHeadSize*2);
-            marker.setAttribute('refY', intervalArrowHeadSize);
-            marker.setAttribute('markerWidth', intervalArrowHeadSize);
-            marker.setAttribute('markerHeight', intervalArrowHeadSize);
-            marker.setAttribute('orient', "auto-start-reverse");
-            const path = document.createElementNS(SVG_NS, 'path');
-            path.setAttribute('d', `M 0 0 L ${intervalArrowHeadSize*2} ${intervalArrowHeadSize} L 0 ${intervalArrowHeadSize*2} z`);
-            path.classList.add('arrow-head', 'primary'); 
-            marker.appendChild(path);
-            defs.appendChild(marker);
-            svg.appendChild(defs);
-
-            const usableWidth = viewBoxWidth - 2 * padding;
-            const displayMax = Math.max(currentNumberRangeMax, boundaryValue);
-            const spacing = displayMax > 0 ? usableWidth / displayMax : usableWidth;
-
-            const axisLine = document.createElementNS(SVG_NS, 'line');
-            axisLine.setAttribute('x1', padding); axisLine.setAttribute('y1', yAxis);
-            axisLine.setAttribute('x2', viewBoxWidth - padding); axisLine.setAttribute('y2', yAxis);
-            axisLine.setAttribute('class', 'axis');
-            svg.appendChild(axisLine);
-
-            const g = document.createElementNS(SVG_NS, 'g');
-            for (let i = 0; i <= displayMax; i++) {
-                const x = padding + i * spacing;
-                 if (x > viewBoxWidth - padding + 5) continue;
-                const tick = document.createElementNS(SVG_NS, "line");
-                tick.setAttribute("class", "tick");
-                tick.setAttribute("x1", x); tick.setAttribute("y1", yAxis - tickHeight / 2);
-                tick.setAttribute("x2", x); tick.setAttribute("y2", yAxis + tickHeight / 2);
-                g.appendChild(tick);
-
-                const isHighlighted = highlightedNumbers.some(h => h.value === i);
-                if (i % (displayMax <= 10 ? 1 : (displayMax <= 20 ? 1 : 2)) === 0 || i === 0 || i === displayMax || isHighlighted) {
-                    const highlight = highlightedNumbers.find(h => h.value === i);
-                    const numText = document.createElementNS(SVG_NS, 'text');
-                    numText.setAttribute('x', x);
-                    numText.setAttribute('y', yNumbers);
-                    numText.textContent = i;
-                    numText.setAttribute('class', 'number-text');
-
-                    if (highlight) {
-                        const textWidth = String(i).length * 7 + 8;
-                        const rect = document.createElementNS(SVG_NS, "rect");
-                        rect.setAttribute("x", x - textWidth / 2);
-                        rect.setAttribute("y", yNumbers - 5);
-                        rect.setAttribute("width", textWidth);
-                        rect.setAttribute("height", 18);
-                        rect.setAttribute("fill", highlight.color);
-                        rect.setAttribute("stroke", darkenColor(highlight.color, 25));
-                        rect.setAttribute("stroke-width", "1.5");
-                        rect.setAttribute("rx", 4);
-                        g.appendChild(rect);
-                        
-                        numText.setAttribute('fill', isColorLight(highlight.color) ? '#000000' : '#FFFFFF');
-                    } else {
-                         numText.setAttribute('fill', 'var(--numberline-text-color, #333)');
-                    }
-                    g.appendChild(numText);
-                }
-            }
-            svg.appendChild(g);
-            
-            const boundaryX = padding + boundaryValue * spacing;
-             if (boundaryX < padding || boundaryX > viewBoxWidth - padding) {}
-
-            const endpointCircle = document.createElementNS(SVG_NS, 'circle');
-            endpointCircle.setAttribute('cx', boundaryX);
-            endpointCircle.setAttribute('cy', yInterval);
-            endpointCircle.setAttribute('r', endpointRadius);
-            endpointCircle.classList.add('interval-endpoint', 'primary', 'open');
-            svg.appendChild(endpointCircle);
-
-            const boundaryLabel = document.createElementNS(SVG_NS, 'text');
-            boundaryLabel.setAttribute('x', boundaryX);
-            boundaryLabel.setAttribute('y', yInterval - endpointRadius - 5);
-            boundaryLabel.textContent = boundaryValue;
-            boundaryLabel.setAttribute('class', 'value-label');
-            svg.appendChild(boundaryLabel);
-
-            const intervalLine = document.createElementNS(SVG_NS, 'line');
-            intervalLine.setAttribute('y1', yInterval);
-            intervalLine.setAttribute('y2', yInterval);
-            intervalLine.classList.add('interval-line', 'primary');
-
-            if (relation === '<') { 
-                if (boundaryValue < currentNumberRangeMax && validSolutions && validSolutions.length > 0) { 
-                    let lineStartX = boundaryX;
-                    let lineEndX = padding + currentNumberRangeMax * spacing; 
-                    lineEndX = Math.min(lineEndX, viewBoxWidth - padding);
-                    intervalLine.setAttribute('x1', lineStartX);
-                    intervalLine.setAttribute('x2', lineEndX);
-                    if (lineEndX > lineStartX + endpointRadius) {
-                         intervalLine.setAttribute('marker-end', `url(#${markerId})`);
-                    }
-                }
-            } else { 
-                if (boundaryValue > 0 && validSolutions && validSolutions.length > 0) { 
-                    let lineStartX = padding;
-                    let lineEndX = boundaryX;
-                    intervalLine.setAttribute('x1', lineStartX);
-                    intervalLine.setAttribute('x2', lineEndX);
-                     if (lineEndX > lineStartX + endpointRadius) {
-                        intervalLine.setAttribute('marker-start', `url(#${markerId})`);
-                    }
-                }
-            }
-            if (validSolutions && validSolutions.length > 0 && intervalLine.hasAttribute('x1') && intervalLine.hasAttribute('x2')) { 
-                 svg.appendChild(intervalLine);
-            }
-        }
-
-        function drawRelationNumberLine(taskIndex, val1, val2, rel1, rel2, highlightedNumbers = []) {
-            const svgId = `numberLine_task_${taskIndex}`;
-            const svg = document.getElementById(svgId);
-            if (!svg || typeof val1 === 'undefined' || typeof val2 === 'undefined') return;
-            svg.innerHTML = ''; 
-
-            const verticalElementSpacing = 20; 
-            let viewBoxHeight = 100; 
-            let yAxis = viewBoxHeight / 2 + 10; 
-            let yIntervalSingle = yAxis - 15; 
-            let yIntervalBottom, yIntervalTop; 
-
-            if (taskIndex === 3 || taskIndex === 4) { 
-                viewBoxHeight = 120; 
-                yAxis = viewBoxHeight / 2; 
-                yIntervalBottom = yAxis - verticalElementSpacing;
-                yIntervalTop = yIntervalBottom - verticalElementSpacing; 
-            }
-            svg.setAttribute('viewBox', `0 0 500 ${viewBoxHeight}`);
-
-            const viewBoxWidth = 500;
-            const padding = 35; 
-            const yNumbers = yAxis + 23; 
-            const tickHeight = 6; 
-            const endpointRadius = 5; 
-            const intervalArrowHeadSize = 3; 
-
-            const defs = document.createElementNS(SVG_NS, 'defs');
-            
-            function createIntervalMarker(idSuffix, typeClass) {
-                const marker = document.createElementNS(SVG_NS, 'marker');
-                marker.setAttribute('id', `interval_arrow_${taskIndex}_${idSuffix}`);
-                marker.setAttribute('viewBox', `0 0 ${intervalArrowHeadSize*2} ${intervalArrowHeadSize*2}`); 
-                marker.setAttribute('refX', intervalArrowHeadSize*2); 
-                marker.setAttribute('refY', intervalArrowHeadSize);   
-                marker.setAttribute('markerWidth', intervalArrowHeadSize); 
-                marker.setAttribute('markerHeight', intervalArrowHeadSize); 
-                marker.setAttribute('orient', "auto-start-reverse");
-                const path = document.createElementNS(SVG_NS, 'path');
-                path.setAttribute('d', `M 0 0 L ${intervalArrowHeadSize*2} ${intervalArrowHeadSize} L 0 ${intervalArrowHeadSize*2} z`); 
-                path.classList.add('arrow-head', typeClass); 
-                marker.appendChild(path);
-                defs.appendChild(marker);
-            }
-            createIntervalMarker('primary', 'primary');
-            if (taskIndex === 3 || taskIndex === 4) {
-                 createIntervalMarker('secondary', 'secondary');
-            }
-            svg.appendChild(defs);
-            
-            const usableWidth = viewBoxWidth - 2 * padding;
-            const displayMax = Math.max(currentNumberRangeMax, val1, val2);
-            const spacing = displayMax > 0 ? usableWidth / displayMax : usableWidth;
-
-            const axisLine = document.createElementNS(SVG_NS, 'line');
-            axisLine.setAttribute('x1', padding); 
-            axisLine.setAttribute('y1', yAxis);
-            axisLine.setAttribute('x2', viewBoxWidth - padding); 
-            axisLine.setAttribute('y2', yAxis);
-            axisLine.setAttribute('class', 'axis');
-            svg.appendChild(axisLine);
-
-            const g = document.createElementNS(SVG_NS, 'g');
-            for (let i = 0; i <= displayMax; i++) {
-                const x = padding + i * spacing;
-                 if (x > viewBoxWidth - padding + 5) continue; 
-                const tick = document.createElementNS(SVG_NS, 'line');
-                tick.setAttribute('x1', x);
-                tick.setAttribute('y1', yAxis - tickHeight / 2);
-                tick.setAttribute('x2', x);
-                tick.setAttribute('y2', yAxis + tickHeight / 2);
-                tick.setAttribute('class', 'tick');
-                g.appendChild(tick);
-
-                const isHighlighted = highlightedNumbers.some(h => h.value === i);
-                if (i % (displayMax <= 10 ? 1 : (displayMax <= 20 ? 1 : 2)) === 0 || i === 0 || i === displayMax || isHighlighted) {
-                     const highlight = highlightedNumbers.find(h => h.value === i);
-                    const numText = document.createElementNS(SVG_NS, 'text');
-                    numText.setAttribute('x', x);
-                    numText.setAttribute('y', yNumbers); 
-                    numText.textContent = i;
-                    numText.setAttribute('class', 'number-text');
-                    
-                    if (highlight) {
-                        const textWidth = String(i).length * 7 + 8;
-                        const rect = document.createElementNS(SVG_NS, "rect");
-                        rect.setAttribute("x", x - textWidth / 2);
-                        rect.setAttribute("y", yNumbers - 5);
-                        rect.setAttribute("width", textWidth);
-                        rect.setAttribute("height", 18);
-                        rect.setAttribute("fill", highlight.color);
-                        rect.setAttribute("stroke", darkenColor(highlight.color, 25));
-                        rect.setAttribute("stroke-width", "1.5");
-                        rect.setAttribute("rx", 4);
-                        g.appendChild(rect);
-
-                        numText.setAttribute('fill', isColorLight(highlight.color) ? '#000000' : '#FFFFFF');
-                    } else {
-                        numText.setAttribute('fill', 'var(--numberline-text-color, #333)');
-                    }
-                    g.appendChild(numText);
-                }
-            }
-            svg.appendChild(g);
-            
-            function createEndpoint(cx, yPos, isOpen, typeClass) {
-                const circle = document.createElementNS(SVG_NS, 'circle');
-                circle.setAttribute('cx', cx);
-                circle.setAttribute('cy', yPos);
-                circle.setAttribute('r', endpointRadius);
-                circle.classList.add('interval-endpoint', typeClass);
-                circle.classList.add(isOpen ? 'open' : 'closed');
-                return circle;
-            }
-
-            function createValueLabel(x, yPos, value) {
-                const label = document.createElementNS(SVG_NS, 'text');
-                label.setAttribute('x', x);
-                label.setAttribute('y', yPos - endpointRadius - 5); 
-                label.textContent = value;
-                label.setAttribute('class', 'value-label');
-                return label;
-            }
-
-            function drawSingleIntervalRay(yPos, boundaryValue, relationIsLess, isPrimaryInterval) {
-                let lineX1, lineX2, endpointX;
-                const typeClass = isPrimaryInterval ? 'primary' : 'secondary';
-                const markerId = `interval_arrow_${taskIndex}_${typeClass}`;
-
-                endpointX = padding + boundaryValue * spacing;
-                const endpointIsOpen = true; 
-
-
-                const intervalLine = document.createElementNS(SVG_NS, 'line');
-                intervalLine.setAttribute('y1', yPos);
-                intervalLine.setAttribute('y2', yPos);
-                intervalLine.classList.add('interval-line', typeClass);
-
-                if (relationIsLess) { 
-                    if (boundaryValue <= 0) return; 
-                    lineX1 = padding; 
-                    lineX2 = endpointX; 
-                    intervalLine.setAttribute('x1', lineX1);
-                    intervalLine.setAttribute('x2', lineX2);
-                    if (endpointX > padding + endpointRadius) { 
-                        intervalLine.setAttribute('marker-start', `url(#${markerId})`);
-                    }
-                } else { 
-                    if (boundaryValue >= currentNumberRangeMax) return; 
-                    lineX1 = endpointX; 
-                    lineX2 = padding + currentNumberRangeMax * spacing;
-                    lineX2 = Math.min(lineX2, viewBoxWidth - padding); 
-                    intervalLine.setAttribute('x1', lineX1);
-                    intervalLine.setAttribute('x2', lineX2);
-                     if (lineX2 > lineX1 + endpointRadius) { 
-                        intervalLine.setAttribute('marker-end', `url(#${markerId})`);
-                    }
-                }
-                if (intervalLine.hasAttribute('x1') && intervalLine.hasAttribute('x2')) {
-                    svg.appendChild(intervalLine);
-                    svg.appendChild(createEndpoint(endpointX, yPos, endpointIsOpen, typeClass));
-                    svg.appendChild(createValueLabel(endpointX, yPos, boundaryValue));
-                }
-            }
-
-
-            if (taskIndex === 1 || taskIndex === 2) { 
-                let lowerBound, upperBound;
-                
-                if (taskIndex === 1) { 
-                    lowerBound = val1; upperBound = val2;
-                } else { 
-                    lowerBound = val2; upperBound = val1;
-                }
-                
-                if (lowerBound >= upperBound -1 ) return; 
-
-                let intervalLineX1 = padding + lowerBound * spacing;
-                let intervalLineX2 = padding + upperBound * spacing;
-
-                const intervalLine = document.createElementNS(SVG_NS, 'line');
-                intervalLine.setAttribute('x1', intervalLineX1);
-                intervalLine.setAttribute('y1', yIntervalSingle);
-                intervalLine.setAttribute('x2', intervalLineX2);
-                intervalLine.setAttribute('y2', yIntervalSingle);
-                intervalLine.classList.add('interval-line', 'primary');
-                svg.appendChild(intervalLine);
-
-                svg.appendChild(createEndpoint(intervalLineX1, yIntervalSingle, true, 'primary'));
-                svg.appendChild(createValueLabel(intervalLineX1, yIntervalSingle, lowerBound));
-                
-                svg.appendChild(createEndpoint(intervalLineX2, yIntervalSingle, true, 'primary'));
-                svg.appendChild(createValueLabel(intervalLineX2, yIntervalSingle, upperBound));
-
-            } else if (taskIndex === 3) { 
-                drawSingleIntervalRay(yIntervalTop, val1, false, true); 
-                drawSingleIntervalRay(yIntervalBottom, val2, false, false);
-
-            } else if (taskIndex === 4) { 
-                drawSingleIntervalRay(yIntervalTop, val1, true, true); 
-                drawSingleIntervalRay(yIntervalBottom, val2, true, false);
-            }
-        }
-        
-        // --- Indítás ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // A check és focus handler függvények itt következnek, mivel nem változtak.
-            // A rövidség kedvéért a teljes, de változatlan check/focus kódot a HTML-be ágyazva képzeljük el.
-            
-            // --- checkNewSimpleTask (VÁLTOZATLAN) ---
-            window.checkNewSimpleTask = function(taskIndex) {
-                 const currentTaskData = simpleTaskData;
-                const feedbackEl = document.getElementById(`task_${taskIndex}_feedback`);
-                feedbackEl.innerHTML = ''; 
-                feedbackEl.className = 'feedback'; 
-
-                const userResEl = document.getElementById(`task_${taskIndex}_user_res`);
-                const userExprRes = parseInt(userResEl.value);
-
-                let feedbackMessages = [];
-                let calculationCorrect = false;
-
-                if (isNaN(userExprRes)) {
-                    feedbackMessages.push(`<li>A kifejezéshez nem adtál meg eredményt.</li>`);
-                    userResEl.style.borderColor = 'red';
-                } else if (userExprRes !== currentTaskData.expr.trueResult) {
-                    feedbackMessages.push(`<li>A kifejezés (${currentTaskData.expr.num1} ${currentTaskData.expr.operator} ${currentTaskData.expr.num2}) eredménye helytelen. A te eredményed: ${userExprRes}, a helyes: ${currentTaskData.expr.trueResult}.</li>`);
-                    userResEl.style.borderColor = 'red';
-                } else {
-                    feedbackMessages.push(`<li>A kifejezés eredménye helyes: ${userExprRes}.</li>`);
-                    userResEl.style.borderColor = 'green';
-                    calculationCorrect = true;
-                }
-                
-                const varInputsContainer = document.getElementById(`task_${taskIndex}_var_inputs_container`);
-                const varValueInputs = varInputsContainer.querySelectorAll('.variable-value-input');
-                let userEnteredSolutions = [];
-                varValueInputs.forEach(inputEl => {
-                    if (inputEl.value.trim() !== '') {
-                        const val = parseInt(inputEl.value);
-                        if (!isNaN(val)) userEnteredSolutions.push(val);
-                    }
-                });
-                userEnteredSolutions = [...new Set(userEnteredSolutions)].sort((a, b) => a - b);
-
-                let allVarValuesCorrect = true;
-                let hasVarValues = userEnteredSolutions.length > 0;
-                let varFeedbackMessages = [];
-                const correctSolutions = currentTaskData.correctSolutions.sort((a,b) => a - b);
-
-                if (!hasVarValues && correctSolutions.length > 0) {
-                    allVarValuesCorrect = false;
-                    varFeedbackMessages.push(`<li>Nem adtál meg ${currentTaskData.variableName} értéket.</li>`);
-                } else if (hasVarValues || correctSolutions.length === 0) {
-                    if (userEnteredSolutions.length !== correctSolutions.length) {
-                        allVarValuesCorrect = false;
-                    } else {
-                        for (let i = 0; i < userEnteredSolutions.length; i++) {
-                            if (userEnteredSolutions[i] !== correctSolutions[i]) {
-                                allVarValuesCorrect = false; break;
-                            }
-                        }
-                    }
-                }
-                
-                const displayVarValues = userEnteredSolutions.join(', ') || (correctSolutions.length === 0 ? 'nincs ilyen érték' : 'nem adtál meg');
-                if (allVarValuesCorrect && (hasVarValues || correctSolutions.length === 0)) {
-                     varFeedbackMessages.push(`<li>A megadott ${currentTaskData.variableName} értékek (${displayVarValues}) helyesek.</li>`);
-                     varValueInputs.forEach(inputEl => { if(inputEl.value.trim() !== '') inputEl.style.borderColor = 'green';});
-                } else if (hasVarValues) {
-                    varFeedbackMessages.push(`<li>A megadott ${currentTaskData.variableName} értékek (${displayVarValues}) nem tökéletesek.</li>`);
-                    if (calculationCorrect) varFeedbackMessages.push(`<li>A helyes ${currentTaskData.variableName} értékek (${currentTaskData.expr.trueResult} ${currentTaskData.relation} ${currentTaskData.variableName}): ${correctSolutions.length > 0 ? correctSolutions.join(', ') : 'nincs megoldás az adott számkörben'}.</li>`);
-                     varValueInputs.forEach(inputEl => { if (inputEl.value.trim() !== '') inputEl.style.borderColor = 'red'; });
-                } else if (!hasVarValues && correctSolutions.length > 0 && calculationCorrect) {
-                     varFeedbackMessages.push(`<li>A helyes ${currentTaskData.variableName} értékek (${currentTaskData.expr.trueResult} ${currentTaskData.relation} ${currentTaskData.variableName}): ${correctSolutions.join(', ')}.</li>`);
-                }
-
-                if (varFeedbackMessages.length > 0) {
-                    feedbackMessages.push(`<li>A ${currentTaskData.variableName} értékek ellenőrzése:</li>`);
-                    feedbackMessages.push(`<ul>${varFeedbackMessages.join('')}</ul>`);
-                }
-
-                if (calculationCorrect && allVarValuesCorrect && (hasVarValues || correctSolutions.length === 0)) {
-                    feedbackEl.classList.add('correct');
-                    feedbackMessages.unshift('<li>Minden helyes! Ügyes vagy! 🎉</li>');
-                } else {
-                    feedbackEl.classList.add('incorrect');
-                }
-                feedbackEl.innerHTML = `<ul>${feedbackMessages.join('')}</ul>`;
-            }
-
-            // --- checkTask (VÁLTOZATLAN) ---
-            window.checkTask = function(taskIndex) {
-                const currentTask = tasks[taskIndex];
-                const feedbackEl = document.getElementById(`task_${taskIndex}_feedback`);
-                feedbackEl.innerHTML = ''; 
-                feedbackEl.className = 'feedback'; 
-
-                const userRes1El = document.getElementById(`task_${taskIndex}_user_res1`);
-                const userRes2El = document.getElementById(`task_${taskIndex}_user_res2`);
-                const userRes1 = parseInt(userRes1El.value);
-                const userRes2 = parseInt(userRes2El.value);
-
-                let feedbackMessages = [];
-                let allCalculationsCorrect = true;
-
-                if (isNaN(userRes1)) {
-                    feedbackMessages.push(`<li>Az első kifejezéshez nem adtál meg eredményt.</li>`);
-                    userRes1El.style.borderColor = 'red';
-                    allCalculationsCorrect = false;
-                } else if (userRes1 !== currentTask.expr1.trueResult) {
-                    feedbackMessages.push(`<li>Az első kifejezés (${currentTask.expr1.num1} ${currentTask.expr1.operator} ${currentTask.expr1.num2}) eredménye helytelen. A te eredményed: ${userRes1}, a helyes eredmény: ${currentTask.expr1.trueResult}.</li>`);
-                    userRes1El.style.borderColor = 'red';
-                    allCalculationsCorrect = false;
-                } else {
-                    feedbackMessages.push(`<li>Az első kifejezés eredménye helyes: ${userRes1}.</li>`);
-                    userRes1El.style.borderColor = 'green';
-                }
-
-                if (isNaN(userRes2)) {
-                    feedbackMessages.push(`<li>A második kifejezéshez nem adtál meg eredményt.</li>`);
-                    userRes2El.style.borderColor = 'red';
-                    allCalculationsCorrect = false;
-                } else if (userRes2 !== currentTask.expr2.trueResult) {
-                    feedbackMessages.push(`<li>A második kifejezés (${currentTask.expr2.num1} ${currentTask.expr2.operator} ${currentTask.expr2.num2}) eredménye helytelen. A te eredményed: ${userRes2}, a helyes eredmény: ${currentTask.expr2.trueResult}.</li>`);
-                    userRes2El.style.borderColor = 'red';
-                    allCalculationsCorrect = false;
-                } else {
-                    feedbackMessages.push(`<li>A második kifejezés eredménye helyes: ${userRes2}.</li>`);
-                    userRes2El.style.borderColor = 'green';
-                }
-                
-                if (isNaN(userRes1) || isNaN(userRes2)) {
-                     feedbackEl.innerHTML = `<ul>${feedbackMessages.join('')}</ul>`;
-                     feedbackEl.classList.add('incorrect');
-                     return;
-                }
-
-                const varInputsContainer = document.getElementById(`task_${taskIndex}_var_inputs_container`);
-                const varValueInputs = varInputsContainer.querySelectorAll('.variable-value-input');
-                let userEnteredSolutions = [];
-                varValueInputs.forEach(inputEl => {
-                    if (inputEl.value.trim() !== '') {
-                        const val = parseInt(inputEl.value);
-                        if (!isNaN(val)) userEnteredSolutions.push(val);
-                    }
-                });
-                userEnteredSolutions = [...new Set(userEnteredSolutions)].sort((a, b) => a - b);
-
-                let allVarValuesCorrect = true; 
-                let hasVarValues = userEnteredSolutions.length > 0;
-                let varFeedbackMessages = [];
-                
-                let correctSolutionsSet = [];
-                const trueRes1 = currentTask.expr1.trueResult;
-                const trueRes2 = currentTask.expr2.trueResult;
-
-                if (taskIndex === 1) { for (let i = trueRes1 + 1; i < trueRes2; i++) correctSolutionsSet.push(i); }
-                else if (taskIndex === 2) { for (let i = trueRes2 + 1; i < trueRes1; i++) correctSolutionsSet.push(i); }
-                else if (taskIndex === 3) { const lowerLimit = Math.max(trueRes1, trueRes2); for (let i = lowerLimit + 1; i <= currentNumberRangeMax; i++) {if (i > trueRes1 && i > trueRes2) correctSolutionsSet.push(i);} }
-                else if (taskIndex === 4) { const upperLimit = Math.min(trueRes1, trueRes2); for (let i = 0; i < upperLimit; i++) {if (i < trueRes1 && i < trueRes2) correctSolutionsSet.push(i);} }
-                correctSolutionsSet.sort((a,b) => a-b);
-
-
-                if (!hasVarValues && correctSolutionsSet.length > 0) {
-                    allVarValuesCorrect = false;
-                    varFeedbackMessages.push(`<li>Nem adtál meg ${currentTask.variableName} értéket.</li>`);
-                } else if (hasVarValues || correctSolutionsSet.length === 0) { 
-                    if (userEnteredSolutions.length !== correctSolutionsSet.length) {
-                        allVarValuesCorrect = false;
-                    } else {
-                        for (let i = 0; i < userEnteredSolutions.length; i++) {
-                            if (userEnteredSolutions[i] !== correctSolutionsSet[i]) {
-                                allVarValuesCorrect = false; break;
-                            }
-                        }
-                    }
-                }
-                
-                const displayUserVarValues = userEnteredSolutions.join(', ') || (correctSolutionsSet.length === 0 ? 'nincs ilyen érték' : 'nem adtál meg');
-                if (allVarValuesCorrect && (hasVarValues || correctSolutionsSet.length === 0) ) { 
-                     varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek (${displayUserVarValues}) mind helyesek.</li>`);
-                     varValueInputs.forEach(inputEl => { if(inputEl.value.trim() !== '') inputEl.style.borderColor = 'green';});
-                } else if (hasVarValues) { 
-                    varFeedbackMessages.push(`<li>A megadott ${currentTask.variableName} értékek (${displayUserVarValues}) nem tökéletesek.</li>`);
-                    if (allCalculationsCorrect) varFeedbackMessages.push(`<li>A helyes ${currentTask.variableName} értékek (a(z) ${trueRes1} és ${trueRes2} alapján): ${correctSolutionsSet.length > 0 ? correctSolutionsSet.join(', ') : 'nincs megoldás az adott számkörben'}.</li>`);
-                     varValueInputs.forEach(inputEl => { if (inputEl.value.trim() !== '') inputEl.style.borderColor = 'red'; });
-                } else if (!hasVarValues && correctSolutionsSet.length > 0 && allCalculationsCorrect) { 
-                     varFeedbackMessages.push(`<li>A helyes ${currentTask.variableName} értékek (a(z) ${trueRes1} és ${trueRes2} alapján): ${correctSolutionsSet.join(', ')}.</li>`);
-                }
-
-                if (varFeedbackMessages.length > 0) {
-                     feedbackMessages.push(`<li>A ${currentTask.variableName} értékek ellenőrzése:</li>`);
-                     feedbackMessages.push(`<ul>${varFeedbackMessages.join('')}</ul>`);
-                }
-                
-                if (allCalculationsCorrect && allVarValuesCorrect && (hasVarValues || correctSolutionsSet.length === 0) ) {
-                    feedbackEl.classList.add('correct');
-                    feedbackMessages.unshift('<li>Minden helyes! Ügyes vagy!</li>');
-                }
-                else {
-                    feedbackEl.classList.add('incorrect');
-                }
-                feedbackEl.innerHTML = `<ul>${feedbackMessages.join('')}</ul>`;
-            }
-
-            // --- setupFocusHandlers (VÁLTOZATLAN) ---
-            window.setupFocusHandlers = function() {
-                const task0ResInput = document.getElementById('task_0_user_res');
-                if (task0ResInput) {
-                    task0ResInput.addEventListener('input', function() {
-                        const expectedLength = String(simpleTaskData.expr.trueResult).length;
-                        if (this.value.length >= expectedLength) { 
-                            const nextElementContainer = document.getElementById('task_0_var_inputs_container');
-                            if (nextElementContainer) {
-                                const firstVarInput = nextElementContainer.querySelector('.variable-value-input');
-                                if (firstVarInput) setTimeout(() => firstVarInput.focus(), 0);
-                            }
-                        }
-                    });
-                }
-
-                for (let i = 1; i <= 4; i++) {
-                    const taskRes1Input = document.getElementById(`task_${i}_user_res1`);
-                    const taskRes2Input = document.getElementById(`task_${i}_user_res2`);
-                    const taskVarContainer = document.getElementById(`task_${i}_var_inputs_container`);
-
-                    if (taskRes1Input && taskRes2Input) {
-                        taskRes1Input.addEventListener('input', function() {
-                            const expectedLength = String(tasks[i].expr1.trueResult).length;
-                            if (this.value.length >= expectedLength) {
-                                setTimeout(() => taskRes2Input.focus(), 0);
-                            }
-                        });
-                    }
-
-                    if (taskRes2Input && taskVarContainer) {
-                        taskRes2Input.addEventListener('input', function() {
-                            const expectedLength = String(tasks[i].expr2.trueResult).length;
-                            if (this.value.length >= expectedLength) {
-                                const firstVarInput = taskVarContainer.querySelector('.variable-value-input');
-                                if (firstVarInput) setTimeout(() => firstVarInput.focus(), 0);
-                            }
-                        });
-                    }
-                }
-            }
-
-
-            updateRangeInfo();
-            applyTheme('theme-candy');
-            generateAllTasks();
-            setupFocusHandlers();
-        });
-    </script>
+<div class="controls-container">
+<div>
+<p class="control-label">Téma választó:</p>
+<div class="theme-selector">
+<button class="theme-button" data-theme="theme-candy">Cukorka</button>
+<button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+<button class="theme-button" data-theme="theme-ocean">Óceán</button>
+<button class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+<button class="theme-button" data-theme="theme-sky">Égbolt</button>
+<button class="theme-button" data-theme="theme-space">Űr</button>
+<button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+<button class="theme-button" data-theme="theme-tech">Techno</button>
+<button class="theme-button" data-theme="theme-sport">Sport</button>
+<button class="theme-button" data-theme="theme-adventure">Kaland</button>
+</div>
+</div>
+<div>
+<p class="control-label">Számkör választó:</p>
+<div class="range-selector">
+<button class="range-button" data-range="5">5-ös számkör</button>
+<button class="range-button" data-range="10">10-es számkör</button>
+<button class="range-button active" data-range="20">20-as számkör</button>
+</div>
+</div>
+</div>
+<div class="container">
+<h1>Relációs Feladatok</h1>
+<h2>Gyakorló 1. osztály</h2>
+<div class="task" id="task_0_container">
+<div class="task-header">
+<h3 id="task_0_title">1. Feladat: Melyik szám teszi igazzá?</h3>
+<button class="task-button new-task-button" onclick="generateNewSimpleTask(0)">Új feladat</button>
+</div>
+<p class="instructions">Számítsd ki a kifejezés értékét, majd írd be a megfelelő <span class="task_var_name_placeholder">[VÁLTOZÓ]</span> értékeket! Az összes lehetséges <span class="task_var_name_placeholder">[VÁLTOZÓ]</span> értéket meg kell adnod (<span id="task_0_range_info">0-20</span> között).</p>
+<div class="operation-display-container">
+<div class="single-expression-wrapper">
+<input class="result-input-above" id="task_0_user_res" type="number"/>
+<span class="expression-text-below" id="task_0_expr_text"></span>
+</div>
+<span class="relation-symbol" id="task_0_rel"></span>
+<span class="variable-symbol" id="task_0_var_name_display"></span>
+</div>
+<div class="variable-input-container">
+<label for="task_0_var_inputs_container" id="task_0_var_input_label"></label>
+<div class="dynamic-inputs" id="task_0_var_inputs_container">
+<input class="variable-value-input" oninput="handleVariableInput(event, 0)" type="number"/>
+</div>
+</div>
+<button class="task-button check-button" onclick="checkNewSimpleTask(0)">Ellenőrzés</button>
+<p class="feedback" id="task_0_feedback"></p>
+<div class="number-line-relational-container">
+<svg class="number-line-relational" id="numberLine_task_0" viewbox="0 0 500 100"></svg>
+</div>
+</div>
+<div class="task" id="task_1_container">
+<div class="task-header">
+<h3 id="task_1_title">2. Feladat: X meghatározása</h3>
+<button class="task-button new-task-button" onclick="generateSingleTask(1)">Új feladat</button>
+</div>
+<p class="instructions">Számítsd ki a kifejezések értékeit, majd írd be a megfelelő X értékeket! Az összes lehetséges X értéket meg kell adnod (<span id="task_1_range_info">0-20</span> között).</p>
+<div class="operation-display-container">
+<div class="single-expression-wrapper">
+<input class="result-input-above" id="task_1_user_res1" type="number"/>
+<span class="expression-text-below" id="task_1_expr1_text"></span>
+</div>
+<span class="relation-symbol" id="task_1_rel1">&lt;</span>
+<span class="variable-symbol">X</span>
+<span class="relation-symbol" id="task_1_rel2">&lt;</span>
+<div class="single-expression-wrapper">
+<input class="result-input-above" id="task_1_user_res2" type="number"/>
+<span class="expression-text-below" id="task_1_expr2_text"></span>
+</div>
+</div>
+<div class="variable-input-container">
+<label for="task_1_var_inputs_container">X:</label>
+<div class="dynamic-inputs" id="task_1_var_inputs_container">
+<input class="variable-value-input" oninput="handleVariableInput(event, 1)" type="number"/>
+</div>
+</div>
+<button class="task-button check-button" onclick="checkTask(1)">Ellenőrzés</button>
+<p class="feedback" id="task_1_feedback"></p>
+<div class="number-line-relational-container">
+<svg class="number-line-relational" id="numberLine_task_1" viewbox="0 0 500 100"></svg>
+</div>
+</div>
+<div class="task" id="task_2_container">
+<div class="task-header">
+<h3 id="task_2_title">3. Feladat: Y meghatározása</h3>
+<button class="task-button new-task-button" onclick="generateSingleTask(2)">Új feladat</button>
+</div>
+<p class="instructions">Számítsd ki a kifejezések értékeit, majd írd be a megfelelő Y értékeket! Az összes lehetséges Y értéket meg kell adnod (<span id="task_2_range_info">0-20</span> között).</p>
+<div class="operation-display-container">
+<div class="single-expression-wrapper">
+<input class="result-input-above" id="task_2_user_res1" type="number"/>
+<span class="expression-text-below" id="task_2_expr1_text"></span>
+</div>
+<span class="relation-symbol" id="task_2_rel1">&gt;</span>
+<span class="variable-symbol">Y</span>
+<span class="relation-symbol" id="task_2_rel2">&gt;</span>
+<div class="single-expression-wrapper">
+<input class="result-input-above" id="task_2_user_res2" type="number"/>
+<span class="expression-text-below" id="task_2_expr2_text"></span>
+</div>
+</div>
+<div class="variable-input-container">
+<label for="task_2_var_inputs_container">Y:</label>
+<div class="dynamic-inputs" id="task_2_var_inputs_container">
+<input class="variable-value-input" oninput="handleVariableInput(event, 2)" type="number"/>
+</div>
+</div>
+<button class="task-button check-button" onclick="checkTask(2)">Ellenőrzés</button>
+<p class="feedback" id="task_2_feedback"></p>
+<div class="number-line-relational-container">
+<svg class="number-line-relational" id="numberLine_task_2" viewbox="0 0 500 100"></svg>
+</div>
+</div>
+<div class="task" id="task_3_container">
+<div class="task-header">
+<h3 id="task_3_title">4. Feladat: Z meghatározása</h3>
+<button class="task-button new-task-button" onclick="generateSingleTask(3)">Új feladat</button>
+</div>
+<p class="instructions">Számítsd ki a kifejezések értékeit, majd írd be a megfelelő Z értékeket (<span id="task_3_range_info">0-20</span> között)!</p>
+<div class="operation-display-container">
+<div class="single-expression-wrapper">
+<input class="result-input-above" id="task_3_user_res1" type="number"/>
+<span class="expression-text-below" id="task_3_expr1_text"></span>
+</div>
+<span class="relation-symbol" id="task_3_rel1">&lt;</span>
+<span class="variable-symbol">Z</span>
+<span class="relation-symbol" id="task_3_rel2">&gt;</span>
+<div class="single-expression-wrapper">
+<input class="result-input-above" id="task_3_user_res2" type="number"/>
+<span class="expression-text-below" id="task_3_expr2_text"></span>
+</div>
+</div>
+<div class="variable-input-container">
+<label for="task_3_var_inputs_container">Z:</label>
+<div class="dynamic-inputs" id="task_3_var_inputs_container">
+<input class="variable-value-input" oninput="handleVariableInput(event, 3)" type="number"/>
+</div>
+</div>
+<button class="task-button check-button" onclick="checkTask(3)">Ellenőrzés</button>
+<p class="feedback" id="task_3_feedback"></p>
+<div class="number-line-relational-container">
+<svg class="number-line-relational" id="numberLine_task_3" viewbox="0 0 500 120"></svg>
+</div>
+</div>
+<div class="task" id="task_4_container">
+<div class="task-header">
+<h3 id="task_4_title">5. Feladat: W meghatározása</h3>
+<button class="task-button new-task-button" onclick="generateSingleTask(4)">Új feladat</button>
+</div>
+<p class="instructions">Számítsd ki a kifejezések értékeit, majd írd be a megfelelő W értékeket (<span id="task_4_range_info">0-20</span> között)!</p>
+<div class="operation-display-container">
+<div class="single-expression-wrapper">
+<input class="result-input-above" id="task_4_user_res1" type="number"/>
+<span class="expression-text-below" id="task_4_expr1_text"></span>
+</div>
+<span class="relation-symbol" id="task_4_rel1">&gt;</span>
+<span class="variable-symbol">W</span>
+<span class="relation-symbol" id="task_4_rel2">&lt;</span>
+<div class="single-expression-wrapper">
+<input class="result-input-above" id="task_4_user_res2" type="number"/>
+<span class="expression-text-below" id="task_4_expr2_text"></span>
+</div>
+</div>
+<div class="variable-input-container">
+<label for="task_4_var_inputs_container">W:</label>
+<div class="dynamic-inputs" id="task_4_var_inputs_container">
+<input class="variable-value-input" oninput="handleVariableInput(event, 4)" type="number"/>
+</div>
+</div>
+<button class="task-button check-button" onclick="checkTask(4)">Ellenőrzés</button>
+<p class="feedback" id="task_4_feedback"></p>
+<div class="number-line-relational-container">
+<svg class="number-line-relational" id="numberLine_task_4" viewbox="0 0 500 120"></svg>
+</div>
+</div>
+</div>
+<script src="relacios-intervallumok.js"></script>
 </body>
 </html>

@@ -1,853 +1,132 @@
 <!DOCTYPE html>
+
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mértékegység Átváltás Gyakorló</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
-
-        .controls-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 900px;
-        }
-
-        .settings-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px; /* Nagyobb rés a csoportok között */
-            width:100%;
-        }
-        .settings-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px; /* Kisebb rés a címke és gombok között */
-            padding: 5px 10px; /* Kisebb belső padding */
-        }
-
-        .control-label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 0.95em;
-            transition: color 0.5s ease;
-        }
-
-        .setting-button {
-            padding: 8px 12px;
-            border: 1px solid transparent;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
-        }
-        .setting-button:hover {
-            transform: translateY(-1px);
-            opacity: 0.9;
-        }
-        .setting-button.active {
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
-            transform: translateY(1px);
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 900px;
-            text-align: center;
-            transition: background-color 0.5s ease, border-color 0.5s ease;
-        }
-
-        h1, h2, h3 {
-            text-align: center;
-            transition: color 0.5s ease;
-        }
-        h1 {
-            font-size: clamp(1.8em, 5vw, 2.2em);
-            margin-bottom: 15px;
-        }
-        h2 { /* Feladatok főcím */
-            font-size: clamp(1.5em, 4.5vw, 1.8em);
-            margin-top: 30px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--theme-h2-border-color, #eee);
-            padding-bottom: 10px;
-        }
-        .task-header h3 { /* Feladat szekciók címei */
-            font-size: clamp(1.1em, 3.5vw, 1.3em);
-        }
-
-        .conversion-table-container {
-            margin: 10px auto 20px auto;
-            padding: 10px;
-            border-radius: 8px;
-            max-width: 320px; /* Keskenyebb táblázat konténer */
-            transition: background-color 0.5s ease, border-color 0.5s ease, max-height 0.5s ease-out, opacity 0.5s ease-out, transform 0.5s ease-out;
-            overflow: hidden;
-            max-height: 0; /* Initially hidden */
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        .conversion-table-container.visible {
-            max-height: 500px; /* Adjust as needed */
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .conversion-table-container h4 {
-             font-size: clamp(1.05em, 3.2vw, 1.2em);
-             margin-bottom: 10px;
-             font-weight: bold;
-        }
-
-        .conversion-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0 auto;
-            font-size: clamp(0.8em, 2.4vw, 0.9em);
-        }
-        .conversion-table th, .conversion-table td {
-            border: 1px solid;
-            padding: 4px 6px; /* Kisebb padding */
-            text-align: center; /* Alapértelmezett középre igazítás */
-            transition: border-color 0.5s ease, background-color 0.5s ease;
-        }
-        .conversion-table th {
-            font-weight: bold;
-        }
-        .conversion-table td:first-child {
-            text-align: right; /* Bal oldali oszlop jobbra igazítva */
-        }
-        .conversion-table td:last-child {
-            text-align: left; /* Jobb oldali oszlop balra igazítva */
-        }
-
-
-        .task {
-            margin-bottom: 30px;
-            padding: 20px;
-            border-radius: 10px;
-            transition: background-color 0.5s ease, border-color 0.5s ease;
-            position: relative;
-        }
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .new-task-button {
-            padding: 6px 12px;
-            font-size: 0.8em;
-            margin-left: 10px;
-        }
-
-        .task p.instructions {
-            line-height: 1.6;
-            font-size: clamp(1em, 3vw, 1.1em);
-            margin-bottom: 10px;
-            transition: color 0.5s ease;
-        }
-
-        .questions-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-
-        .question-item {
-            display: flex;
-            align-items: center; /* Vertikálisan középre */
-            justify-content: flex-start; /* Balra igazítjuk az itemeket */
-            padding: 12px;
-            border-radius: 6px;
-            transition: background-color 0.3s ease;
-            gap: 5px; /* Kisebb rés az elemek között */
-        }
-        .question-item .prompt {
-            font-size: clamp(1em, 3vw, 1.1em);
-            font-weight: bold;
-            text-align: left;
-            margin-right: 5px; /* Kis hely az input előtt */
-        }
-        .question-item input {
-            width: 70px; /* Kicsit keskenyebb input, ha kell */
-            padding: 8px;
-            font-size: clamp(0.9em, 2.8vw, 1em);
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            text-align: center;
-            margin-right: 5px; /* Kis hely a mértékegység előtt */
-        }
-         .question-item .unit-suffix {
-            font-size: clamp(0.9em, 2.8vw, 1em);
-            font-weight: normal;
-        }
-
-        input[type=number]::-webkit-outer-spin-button,
-        input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-
-
-        button.task-button {
-            padding: 10px 20px;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: clamp(1em, 3vw, 1.1em);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        button.task-button:hover {
-            transform: translateY(-2px);
-        }
-        button.task-button:active {
-            transform: translateY(0px);
-        }
-
-        .feedback {
-            margin-top: 10px;
-            font-weight: bold;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: clamp(0.9em, 2.8vw, 1.05em);
-            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
-            min-height: 1.5em;
-        }
-
-        /* Alapértelmezett téma stílusok */
-        .setting-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
-        .task-button { background-color: #007bff; color: white; }
-        .container { background-color: #ffffff; border: 1px solid #e5e7eb; }
-        h1, h2 { color: #007bff; --theme-h2-border-color: #007bff30;}
-        .conversion-table-container { background-color: #f8f9fa; border: 1px solid #dee2e6;}
-        .conversion-table-container h4 { color: #495057; }
-        .conversion-table th, .conversion-table td { border-color: #dee2e6; }
-        .conversion-table th { background-color: #e9ecef; color: #495057;}
-        .conversion-table td { background-color: #fff; color: #212529;}
-
-        .task { background-color: #f9fafb; border: 1px dashed #d1d5db; }
-        .feedback.correct { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
-        .feedback.incorrect { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
-        .control-label { color: #333; }
-        .question-item { background-color: #f9f9f9; border: 1px solid #eee; }
-        .question-item .prompt, .question-item .unit-suffix { color: #333; }
-        .question-item input { border-color: #ccc; color: #333; }
-        .question-item input:focus { border-color: #007bff; outline: none; }
-
-
-        /* --- THEME DEFINITIONS --- */
-        /* 1. Candy Theme (Girlish) */
-        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
-        body.theme-candy .control-label { color: #c71585; }
-        body.theme-candy .setting-button.active { background-color: #ffb6c1; color: #7c3c60; }
-        body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
-        body.theme-candy h1, body.theme-candy h2, body.theme-candy .conversion-table-container h4 { color: #da70d6; --theme-h2-border-color: #da70d680;}
-        body.theme-candy .conversion-table-container { background-color: #fff0f5; border: 1px solid #ffb6c1;}
-        body.theme-candy .conversion-table th { background-color: #ffc0cb; color: #c71585;}
-        body.theme-candy .conversion-table td { background-color: #fffafa; border-color: #ffb6c1; color: #8a2be2;}
-        body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
-        body.theme-candy .task-header h3 { color: #ff69b4; }
-        body.theme-candy .task p.instructions { color: #8a2be2; }
-        body.theme-candy button.task-button { background-color: #ff69b4; color: white; }
-        body.theme-candy button.task-button:hover { background-color: #ff1493; }
-        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border: 1px solid #90ee90; }
-        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border: 1px solid #ffb6c1; }
-        body.theme-candy .question-item { background-color: #fffafa; border-color: #ffdae0; }
-        body.theme-candy .question-item .prompt, body.theme-candy .question-item .unit-suffix { color: #c71585; }
-        body.theme-candy .question-item input { border-color: #ffb6c1; color: #9932cc; }
-        body.theme-candy .question-item input:focus { border-color: #ff69b4;}
-
-        /* 2. Space Theme (Boyish) */
-        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;}
-        body.theme-space .control-label { color: #93c5fd; }
-        body.theme-space .setting-button.active { background-color: #1e3a8a; color: #93c5fd; }
-        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
-        body.theme-space h1, body.theme-space h2, body.theme-space .conversion-table-container h4 { color: #60a5fa; --theme-h2-border-color: #60a5fa80;}
-        body.theme-space .conversion-table-container { background-color: #17253c; border: 1px solid #3b506f;}
-        body.theme-space .conversion-table th { background-color: #1e3a8a; color: #93c5fd;}
-        body.theme-space .conversion-table td { background-color: #2c3e50; border-color: #3b506f; color: #e2e8f0;}
-        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
-        body.theme-space .task-header h3 { color: #93c5fd; }
-        body.theme-space .task p.instructions { color: #cbd5e1; }
-        body.theme-space button.task-button { background-color: #2563eb; }
-        body.theme-space button.task-button:hover { background-color: #1d4ed8; }
-        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
-        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
-        body.theme-space .question-item { background-color: #2c3e50; border-color: #34495e; }
-        body.theme-space .question-item .prompt, body.theme-space .question-item .unit-suffix { color: #93c5fd; }
-        body.theme-space .question-item input { background-color: #1e293b; border-color: #475569; color: #e2e8f0; }
-        body.theme-space .question-item input:focus { border-color: #60a5fa;}
-
-
-        /* 3. Jungle Theme (Boyish) */
-        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;}
-        body.theme-jungle .control-label { color: #558b2f; }
-        body.theme-jungle .setting-button.active { background-color: #689f38; color: #dcedc8; }
-        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
-        body.theme-jungle h1, body.theme-jungle h2, body.theme-jungle .conversion-table-container h4 { color: #388e3c; --theme-h2-border-color: #388e3c80;}
-        body.theme-jungle .conversion-table-container { background-color: #dcedc8; border: 1px solid #a5d6a7;}
-        body.theme-jungle .conversion-table th { background-color: #a5d6a7; color: #2e7d32;}
-        body.theme-jungle .conversion-table td { background-color: #f1f8e9; border-color: #a5d6a7; color: #1b5e20;}
-        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
-        body.theme-jungle .task-header h3 { color: #558b2f; }
-        body.theme-jungle .task p.instructions { color: #2e7d32; }
-        body.theme-jungle button.task-button { background-color: #7cb342; }
-        body.theme-jungle button.task-button:hover { background-color: #689f38; }
-        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
-        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
-        body.theme-jungle .question-item { background-color: #f0f4c3; border-color: #dce775; }
-        body.theme-jungle .question-item .prompt, body.theme-jungle .question-item .unit-suffix { color: #558b2f; }
-        body.theme-jungle .question-item input { border-color: #81c784; color: #1b5e20; }
-        body.theme-jungle .question-item input:focus { border-color: #7cb342;}
-
-        /* 4. Magic Forest Theme (Girlish) */
-        body.theme-magicforest { background-color: #e6e6fa; color: #483d8b; --theme-button-active-border-color: #8a2be2;}
-        body.theme-magicforest .control-label { color: #9932cc; }
-        body.theme-magicforest .setting-button.active { background-color: #9370db; color: #f8f0ff; }
-        body.theme-magicforest .container { background-color: #d8bfd8; border: 2px solid #dda0dd; }
-        body.theme-magicforest h1, body.theme-magicforest h2, body.theme-magicforest .conversion-table-container h4 { color: #8a2be2; --theme-h2-border-color: #8a2be280;}
-        body.theme-magicforest .conversion-table-container { background-color: #f3e8ff; border: 1px solid #dda0dd;}
-        body.theme-magicforest .conversion-table th { background-color: #dda0dd; color: #6a0dad;}
-        body.theme-magicforest .conversion-table td { background-color: #fff0f5; border-color: #dda0dd; color: #483d8b;}
-        body.theme-magicforest .task { background-color: #f5f5f5; border: 2px dashed #ba55d3; }
-        body.theme-magicforest .task-header h3 { color: #9932cc; }
-        body.theme-magicforest .task p.instructions { color: #4b0082; }
-        body.theme-magicforest button.task-button { background-color: #9370db; }
-        body.theme-magicforest button.task-button:hover { background-color: #8a2be2; }
-        body.theme-magicforest .question-item { background-color: #f8f0ff; border-color: #e6e6fa; }
-        body.theme-magicforest .question-item .prompt, body.theme-magicforest .question-item .unit-suffix { color: #9932cc; }
-        body.theme-magicforest .question-item input { border-color: #ba55d3; color: #483d8b; }
-        body.theme-magicforest .question-item input:focus { border-color: #9370db;}
-
-        /* 5. Robo/Tech Theme (Boyish) */
-        body.theme-tech { background-color: #263238; color: #eceff1; --theme-button-active-border-color: #00acc1;}
-        body.theme-tech .control-label { color: #26c6da; }
-        body.theme-tech .setting-button.active { background-color: #00838f; color: #e0f7fa; }
-        body.theme-tech .container { background-color: #37474f; border: 2px solid #546e7a; }
-        body.theme-tech h1, body.theme-tech h2, body.theme-tech .conversion-table-container h4 { color: #00acc1; --theme-h2-border-color: #00acc180;}
-        body.theme-tech .conversion-table-container { background-color: #2c3e50; border: 1px solid #546e7a;}
-        body.theme-tech .conversion-table th { background-color: #455a64; color: #00e5ff;}
-        body.theme-tech .conversion-table td { background-color: #37474f; border-color: #546e7a; color: #b0bec5;}
-        body.theme-tech .task { background-color: #455a64; border: 2px dashed #78909c; }
-        body.theme-tech .task-header h3 { color: #26c6da; }
-        body.theme-tech .task p.instructions { color: #b0bec5; }
-        body.theme-tech button.task-button { background-color: #0097a7; }
-        body.theme-tech button.task-button:hover { background-color: #00838f; }
-        body.theme-tech .question-item { background-color: #455a64; border-color: #546e7a; }
-        body.theme-tech .question-item .prompt, body.theme-tech .question-item .unit-suffix { color: #26c6da; }
-        body.theme-tech .question-item input { background-color: #37474f; border-color: #78909c; color: #eceff1; }
-        body.theme-tech .question-item input:focus { border-color: #00acc1;}
-
-        /* 6. Ocean Theme (Girlish) */
-        body.theme-ocean { background-color: #e0f7fa; color: #00796b; --theme-button-active-border-color: #20b2aa;}
-        body.theme-ocean .control-label { color: #00acc1; }
-        body.theme-ocean .setting-button.active { background-color: #4db6ac; color: #e0f2f1; }
-        body.theme-ocean .container { background-color: #b2ebf2; border: 2px solid #4dd0e1; }
-        body.theme-ocean h1, body.theme-ocean h2, body.theme-ocean .conversion-table-container h4 { color: #00897b; --theme-h2-border-color: #00897b80;}
-        body.theme-ocean .conversion-table-container { background-color: #e0f7fa; border: 1px solid #80deea;}
-        body.theme-ocean .conversion-table th { background-color: #b2ebf2; color: #006064;}
-        body.theme-ocean .conversion-table td { background-color: #f0ffff; border-color: #80deea; color: #00796b;}
-        body.theme-ocean .task { background-color: #e0f7fa; border: 2px dashed #80deea; }
-        body.theme-ocean .task-header h3 { color: #00acc1; }
-        body.theme-ocean .task p.instructions { color: #00695c; }
-        body.theme-ocean button.task-button { background-color: #26a69a; }
-        body.theme-ocean button.task-button:hover { background-color: #00897b; }
-        body.theme-ocean .question-item { background-color: #e0f2f1; border-color: #b2dfdb; }
-        body.theme-ocean .question-item .prompt, body.theme-ocean .question-item .unit-suffix { color: #00acc1; }
-        body.theme-ocean .question-item input { border-color: #80deea; color: #004d40; }
-        body.theme-ocean .question-item input:focus { border-color: #26a69a;}
-
-        /* 7. Sport Theme (Boyish) */
-        body.theme-sport { background-color: #e3f2fd; color: #0d47a1; --theme-button-active-border-color: #d32f2f;}
-        body.theme-sport .control-label { color: #1976d2; }
-        body.theme-sport .setting-button.active { background-color: #1976d2; color: #e3f2fd; }
-        body.theme-sport .container { background-color: #bbdefb; border: 2px solid #64b5f6; }
-        body.theme-sport h1, body.theme-sport h2, body.theme-sport .conversion-table-container h4 { color: #d32f2f; --theme-h2-border-color: #d32f2f80;}
-        body.theme-sport .conversion-table-container { background-color: #e3f2fd; border: 1px solid #90caf9;}
-        body.theme-sport .conversion-table th { background-color: #90caf9; color: #c62828;}
-        body.theme-sport .conversion-table td { background-color: #e3f2fd; border-color: #90caf9; color: #0d47a1;}
-        body.theme-sport .task { background-color: #e3f2fd; border: 2px dashed #42a5f5; }
-        body.theme-sport .task-header h3 { color: #1976d2; }
-        body.theme-sport .task p.instructions { color: #0d47a1; }
-        body.theme-sport button.task-button { background-color: #2196f3; }
-        body.theme-sport button.task-button:hover { background-color: #1976d2; }
-        body.theme-sport .question-item { background-color: #e3f2fd; border-color: #90caf9; }
-        body.theme-sport .question-item .prompt, body.theme-sport .question-item .unit-suffix { color: #1976d2; }
-        body.theme-sport .question-item input { border-color: #42a5f5; color: #01579b; }
-        body.theme-sport .question-item input:focus { border-color: #2196f3;}
-
-        /* 8. Flower Garden Theme (Girlish) */
-        body.theme-flowergarden { background-color: #fffaf0; color: #556b2f; --theme-button-active-border-color: #ff6347;}
-        body.theme-flowergarden .control-label { color: #ff7f50; }
-        body.theme-flowergarden .setting-button.active { background-color: #ffdab9; color: #8b4513; }
-        body.theme-flowergarden .container { background-color: #fff5ee; border: 2px solid #ffdab9; }
-        body.theme-flowergarden h1, body.theme-flowergarden h2, body.theme-flowergarden .conversion-table-container h4 { color: #ff6347; --theme-h2-border-color: #ff634780;}
-        body.theme-flowergarden .conversion-table-container { background-color: #fff0e1; border: 1px solid #ffdab9;}
-        body.theme-flowergarden .conversion-table th { background-color: #ffefd5; color: #d2691e;}
-        body.theme-flowergarden .conversion-table td { background-color: #fffaf0; border-color: #ffdab9; color: #556b2f;}
-        body.theme-flowergarden .task { background-color: #fffafa; border: 2px dashed #ffe4b5; }
-        body.theme-flowergarden .task-header h3 { color: #ff7f50; }
-        body.theme-flowergarden .task p.instructions { color: #8b4513; }
-        body.theme-flowergarden button.task-button { background-color: #ffa07a; }
-        body.theme-flowergarden button.task-button:hover { background-color: #ff7f50; }
-        body.theme-flowergarden .question-item { background-color: #fff8e1; border-color: #ffecb3; }
-        body.theme-flowergarden .question-item .prompt, body.theme-flowergarden .question-item .unit-suffix { color: #ff7f50; }
-        body.theme-flowergarden .question-item input { border-color: #ffdab9; color: #a0522d; }
-        body.theme-flowergarden .question-item input:focus { border-color: #ffa07a;}
-
-        /* 9. Adventure Theme (Boyish) */
-        body.theme-adventure { background-color: #f5f5dc; color: #5d4037; --theme-button-active-border-color: #bf360c;}
-        body.theme-adventure .control-label { color: #6d4c41; }
-        body.theme-adventure .setting-button.active { background-color: #a1887f; color: #efebe9; }
-        body.theme-adventure .container { background-color: #efebe9; border: 2px solid #a1887f; }
-        body.theme-adventure h1, body.theme-adventure h2, body.theme-adventure .conversion-table-container h4 { color: #bf360c; --theme-h2-border-color: #bf360c80;}
-        body.theme-adventure .conversion-table-container { background-color: #d7ccc8; border: 1px solid #a1887f;}
-        body.theme-adventure .conversion-table th { background-color: #bcaaa4; color: #4e342e;}
-        body.theme-adventure .conversion-table td { background-color: #efebe9; border-color: #a1887f; color: #5d4037;}
-        body.theme-adventure .task { background-color: #d7ccc8; border: 2px dashed #8d6e63; }
-        body.theme-adventure .task-header h3 { color: #6d4c41; }
-        body.theme-adventure .task p.instructions { color: #4e342e; }
-        body.theme-adventure button.task-button { background-color: #795548; }
-        body.theme-adventure button.task-button:hover { background-color: #5d4037; }
-        body.theme-adventure .question-item { background-color: #efebe9; border-color: #d7ccc8; }
-        body.theme-adventure .question-item .prompt, body.theme-adventure .question-item .unit-suffix { color: #6d4c41; }
-        body.theme-adventure .question-item input { border-color: #8d6e63; color: #3e2723; }
-        body.theme-adventure .question-item input:focus { border-color: #795548;}
-
-        /* 10. Sky Theme (Girlish) */
-        body.theme-sky { background-color: #f0f8ff; color: #4682b4; --theme-button-active-border-color: #1e90ff;}
-        body.theme-sky .control-label { color: #00bfff; }
-        body.theme-sky .setting-button.active { background-color: #add8e6; color: #005a9c; }
-        body.theme-sky .container { background-color: #e6f7ff; border: 2px solid #b0e0e6; }
-        body.theme-sky h1, body.theme-sky h2, body.theme-sky .conversion-table-container h4 { color: #1e90ff; --theme-h2-border-color: #1e90ff80;}
-        body.theme-sky .conversion-table-container { background-color: #f0f8ff; border: 1px solid #add8e6;}
-        body.theme-sky .conversion-table th { background-color: #b0e0e6; color: #1c86ee;}
-        body.theme-sky .conversion-table td { background-color: #f5faff; border-color: #add8e6; color: #4682b4;}
-        body.theme-sky .task { background-color: #f5faff; border: 2px dashed #add8e6; }
-        body.theme-sky .task-header h3 { color: #00bfff; }
-        body.theme-sky .task p.instructions { color: #5f9ea0; }
-        body.theme-sky button.task-button { background-color: #87cefa; }
-        body.theme-sky button.task-button:hover { background-color: #6495ed; }
-        body.theme-sky .question-item { background-color: #f0f8ff; border-color: #e6f2ff; }
-        body.theme-sky .question-item .prompt, body.theme-sky .question-item .unit-suffix { color: #00bfff; }
-        body.theme-sky .question-item input { border-color: #b0e0e6; color: #4682b4; }
-        body.theme-sky .question-item input:focus { border-color: #87cefa;}
-
-    </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mértékegység Átváltás Gyakorló</title>
+<link href="mertekegyseg-atvaltas.css" rel="stylesheet"/>
 </head>
 <body class="theme-candy">
-    <div class="controls-container">
-        <div class="settings-row">
-            <div class="settings-group">
-                <p class="control-label">Téma választó:</p>
-                <div id="themeSelector" class="flex flex-wrap justify-center gap-2">
-                    <button class="setting-button theme-button" data-theme="theme-candy">Cukorka</button>
-                    <button class="setting-button theme-button" data-theme="theme-magicforest">Varázserdő</button>
-                    <button class="setting-button theme-button" data-theme="theme-ocean">Óceán</button>
-                    <button class="setting-button theme-button" data-theme="theme-flowergarden">Virágoskert</button>
-                    <button class="setting-button theme-button" data-theme="theme-sky">Égbolt</button>
-                    <button class="setting-button theme-button" data-theme="theme-space">Űr</button>
-                    <button class="setting-button theme-button" data-theme="theme-jungle">Őserdő</button>
-                    <button class="setting-button theme-button" data-theme="theme-tech">Techno</button>
-                    <button class="setting-button theme-button" data-theme="theme-sport">Sport</button>
-                    <button class="setting-button theme-button" data-theme="theme-adventure">Kaland</button>
-                </div>
-            </div>
-            <div class="settings-group">
-                <p class="control-label">Segítség szintje:</p>
-                <div id="helpLevelSelector" class="flex flex-wrap justify-center gap-2">
-                    <button class="setting-button active" data-help="independent">Önálló</button>
-                    <button class="setting-button" data-help="assisted">Segítő</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <h1>Mértékegység Átváltások</h1>
-
-        <div id="taskLength" class="task">
-            <div class="task-header">
-                <h3>Hosszúság mértékegységei</h3>
-                <button class="task-button new-task-button" onclick="generateTasks('length')">Új feladatok</button>
-            </div>
-            <div id="conversionTableLength" class="conversion-table-container">
-                <h4>Átváltási Táblázat: Hosszúság</h4>
-                <table class="conversion-table">
-                    <tbody>
-                        <tr><td>1 m</td><td>=</td><td>10 dm</td></tr>
-                        <tr><td>1 m</td><td>=</td><td>100 cm</td></tr>
-                        <tr><td>1 m</td><td>=</td><td>1000 mm</td></tr>
-                        <tr><td>1 dm</td><td>=</td><td>10 cm</td></tr>
-                        <tr><td>1 dm</td><td>=</td><td>100 mm</td></tr>
-                        <tr><td>1 cm</td><td>=</td><td>10 mm</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="instructions">Végezd el az átváltásokat!</p>
-            <div id="questionsLength" class="questions-container"></div>
-            <button class="task-button" onclick="checkAnswers('length')">Ellenőrzés</button>
-            <p id="feedbackLength" class="feedback">&nbsp;</p>
-        </div>
-        <hr style="margin: 40px auto; border: 0; border-top: 2px dashed #ccc; width: 80%;">
-
-        <div id="taskMass" class="task">
-            <div class="task-header">
-                <h3>Tömeg mértékegységei</h3>
-                <button class="task-button new-task-button" onclick="generateTasks('mass')">Új feladatok</button>
-            </div>
-             <div id="conversionTableMass" class="conversion-table-container">
-                <h4>Átváltási Táblázat: Tömeg</h4>
-                <table class="conversion-table">
-                    <tbody>
-                        <tr><td>1 kg</td><td>=</td><td>100 dkg</td></tr>
-                        <tr><td>1 kg</td><td>=</td><td>1000 g</td></tr>
-                        <tr><td>1 dkg</td><td>=</td><td>10 g</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="instructions">Végezd el az átváltásokat!</p>
-            <div id="questionsMass" class="questions-container"></div>
-            <button class="task-button" onclick="checkAnswers('mass')">Ellenőrzés</button>
-            <p id="feedbackMass" class="feedback">&nbsp;</p>
-        </div>
-        <hr style="margin: 40px auto; border: 0; border-top: 2px dashed #ccc; width: 80%;">
-
-        <div id="taskVolume" class="task">
-            <div class="task-header">
-                <h3>Űrmérték mértékegységei</h3>
-                <button class="task-button new-task-button" onclick="generateTasks('volume')">Új feladatok</button>
-            </div>
-            <div id="conversionTableVolume" class="conversion-table-container">
-                <h4>Átváltási Táblázat: Űrmérték</h4>
-                <table class="conversion-table">
-                    <tbody>
-                        <tr><td>1 l</td><td>=</td><td>10 dl</td></tr>
-                        <tr><td>1 l</td><td>=</td><td>100 cl</td></tr>
-                        <tr><td>1 l</td><td>=</td><td>1000 ml</td></tr>
-                        <tr><td>1 dl</td><td>=</td><td>10 cl</td></tr>
-                        <tr><td>1 dl</td><td>=</td><td>100 ml</td></tr>
-                        <tr><td>1 cl</td><td>=</td><td>10 ml</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="instructions">Végezd el az átváltásokat!</p>
-            <div id="questionsVolume" class="questions-container"></div>
-            <button class="task-button" onclick="checkAnswers('volume')">Ellenőrzés</button>
-            <p id="feedbackVolume" class="feedback">&nbsp;</p>
-        </div>
-        <hr style="margin: 40px auto; border: 0; border-top: 2px dashed #ccc; width: 80%;">
-
-         <div id="taskTime" class="task">
-            <div class="task-header">
-                <h3>Idő mértékegységei</h3>
-                <button class="task-button new-task-button" onclick="generateTasks('time')">Új feladatok</button>
-            </div>
-            <div id="conversionTableTime" class="conversion-table-container">
-                <h4>Átváltási Táblázat: Idő</h4>
-                <table class="conversion-table">
-                    <tbody>
-                        <tr><td>1 hét</td><td>=</td><td>7 nap</td></tr>
-                        <tr><td>1 nap</td><td>=</td><td>24 óra</td></tr>
-                        <tr><td>1 óra</td><td>=</td><td>60 perc</td></tr>
-                        <tr><td>1 perc</td><td>=</td><td>60 másodperc</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="instructions">Végezd el az átváltásokat!</p>
-            <div id="questionsTime" class="questions-container"></div>
-            <button class="task-button" onclick="checkAnswers('time')">Ellenőrzés</button>
-            <p id="feedbackTime" class="feedback">&nbsp;</p>
-        </div>
-
-    </div>
-
-    <script>
-        const bodyEl = document.body;
-        const themeSelector = document.getElementById('themeSelector');
-        const helpLevelSelector = document.getElementById('helpLevelSelector');
-
-        let currentSettings = {
-            theme: 'theme-candy',
-            helpLevel: 'independent'
-        };
-
-        const conversionData = {
-            length: {
-                units: ['m', 'dm', 'cm', 'mm'],
-                factors: {
-                    'm': {'dm': 10, 'cm': 100, 'mm': 1000},
-                    'dm': {'m': 0.1, 'cm': 10, 'mm': 100},
-                    'cm': {'m': 0.01, 'dm': 0.1, 'mm': 10},
-                    'mm': {'m': 0.001, 'dm': 0.01, 'cm': 0.1}
-                },
-                tasks: [],
-                tableElementId: 'conversionTableLength'
-            },
-            mass: {
-                units: ['kg', 'dkg', 'g'],
-                factors: {
-                    'kg': {'dkg': 100, 'g': 1000},
-                    'dkg': {'kg': 0.01, 'g': 10},
-                    'g': {'kg': 0.001, 'dkg': 0.1}
-                },
-                tasks: [],
-                tableElementId: 'conversionTableMass'
-            },
-            volume: {
-                units: ['l', 'dl', 'cl', 'ml'],
-                factors: {
-                    'l': {'dl': 10, 'cl': 100, 'ml': 1000},
-                    'dl': {'l': 0.1, 'cl': 10, 'ml': 100},
-                    'cl': {'l': 0.01, 'dl': 0.1, 'ml': 10},
-                    'ml': {'l': 0.001, 'dl': 0.01, 'cl': 0.1}
-                },
-                tasks: [],
-                tableElementId: 'conversionTableVolume'
-            },
-            time: {
-                units: ['hét', 'nap', 'óra', 'perc', 'mp'], // mp = másodperc
-                factors: { // Ezt a faktort a komplexebb, nem egyirányú generáláshoz használhatnánk
-                    'hét': {'nap': 7},
-                    'nap': {'hét': 1/7, 'óra': 24},
-                    'óra': {'nap': 1/24, 'perc': 60},
-                    'perc': {'óra': 1/60, 'mp': 60},
-                    'mp': {'perc': 1/60}
-                },
-                // Egyszerűbb, egyirányú átváltásokra korlátozzuk a 3. osztályban
-                simplePairs: [
-                    {from: 'hét', to: 'nap', factor: 7},
-                    {from: 'nap', to: 'óra', factor: 24},
-                    {from: 'óra', to: 'perc', factor: 60},
-                    {from: 'perc', to: 'mp', factor: 60}
-                ],
-                tasks: [],
-                tableElementId: 'conversionTableTime'
-            }
-        };
-
-        themeSelector.addEventListener('click', (e) => {
-            if (e.target.classList.contains('setting-button')) {
-                currentSettings.theme = e.target.dataset.theme;
-                applyThemeUI();
-            }
-        });
-
-        helpLevelSelector.addEventListener('click', (e) => {
-            if (e.target.classList.contains('setting-button')) {
-                currentSettings.helpLevel = e.target.dataset.help;
-                updateActiveButtonVisuals(helpLevelSelector, e.target);
-                toggleConversionTables();
-            }
-        });
-
-        function applyThemeUI() {
-            bodyEl.className = '';
-            bodyEl.classList.add(currentSettings.theme);
-            updateActiveButtonVisuals(themeSelector, themeSelector.querySelector(`[data-theme="${currentSettings.theme}"]`));
-            updateActiveButtonVisuals(helpLevelSelector, helpLevelSelector.querySelector(`[data-help="${currentSettings.helpLevel}"]`));
-        }
-
-        function updateActiveButtonVisuals(container, activeButton) {
-            if (!container || !activeButton) return;
-            container.querySelectorAll('.setting-button').forEach(btn => btn.classList.remove('active'));
-            activeButton.classList.add('active');
-        }
-
-        function getRandomInt(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        function generateTasks(type) {
-            const config = conversionData[type];
-            config.tasks = [];
-            const questionsEl = document.getElementById(`questions${type.charAt(0).toUpperCase() + type.slice(1)}`);
-            const feedbackEl = document.getElementById(`feedback${type.charAt(0).toUpperCase() + type.slice(1)}`);
-
-            questionsEl.innerHTML = '';
-            feedbackEl.innerHTML = '&nbsp;';
-            feedbackEl.className = 'feedback';
-
-            const numQuestions = 8;
-            const usedPairs = new Set();
-
-            for (let i = 0; i < numQuestions; i++) {
-                let fromUnit, toUnit, factor, value, expectedAnswer;
-                let attempt = 0;
-
-                do {
-                    if (type === 'time') {
-                        const pair = config.simplePairs[Math.floor(Math.random() * config.simplePairs.length)];
-                        fromUnit = pair.from;
-                        toUnit = pair.to;
-                        factor = pair.factor;
-                    } else {
-                        fromUnit = config.units[Math.floor(Math.random() * config.units.length)];
-                        do {
-                            toUnit = config.units[Math.floor(Math.random() * config.units.length)];
-                        } while (toUnit === fromUnit || !config.factors[fromUnit] || !config.factors[fromUnit][toUnit]);
-                        factor = config.factors[fromUnit][toUnit];
-                    }
-                    attempt++;
-                } while (usedPairs.has(`${fromUnit}-${toUnit}`) && attempt < 20);
-                usedPairs.add(`${fromUnit}-${toUnit}`);
-
-
-                if (type === 'time') {
-                    value = getRandomInt(1, 5);
-                } else if (factor > 500) { // Ha nagy az átváltási faktor (pl. m -> mm)
-                    value = getRandomInt(1, 5);
-                } else if (factor < 0.05) { // Ha kicsi az átváltási faktor (pl. mm -> m)
-                    value = getRandomInt(100, 5000);
-                     if(value % (1/factor) !== 0 && factor !==0 ) { // ensure whole number result for small factors
-                         value = Math.round(value / (1/factor)) * (1/factor);
-                         if (value === 0 && getRandomInt(1,2)===1) value = 1/factor; // Avoid 0 if possible
-                    }
-                     if (value === 0 && type !== 'time') value = getRandomInt(1,5) * (1/factor);
-
-                } else {
-                    value = getRandomInt(1, 20);
-                }
-                 // Ensure value is not 0 for non-time, or if it is, try once more to get non-zero
-                if (value === 0 && type !== 'time') {
-                    value = getRandomInt(1, 5);
-                     if (factor < 0.05 && factor !== 0) value = value * (1/factor);
-                }
-
-
-                expectedAnswer = value * factor;
-                if (!Number.isInteger(expectedAnswer)) {
-                    if (Math.abs(expectedAnswer - Math.round(expectedAnswer)) < 0.00001) {
-                        expectedAnswer = Math.round(expectedAnswer);
-                    } else {
-                        if (factor === 0.1 || factor === 0.01 || factor === 0.001) {
-                             expectedAnswer = parseFloat(expectedAnswer.toPrecision(10)); 
-                        } else {
-                            expectedAnswer = parseFloat(expectedAnswer.toFixed(3));
-                        }
-                    }
-                }
-
-
-                config.tasks.push({
-                    id: `${type}_q_${i}`,
-                    fromUnit: fromUnit,
-                    toUnit: toUnit,
-                    value: value,
-                    expectedAnswer: expectedAnswer
-                });
-
-                const item = document.createElement('div');
-                item.classList.add('question-item');
-                // Updated HTML structure for the question item
-                item.innerHTML = `
-                    <span class="prompt">${value} ${fromUnit} = </span>
-                    <input type="number" id="${type}_q_${i}" step="any">
-                    <span class="unit-suffix">${toUnit}</span>
-                `;
-                questionsEl.appendChild(item);
-            }
-        }
-
-        function checkAnswers(type) {
-            const config = conversionData[type];
-            const feedbackEl = document.getElementById(`feedback${type.charAt(0).toUpperCase() + type.slice(1)}`);
-            let allCorrect = true;
-            let correctCount = 0;
-            const totalTasks = config.tasks.length;
-
-            if (totalTasks === 0) {
-                feedbackEl.textContent = 'Nincsenek még feladatok. Kattints az "Új feladatok" gombra!';
-                feedbackEl.className = 'feedback incorrect';
-                return;
-            }
-
-            config.tasks.forEach(task => {
-                const inputEl = document.getElementById(task.id);
-                const userAnswerRaw = inputEl.value.trim().replace(',', '.');
-                const userAnswer = parseFloat(userAnswerRaw);
-
-                if (userAnswerRaw === "" || isNaN(userAnswer)) {
-                    inputEl.style.borderColor = 'red';
-                    allCorrect = false;
-                } else {
-                    const tolerance = 0.001;
-                    if (Math.abs(userAnswer - task.expectedAnswer) < tolerance) {
-                        inputEl.style.borderColor = 'green';
-                        correctCount++;
-                    } else {
-                        inputEl.style.borderColor = 'red';
-                        allCorrect = false;
-                    }
-                }
-            });
-
-            if (allCorrect) {
-                feedbackEl.textContent = 'Minden válasz helyes! Ügyes vagy! 🎉';
-                feedbackEl.className = 'feedback correct';
-            } else {
-                feedbackEl.textContent = `Összesen ${correctCount} helyes válasz a ${totalTasks}-ból. Nézd át a pirossal jelölt válaszokat!`;
-                feedbackEl.className = 'feedback incorrect';
-            }
-        }
-
-        function toggleConversionTables() {
-            Object.keys(conversionData).forEach(type => {
-                const tableContainerId = conversionData[type].tableElementId;
-                const tableContainer = document.getElementById(tableContainerId);
-                if (tableContainer) {
-                    if (currentSettings.helpLevel === 'assisted') {
-                        tableContainer.classList.add('visible');
-                    } else {
-                        tableContainer.classList.remove('visible');
-                    }
-                }
-            });
-        }
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-            applyThemeUI();
-            Object.keys(conversionData).forEach(type => generateTasks(type));
-            toggleConversionTables();
-        });
-    </script>
+<div class="controls-container">
+<div class="settings-row">
+<div class="settings-group">
+<p class="control-label">Téma választó:</p>
+<div class="flex flex-wrap justify-center gap-2" id="themeSelector">
+<button class="setting-button theme-button" data-theme="theme-candy">Cukorka</button>
+<button class="setting-button theme-button" data-theme="theme-magicforest">Varázserdő</button>
+<button class="setting-button theme-button" data-theme="theme-ocean">Óceán</button>
+<button class="setting-button theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+<button class="setting-button theme-button" data-theme="theme-sky">Égbolt</button>
+<button class="setting-button theme-button" data-theme="theme-space">Űr</button>
+<button class="setting-button theme-button" data-theme="theme-jungle">Őserdő</button>
+<button class="setting-button theme-button" data-theme="theme-tech">Techno</button>
+<button class="setting-button theme-button" data-theme="theme-sport">Sport</button>
+<button class="setting-button theme-button" data-theme="theme-adventure">Kaland</button>
+</div>
+</div>
+<div class="settings-group">
+<p class="control-label">Segítség szintje:</p>
+<div class="flex flex-wrap justify-center gap-2" id="helpLevelSelector">
+<button class="setting-button active" data-help="independent">Önálló</button>
+<button class="setting-button" data-help="assisted">Segítő</button>
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<h1>Mértékegység Átváltások</h1>
+<div class="task" id="taskLength">
+<div class="task-header">
+<h3>Hosszúság mértékegységei</h3>
+<button class="task-button new-task-button" onclick="generateTasks('length')">Új feladatok</button>
+</div>
+<div class="conversion-table-container" id="conversionTableLength">
+<h4>Átváltási Táblázat: Hosszúság</h4>
+<table class="conversion-table">
+<tbody>
+<tr><td>1 m</td><td>=</td><td>10 dm</td></tr>
+<tr><td>1 m</td><td>=</td><td>100 cm</td></tr>
+<tr><td>1 m</td><td>=</td><td>1000 mm</td></tr>
+<tr><td>1 dm</td><td>=</td><td>10 cm</td></tr>
+<tr><td>1 dm</td><td>=</td><td>100 mm</td></tr>
+<tr><td>1 cm</td><td>=</td><td>10 mm</td></tr>
+</tbody>
+</table>
+</div>
+<p class="instructions">Végezd el az átváltásokat!</p>
+<div class="questions-container" id="questionsLength"></div>
+<button class="task-button" onclick="checkAnswers('length')">Ellenőrzés</button>
+<p class="feedback" id="feedbackLength"> </p>
+</div>
+<hr style="margin: 40px auto; border: 0; border-top: 2px dashed #ccc; width: 80%;"/>
+<div class="task" id="taskMass">
+<div class="task-header">
+<h3>Tömeg mértékegységei</h3>
+<button class="task-button new-task-button" onclick="generateTasks('mass')">Új feladatok</button>
+</div>
+<div class="conversion-table-container" id="conversionTableMass">
+<h4>Átváltási Táblázat: Tömeg</h4>
+<table class="conversion-table">
+<tbody>
+<tr><td>1 kg</td><td>=</td><td>100 dkg</td></tr>
+<tr><td>1 kg</td><td>=</td><td>1000 g</td></tr>
+<tr><td>1 dkg</td><td>=</td><td>10 g</td></tr>
+</tbody>
+</table>
+</div>
+<p class="instructions">Végezd el az átváltásokat!</p>
+<div class="questions-container" id="questionsMass"></div>
+<button class="task-button" onclick="checkAnswers('mass')">Ellenőrzés</button>
+<p class="feedback" id="feedbackMass"> </p>
+</div>
+<hr style="margin: 40px auto; border: 0; border-top: 2px dashed #ccc; width: 80%;"/>
+<div class="task" id="taskVolume">
+<div class="task-header">
+<h3>Űrmérték mértékegységei</h3>
+<button class="task-button new-task-button" onclick="generateTasks('volume')">Új feladatok</button>
+</div>
+<div class="conversion-table-container" id="conversionTableVolume">
+<h4>Átváltási Táblázat: Űrmérték</h4>
+<table class="conversion-table">
+<tbody>
+<tr><td>1 l</td><td>=</td><td>10 dl</td></tr>
+<tr><td>1 l</td><td>=</td><td>100 cl</td></tr>
+<tr><td>1 l</td><td>=</td><td>1000 ml</td></tr>
+<tr><td>1 dl</td><td>=</td><td>10 cl</td></tr>
+<tr><td>1 dl</td><td>=</td><td>100 ml</td></tr>
+<tr><td>1 cl</td><td>=</td><td>10 ml</td></tr>
+</tbody>
+</table>
+</div>
+<p class="instructions">Végezd el az átváltásokat!</p>
+<div class="questions-container" id="questionsVolume"></div>
+<button class="task-button" onclick="checkAnswers('volume')">Ellenőrzés</button>
+<p class="feedback" id="feedbackVolume"> </p>
+</div>
+<hr style="margin: 40px auto; border: 0; border-top: 2px dashed #ccc; width: 80%;"/>
+<div class="task" id="taskTime">
+<div class="task-header">
+<h3>Idő mértékegységei</h3>
+<button class="task-button new-task-button" onclick="generateTasks('time')">Új feladatok</button>
+</div>
+<div class="conversion-table-container" id="conversionTableTime">
+<h4>Átváltási Táblázat: Idő</h4>
+<table class="conversion-table">
+<tbody>
+<tr><td>1 hét</td><td>=</td><td>7 nap</td></tr>
+<tr><td>1 nap</td><td>=</td><td>24 óra</td></tr>
+<tr><td>1 óra</td><td>=</td><td>60 perc</td></tr>
+<tr><td>1 perc</td><td>=</td><td>60 másodperc</td></tr>
+</tbody>
+</table>
+</div>
+<p class="instructions">Végezd el az átváltásokat!</p>
+<div class="questions-container" id="questionsTime"></div>
+<button class="task-button" onclick="checkAnswers('time')">Ellenőrzés</button>
+<p class="feedback" id="feedbackTime"> </p>
+</div>
+</div>
+<script src="mertekegyseg-atvaltas.js"></script>
 </body>
 </html>

@@ -1,0 +1,407 @@
+body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .settings-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px 15px;
+            width:100%;
+        }
+        .settings-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 10px;
+        }
+
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            transition: color 0.5s ease;
+        }
+
+        .theme-button, .range-button, .length-button {
+            padding: 7px 10px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85em;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-button:hover, .range-button:hover, .length-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        .theme-button.active, .range-button.active, .length-button.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px var(--theme-button-active-border-color, #000);
+            transform: translateY(1px);
+        }
+        .length-selector-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            max-width: 300px;
+        }
+
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        h1, h2 {
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+        h1 {
+            font-size: clamp(1.8em, 5vw, 2.2em);
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: clamp(1.3em, 4vw, 1.6em);
+            margin-bottom: 25px;
+        }
+        .task {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+            position: relative;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .task-header h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: clamp(1.1em, 3.5vw, 1.3em);
+            transition: color 0.5s ease;
+        }
+        .new-task-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .task p.instructions {
+            line-height: 1.6;
+            font-size: clamp(1em, 3vw, 1.1em);
+            margin-bottom: 15px;
+            transition: color 0.5s ease;
+        }
+
+        .chain-calculation-container {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0px;
+            margin: 30px 0;
+            padding: 10px 0; /* Vízszintes padding csökkentve, hogy több hely legyen */
+            border-radius: 8px;
+            min-height: 80px;
+            transition: background-color 0.3s ease, font-size 0.3s ease;
+            overflow-x: auto;
+            overflow-y: hidden;
+            width: 100%; /* Biztosítja, hogy a konténer kitöltse a rendelkezésre álló helyet */
+            box-sizing: border-box;
+        }
+        .chain-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.5em, 5vw, 2em);
+            font-weight: bold;
+            transition: color 0.5s ease, min-width 0.3s ease, height 0.3s ease, margin 0.3s ease, font-size 0.3s ease;
+            min-width: 50px;
+            height: 50px;
+            margin: 0 0px;
+            flex-shrink: 0;
+        }
+        .chain-item .number-display {
+            width: 100%;
+            height: 100%;
+            padding: 0 8px;
+            border-radius: 8px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease, padding 0.3s ease;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+         .chain-item .operation-number-display {
+            width: 45px;
+            height: 45px;
+            padding: 0 5px;
+            border-radius: 8px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease, width 0.3s ease, height 0.3s ease, font-size 0.3s ease;
+            box-sizing: border-box;
+            color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        .chain-operation-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            margin: 0 5px;
+            min-width: 60px;
+            height: 75px;
+            position: relative;
+            transition: min-width 0.3s ease, height 0.3s ease, margin 0.3s ease;
+            flex-shrink: 0;
+        }
+        .chain-operation-group .op-display-container {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(1.2em, 3.5vw, 1.5em);
+            white-space: nowrap;
+            transition: top 0.3s ease, font-size 0.3s ease;
+        }
+        .chain-operation-group .op-sign {
+            margin-left: 10px;
+            font-weight: bold;
+            transition: font-size 0.3s ease;
+        }
+        .chain-operation-group .arrow-symbol {
+            font-size: 2.8em;
+            line-height: 0.8;
+            transition: font-size 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .chain-item input[type="number"] {
+            width: 100%;
+            height: 100%;
+            padding: 8px;
+            font-size: 1em;
+            text-align: center;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            transition: border-color 0.3s ease, background-color 0.3s ease, padding 0.3s ease;
+        }
+        .chain-equals {
+            font-size: clamp(1.5em, 5vw, 2em);
+            margin: 0 5px;
+            align-self: center;
+            transition: font-size 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        /* --- Dinamikus méretezés hosszú láncokhoz --- */
+        /* 4-5 művelet */
+        .chain-calculation-container.long-chain-4-5 .chain-item { font-size: clamp(1.2em, 4vw, 1.6em); min-width: 40px; height: 40px; margin: 0 5px; }
+        .chain-calculation-container.long-chain-4-5 .chain-item .number-display { padding: 0 6px; }
+        .chain-calculation-container.long-chain-4-5 .chain-item .operation-number-display { width: 36px; height: 36px; font-size: 0.8em; }
+        .chain-calculation-container.long-chain-4-5 .chain-operation-group { min-width: 50px; height: 60px; margin: 0 3px;}
+        .chain-calculation-container.long-chain-4-5 .chain-operation-group .op-display-container { top: -8px; font-size: clamp(1em, 3vw, 1.3em); }
+        .chain-calculation-container.long-chain-4-5 .chain-operation-group .arrow-symbol { font-size: 2.2em; }
+        .chain-calculation-container.long-chain-4-5 .chain-item input[type="number"] { padding: 6px; }
+        .chain-calculation-container.long-chain-4-5 .chain-equals { font-size: clamp(1.2em, 4vw, 1.6em); }
+
+        /* 6 művelet */
+        .chain-calculation-container.long-chain-6 .chain-item { font-size: clamp(1.0em, 3.5vw, 1.4em); min-width: 35px; height: 35px; margin: 0 4px; }
+        .chain-calculation-container.long-chain-6 .chain-item .number-display { padding: 0 5px; }
+        .chain-calculation-container.long-chain-6 .chain-item .operation-number-display { width: 32px; height: 38px; font-size: 0.75em; }
+        .chain-calculation-container.long-chain-6 .chain-operation-group { min-width: 42px; height: 57px; margin: 0 2px;}
+        .chain-calculation-container.long-chain-6 .chain-operation-group .op-display-container { top: -7px; font-size: clamp(0.9em, 2.8vw, 1.2em); }
+        .chain-calculation-container.long-chain-6 .chain-operation-group .arrow-symbol { font-size: 2em; }
+        .chain-calculation-container.long-chain-6 .chain-item input[type="number"] { padding: 5px; }
+        .chain-calculation-container.long-chain-6 .chain-equals { font-size: clamp(1.0em, 3.5vw, 1.4em); }
+
+        /* 7 művelet */
+        .chain-calculation-container.long-chain-7 .chain-item { font-size: clamp(0.9em, 3vw, 1.2em); min-width: 30px; height: 30px; margin: 0 3px; }
+        .chain-calculation-container.long-chain-7 .chain-item .number-display { padding: 0 4px; }
+        .chain-calculation-container.long-chain-7 .chain-item .operation-number-display { width: 28px; height: 28px; font-size: 0.7em; }
+        .chain-calculation-container.long-chain-7 .chain-operation-group { min-width: 38px; height: 50px; margin: 0 2px;}
+        .chain-calculation-container.long-chain-7 .chain-operation-group .op-display-container { top: -6px; font-size: clamp(0.8em, 2.5vw, 1.1em); }
+        .chain-calculation-container.long-chain-7 .chain-operation-group .arrow-symbol { font-size: 1.8em; }
+        .chain-calculation-container.long-chain-7 .chain-item input[type="number"] { padding: 4px; }
+        .chain-calculation-container.long-chain-7 .chain-equals { font-size: clamp(0.9em, 3vw, 1.2em); }
+
+        /* 8 művelet */
+        .chain-calculation-container.long-chain-8 .chain-item { font-size: clamp(0.8em, 2.5vw, 1.0em); min-width: 26px; height: 26px; margin: 0 2px; }
+        .chain-calculation-container.long-chain-8 .chain-item .number-display { padding: 0 3px; }
+        .chain-calculation-container.long-chain-8 .chain-item .operation-number-display { width: 24px; height: 24px; font-size: 0.65em; }
+        .chain-calculation-container.long-chain-8 .chain-operation-group { min-width: 34px; height: 45px; margin: 0 1px;}
+        .chain-calculation-container.long-chain-8 .chain-operation-group .op-display-container { top: -5px; font-size: clamp(0.7em, 2.2vw, 1.0em); }
+        .chain-calculation-container.long-chain-8 .chain-operation-group .arrow-symbol { font-size: 1.6em; }
+        .chain-calculation-container.long-chain-8 .chain-item input[type="number"] { padding: 3px; }
+        .chain-calculation-container.long-chain-8 .chain-equals { font-size: clamp(0.8em, 2.5vw, 1.0em); }
+
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        button.task-button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(1em, 3vw, 1.1em);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button.task-button:hover {
+            transform: translateY(-2px);
+        }
+        button.task-button:active {
+            transform: translateY(0px);
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: clamp(0.9em, 2.8vw, 1.05em);
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+            min-height: 1.5em;
+            line-height: 1.4;
+        }
+
+        /* Alapértelmezett téma stílusok */
+        .theme-button, .range-button, .length-button { background-color: #e0e0e0; color: #333; border: 1px solid #ccc; }
+        button.task-button { background-color: #007bff; color: white; }
+        .container { background-color: #ffffff; border: 1px solid #e5e7eb; }
+        .task { background-color: #f9fafb; border: 1px dashed #d1d5db; }
+        .feedback.correct { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .feedback.incorrect { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
+        h1, h2 { color: #007bff; }
+        .chain-calculation-container { background-color: #f0f8ff; }
+        .chain-item { color: #0056b3; }
+        .chain-item .number-display { background-color: #bee3f8; color: #004085; }
+        .chain-item .operation-number-display.op-plus { background-color: #C8E6C9; color: #2E7D32; }
+        .chain-item .operation-number-display.op-minus { background-color: #FFCDD2; color: #C62828; }
+        .chain-operation-group .op-sign { color: #0056b3; }
+        .chain-operation-group .arrow-symbol { color: #0056b3; }
+        .chain-item input[type="number"] { border-color: #90cdf4; background-color: #ffffff;}
+
+
+        /* --- THEME DEFINITIONS --- */
+        body.theme-candy { background-color: #fff0f5; color: #8a2be2; --theme-button-active-border-color: #da70d6;}
+        body.theme-candy .control-label { color: #c71585; }
+        body.theme-candy .theme-button.active, body.theme-candy .range-button.active, body.theme-candy .length-button.active { background-color: #ffb6c1; color: #7c3c60; }
+        body.theme-candy .container { background-color: #ffe4e1; border: 2px solid #ffc0cb; }
+        body.theme-candy h1, body.theme-candy h2 { color: #da70d6; }
+        body.theme-candy .task { background-color: #fffafa; border: 2px dashed #ffb6c1; }
+        body.theme-candy .task-header h3 { color: #ff69b4; }
+        body.theme-candy .task p.instructions { color: #8a2be2; }
+        body.theme-candy button.task-button { background-color: #ff69b4; }
+        body.theme-candy .feedback.correct { color: #228b22; background-color: #f0fff0; border: 1px solid #90ee90; }
+        body.theme-candy .feedback.incorrect { color: #dc143c; background-color: #fff0f5; border: 1px solid #ffb6c1; }
+        body.theme-candy .chain-calculation-container { background-color: #fff0f5; }
+        body.theme-candy .chain-item { color: #c71585; }
+        body.theme-candy .chain-item .number-display { background-color: #ffb6c1; color: #a52a2a; }
+        body.theme-candy .chain-item .operation-number-display.op-plus { background-color: #f8bbd0; color: #880e4f;}
+        body.theme-candy .chain-item .operation-number-display.op-minus { background-color: #ffcdd2; color: #b71c1c; }
+        body.theme-candy .chain-operation-group .op-sign { color: #db7093; }
+        body.theme-candy .chain-operation-group .arrow-symbol { color: #db7093; }
+        body.theme-candy .chain-item input[type="number"] { border-color: #ffc0cb; background-color: #fff5f8;}
+
+        body.theme-space { background-color: #0f172a; color: #e2e8f0; --theme-button-active-border-color: #60a5fa;}
+        body.theme-space .control-label { color: #93c5fd; }
+        body.theme-space .theme-button.active, body.theme-space .range-button.active, body.theme-space .length-button.active { background-color: #1e3a8a; color: #93c5fd; }
+        body.theme-space .container { background-color: #1e293b; border: 2px solid #334155; }
+        body.theme-space h1, body.theme-space h2 { color: #60a5fa; }
+        body.theme-space .task { background-color: #334155; border: 2px dashed #475569; }
+        body.theme-space .task-header h3 { color: #93c5fd; }
+        body.theme-space .task p.instructions { color: #cbd5e1; }
+        body.theme-space button.task-button { background-color: #2563eb; }
+        body.theme-space .feedback.correct { color: #4ade80; background-color: #162d22; border: 1px solid #22c55e; }
+        body.theme-space .feedback.incorrect { color: #f87171; background-color: #3f1a1a; border: 1px solid #ef4444; }
+        body.theme-space .chain-calculation-container { background-color: #111827; }
+        body.theme-space .chain-item { color: #93c5fd; }
+        body.theme-space .chain-item .number-display { background-color: #374151; color: #e5e7eb; }
+        body.theme-space .chain-item .operation-number-display.op-plus { background-color: #22c55e; color: #064e3b;}
+        body.theme-space .chain-item .operation-number-display.op-minus { background-color: #ef4444; color: #7f1d1d;}
+        body.theme-space .chain-operation-group .op-sign { color: #60a5fa; }
+        body.theme-space .chain-operation-group .arrow-symbol { color: #60a5fa; }
+        body.theme-space .chain-item input[type="number"] { border-color: #4b5563; background-color: #1f2937; color: #e5e7eb; }
+
+        body.theme-jungle { background-color: #f0fff0; color: #1b5e20; --theme-button-active-border-color: #558b2f;}
+        body.theme-jungle .control-label { color: #558b2f; }
+        body.theme-jungle .theme-button.active, body.theme-jungle .range-button.active, body.theme-jungle .length-button.active { background-color: #689f38; color: #dcedc8; }
+        body.theme-jungle .container { background-color: #e8f5e9; border: 2px solid #a5d6a7; }
+        body.theme-jungle h1, body.theme-jungle h2 { color: #388e3c; }
+        body.theme-jungle .task { background-color: #dcedc8; border: 2px dashed #81c784; }
+        body.theme-jungle .task-header h3 { color: #558b2f; }
+        body.theme-jungle .task p.instructions { color: #2e7d32; }
+        body.theme-jungle button.task-button { background-color: #7cb342; }
+        body.theme-jungle .feedback.correct { color: #388e3c; background-color: #e8f5e9; border: 1px solid #a5d6a7; }
+        body.theme-jungle .feedback.incorrect { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef9a9a; }
+        body.theme-jungle .chain-calculation-container { background-color: #dcedc8; }
+        body.theme-jungle .chain-item { color: #2e7d32; }
+        body.theme-jungle .chain-item .number-display { background-color: #a5d6a7; color: #1b5e20; }
+        body.theme-jungle .chain-item .operation-number-display.op-plus { background-color: #81c784; color: #1b5e20;}
+        body.theme-jungle .chain-item .operation-number-display.op-minus { background-color: #ef9a9a; color: #c62828;}
+        body.theme-jungle .chain-operation-group .op-sign { color: #388e3c; }
+        body.theme-jungle .chain-operation-group .arrow-symbol { color: #388e3c; }
+        body.theme-jungle .chain-item input[type="number"] { border-color: #81c784; background-color: #f1f8e9; }
+
+        /* Rövidített téma definíciók a többihez (csak a lánc elemeinek színei) */
+        body.theme-magicforest { --theme-button-active-border-color: #8a2be2;} body.theme-magicforest .chain-item { color: #6a0dad; } body.theme-magicforest .chain-item .number-display { background-color: #dda0dd; color: #483d8b; } body.theme-magicforest .chain-item .operation-number-display.op-plus { background-color: #d1c4e9; color: #311b92;} body.theme-magicforest .chain-item .operation-number-display.op-minus { background-color: #f8bbd0; color: #880e4f;} body.theme-magicforest .chain-operation-group .op-sign, body.theme-magicforest .chain-operation-group .arrow-symbol { color: #8a2be2; } body.theme-magicforest .chain-item input {border-color: #ba55d3; background-color: #f8f0ff;}
+        body.theme-tech { --theme-button-active-border-color: #00acc1;} body.theme-tech .chain-item { color: #80d8ff; } body.theme-tech .chain-item .number-display { background-color: #455a64; color: #e0f7fa; } body.theme-tech .chain-item .operation-number-display.op-plus { background-color: #00bfa5; color: #004d40;} body.theme-tech .chain-item .operation-number-display.op-minus { background-color: #ff5252; color: #b71c1c;} body.theme-tech .chain-operation-group .op-sign, body.theme-tech .chain-operation-group .arrow-symbol { color: #00bcd4; } body.theme-tech .chain-item input {border-color: #546e7a; background-color: #37474f; color: #e0f7fa;}
+        body.theme-ocean { --theme-button-active-border-color: #20b2aa;} body.theme-ocean .chain-item { color: #00695c; } body.theme-ocean .chain-item .number-display { background-color: #80deea; color: #004d40; } body.theme-ocean .chain-item .operation-number-display.op-plus { background-color: #4db6ac; color: #004d40;} body.theme-ocean .chain-item .operation-number-display.op-minus { background-color: #ffab91; color: #c62828;} body.theme-ocean .chain-operation-group .op-sign, body.theme-ocean .chain-operation-group .arrow-symbol { color: #00897b; } body.theme-ocean .chain-item input {border-color: #4dd0e1; background-color: #e0f2f1;}
+        body.theme-sport { --theme-button-active-border-color: #d32f2f;} body.theme-sport .chain-item { color: #0d47a1; } body.theme-sport .chain-item .number-display { background-color: #90caf9; color: #023047; } body.theme-sport .chain-item .operation-number-display.op-plus { background-color: #64b5f6; color: #01579b;} body.theme-sport .chain-item .operation-number-display.op-minus { background-color: #e57373; color: #b71c1c;} body.theme-sport .chain-operation-group .op-sign, body.theme-sport .chain-operation-group .arrow-symbol { color: #1565c0; } body.theme-sport .chain-item input {border-color: #64b5f6; background-color: #e3f2fd;}
+        body.theme-flowergarden { --theme-button-active-border-color: #ff6347;} body.theme-flowergarden .chain-item { color: #8b4513; } body.theme-flowergarden .chain-item .number-display { background-color: #ffdab9; color: #5d4037; } body.theme-flowergarden .chain-item .operation-number-display.op-plus { background-color: #ffcc80; color: #e65100;} body.theme-flowergarden .chain-item .operation-number-display.op-minus { background-color: #ffab91; color: #d84315;} body.theme-flowergarden .chain-operation-group .op-sign, body.theme-flowergarden .chain-operation-group .arrow-symbol { color: #ff8c00; } body.theme-flowergarden .chain-item input {border-color: #ffe4b5; background-color: #fffaf0;}
+        body.theme-adventure { --theme-button-active-border-color: #bf360c;} body.theme-adventure .chain-item { color: #4e342e; } body.theme-adventure .chain-item .number-display { background-color: #a1887f; color: #f5f5dc; } body.theme-adventure .chain-item .operation-number-display.op-plus { background-color: #8d6e63; color: #3e2723;} body.theme-adventure .chain-item .operation-number-display.op-minus { background-color: #bcaaa4; color: #5d4037;} body.theme-adventure .chain-operation-group .op-sign, body.theme-adventure .chain-operation-group .arrow-symbol { color: #5d4037; } body.theme-adventure .chain-item input {border-color: #8d6e63; background-color: #efebe9;}
+        body.theme-sky { --theme-button-active-border-color: #1e90ff;} body.theme-sky .chain-item { color: #1e90ff; } body.theme-sky .chain-item .number-display { background-color: #b0e0e6; color: #005a9c; } body.theme-sky .chain-item .operation-number-display.op-plus { background-color: #81d4fa; color: #01579b;} body.theme-sky .chain-item .operation-number-display.op-minus { background-color: #90a4ae; color: #263238;} body.theme-sky .chain-operation-group .op-sign, body.theme-sky .chain-operation-group .arrow-symbol { color: #00bfff; } body.theme-sky .chain-item input {border-color: #add8e6; background-color: #f0f8ff;}
