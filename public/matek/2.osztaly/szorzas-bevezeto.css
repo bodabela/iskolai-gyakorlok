@@ -223,6 +223,24 @@ button.task-button:active {
     font-weight: bold;
 }
 
+.multiplication-container-task1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.multiplication-container-task1 input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    font-size: 1.1em;
+}
+
+.multiplication-container-task1 span {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
 input.correct {
     border-color: #28a745 !important;
     background-color: #e9f7ef !important;

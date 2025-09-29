@@ -74,6 +74,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 groupsContainer.appendChild(group);
             }
 
+            const multiplicationContainer = document.createElement('div');
+            multiplicationContainer.className = 'multiplication-container-task1';
+            
+            const factor1Input = document.createElement('input');
+            factor1Input.type = 'number';
+            factor1Input.min = 0;
+            factor1Input.dataset.multiplication = 'factor1';
+
+            const multiSign = document.createElement('span');
+            multiSign.textContent = '·';
+
+            const factor2Input = document.createElement('input');
+            factor2Input.type = 'number';
+            factor2Input.min = 0;
+            factor2Input.dataset.multiplication = 'factor2';
+
+            const equalsSign = document.createElement('span');
+            equalsSign.textContent = '=';
+
+            const productInput = document.createElement('input');
+            productInput.type = 'number';
+            productInput.min = 0;
+            productInput.dataset.multiplication = 'product';
+
+            multiplicationContainer.appendChild(factor1Input);
+            multiplicationContainer.appendChild(multiSign);
+            multiplicationContainer.appendChild(factor2Input);
+            multiplicationContainer.appendChild(equalsSign);
+            multiplicationContainer.appendChild(productInput);
+
             const equationContainer = document.createElement('div');
             equationContainer.className = 'equation-container';
             for (let j = 0; j < numGroups; j++) {
@@ -97,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             equationContainer.appendChild(sumInput);
 
             row.appendChild(groupsContainer);
+            row.appendChild(multiplicationContainer);
             row.appendChild(equationContainer);
             taskRowsContainer.appendChild(row);
         }
@@ -114,25 +145,38 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = taskRowsContainer.querySelector(`.task-row[data-row-index="${index}"]`);
             const inputs = row.querySelectorAll('input[type="number"]');
             
-            const userSolutionRow = { terms: [], sum: 0 };
+            const userSolutionRow = { terms: [], sum: null, multiplication: {} };
 
             inputs.forEach((input) => {
                 input.classList.remove('correct', 'incorrect');
-                const isSumInput = input.dataset.isSum === 'true';
-                const correctAnswer = isSumInput ? data.sum : data.ballsPerGroup;
                 const userAnswer = parseInt(input.value, 10);
-
-                if (isSumInput) {
-                    userSolutionRow.sum = isNaN(userAnswer) ? null : userAnswer;
+                let correctAnswer;
+                
+                if (input.dataset.multiplication) {
+                    const part = input.dataset.multiplication;
+                    userSolutionRow.multiplication[part] = isNaN(userAnswer) ? null : userAnswer;
+                    if (part === 'factor1') {
+                        correctAnswer = data.numGroups;
+                    } else if (part === 'factor2') {
+                        correctAnswer = data.ballsPerGroup;
+                    } else if (part === 'product') {
+                        correctAnswer = data.sum;
+                    }
                 } else {
-                    userSolutionRow.terms.push(isNaN(userAnswer) ? null : userAnswer);
+                    const isSumInput = input.dataset.isSum === 'true';
+                    correctAnswer = isSumInput ? data.sum : data.ballsPerGroup;
+                    if (isSumInput) {
+                        userSolutionRow.sum = isNaN(userAnswer) ? null : userAnswer;
+                    } else {
+                        userSolutionRow.terms.push(isNaN(userAnswer) ? null : userAnswer);
+                    }
                 }
 
-                if (isNaN(userAnswer) || userAnswer !== correctAnswer) {
+                if (!isNaN(userAnswer) && userAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                } else {
                     input.classList.add('incorrect');
                     allCorrect = false;
-                } else {
-                    input.classList.add('correct');
                 }
             });
             userSolutions.push(userSolutionRow);
