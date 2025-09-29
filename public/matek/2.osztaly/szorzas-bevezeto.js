@@ -26,6 +26,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    function autoFocusNext(event) {
+        const target = event.target;
+        const maxLength = parseInt(target.getAttribute('maxlength'), 10);
+        const myLength = target.value.length;
+
+        if (myLength >= maxLength) {
+            const container = target.closest('.equation-container, .multiplication-container');
+            if (container) {
+                const inputs = Array.from(container.querySelectorAll('input[type="number"]'));
+                const currentIndex = inputs.indexOf(target);
+                if (currentIndex !== -1 && currentIndex < inputs.length - 1) {
+                    inputs[currentIndex + 1].focus();
+                }
+            }
+        }
+    }
+
     // --- TASK 1: ADDITION ---
     function generateTask1() {
         taskData = [];
@@ -77,32 +94,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const multiplicationContainer = document.createElement('div');
             multiplicationContainer.className = 'multiplication-container-task1';
             
-            const factor1Input = document.createElement('input');
-            factor1Input.type = 'number';
-            factor1Input.min = 0;
-            factor1Input.dataset.multiplication = 'factor1';
+            const factor1Span = document.createElement('span');
+            factor1Span.textContent = numGroups;
+            factor1Span.className = 'multiplication-part';
 
             const multiSign = document.createElement('span');
             multiSign.textContent = '·';
 
-            const factor2Input = document.createElement('input');
-            factor2Input.type = 'number';
-            factor2Input.min = 0;
-            factor2Input.dataset.multiplication = 'factor2';
+            const factor2Span = document.createElement('span');
+            factor2Span.textContent = ballsPerGroup;
+            factor2Span.className = 'multiplication-part';
 
             const equalsSign = document.createElement('span');
             equalsSign.textContent = '=';
 
-            const productInput = document.createElement('input');
-            productInput.type = 'number';
-            productInput.min = 0;
-            productInput.dataset.multiplication = 'product';
+            const productSpan = document.createElement('span');
+            productSpan.textContent = sum;
+            productSpan.className = 'multiplication-part';
 
-            multiplicationContainer.appendChild(factor1Input);
+            multiplicationContainer.appendChild(factor1Span);
             multiplicationContainer.appendChild(multiSign);
-            multiplicationContainer.appendChild(factor2Input);
+            multiplicationContainer.appendChild(factor2Span);
             multiplicationContainer.appendChild(equalsSign);
-            multiplicationContainer.appendChild(productInput);
+            multiplicationContainer.appendChild(productSpan);
 
             const equationContainer = document.createElement('div');
             equationContainer.className = 'equation-container';
@@ -110,6 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const input = document.createElement('input');
                 input.type = 'number';
                 input.min = 0;
+                input.setAttribute('maxlength', String(ballsPerGroup).length);
+                input.addEventListener('input', autoFocusNext);
                 equationContainer.appendChild(input);
                 if (j < numGroups - 1) {
                     const plus = document.createElement('span');
@@ -124,6 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
             sumInput.type = 'number';
             sumInput.min = 0;
             sumInput.dataset.isSum = true;
+            sumInput.setAttribute('maxlength', String(sum).length);
+            sumInput.addEventListener('input', autoFocusNext);
             equationContainer.appendChild(sumInput);
 
             row.appendChild(groupsContainer);
@@ -143,33 +161,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         taskData.forEach((data, index) => {
             const row = taskRowsContainer.querySelector(`.task-row[data-row-index="${index}"]`);
-            const inputs = row.querySelectorAll('input[type="number"]');
+            const inputs = row.querySelectorAll('.equation-container input[type="number"]');
             
-            const userSolutionRow = { terms: [], sum: null, multiplication: {} };
+            const userSolutionRow = { terms: [], sum: null };
 
             inputs.forEach((input) => {
                 input.classList.remove('correct', 'incorrect');
                 const userAnswer = parseInt(input.value, 10);
                 let correctAnswer;
                 
-                if (input.dataset.multiplication) {
-                    const part = input.dataset.multiplication;
-                    userSolutionRow.multiplication[part] = isNaN(userAnswer) ? null : userAnswer;
-                    if (part === 'factor1') {
-                        correctAnswer = data.numGroups;
-                    } else if (part === 'factor2') {
-                        correctAnswer = data.ballsPerGroup;
-                    } else if (part === 'product') {
-                        correctAnswer = data.sum;
-                    }
+                const isSumInput = input.dataset.isSum === 'true';
+                correctAnswer = isSumInput ? data.sum : data.ballsPerGroup;
+                if (isSumInput) {
+                    userSolutionRow.sum = isNaN(userAnswer) ? null : userAnswer;
                 } else {
-                    const isSumInput = input.dataset.isSum === 'true';
-                    correctAnswer = isSumInput ? data.sum : data.ballsPerGroup;
-                    if (isSumInput) {
-                        userSolutionRow.sum = isNaN(userAnswer) ? null : userAnswer;
-                    } else {
-                        userSolutionRow.terms.push(isNaN(userAnswer) ? null : userAnswer);
-                    }
+                    userSolutionRow.terms.push(isNaN(userAnswer) ? null : userAnswer);
                 }
 
                 if (!isNaN(userAnswer) && userAnswer === correctAnswer) {
@@ -286,15 +292,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const eq1 = document.createElement('div');
         eq1.className = 'multiplication-equation';
-        eq1.innerHTML = `<span>${rows}</span> <span>×</span> <input type="number" data-answer="${cols}"> <span>=</span> <span class="result">${total}</span>`;
+        eq1.innerHTML = `<span>${rows}</span> <span>·</span> <input type="number" data-answer="${cols}"> <span>=</span> <span class="result">${total}</span>`;
         
         const eq2 = document.createElement('div');
         eq2.className = 'multiplication-equation';
-        eq2.innerHTML = `<span>${cols}</span> <span>×</span> <input type="number" data-answer="${rows}"> <span>=</span> <span class="result">${total}</span>`;
+        eq2.innerHTML = `<span>${cols}</span> <span>·</span> <input type="number" data-answer="${rows}"> <span>=</span> <span class="result">${total}</span>`;
         
         multiplicationContainer.appendChild(eq1);
         multiplicationContainer.appendChild(document.createTextNode('vagy'));
         multiplicationContainer.appendChild(eq2);
+
+        multiplicationContainer.querySelectorAll('input[type="number"]').forEach(input => {
+            const answer = input.dataset.answer;
+            input.setAttribute('maxlength', String(answer).length);
+            input.addEventListener('input', autoFocusNext);
+        });
 
         task2Container.appendChild(gridWrapper);
         task2Container.appendChild(multiplicationContainer);

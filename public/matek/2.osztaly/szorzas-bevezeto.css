@@ -230,10 +230,15 @@ button.task-button:active {
     gap: 5px;
 }
 
-.multiplication-container-task1 input[type="number"] {
-    width: 50px;
-    padding: 5px;
+.multiplication-container-task1 .multiplication-part {
     font-size: 1.1em;
+    font-weight: normal;
+    padding: 5px;
+    min-width: 50px;
+    text-align: center;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 8px;
+    box-sizing: border-box;
 }
 
 .multiplication-container-task1 span {
