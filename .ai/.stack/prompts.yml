@@ -10,6 +10,11 @@ html-js-css-separation:
     type: app
     kind: tier
     tier_name: web
+input-handling:
+    name: input-handling
+    text: A könnyebb kitölthetőség érdekében mindig segítjük a gyereket az inputok logikus sorrendjének automatikus váltásával, ha a megoldás alapján már kellő számú karaktert beírt. A következő input meghatáorzásakor figyelembe kell venni, hogyha a következő input olyan lenne, hogy már megvan a kellő mennyiségű karakter, akkor lépjünk tovább a következőre, ahol nincs elég karakter.
+    type: app
+    kind: general
 vanilla-stack:
     name: vanilla-stack
     text: Vanilla HTML, Javascript és CSS stacken dolgozunk.

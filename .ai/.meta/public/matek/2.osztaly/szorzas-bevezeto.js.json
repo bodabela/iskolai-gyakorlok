@@ -1,0 +1,21 @@
+{
+  "type": "app",
+  "tierName": "web",
+  "description": "Ez a Javascript fájl interaktív matek gyakorlatokat biztosít 2. osztályosok számára, bevezetve a szorzást ismételt összeadás és vizuális rácsok segítségével, kezelve a felhasználói felületet, témákat és szám tartományokat, továbbá naplózva a felhasználói interakciókat egy Firebase logger modulon keresztül.",
+  "keywords": [
+    "javascript",
+    "frontend",
+    "matek",
+    "szorzás bevezető",
+    "második osztály",
+    "interaktív gyakorlat",
+    "DOM manipuláció",
+    "firebase naplózás",
+    "téma váltás",
+    "szám tartomány"
+  ],
+  "dependencies": [
+    "FirebaseLogger"
+  ],
+  "generationCount": 2
+}

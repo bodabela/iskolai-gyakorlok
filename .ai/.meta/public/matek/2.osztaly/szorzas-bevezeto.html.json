@@ -1,0 +1,22 @@
+{
+  "type": "app",
+  "tierName": "web",
+  "description": "Ez a HTML fájl egy interaktív, 2. osztályos szorzás bevezető matematikai feladatlapot biztosít felhasználói felülettel a témaválasztáshoz és számkör beállításhoz, a web réteg részeként, eseményeit Firebase-be naplózva.",
+  "keywords": [
+    "HTML",
+    "matematika",
+    "szorzás",
+    "2. osztály",
+    "gyakorló",
+    "feladatlap",
+    "interaktív",
+    "weboldal",
+    "Firebase",
+    "frontend"
+  ],
+  "dependencies": [
+    "public/matek/2.osztaly/szorzas-bevezeto.css",
+    "public/matek/2.osztaly/szorzas-bevezeto.js",
+    "public/js/firebase-logger.js"
+  ]
+}
