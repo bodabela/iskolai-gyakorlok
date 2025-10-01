@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. Osztály - Osztás bevezető</title>
+    <link rel="stylesheet" href="osztas-bevezeto.css">
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button id="themeBtnCandy" class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button id="themeBtnMagicForest" class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button id="themeBtnOcean" class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button id="themeBtnFlowerGarden" class="theme-button" data-theme="theme-flowergarden">Virágoskert</button>
+                <button id="themeBtnSky" class="theme-button" data-theme="theme-sky">Égbolt</button>
+                <button id="themeBtnSpace" class="theme-button" data-theme="theme-space">Űr</button>
+                <button id="themeBtnJungle" class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button id="themeBtnTech" class="theme-button" data-theme="theme-tech">Techno</button>
+                <button id="themeBtnSport" class="theme-button" data-theme="theme-sport">Sport</button>
+                <button id="themeBtnAdventure" class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+        <div>
+            <p class="control-label">Számkör választó:</p>
+            <div class="range-selector">
+                <button class="range-button active" data-range="20">20-as</button>
+                <button class="range-button" data-range="50">50-es</button>
+                <button class="range-button" data-range="100">100-as</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>2. Osztály - Matematika Feladatok</h1>
+        <h2>Téma: Bevezetés az osztásba</h2>
+
+        <div class="task" id="task-wrapper">
+            <div class="task-header">
+                <h3>Feladat: Mennyit ér egy ábra?</h3>
+                <button class="task-button new-task-button" id="new-task-button">Új feladat</button>
+            </div>
+            <p>Az azonos ábrák azonos számot jelölnek. Számold ki, mennyit ér egy ábra, és írd be a számot a dobozba!</p>
+            <div id="task-rows-container">
+                <!-- Task rows will be generated here by JavaScript -->
+            </div>
+            <button class="task-button" id="check-button">Ellenőrzés</button>
+            <p id="feedback" class="feedback"></p>
+        </div>
+    </div>
+
+    <script src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-auth-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
+    <script src="../../js/firebase-logger.js"></script>
+    <script src="osztas-bevezeto.js"></script>
+</body>
+</html>

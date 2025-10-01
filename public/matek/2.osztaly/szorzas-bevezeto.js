@@ -32,12 +32,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const myLength = target.value.length;
 
         if (myLength >= maxLength) {
-            const container = target.closest('.equation-container, .multiplication-container');
-            if (container) {
-                const inputs = Array.from(container.querySelectorAll('input[type="number"]'));
-                const currentIndex = inputs.indexOf(target);
-                if (currentIndex !== -1 && currentIndex < inputs.length - 1) {
-                    inputs[currentIndex + 1].focus();
+            const taskWrapper = target.closest('.task');
+            if (!taskWrapper) return;
+
+            const inputs = Array.from(taskWrapper.querySelectorAll('input[type="number"]'));
+            const currentIndex = inputs.indexOf(target);
+
+            if (currentIndex !== -1) {
+                // Find next unfilled input in the same task
+                for (let i = currentIndex + 1; i < inputs.length; i++) {
+                    const nextInput = inputs[i];
+                    const nextMaxLength = parseInt(nextInput.getAttribute('maxlength'), 10) || 1;
+                    if (nextInput.value.length < nextMaxLength) {
+                        nextInput.focus();
+                        return; // focus set, exit
+                    }
+                }
+                // Optional: check from start of the task
+                for (let i = 0; i < currentIndex; i++) {
+                    const nextInput = inputs[i];
+                    const nextMaxLength = parseInt(nextInput.getAttribute('maxlength'), 10) || 1;
+                    if (nextInput.value.length < nextMaxLength) {
+                        nextInput.focus();
+                        return; // focus set, exit
+                    }
                 }
             }
         }
