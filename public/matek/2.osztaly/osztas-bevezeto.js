@@ -99,6 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const shapeEl = document.createElement('div');
                 shapeEl.className = selectedShape;
                 itemsContainer.appendChild(shapeEl);
+                if (j < divisor - 1) {
+                    const plusSign = document.createElement('span');
+                    plusSign.textContent = '+';
+                    plusSign.className = 'plus-sign';
+                    itemsContainer.appendChild(plusSign);
+                }
             }
 
             const equationPart = document.createElement('div');

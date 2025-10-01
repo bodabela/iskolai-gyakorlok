@@ -181,9 +181,15 @@ button.task-button:active {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    flex: 3; /* takes more space */
+    flex: 4; /* takes more space */
     justify-content: flex-start;
-    min-width: 200px;
+    min-width: 300px;
+    align-items: center;
+}
+
+.items-container .plus-sign {
+    font-size: 1.8em;
+    font-weight: bold;
 }
 
 .ball {
@@ -237,7 +243,7 @@ button.task-button:active {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex: 2; /* takes less space */
+    flex: 1; /* takes less space */
     justify-content: flex-end;
     min-width: 150px;
 }
