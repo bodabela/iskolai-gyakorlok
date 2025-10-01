@@ -193,6 +193,28 @@ button.task-button:active {
     background-color: var(--ball-color, #3498db);
 }
 
+.square {
+    width: 20px;
+    height: 20px;
+    background-color: var(--ball-color, #3498db);
+}
+
+.triangle {
+    width: 0;
+    height: 0;
+    background-color: transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid var(--ball-color, #3498db);
+}
+
+.pentagon {
+    width: 20px;
+    height: 20px;
+    background-color: var(--ball-color, #3498db);
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
 .equation-part {
     display: flex;
     align-items: center;
@@ -220,7 +242,10 @@ button.task-button:active {
     min-width: 150px;
 }
 
-.result-part .ball {
+.result-part .ball,
+.result-part .square,
+.result-part .triangle,
+.result-part .pentagon {
     flex-shrink: 0;
 }
 

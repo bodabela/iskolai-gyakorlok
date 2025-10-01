@@ -60,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const generatedTasksForLogging = [];
         const NUM_ROWS = 3;
+        const shapes = ['ball', 'square', 'triangle', 'pentagon'];
+        // Shuffle the array to get different shapes for each row
+        const selectedShapesForRow = shapes.sort(() => 0.5 - Math.random()).slice(0, NUM_ROWS);
 
         for (let i = 0; i < NUM_ROWS; i++) {
             let divisor, quotient, dividend;
@@ -87,12 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = document.createElement('div');
             row.className = 'task-row';
 
+            const selectedShape = selectedShapesForRow[i];
+
             const itemsContainer = document.createElement('div');
             itemsContainer.className = 'items-container';
             for (let j = 0; j < divisor; j++) {
-                const ball = document.createElement('div');
-                ball.className = 'ball';
-                itemsContainer.appendChild(ball);
+                const shapeEl = document.createElement('div');
+                shapeEl.className = selectedShape;
+                itemsContainer.appendChild(shapeEl);
             }
 
             const equationPart = document.createElement('div');
@@ -107,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const resultPart = document.createElement('div');
             resultPart.className = 'result-part';
-            const singleBall = document.createElement('div');
-            singleBall.className = 'ball';
+            const singleShape = document.createElement('div');
+            singleShape.className = selectedShape;
             const equals2 = document.createElement('span');
             equals2.textContent = '=';
             const input = document.createElement('input');
@@ -118,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             input.setAttribute('maxlength', String(quotient).length);
             input.addEventListener('input', autoFocusNext);
 
-            resultPart.appendChild(singleBall);
+            resultPart.appendChild(singleShape);
             resultPart.appendChild(equals2);
             resultPart.appendChild(input);
 
