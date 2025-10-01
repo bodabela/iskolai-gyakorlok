@@ -68,7 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
             let divisor, quotient, dividend;
             let attempts = 0;
             do {
-                divisor = getRandomInt(2, 10);
+                const maxDivisor = Math.min(10, Math.floor(currentNumberRange / 2));
+                divisor = getRandomInt(2, maxDivisor);
                 let maxQuotient = Math.floor(currentNumberRange / divisor);
                 if (maxQuotient < 2) maxQuotient = 2;
                 if (maxQuotient > 10) maxQuotient = 10;
