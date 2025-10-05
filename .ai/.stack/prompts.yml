@@ -1,3 +1,9 @@
+auto-open-html-pages-as-run-commands:
+    name: auto-open-html-pages-as-run-commands
+    text: Amikor egy oldal módosul, akkor annak .html fájlját automatikusan nyissuk meg a 'start' paranccsal. Legyenek ezek a run parancsok.
+    type: app
+    kind: tier
+    tier_name: web
 firebase-data-layer:
     name: firebase-data-layer
     text: Az alkalmazás eseményeit firebase adatbázisba rögzítjük.
@@ -13,6 +19,17 @@ html-js-css-separation:
 input-handling:
     name: input-handling
     text: A könnyebb kitölthetőség érdekében mindig segítjük a gyereket az inputok logikus sorrendjének automatikus váltásával, ha a megoldás alapján már kellő számú karaktert beírt. A következő input meghatáorzásakor figyelembe kell venni, hogyha a következő input olyan lenne, hogy már megvan a kellő mennyiségű karakter, akkor lépjünk tovább a következőre, ahol nincs elég karakter.
+    type: app
+    kind: tier
+    tier_name: web
+mobile-compatibilty:
+    name: mobile-compatibilty
+    text: minden alkalmazoptt megoldásnak működnie kell desktop és mobil böngészőkben is.
+    type: app
+    kind: general
+no-build-commands:
+    name: no-build-commands
+    text: A stack nem kíván buildelést.
     type: app
     kind: general
 vanilla-stack:

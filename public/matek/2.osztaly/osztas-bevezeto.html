@@ -31,23 +31,51 @@
                 <button class="range-button" data-range="100">100-as</button>
             </div>
         </div>
+        <button class="task-button new-task-button" id="new-task-button">Új feladatok</button>
     </div>
 
     <div class="container">
         <h1>2. Osztály - Matematika Feladatok</h1>
         <h2>Téma: Bevezetés az osztásba</h2>
 
-        <div class="task" id="task-wrapper">
+        <div class="task" id="task-1">
             <div class="task-header">
                 <h3>Feladat: Mennyit ér egy ábra?</h3>
-                <button class="task-button new-task-button" id="new-task-button">Új feladat</button>
             </div>
             <p>Az azonos ábrák azonos számot jelölnek. Számold ki, mennyit ér egy ábra, és írd be a számot a dobozba!</p>
-            <div id="task-rows-container">
-                <!-- Task rows will be generated here by JavaScript -->
+            <div id="task-1-rows-container">
+                <!-- Task 1 rows will be generated here by JavaScript -->
             </div>
-            <button class="task-button" id="check-button">Ellenőrzés</button>
-            <p id="feedback" class="feedback"></p>
+            <button class="task-button" id="check-button-1">Ellenőrzés</button>
+            <p id="feedback-1" class="feedback"></p>
+        </div>
+
+        <hr class="task-divider">
+
+        <div class="task" id="task-2">
+            <div class="task-header">
+                <h3>Feladat: Oszd szét a golyókat egyenlően!</h3>
+            </div>
+            <p>Húzd a golyókat a nagy téglalapból a kisebbekbe úgy, hogy mindegyikbe ugyanannyi kerüljön!</p>
+            
+            <div id="task-2-area">
+                <div id="ball-source-container" class="source-bowl">
+                    <!-- Balls will be generated here -->
+                </div>
+                <div id="division-equation-container" class="equation-container">
+                    <!-- Division equation will be shown here -->
+                </div>
+                <div id="ball-target-container">
+                    <!-- Drop targets will be generated here -->
+                </div>
+            </div>
+
+            <div id="summary-container">
+                <!-- Summary equations will be shown here -->
+            </div>
+            
+            <button class="task-button" id="check-button-2">Ellenőrzés</button>
+            <p id="feedback-2" class="feedback"></p>
         </div>
     </div>
 
