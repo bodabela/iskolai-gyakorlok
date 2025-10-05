@@ -187,6 +187,16 @@ button.task-button:active {
     align-items: center;
 }
 
+.multiplication-part {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 1; /* takes more space */
+    align-items: center;
+    font-size: 1.8em;
+    font-weight: bold;	
+}
+
 .items-container .plus-sign {
     font-size: 1.8em;
     font-weight: bold;

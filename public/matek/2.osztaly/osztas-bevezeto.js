@@ -107,6 +107,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            const multiplicationPart = document.createElement('div');
+            multiplicationPart.className = 'multiplication-part';
+            const multiEquals = document.createElement('span');
+            multiEquals.textContent = '=';
+            const divisorSpan = document.createElement('span');
+            divisorSpan.textContent = divisor;
+            const multiplySign = document.createElement('span');
+            multiplySign.textContent = '·';
+            const shapeInMulti = document.createElement('div');
+            shapeInMulti.className = selectedShape;
+            multiplicationPart.appendChild(multiEquals);
+            multiplicationPart.appendChild(divisorSpan);
+            multiplicationPart.appendChild(multiplySign);
+            multiplicationPart.appendChild(shapeInMulti);
+
             const equationPart = document.createElement('div');
             equationPart.className = 'equation-part';
             const equals1 = document.createElement('span');
@@ -135,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultPart.appendChild(input);
 
             row.appendChild(itemsContainer);
+            row.appendChild(multiplicationPart);
             row.appendChild(equationPart);
             row.appendChild(resultPart);
             taskRowsContainer.appendChild(row);
