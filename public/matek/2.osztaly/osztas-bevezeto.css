@@ -144,8 +144,9 @@ button.task-button:active {
     transform: translateY(0px);
 }
 .new-task-button {
-    padding: 8px 16px;
-    font-size: 0.9em;
+    padding: 6px 12px;
+    font-size: 0.8em;
+    margin-left: 10px;
     margin-top: 0;
 }
 .feedback {

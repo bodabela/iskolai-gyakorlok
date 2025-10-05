@@ -5,13 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const bodyEl = document.body;
     const themeButtons = document.querySelectorAll('.theme-button');
     const rangeButtons = document.querySelectorAll('.range-button');
-    const newTaskButton = document.getElementById('new-task-button');
     let currentNumberRange = 20;
 
     // --- TASK 1: "Mennyit ér egy ábra?" ---
     const task1RowsContainer = document.getElementById('task-1-rows-container');
     const feedbackEl1 = document.getElementById('feedback-1');
     const checkButton1 = document.getElementById('check-button-1');
+    const newTaskButton1 = document.getElementById('new-task-1-button');
     let task1Data = [];
 
     function generateTask1() {
@@ -137,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- TASK 2: "Oszd szét a golyókat" ---
     const feedbackEl2 = document.getElementById('feedback-2');
     const checkButton2 = document.getElementById('check-button-2');
+    const newTaskButton2 = document.getElementById('new-task-2-button');
     const ballSourceContainer = document.getElementById('ball-source-container');
     const ballTargetContainer = document.getElementById('ball-target-container');
     const divisionEquationContainer = document.getElementById('division-equation-container');
@@ -374,7 +375,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    newTaskButton.addEventListener('click', generateAllTasks);
+    newTaskButton1.addEventListener('click', generateTask1);
+    newTaskButton2.addEventListener('click', generateTask2);
     checkButton1.addEventListener('click', checkTask1);
     checkButton2.addEventListener('click', checkTask2);
 
