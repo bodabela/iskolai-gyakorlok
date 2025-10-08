@@ -238,29 +238,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- TASK 4: Kétszerese és fele ---
     function generateTask4() {
         clearContainerAndFeedback(4);
+        const container = containers[4];
         const numTasks = 4;
         const generatedTasks = [];
-        for(let i=0; i<numTasks; i++) {
-            const isDouble = Math.random() > 0.5;
-            const row = document.createElement('div');
-            row.className = 'task-4-row';
-            let task = {};
 
-            if (isDouble) {
-                const num = getRandomInt(1, Math.floor(currentMaxResult / 2));
-                const answer = num * 2;
-                row.innerHTML = `<div class="flow-box">${num}</div><div class="flow-arrow"><span>kétszerese</span></div>`;
-                row.appendChild(createInput(answer));
-                task = {type: 'double', num, answer};
-            } else {
-                const num = getRandomInt(1, Math.floor(currentMaxResult / 2)) * 2;
-                const answer = num / 2;
-                row.innerHTML = `<div class="flow-box">${num}</div><div class="flow-arrow"><span>fele</span></div>`;
-                row.appendChild(createInput(answer));
-                task = {type: 'half', num, answer};
-            }
-            generatedTasks.push(task);
-            containers[4].appendChild(row);
+        for (let i = 0; i < numTasks; i++) {
+            const num = getRandomInt(1, Math.floor(currentMaxResult / 2));
+            const answer = num * 2;
+            
+            const item = document.createElement('div');
+            item.className = 'task-4-item';
+
+            const numBox = document.createElement('div');
+            numBox.className = 'flow-box';
+            numBox.textContent = num;
+
+            const arrowsContainer = document.createElement('div');
+            arrowsContainer.className = 'flow-arrows-container';
+            arrowsContainer.innerHTML = `
+                <div class="flow-arrow forward"><span>kétszerese</span></div>
+                <div class="flow-arrow backward"><span>fele</span></div>
+            `;
+
+            const inputBox = createInput(answer);
+
+            item.appendChild(numBox);
+            item.appendChild(arrowsContainer);
+            item.appendChild(inputBox);
+            
+            container.appendChild(item);
+            
+            generatedTasks.push({ type: 'double-half', num, answer });
         }
         logNewTask('szamolas-2-vel-dupla-fele', { range: currentMaxResult, tasks: generatedTasks });
     }

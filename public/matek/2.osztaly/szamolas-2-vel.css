@@ -281,14 +281,21 @@ input.incorrect {
 }
 
 /* --- Task 4 Styles --- */
-.task-4-row {
+#task-4-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+.task-4-item {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 10px;
     font-size: 1.3em;
     font-weight: bold;
+    background-color: rgba(0,0,0,0.02);
+    padding: 15px;
+    border-radius: 8px;
 }
 .flow-box {
     padding: 10px 15px;
@@ -298,6 +305,10 @@ input.incorrect {
     min-width: 50px;
     text-align: center;
 }
+.flow-arrows-container {
+    display: flex;
+    flex-direction: column;
+}
 .flow-arrow {
     display: flex;
     flex-direction: column;
@@ -305,12 +316,22 @@ input.incorrect {
 }
 .flow-arrow span {
     font-size: 0.8em;
+}
+.flow-arrow.forward span {
     margin-bottom: -5px;
 }
-.flow-arrow::after {
+.flow-arrow.forward::after {
     content: '→';
     font-size: 2em;
     color: var(--ball-color, #3498db);
+}
+.flow-arrow.backward span {
+     margin-top: -5px;
+}
+.flow-arrow.backward::after {
+    content: '←';
+    font-size: 2em;
+    color: var(--group-border-color, #ccc);
 }
 
 /* --- Task 5 Styles --- */
