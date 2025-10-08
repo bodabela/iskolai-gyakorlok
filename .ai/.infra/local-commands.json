@@ -4,5 +4,17 @@
     "command": "start public/matek/2.osztaly/szamolas-2-vel.html",
     "environment": "local",
     "isHotSwappable": false
+  },
+  {
+    "id": "start-szamolas-2-vel-page",
+    "command": "start public/matek/2.osztaly/szamolas-2-vel.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "start-matek-index-page",
+    "command": "start public/matek/index.html",
+    "environment": "local",
+    "isHotSwappable": false
   }
 ]

@@ -92,14 +92,28 @@ document.addEventListener('DOMContentLoaded', () => {
         clearContainerAndFeedback(1);
         const numTasks = 2;
         const generatedTasks = [];
+        const usedNumGroups = new Set();
+        const maxNumGroups = Math.floor(currentMaxResult / 2);
+    
+        if (maxNumGroups - 2 + 1 < numTasks) {
+            console.error("Not enough unique variations for Task 1 in the selected range.");
+            containers[1].innerHTML = "<p>A választott számkörben nem lehet elég különböző feladatot generálni.</p>";
+            return;
+        }
+    
         for(let i=0; i<numTasks; i++) {
-            const numGroups = getRandomInt(2, Math.floor(currentMaxResult / 2));
+            let numGroups;
+            do {
+                numGroups = getRandomInt(2, maxNumGroups);
+            } while (usedNumGroups.has(numGroups));
+            usedNumGroups.add(numGroups);
+            
             const sum = numGroups * 2;
             generatedTasks.push({ numGroups, sum });
-
+    
             const row = document.createElement('div');
             row.className = 'task-1-row';
-
+    
             const groupsContainer = document.createElement('div');
             groupsContainer.className = 'groups-container';
             for (let g = 0; g < numGroups; g++) {
@@ -112,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 groupsContainer.appendChild(group);
             }
-
+    
             const addTerms = Array(numGroups).fill('2').join(' + ');
             const additionEq = document.createElement('div');
             additionEq.className = 'equation-container';
@@ -123,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             multiEq.className = 'equation-container';
             multiEq.innerHTML = `${numGroups} · 2 = `;
             multiEq.appendChild(createInput(sum));
-
+    
             row.appendChild(groupsContainer);
             row.appendChild(additionEq);
             row.appendChild(multiEq);
@@ -135,7 +149,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- TASK 2: Dominós duplázás ---
     function generateTask2() {
         clearContainerAndFeedback(2);
+        const numTasks = 2;
         const generatedTasks = [];
+        const usedNs = new Set();
+        const maxN = Math.min(6, Math.floor(currentMaxResult / 2));
+
+        if (maxN < numTasks) {
+            console.error("Not enough unique variations for Task 2 in the selected range.");
+            containers[2].innerHTML = "<p>A választott számkörben nem lehet elég különböző feladatot generálni.</p>";
+            return;
+        }
+
         const dotPositions = [
             [], // 0
             [[1, 1]], // 1
@@ -145,8 +169,13 @@ document.addEventListener('DOMContentLoaded', () => {
             [[0, 0], [0, 2], [1, 1], [2, 0], [2, 2]], // 5
             [[0, 0], [0, 2], [1, 0], [1, 2], [2, 0], [2, 2]] // 6
         ];
-        for(let i=0; i<2; i++) {
-            const n = getRandomInt(1, Math.min(6, Math.floor(currentMaxResult / 2)));
+        for(let i=0; i<numTasks; i++) {
+            let n;
+            do {
+                n = getRandomInt(1, maxN);
+            } while (usedNs.has(n));
+            usedNs.add(n);
+
             const sum = n * 2;
             generatedTasks.push({ n, sum });
 
@@ -219,10 +248,24 @@ document.addEventListener('DOMContentLoaded', () => {
         clearContainerAndFeedback(3);
         const numTasks = 6;
         const generatedTasks = [];
-        for(let i=0; i<numTasks; i++) {
-            const num1 = getRandomInt(1, Math.floor(currentMaxResult / 2));
+        const usedTasks = new Set();
+        const maxNum1 = Math.floor(currentMaxResult / 2);
+        const possibleTaskCount = maxNum1 * 4;
+    
+        if (possibleTaskCount < numTasks) {
+            console.warn(`Not enough unique variations for Task 3. Generating ${possibleTaskCount} instead of ${numTasks}.`);
+        }
+    
+        for(let i=0; i<numTasks && usedTasks.size < possibleTaskCount; i++) {
+            let num1, type, taskKey;
+            do {
+                num1 = getRandomInt(1, maxNum1);
+                type = getRandomInt(1, 4);
+                taskKey = `${type}-${num1}`;
+            } while (usedTasks.has(taskKey));
+            usedTasks.add(taskKey);
+    
             const result = num1 * 2;
-            const type = getRandomInt(1, 4);
             const box = document.createElement('div');
             box.className = 'equation-box';
             let task = {};
@@ -263,9 +306,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = containers[4];
         const numTasks = 4;
         const generatedTasks = [];
+        const usedNums = new Set();
+        const maxNum = Math.floor(currentMaxResult / 2);
+
+        if (maxNum < numTasks) {
+            console.error("Not enough unique variations for Task 4 in the selected range.");
+            container.innerHTML = "<p>A választott számkörben nem lehet elég különböző feladatot generálni.</p>";
+            return;
+        }
 
         for (let i = 0; i < numTasks; i++) {
-            const num = getRandomInt(1, Math.floor(currentMaxResult / 2));
+            let num;
+            do {
+                num = getRandomInt(1, maxNum);
+            } while (usedNums.has(num));
+            usedNums.add(num);
+
             const answer = num * 2;
             
             const item = document.createElement('div');
