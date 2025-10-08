@@ -1,0 +1,8 @@
+[
+  {
+    "id": "new-exercise-page",
+    "command": "start public/matek/2.osztaly/szamolas-2-vel.html",
+    "environment": "local",
+    "isHotSwappable": false
+  }
+]
