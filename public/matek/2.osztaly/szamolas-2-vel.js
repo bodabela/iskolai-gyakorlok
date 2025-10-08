@@ -155,6 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const domino = document.createElement('div');
             domino.className = 'domino-container';
+            
+            // First half (static)
             const half1 = document.createElement('div');
             half1.className = 'domino-half';
             dotPositions[n].forEach(pos => {
@@ -164,7 +166,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 dot.style.gridColumnStart = pos[1] + 1;
                 half1.appendChild(dot);
             });
-            const half2 = half1.cloneNode(true);
+
+            // Second half (interactive)
+            const half2 = document.createElement('div');
+            half2.className = 'domino-half interactive';
+            half2.dataset.answer = JSON.stringify(dotPositions[n]);
+
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'domino-dot placeholder';
+                    dot.style.gridRowStart = r + 1;
+                    dot.style.gridColumnStart = c + 1;
+                    dot.dataset.pos = JSON.stringify([r, c]);
+                    dot.addEventListener('click', () => {
+                        dot.classList.toggle('selected');
+                        dot.classList.toggle('placeholder');
+                    });
+                    half2.appendChild(dot);
+                }
+            }
+            
             domino.appendChild(half1);
             domino.appendChild(half2);
 
@@ -332,6 +354,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 input.classList.add('correct');
             }
         });
+
+        // Custom check for task 2 dominoes
+        if (taskNum === 2) {
+            const interactiveHalves = taskContainer.querySelectorAll('.domino-half.interactive');
+            interactiveHalves.forEach(half => {
+                half.classList.remove('correct', 'incorrect');
+                const correctAnswer = JSON.parse(half.dataset.answer);
+                const selectedDots = half.querySelectorAll('.domino-dot.selected');
+                const userAnswer = Array.from(selectedDots).map(dot => JSON.parse(dot.dataset.pos));
+
+                // Sort both arrays to compare them regardless of click order
+                const sortFn = (a, b) => a[0] - b[0] || a[1] - b[1];
+                const isDominoCorrect = JSON.stringify(userAnswer.sort(sortFn)) === JSON.stringify(correctAnswer.sort(sortFn));
+
+                if (isDominoCorrect) {
+                    half.classList.add('correct');
+                } else {
+                    half.classList.add('incorrect');
+                    allCorrect = false;
+                }
+            });
+        }
 
         setFeedback(taskNum, allCorrect);
         logTaskCheck(`szamolas-2-vel-task${taskNum}`, { correct: allCorrect, solutions: userSolutions });

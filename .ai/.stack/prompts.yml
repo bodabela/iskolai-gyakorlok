@@ -4,6 +4,11 @@ auto-open-html-pages-as-run-commands:
     type: app
     kind: tier
     tier_name: web
+egyedi-feladvanyok:
+    name: egyedi-feladvanyok
+    text: Ügyeljünk arra, hogy egy feladaton belül ne készüljön ugyanaz a feladvány.
+    type: app
+    kind: general
 firebase-data-layer:
     name: firebase-data-layer
     text: Az alkalmazás eseményeit firebase adatbázisba rögzítjük.

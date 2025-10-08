@@ -258,6 +258,30 @@ input.incorrect {
     justify-self: center;
     align-self: center;
 }
+.domino-half.interactive {
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.05);
+    transition: border-color 0.3s ease;
+}
+.domino-dot.placeholder {
+    background-color: #ccc;
+    transform: scale(0.7);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.domino-half.interactive:hover .domino-dot.placeholder {
+    background-color: #bbb;
+}
+.domino-dot.selected {
+    background-color: var(--ball-color, #333);
+    transform: scale(1);
+}
+.domino-half.correct {
+    border-color: #28a745 !important;
+}
+.domino-half.incorrect {
+    border-color: #dc3545 !important;
+}
+
 
 /* --- Task 3 Styles --- */
 #task-3-container {
