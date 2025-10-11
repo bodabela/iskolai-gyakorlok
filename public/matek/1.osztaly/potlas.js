@@ -1,3 +1,5 @@
+initializeFirebaseAndLogger();
+
 let currentNumberRange = 10;
         let task1Data = { targetSum: 0, columns: [] };
         let task2Data = { rule: { variable1: 'Y', variable2: 'X', operation: '+', diff: 0, variable1Icon: '', variable2Icon: ''},
@@ -201,6 +203,11 @@ let currentNumberRange = 10;
                 });
             }
             renderTask1Table(shouldSetFocus);
+            logNewTask('Pótlás - 1. feladat', { 
+                range: currentNumberRange, 
+                targetSum: task1Data.targetSum, 
+                columns: task1Data.columns.length 
+            });
             document.getElementById('task1_feedback').textContent = '';
             document.getElementById('task1_feedback').className = 'feedback';
             document.getElementById('task1_description_p').textContent = `A számokat pótold a táblázat elején megadott ${task1Data.targetSum} számra! Írd a hiányzó mennyiséget a megfelelő helyre!`;
@@ -264,10 +271,12 @@ let currentNumberRange = 10;
             const feedbackEl = document.getElementById('task1_feedback');
             let allCorrect = true;
             let allFilled = true;
+            let userAnswers = {};
             const borderWidth = getComputedStyle(document.documentElement).getPropertyValue('--feedback-border-width').trim();
 
             task1Data.columns.forEach((colData) => {
                 const inputEl = document.getElementById(colData.id);
+                userAnswers[colData.id] = inputEl ? inputEl.value.trim() : 'N/A';
                 if (!inputEl || !inputEl.closest('td')) return;
 
                 if (inputEl.value.trim() === "") {
@@ -284,6 +293,13 @@ let currentNumberRange = 10;
                 }
                 inputEl.style.borderWidth = borderWidth;
                 inputEl.style.borderStyle = 'solid';
+            });
+
+            logTaskCheck('Pótlás - 1. feladat', {
+                range: currentNumberRange,
+                answers: userAnswers,
+                correct: allCorrect,
+                filled: allFilled
             });
 
             if (!allFilled) {
@@ -393,6 +409,11 @@ let currentNumberRange = 10;
                 task2Data.solutions[`y_col${i}`] = yVal;
             }
             renderTask2Table(shouldSetFocus);
+            logNewTask('Pótlás - 2. feladat (szabály)', { 
+                range: currentNumberRange, 
+                rule: task2Data.rule, 
+                pairs: task2Data.tablePairs.length 
+            });
             document.getElementById('task2_feedback').textContent = '';
             document.getElementById('task2_feedback').className = 'feedback';
         }
@@ -478,6 +499,7 @@ let currentNumberRange = 10;
             const feedbackEl = document.getElementById('task2_feedback');
             let allCorrect = true;
             let allFilled = true;
+            let userAnswers = {};
             const borderWidth = getComputedStyle(document.documentElement).getPropertyValue('--feedback-border-width').trim();
 
             task2Data.tablePairs.forEach((pair, i) => {
@@ -485,6 +507,7 @@ let currentNumberRange = 10;
                     if (pair[solutionKey.charAt(0)] === null && inputId) {
                         const inputEl = document.getElementById(inputId);
                         if (!inputEl) return;
+                        userAnswers[inputId] = inputEl.value.trim();
                         if (inputEl.value.trim() === "") {
                             allFilled = false;
                             inputEl.style.borderColor = `var(--feedback-incorrect-border-color)`;
@@ -503,6 +526,13 @@ let currentNumberRange = 10;
                 };
                 checkInput(pair.xInputId, `x_col${i}`);
                 checkInput(pair.yInputId, `y_col${i}`);
+            });
+
+            logTaskCheck('Pótlás - 2. feladat (szabály)', {
+                range: currentNumberRange,
+                answers: userAnswers,
+                correct: allCorrect,
+                filled: allFilled
             });
 
             if (!allFilled) {
@@ -576,6 +606,11 @@ let currentNumberRange = 10;
             generateTask3RuleOptions();
             renderTask3Table(shouldSetFocus);
             renderTask3RuleOptions();
+            logNewTask('Pótlás - 3. feladat (tárgyas)', { 
+                range: currentNumberRange, 
+                targetSum: task3Data.targetSumPerColumn, 
+                items: [task3Data.itemType1.name, task3Data.itemType2.name] 
+            });
             document.getElementById('task3_feedback').textContent = '';
             document.getElementById('task3_feedback').className = 'feedback';
         }
@@ -736,12 +771,14 @@ let currentNumberRange = 10;
             const feedbackEl = document.getElementById('task3_feedback');
             let allTableCorrect = true;
             let allTableFilled = true;
+            let tableUserAnswers = {};
             const borderWidth = getComputedStyle(document.documentElement).getPropertyValue('--feedback-border-width').trim();
 
             task3Data.solutions.forEach(sol => {
                 if (sol.input0Id) {
                     const inputEl = document.getElementById(sol.input0Id);
                     if (!inputEl) return;
+                    tableUserAnswers[sol.input0Id] = inputEl.value.trim();
                     if (inputEl.value.trim() === "") { allTableFilled = false; inputEl.style.borderColor = `var(--feedback-incorrect-border-color)`; }
                     else {
                         const userAnswer = parseInt(inputEl.value);
@@ -753,6 +790,7 @@ let currentNumberRange = 10;
                 if (sol.input1Id) {
                     const inputEl = document.getElementById(sol.input1Id);
                     if (!inputEl) return;
+                    tableUserAnswers[sol.input1Id] = inputEl.value.trim();
                     if (inputEl.value.trim() === "") { allTableFilled = false; inputEl.style.borderColor = `var(--feedback-incorrect-border-color)`; }
                     else {
                         const userAnswer = parseInt(inputEl.value);
@@ -765,11 +803,23 @@ let currentNumberRange = 10;
 
             const selectedRuleCard = document.querySelector('#task3_rule_options_container .rule-card.selected');
             let ruleCorrect = false;
+
             if (selectedRuleCard) {
                 ruleCorrect = selectedRuleCard.dataset.ruleText === task3Data.correctRuleString;
                 selectedRuleCard.style.borderColor = ruleCorrect ? `var(--feedback-correct-border-color)` : `var(--feedback-incorrect-border-color)`;
                 selectedRuleCard.style.borderWidth = borderWidth;
-            } else {
+            }
+
+            logTaskCheck('Pótlás - 3. feladat (tárgyas)', {
+                range: currentNumberRange,
+                tableAnswers: tableUserAnswers,
+                ruleAnswer: selectedRuleCard ? selectedRuleCard.dataset.ruleText : 'Nincs kiválasztva',
+                tableCorrect: allTableCorrect,
+                ruleCorrect: ruleCorrect,
+                filled: allTableFilled && !!selectedRuleCard
+            });
+
+            if (!selectedRuleCard) {
                  feedbackEl.textContent = 'Kérlek, válassz egy szabályt is!';
                  feedbackEl.className = 'feedback incorrect';
                  return;
@@ -799,6 +849,7 @@ let currentNumberRange = 10;
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            logTaskEntry('Pótlás Gyakorló');
             let initialTheme = 'theme-candy';
             for (let i = 0; i < bodyEl.classList.length; i++) {
                 if (bodyEl.classList[i].startsWith('theme-')) {

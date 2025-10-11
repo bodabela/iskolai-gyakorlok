@@ -1,3 +1,5 @@
+initializeFirebaseAndLogger();
+
 const bodyEl = document.body;
         const themeSelector = document.getElementById('themeSelector');
         const rangeSelector = document.getElementById('rangeSelector');
@@ -97,6 +99,13 @@ const bodyEl = document.body;
             }
             renderChain();
             if (currentTask.userInputs.length > 0) currentTask.userInputs[0].focus();
+            logNewTask('Láncszámolás', { 
+                settings: currentSettings, 
+                task: {
+                    startNumber: currentTask.startNumber,
+                    operations: currentTask.operations
+                }
+            });
         }
 
         function renderChain() {
@@ -151,7 +160,7 @@ const bodyEl = document.body;
 
                 const arrowSymbol = document.createElement('span');
                 arrowSymbol.classList.add('arrow-symbol');
-                arrowSymbol.innerHTML = '&rarr;';
+                arrowSymbol.innerHTML = '→';
                 // A nyíl színét is a CSS témákból vesszük
                 // arrowSymbol.style.color = getComputedStyle(document.documentElement).getPropertyValue(operatorConfig[op.operator].signColorThemeVar).trim() || (op.operator === '+' ? '#388E3C' : '#D32F2F');
                 operationGroup.appendChild(arrowSymbol);
@@ -186,9 +195,11 @@ const bodyEl = document.body;
         function checkChainTask() {
             let allCorrect = true;
             let allFilled = true;
+            let userAnswers = [];
             if (currentTask.userInputs.length === 0) { feedbackArea.textContent = "Nincs feladat generálva."; feedbackArea.className = 'feedback incorrect'; return; }
             currentTask.userInputs.forEach((inputEl, index) => {
                 const userAnswerStr = inputEl.value.trim();
+                userAnswers.push(userAnswerStr);
                 if (userAnswerStr === "") { allFilled = false; inputEl.style.borderColor = 'red'; }
                 else {
                     const userAnswer = parseInt(userAnswerStr);
@@ -197,12 +208,21 @@ const bodyEl = document.body;
                     else { inputEl.style.borderColor = 'green'; }
                 }
             });
+
+            logTaskCheck('Láncszámolás', {
+                settings: currentSettings,
+                answers: userAnswers,
+                correct: allCorrect,
+                filled: allFilled
+            });
+
             if (!allFilled) { feedbackArea.textContent = 'Kérlek, tölts ki minden mezőt!'; feedbackArea.className = 'feedback incorrect'; }
             else if (allCorrect) { feedbackArea.textContent = 'Minden lépés helyes! Ügyes vagy! 🎉'; feedbackArea.className = 'feedback correct'; }
             else { feedbackArea.textContent = 'Van néhány hiba. Nézd át a pirossal jelölt részeket! 🤔'; feedbackArea.className = 'feedback incorrect'; }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            logTaskEntry('Láncszámolás Gyakorló');
             applyTheme(currentSettings.theme);
             generateNewChainTask();
         });

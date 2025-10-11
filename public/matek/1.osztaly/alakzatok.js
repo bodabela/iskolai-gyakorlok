@@ -1,3 +1,5 @@
+initializeFirebaseAndLogger();
+
 // --- GLOBÁLIS KONSTANSOK ÉS SEGÉDFÜGGVÉNYEK ---
         const SVG_NS = "http://www.w3.org/2000/svg";
         const ALL_SHAPE_TYPES = [
@@ -550,6 +552,12 @@
                 mapCol1: column1ShapesData,
                 mapCol2: column2ShapesData
             };
+             if (!isThemeChange) {
+                logNewTask('Alakzatok - Összekötés', { 
+                    pairs: numberOfPairs, 
+                    shapes: baseShapes 
+                });
+            }
             const shapeSize = 65;
             column1ShapesData.forEach((type, index) => {
                 const shapeDiv = document.createElement('div');
@@ -658,7 +666,14 @@
                     conn.to.classList.add('incorrect-connection');
                 }
             });
-            if (correctConnectionsCount === totalPossiblePairs && task1State.connections.length === totalPossiblePairs) {
+            const isComplete = correctConnectionsCount === totalPossiblePairs && task1State.connections.length === totalPossiblePairs;
+            logTaskCheck('Alakzatok - Összekötés', { 
+                connections: task1State.connections.map(c => ({ from: c.from.dataset.shapeType, to: c.to.dataset.shapeType })),
+                correctCount: correctConnectionsCount, 
+                totalPossible: totalPossiblePairs,
+                isComplete: isComplete
+            });
+            if (isComplete) {
                 setFeedback('feedback_task1', `Szuper! Mind a ${totalPossiblePairs} kapcsolat helyes! 🎉`, true);
             } else if (correctConnectionsCount > 0 && task1State.connections.length < totalPossiblePairs) {
                  setFeedback('feedback_task1', `Helyes kapcsolatok: ${correctConnectionsCount}. Még ${totalPossiblePairs - task1State.connections.length} párt kell összekötnöd.`, false);
@@ -692,6 +707,13 @@
             }
             shuffleArray(options);
 
+            if (!isThemeChange) {
+                logNewTask('Alakzatok - Árnyékkereső', { 
+                    correctShape: shapeType, 
+                    options: options 
+                });
+            }
+
             options.forEach((optType, index) => {
                 const shadowDiv = document.createElement('div');
                 shadowDiv.classList.add('shadow-item', 'shape-item');
@@ -716,6 +738,11 @@
                 return;
             }
             const isCorrect = task2State.selectedShadow.dataset.shapeType === task2State.correctShapeType;
+            logTaskCheck('Alakzatok - Árnyékkereső', { 
+                selected: task2State.selectedShadow.dataset.shapeType, 
+                correct: task2State.correctShapeType, 
+                isCorrect: isCorrect 
+            });
             task2State.selectedShadow.classList.remove('selected');
             task2State.selectedShadow.classList.add(isCorrect ? 'correct-selection' : 'incorrect-selection');
             setFeedback('feedback_task2', isCorrect ? "Helyes! Ez a jó árnyék! 👍" : "Ez nem a helyes árnyék. Próbáld újra!", isCorrect);
@@ -757,6 +784,12 @@
 
             task3State.shapes = [];
             task3State.binContents = { kor: [], negyszog: [], haromszog: [] };
+
+            if (!isThemeChange) {
+                logNewTask('Alakzatok - Csoportosítás', { 
+                    shapes: shapesToGroupTypes 
+                });
+            }
 
             shapesToGroupTypes.forEach((type, index) => {
                 const shapeDiv = document.createElement('div');
@@ -837,6 +870,15 @@
             const totalShapes = task3State.shapes.length;
             if (placedCount < totalShapes) {
                 allCorrect = false;
+            }
+
+            logTaskCheck('Alakzatok - Csoportosítás', { 
+                placed: placedCount, 
+                total: totalShapes, 
+                isCorrect: allCorrect && (placedCount === totalShapes)
+            });
+
+            if (placedCount < totalShapes) {
                 setFeedback('feedback_task3', `Még nem minden alakzat van a dobozokban! Helyezd el a maradék ${totalShapes - placedCount} alakzatot is.`, false);
                 return;
             }
@@ -869,6 +911,14 @@
             shapesToDisplay.push(oddShapeType);
             shuffleArray(shapesToDisplay);
 
+            if (!isThemeChange) {
+                logNewTask('Alakzatok - Kakukktojás', { 
+                    commonShape: commonShapeType, 
+                    oddShape: oddShapeType,
+                    display: shapesToDisplay
+                });
+            }
+
             shapesToDisplay.forEach((type, index) => {
                 const shapeDiv = document.createElement('div');
                 shapeDiv.classList.add('shape-item');
@@ -894,6 +944,11 @@
                 return;
             }
             const isCorrect = task4State.selectedShape.dataset.shapeType === task4State.oddOneOutType;
+            logTaskCheck('Alakzatok - Kakukktojás', { 
+                selected: task4State.selectedShape.dataset.shapeType, 
+                correct: task4State.oddOneOutType, 
+                isCorrect: isCorrect 
+            });
              task4State.selectedShape.classList.remove('selected');
             task4State.selectedShape.classList.add(isCorrect ? 'correct-selection' : 'incorrect-selection');
             setFeedback('feedback_task4', isCorrect ? "Helyes! Ez volt a kakukktojás! 🥚" : "Ez az alakzat illik a sorba. Keresd meg azt, amelyik más!", isCorrect);
@@ -950,6 +1005,14 @@
 
             shuffleArray(options);
 
+            if (!isThemeChange) {
+                logNewTask('Alakzatok - Sorozat', { 
+                    sequence: sequence, 
+                    correctNext: task5State.correctNext,
+                    options: options.slice(0,3)
+                });
+            }
+
             options.slice(0,3).forEach((optType, index) => {
                 const optionDiv = document.createElement('div');
                 optionDiv.classList.add('shape-item');
@@ -991,6 +1054,11 @@
                 return;
             }
             const isCorrect = task5State.droppedShapeType === task5State.correctNext;
+            logTaskCheck('Alakzatok - Sorozat', { 
+                selected: task5State.droppedShapeType, 
+                correct: task5State.correctNext, 
+                isCorrect: isCorrect 
+            });
             dropTarget.classList.add(isCorrect ? 'correct-choice' : 'incorrect-choice');
             setFeedback('feedback_task5', isCorrect ? "Ügyes! Ez a helyes folytatás! 🏁" : "Nem ez következik a sorban. Figyelj jobban!", isCorrect);
         }
@@ -1013,6 +1081,13 @@
             shuffleArray(otherTypes);
             for(let i=0; i< Math.min(2, otherTypes.length); i++) { if(otherTypes[i]) options.push(otherTypes[i]); }
             shuffleArray(options);
+
+            if (!isThemeChange) {
+                logNewTask('Alakzatok - Megnevezés', { 
+                    correctShape: shapeType, 
+                    options: options 
+                });
+            }
 
             options.forEach(optType => {
                 const button = document.createElement('button');
@@ -1037,6 +1112,11 @@
                 return;
             }
             const isCorrect = task7State.selectedOption.dataset.shapeType === task7State.correctType;
+            logTaskCheck('Alakzatok - Megnevezés', { 
+                selected: task7State.selectedOption.dataset.shapeType, 
+                correct: task7State.correctType, 
+                isCorrect: isCorrect 
+            });
             task7State.selectedOption.classList.remove('selected');
             setFeedback('feedback_task7', isCorrect ? "Pontosan! Ez egy " + (SHAPE_NAMES[task7State.correctType] || task7State.correctType) + ". ✅" : "Ez nem a helyes név. Próbáld újra!", isCorrect);
         }
@@ -1085,6 +1165,12 @@
             ).join('');
             instructionEl.innerHTML = `Válaszd ki a színt, majd kattints az alakzatokra! ${instructionsText}`;
 
+            if (!isThemeChange) {
+                logNewTask('Alakzatok - Színező', { 
+                    instructions: tasksToColor, 
+                    shapesOnDisplay: 0 // Will be updated later
+                });
+            }
 
             TASK8_COLORS.forEach(color => {
                 const btn = document.createElement('button');
@@ -1183,6 +1269,12 @@
                 }
             });
 
+            logTaskCheck('Alakzatok - Színező', { 
+                isCorrect: overallCorrect,
+                userColors: Object.values(task8State.shapesData).map(s => ({type: s.type, color: s.currentColor})),
+                instructions: task8State.coloringInstructions
+            });
+
             if (overallCorrect) {
                 setFeedback('feedback_task8', "Tökéletes színezés! 🎨", true);
             } else {
@@ -1241,6 +1333,14 @@
             const questionedShapeName = SHAPE_NAMES[task9State.questionedShapeType] || "alakzat";
             instructionTextEl.textContent = `Figyeld meg az alakzatokat! A sorban lévő ${questionedShapeName} balról és jobbról hanyadik?`;
 
+            if (!isThemeChange) {
+                logNewTask('Alakzatok - Hányadik a sorban', { 
+                    shapes: task9State.shapesInOrder, 
+                    questionedShape: task9State.questionedShapeType,
+                    correct: { left: task9State.correctPosFromLeft, right: task9State.correctPosFromRight }
+                });
+            }
+
             task9State.shapesInOrder.forEach((type) => {
                 const shapeDiv = document.createElement('div');
                 shapeDiv.classList.add('position-task-shape');
@@ -1297,6 +1397,14 @@
                 inputRightEl.classList.add('incorrect-input');
                 inputRightEl.classList.remove('correct-input');
             }
+
+            logTaskCheck('Alakzatok - Hányadik a sorban', { 
+                answerLeft: userAnswerLeft, 
+                answerRight: userAnswerRight, 
+                correctLeft: task9State.correctPosFromLeft, 
+                correctRight: task9State.correctPosFromRight, 
+                isCorrect: leftCorrect && rightCorrect 
+            });
 
             if (!allFilledAndValid && (isNaN(userAnswerLeft) || isNaN(userAnswerRight)) ) {
                 setFeedback('feedback_task9', "Kérlek, mindkét helyre írj be egy számot!", false);
@@ -1384,6 +1492,13 @@
             let finalPalette = Array.from(paletteSet);
             shuffleArray(finalPalette);
 
+            if (!isThemeChange) {
+                logNewTask('Alakzatok - Építő', { 
+                    goal: task10State.currentGoalKey,
+                    palette: finalPalette
+                });
+            }
+
             finalPalette.forEach((type, index) => {
                 const shapeDiv = document.createElement('div');
                 shapeDiv.classList.add('shape-item');
@@ -1459,6 +1574,13 @@
                 }
             }
 
+            logTaskCheck('Alakzatok - Építő', { 
+                goal: task10State.currentGoalKey, 
+                placedShapes: placedTypesCount,
+                required: requiredShapesForGoal,
+                isCorrect: allRequiredMet 
+            });
+
             if (allRequiredMet) {
                  setFeedback('feedback_task10', `Ügyes! Sikeresen felhasználtad a szükséges alakzatokat a ${currentGoal.name} építéséhez! 🎉`, true);
             } else {
@@ -1482,6 +1604,7 @@
 
         // --- INICIALIZÁLÁS ---
         document.addEventListener('DOMContentLoaded', function() {
+            logTaskEntry('Alakzatok Gyakorló');
             generateShapeLegend();
             applyTheme(currentTheme);
 

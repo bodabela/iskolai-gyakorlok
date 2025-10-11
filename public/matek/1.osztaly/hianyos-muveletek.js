@@ -303,6 +303,7 @@ function generateTask1() {
     document.getElementById('task1_answer').max = currentNumberRange;
     document.getElementById('task1_feedback').textContent = '';
     document.getElementById('task1_feedback').className = 'feedback';
+    logNewTask('Hiányos Műveletek - Összeadás', { range: currentNumberRange, task: task1Data });
     initNumberLine1(task1Data.num1, task1Data.sum);
 }
 
@@ -324,6 +325,7 @@ function generateTask2() {
     document.getElementById('task2_answer').max = currentNumberRange;
     document.getElementById('task2_feedback').textContent = '';
     document.getElementById('task2_feedback').className = 'feedback';
+    logNewTask('Hiányos Műveletek - Kivonás (kivonandó)', { range: currentNumberRange, task: task2Data });
     initNumberLine2(task2Data.minuend, task2Data.difference);
 }
 
@@ -355,6 +357,7 @@ function generateTask3() {
     document.getElementById('task3_answer').max = currentNumberRange;
     document.getElementById('task3_feedback').textContent = '';
     document.getElementById('task3_feedback').className = 'feedback';
+    logNewTask('Hiányos Műveletek - Kivonás (kisebbítendő)', { range: currentNumberRange, task: task3Data });
     initNumberLine3(task3Data.correctAnswer, task3Data.subtrahend, task3Data.difference);
 }
 
@@ -369,7 +372,13 @@ function clearFeedback(feedbackEl) {
 function checkTask1() {
     const answer = parseInt(document.getElementById('task1_answer').value);
     const feedbackEl = document.getElementById('task1_feedback');
-    if (answer === task1Data.correctAnswer) { 
+    const isCorrect = answer === task1Data.correctAnswer;
+    logTaskCheck('Hiányos Műveletek - Összeadás', { 
+        range: currentNumberRange, 
+        answer: isNaN(answer) ? document.getElementById('task1_answer').value : answer,
+        isCorrect: isCorrect 
+    });
+    if (isCorrect) { 
         feedbackEl.textContent = 'Ügyes vagy! Pontosan ' + task1Data.correctAnswer + ' hiányzott.';
         feedbackEl.className = 'feedback correct';
     } else if (isNaN(answer)) {
@@ -386,7 +395,13 @@ function checkTask1() {
 function checkTask2() {
     const answer = parseInt(document.getElementById('task2_answer').value);
     const feedbackEl = document.getElementById('task2_feedback');
-    if (answer === task2Data.correctAnswer) { 
+    const isCorrect = answer === task2Data.correctAnswer;
+    logTaskCheck('Hiányos Műveletek - Kivonás (kivonandó)', { 
+        range: currentNumberRange, 
+        answer: isNaN(answer) ? document.getElementById('task2_answer').value : answer, 
+        isCorrect: isCorrect 
+    });
+    if (isCorrect) { 
         feedbackEl.textContent = 'Nagyszerű! Valóban ' + task2Data.correctAnswer + '-öt kellett elvenni.';
         feedbackEl.className = 'feedback correct';
     } else if (isNaN(answer)) {
@@ -403,7 +418,13 @@ function checkTask2() {
 function checkTask3() {
     const answer = parseInt(document.getElementById('task3_answer').value);
     const feedbackEl = document.getElementById('task3_feedback');
-    if (answer === task3Data.correctAnswer) { 
+    const isCorrect = answer === task3Data.correctAnswer;
+    logTaskCheck('Hiányos Műveletek - Kivonás (kisebbítendő)', { 
+        range: currentNumberRange, 
+        answer: isNaN(answer) ? document.getElementById('task3_answer').value : answer, 
+        isCorrect: isCorrect 
+    });
+    if (isCorrect) { 
         feedbackEl.textContent = 'Kiváló! A ' + task3Data.correctAnswer + '-ből kell elvenni ' + task3Data.subtrahend + '-ot.';
         feedbackEl.className = 'feedback correct';
     } else if (isNaN(answer)) {
@@ -465,6 +486,7 @@ rangeButtons.forEach(button => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    logTaskEntry('Hiányos Műveletek Gyakorló');
     generateTask1(); 
     generateTask2();
     generateTask3();

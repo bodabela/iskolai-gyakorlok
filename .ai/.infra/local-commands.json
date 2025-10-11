@@ -16,5 +16,35 @@
     "command": "start public/matek/index.html",
     "environment": "local",
     "isHotSwappable": false
+  },
+  {
+    "id": "start-matek-index",
+    "command": "start public/matek/index.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "open-alakzatok",
+    "command": "start public/matek/1.osztaly/alakzatok.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "open-lanc-szamolas",
+    "command": "start public/matek/1.osztaly/lanc-szamolas.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "open-potlas",
+    "command": "start public/matek/1.osztaly/potlas.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "open-hianyos-muveletek",
+    "command": "start public/matek/1.osztaly/hianyos-muveletek.html",
+    "environment": "local",
+    "isHotSwappable": false
   }
 ]
