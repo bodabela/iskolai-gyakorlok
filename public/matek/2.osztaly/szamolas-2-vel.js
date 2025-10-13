@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modeButtons = document.querySelectorAll('.mode-button');
 
     let currentMaxResult = 20;
-    let currentMode = 'onallo';
+    let currentMode = 'szorzotablaval';
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -296,11 +296,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 2: // ? * 2 = n
                     input = createInput(num1);
-                    input.dataset.operationType = 'division';
+                    input.dataset.operationType = 'find_factor';
                     input.dataset.op1 = result;
                     input.dataset.op2 = 2;
                     box.appendChild(input);
-                    box.innerHTML += ` · 2 = ${result}`;
+                    box.appendChild(document.createTextNode(` · 2 = ${result}`));
                     task = { type: '?*2=n', op2: result, answer: num1};
                     break;
                 case 3: // n : 2 = ?
@@ -314,11 +314,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 4: // ? : 2 = n
                     input = createInput(result);
-                    input.dataset.operationType = 'multiplication';
+                    input.dataset.operationType = 'find_dividend';
                     input.dataset.op1 = num1;
                     input.dataset.op2 = 2;
                     box.appendChild(input);
-                    box.innerHTML += ` : 2 = ${num1}`;
+                    box.appendChild(document.createTextNode(` : 2 = ${num1}`));
                     task = { type: '?/2=n', op2: num1, answer: result};
                     break;
             }
@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const solutionContainer = document.createElement('div');
         solutionContainer.className = 'solution-container';
-        solutionContainer.innerHTML = 'Megoldás: ';
+        solutionContainer.appendChild(document.createTextNode('Megoldás: '));
 
         const op1 = selectedProblem.op1(n, r);
         const op2 = selectedProblem.op2(n, r);
@@ -414,19 +414,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputAnswer = createInput(answer);
 
         if (selectedProblem.type === '*') {
-            input1.dataset.operationType = 'division'; input1.dataset.op1 = answer; input1.dataset.op2 = op2;
-            input2.dataset.operationType = 'division'; input2.dataset.op1 = answer; input2.dataset.op2 = op1;
+            input1.dataset.operationType = 'find_factor'; input1.dataset.op1 = answer; input1.dataset.op2 = op2;
+            input2.dataset.operationType = 'find_factor'; input2.dataset.op1 = answer; input2.dataset.op2 = op1;
             inputAnswer.dataset.operationType = 'multiplication'; inputAnswer.dataset.op1 = op1; inputAnswer.dataset.op2 = op2;
         } else { // division
-            input1.dataset.operationType = 'multiplication'; input1.dataset.op1 = answer; input1.dataset.op2 = op2;
-            input2.dataset.operationType = 'division_missing_divisor'; input2.dataset.op1 = op1; input2.dataset.res = answer;
+            input1.dataset.operationType = 'find_dividend'; input1.dataset.op1 = answer; input1.dataset.op2 = op2;
+            input2.dataset.operationType = 'find_divisor'; input2.dataset.op1 = op1; input2.dataset.op2 = answer;
             inputAnswer.dataset.operationType = 'division'; inputAnswer.dataset.op1 = op1; inputAnswer.dataset.op2 = op2;
         }
 
         solutionContainer.appendChild(input1);
-        solutionContainer.innerHTML += ` ${selectedProblem.type === '*' ? '·' : ':'} `;
+        solutionContainer.appendChild(document.createTextNode(` ${selectedProblem.type === '*' ? '·' : ':'} `));
         solutionContainer.appendChild(input2);
-        solutionContainer.innerHTML += ' = ';
+        solutionContainer.appendChild(document.createTextNode(' = '));
         solutionContainer.appendChild(inputAnswer);
 
         wrapper.appendChild(p);
@@ -510,6 +510,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function highlightInTable(table, row, col, result) {
         if (!table || isNaN(row) || isNaN(col)) return;
         clearTableHighlights(table);
+        // The table only goes up to 10x10
+        if (row > 10 || col > 10 || row < 1 || col < 1) return;
         table.querySelector(`th[data-col='${col}']`)?.classList.add('highlight-factor2');
         table.querySelector(`th[data-row='${row}']`)?.classList.add('highlight-factor1');
         table.querySelector(`td[data-row='${row}'][data-col='${col}']`)?.classList.add('highlight-result');
@@ -525,20 +527,52 @@ document.addEventListener('DOMContentLoaded', () => {
         const opType = input.dataset.operationType;
         const op1 = parseInt(input.dataset.op1, 10);
         const op2 = parseInt(input.dataset.op2, 10);
-        const res = parseInt(input.dataset.res, 10);
         
+        let factor1, factor2, product;
         switch(opType) {
-            case 'multiplication': // op1 * op2 = ?
-                highlightInTable(table, op1, op2, op1 * op2);
+            case 'multiplication': // op1 * op2 = ?. Find product.
+                factor1 = op1;
+                factor2 = op2;
+                product = op1 * op2;
                 break;
-            case 'division': // op1 / op2 = ?
-                const quotient = op1 / op2;
-                if (Number.isInteger(quotient)) highlightInTable(table, quotient, op2, op1);
+            case 'find_dividend':  // ? / op2 = op1. Find dividend. (op1=quotient, op2=divisor)
+                factor1 = op1;
+                factor2 = op2;
+                product = op1 * op2;
                 break;
-            case 'division_missing_divisor': // op1 / ? = res
-                const divisor = op1 / res;
-                if (Number.isInteger(divisor)) highlightInTable(table, res, divisor, op1);
+            case 'division': // op1 / op2 = ?. Find quotient. (op1=dividend, op2=divisor)
+                product = op1;
+                factor2 = op2;
+                factor1 = op1 / op2;
                 break;
+            case 'find_factor': // ? * op2 = op1. Find factor. (op1=product, op2=known factor)
+                product = op1;
+                factor2 = op2;
+                factor1 = op1 / op2;
+                break;
+            case 'find_divisor': // op1 / ? = op2. Find divisor. (op1=dividend, op2=quotient)
+                product = op1;
+                factor2 = op2;       // known factor (quotient)
+                factor1 = op1 / op2; // unknown factor (divisor)
+                break;
+        }
+
+        if (factor1 !== undefined && factor2 !== undefined && Number.isInteger(factor1) && Number.isInteger(factor2)) {
+            // Since this is "számolás 2-vel", one of the factors should be 2.
+            // For consistency, let's always highlight '2' as the row.
+            let row, col;
+            if (factor1 === 2) {
+                row = factor1;
+                col = factor2;
+            } else if (factor2 === 2) {
+                row = factor2;
+                col = factor1;
+            } else {
+                // This case should not happen in this exercise, but as a fallback:
+                row = factor1;
+                col = factor2;
+            }
+            highlightInTable(table, row, col, product);
         }
     }
 
