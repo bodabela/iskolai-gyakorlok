@@ -46,5 +46,20 @@
     "command": "start public/matek/1.osztaly/hianyos-muveletek.html",
     "environment": "local",
     "isHotSwappable": false
+  },
+  {
+    "id": "dev-server",
+    "command": "firebase serve --only hosting",
+    "environment": "local",
+    "isHotSwappable": true
+  },
+  {
+    "id": "open-page",
+    "command": "start http://localhost:5000/matek/2.osztaly/szamolas-2-vel.html",
+    "environment": "local",
+    "isHotSwappable": false,
+    "dependsOn": [
+      "dev-server"
+    ]
   }
 ]

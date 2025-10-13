@@ -20,8 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const bodyEl = document.body;
     const themeButtons = document.querySelectorAll('.theme-button');
     const rangeButtons = document.querySelectorAll('.range-button');
+    const modeButtons = document.querySelectorAll('.mode-button');
 
     let currentMaxResult = 20;
+    let currentMode = 'onallo';
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -84,6 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
         input.dataset.answer = correctAnswer;
         input.setAttribute('maxlength', String(correctAnswer).length);
         input.addEventListener('input', autoFocusNext);
+        input.addEventListener('focus', handleInputFocus);
+        input.addEventListener('blur', handleInputBlur);
         return input;
     }
 
@@ -131,12 +135,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const additionEq = document.createElement('div');
             additionEq.className = 'equation-container';
             additionEq.innerHTML = `${addTerms} = `;
-            additionEq.appendChild(createInput(sum));
+            const addInput = createInput(sum);
+            addInput.dataset.operationType = 'multiplication';
+            addInput.dataset.op1 = numGroups;
+            addInput.dataset.op2 = 2;
+            additionEq.appendChild(addInput);
             
             const multiEq = document.createElement('div');
             multiEq.className = 'equation-container';
             multiEq.innerHTML = `${numGroups} · 2 = `;
-            multiEq.appendChild(createInput(sum));
+            const multiInput = createInput(sum);
+            multiInput.dataset.operationType = 'multiplication';
+            multiInput.dataset.op1 = numGroups;
+            multiInput.dataset.op2 = 2;
+            multiEq.appendChild(multiInput);
     
             row.appendChild(groupsContainer);
             row.appendChild(additionEq);
@@ -152,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const numTasks = 2;
         const generatedTasks = [];
         const usedNs = new Set();
-        const maxN = Math.min(6, Math.floor(currentMaxResult / 2));
+        const maxN = Math.min(10, Math.floor(currentMaxResult / 2));
 
         if (maxN < numTasks) {
             console.error("Not enough unique variations for Task 2 in the selected range.");
@@ -167,7 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
             [[0, 0], [1, 1], [2, 2]], // 3
             [[0, 0], [0, 2], [2, 0], [2, 2]], // 4
             [[0, 0], [0, 2], [1, 1], [2, 0], [2, 2]], // 5
-            [[0, 0], [0, 2], [1, 0], [1, 2], [2, 0], [2, 2]] // 6
+            [[0, 0], [0, 2], [1, 0], [1, 2], [2, 0], [2, 2]], // 6
+            [[0, 0], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 2]], // 7
+            [[0, 0], [0, 1], [0, 2], [1, 0], [1, 2], [2, 0], [2, 1], [2, 2]], // 8
+            [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]], // 9
+            [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2],[0,1.5]] // 10, not standard domino but will work
         ];
         for(let i=0; i<numTasks; i++) {
             let n;
@@ -185,7 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const domino = document.createElement('div');
             domino.className = 'domino-container';
             
-            // First half (static)
             const half1 = document.createElement('div');
             half1.className = 'domino-half';
             dotPositions[n].forEach(pos => {
@@ -196,25 +211,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 half1.appendChild(dot);
             });
 
-            // Second half (interactive)
             const half2 = document.createElement('div');
-            half2.className = 'domino-half interactive';
-            half2.dataset.answer = JSON.stringify(dotPositions[n]);
-
-            for (let r = 0; r < 3; r++) {
-                for (let c = 0; c < 3; c++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'domino-dot placeholder';
-                    dot.style.gridRowStart = r + 1;
-                    dot.style.gridColumnStart = c + 1;
-                    dot.dataset.pos = JSON.stringify([r, c]);
-                    dot.addEventListener('click', () => {
-                        dot.classList.toggle('selected');
-                        dot.classList.toggle('placeholder');
-                    });
-                    half2.appendChild(dot);
-                }
-            }
+            half2.className = 'domino-half';
+            dotPositions[n].forEach(pos => {
+                const dot = document.createElement('div');
+                dot.className = 'domino-dot';
+                dot.style.gridRowStart = pos[0] + 1;
+                dot.style.gridColumnStart = pos[1] + 1;
+                half2.appendChild(dot);
+            });
             
             domino.appendChild(half1);
             domino.appendChild(half2);
@@ -227,12 +232,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const addEq = document.createElement('div');
             addEq.className = 'equation-container';
             addEq.innerHTML = `${n} + ${n} = `;
-            addEq.appendChild(createInput(sum));
+            const addInput = createInput(sum);
+            addInput.dataset.operationType = 'multiplication';
+            addInput.dataset.op1 = 2;
+            addInput.dataset.op2 = n;
+            addEq.appendChild(addInput);
             
             const multiEq = document.createElement('div');
             multiEq.className = 'equation-container';
             multiEq.innerHTML = `2 · ${n} = `;
-            multiEq.appendChild(createInput(sum));
+            const multiInput = createInput(sum);
+            multiInput.dataset.operationType = 'multiplication';
+            multiInput.dataset.op1 = 2;
+            multiInput.dataset.op2 = n;
+            multiEq.appendChild(multiInput);
 
             eqContainer.appendChild(addEq); 
             eqContainer.appendChild(multiEq);
@@ -269,27 +282,42 @@ document.addEventListener('DOMContentLoaded', () => {
             const box = document.createElement('div');
             box.className = 'equation-box';
             let task = {};
+            let input;
 
             switch(type) {
                 case 1: // n * 2 = ?
                     box.innerHTML = `${num1} · 2 = `;
-                    box.appendChild(createInput(result));
+                    input = createInput(result);
+                    input.dataset.operationType = 'multiplication';
+                    input.dataset.op1 = num1;
+                    input.dataset.op2 = 2;
+                    box.appendChild(input);
                     task = { type: 'n*2=?', op1: num1, answer: result};
                     break;
                 case 2: // ? * 2 = n
-                    box.innerHTML = ``;
-                    box.appendChild(createInput(num1));
+                    input = createInput(num1);
+                    input.dataset.operationType = 'division';
+                    input.dataset.op1 = result;
+                    input.dataset.op2 = 2;
+                    box.appendChild(input);
                     box.innerHTML += ` · 2 = ${result}`;
                     task = { type: '?*2=n', op2: result, answer: num1};
                     break;
-                case 3: // n / 2 = ?
+                case 3: // n : 2 = ?
                     box.innerHTML = `${result} : 2 = `;
-                    box.appendChild(createInput(num1));
+                    input = createInput(num1);
+                    input.dataset.operationType = 'division';
+                    input.dataset.op1 = result;
+                    input.dataset.op2 = 2;
+                    box.appendChild(input);
                     task = { type: 'n/2=?', op1: result, answer: num1};
                     break;
-                case 4: // ? / 2 = n
-                    box.innerHTML = ``;
-                    box.appendChild(createInput(result));
+                case 4: // ? : 2 = n
+                    input = createInput(result);
+                    input.dataset.operationType = 'multiplication';
+                    input.dataset.op1 = num1;
+                    input.dataset.op2 = 2;
+                    box.appendChild(input);
                     box.innerHTML += ` : 2 = ${num1}`;
                     task = { type: '?/2=n', op2: num1, answer: result};
                     break;
@@ -339,6 +367,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             const inputBox = createInput(answer);
+            inputBox.dataset.operationType = 'multiplication';
+            inputBox.dataset.op1 = num;
+            inputBox.dataset.op2 = 2;
 
             item.appendChild(numBox);
             item.appendChild(arrowsContainer);
@@ -378,11 +409,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const op2 = selectedProblem.op2(n, r);
         const answer = selectedProblem.type === '*' ? op1 * op2 : op1 / op2;
         
-        solutionContainer.appendChild(createInput(op1));
+        const input1 = createInput(op1);
+        const input2 = createInput(op2);
+        const inputAnswer = createInput(answer);
+
+        if (selectedProblem.type === '*') {
+            input1.dataset.operationType = 'division'; input1.dataset.op1 = answer; input1.dataset.op2 = op2;
+            input2.dataset.operationType = 'division'; input2.dataset.op1 = answer; input2.dataset.op2 = op1;
+            inputAnswer.dataset.operationType = 'multiplication'; inputAnswer.dataset.op1 = op1; inputAnswer.dataset.op2 = op2;
+        } else { // division
+            input1.dataset.operationType = 'multiplication'; input1.dataset.op1 = answer; input1.dataset.op2 = op2;
+            input2.dataset.operationType = 'division_missing_divisor'; input2.dataset.op1 = op1; input2.dataset.res = answer;
+            inputAnswer.dataset.operationType = 'division'; inputAnswer.dataset.op1 = op1; inputAnswer.dataset.op2 = op2;
+        }
+
+        solutionContainer.appendChild(input1);
         solutionContainer.innerHTML += ` ${selectedProblem.type === '*' ? '·' : ':'} `;
-        solutionContainer.appendChild(createInput(op2));
+        solutionContainer.appendChild(input2);
         solutionContainer.innerHTML += ' = ';
-        solutionContainer.appendChild(createInput(answer));
+        solutionContainer.appendChild(inputAnswer);
 
         wrapper.appendChild(p);
         wrapper.appendChild(solutionContainer);
@@ -411,30 +456,99 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Custom check for task 2 dominoes
         if (taskNum === 2) {
-            const interactiveHalves = taskContainer.querySelectorAll('.domino-half.interactive');
-            interactiveHalves.forEach(half => {
-                half.classList.remove('correct', 'incorrect');
-                const correctAnswer = JSON.parse(half.dataset.answer);
-                const selectedDots = half.querySelectorAll('.domino-dot.selected');
-                const userAnswer = Array.from(selectedDots).map(dot => JSON.parse(dot.dataset.pos));
-
-                // Sort both arrays to compare them regardless of click order
-                const sortFn = (a, b) => a[0] - b[0] || a[1] - b[1];
-                const isDominoCorrect = JSON.stringify(userAnswer.sort(sortFn)) === JSON.stringify(correctAnswer.sort(sortFn));
-
-                if (isDominoCorrect) {
-                    half.classList.add('correct');
-                } else {
-                    half.classList.add('incorrect');
-                    allCorrect = false;
-                }
-            });
+            // This task no longer has interactive dominoes, but keeping the block just in case
         }
 
         setFeedback(taskNum, allCorrect);
         logTaskCheck(`szamolas-2-vel-task${taskNum}`, { correct: allCorrect, solutions: userSolutions });
+    }
+
+    // --- Multiplication Table Logic ---
+    function generateMultiplicationTable(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const table = document.createElement('table');
+        table.className = 'szorzotabla';
+        
+        const thead = table.createTHead();
+        const headerRow = thead.insertRow();
+        const th = document.createElement('th');
+        th.textContent = '·';
+        headerRow.appendChild(th);
+        for (let i = 1; i <= 10; i++) {
+            const th = document.createElement('th');
+            th.textContent = i;
+            th.dataset.col = i;
+            headerRow.appendChild(th);
+        }
+
+        const tbody = table.createTBody();
+        for (let i = 1; i <= 10; i++) {
+            const row = tbody.insertRow();
+            const th = document.createElement('th');
+            th.textContent = i;
+            th.dataset.row = i;
+            row.appendChild(th);
+            for (let j = 1; j <= 10; j++) {
+                const cell = row.insertCell();
+                cell.textContent = i * j;
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+            }
+        }
+        container.innerHTML = '';
+        container.appendChild(table);
+    }
+
+    function clearTableHighlights(table) {
+        table.querySelectorAll('.highlight-factor1, .highlight-factor2, .highlight-result').forEach(el => {
+            el.classList.remove('highlight-factor1', 'highlight-factor2', 'highlight-result');
+        });
+    }
+
+    function highlightInTable(table, row, col, result) {
+        if (!table || isNaN(row) || isNaN(col)) return;
+        clearTableHighlights(table);
+        table.querySelector(`th[data-col='${col}']`)?.classList.add('highlight-factor2');
+        table.querySelector(`th[data-row='${row}']`)?.classList.add('highlight-factor1');
+        table.querySelector(`td[data-row='${row}'][data-col='${col}']`)?.classList.add('highlight-result');
+    }
+
+    function handleInputFocus(event) {
+        if (currentMode !== 'szorzotablaval') return;
+        const input = event.target;
+        const taskWrapper = input.closest('.task');
+        const table = taskWrapper.querySelector('.szorzotabla');
+        if (!table) return;
+
+        const opType = input.dataset.operationType;
+        const op1 = parseInt(input.dataset.op1, 10);
+        const op2 = parseInt(input.dataset.op2, 10);
+        const res = parseInt(input.dataset.res, 10);
+        
+        switch(opType) {
+            case 'multiplication': // op1 * op2 = ?
+                highlightInTable(table, op1, op2, op1 * op2);
+                break;
+            case 'division': // op1 / op2 = ?
+                const quotient = op1 / op2;
+                if (Number.isInteger(quotient)) highlightInTable(table, quotient, op2, op1);
+                break;
+            case 'division_missing_divisor': // op1 / ? = res
+                const divisor = op1 / res;
+                if (Number.isInteger(divisor)) highlightInTable(table, res, divisor, op1);
+                break;
+        }
+    }
+
+    function handleInputBlur(event) {
+        const input = event.target;
+        const taskWrapper = input.closest('.task');
+        const table = taskWrapper.querySelector('.szorzotabla');
+        if (table) {
+            clearTableHighlights(table);
+        }
     }
 
     // --- Main Logic ---
@@ -446,13 +560,22 @@ document.addEventListener('DOMContentLoaded', () => {
         generateTask5();
     }
 
+    function generateAllTables() {
+        for (let i = 1; i <= 5; i++) {
+            generateMultiplicationTable(`szorzotabla-${i}-wrapper`);
+        }
+    }
+
     function applyTheme(themeClass) {
         bodyEl.className = ''; 
+        if (currentMode === 'szorzotablaval') {
+            bodyEl.classList.add('szorzotabla-mode');
+        }
         bodyEl.classList.add(themeClass); 
         themeButtons.forEach(btn => {
             btn.classList.toggle('active', btn.dataset.theme === themeClass);
         });
-        generateAllTasks(); // Regenerate tasks to apply colors (e.g., for domino dots)
+        generateAllTasks();
     }
 
     themeButtons.forEach(button => {
@@ -468,12 +591,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    modeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            currentMode = button.dataset.mode;
+            modeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            bodyEl.classList.toggle('szorzotabla-mode', currentMode === 'szorzotablaval');
+            logEvent('MODE_CHANGE', { page: 'szamolas-2-vel', newMode: currentMode });
+        });
+    });
+
     for (let i = 1; i <= 5; i++) {
         document.getElementById(`new-task-${i}-button`).addEventListener('click', () => eval(`generateTask${i}()`));
         document.getElementById(`check-${i}-button`).addEventListener('click', () => checkTask(i));
     }
 
     logTaskEntry('szamolas-2-vel');
+    generateAllTables();
     generateAllTasks();
     applyTheme('theme-candy');
 });
