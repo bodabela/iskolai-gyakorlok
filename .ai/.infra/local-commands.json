@@ -55,11 +55,20 @@
   },
   {
     "id": "open-page",
-    "command": "start http://localhost:5000/matek/2.osztaly/szamolas-2-vel.html",
+    "command": "start public/matek/2.osztaly/szamolas-2-vel.html",
     "environment": "local",
-    "isHotSwappable": false,
-    "dependsOn": [
-      "dev-server"
-    ]
+    "isHotSwappable": false
+  },
+  {
+    "id": "open-new-page",
+    "command": "start public/matek/2.osztaly/szorzotabla-gyakorlo.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "start-szorzotabla-gyakorlo",
+    "command": "start public/matek/2.osztaly/szorzotabla-gyakorlo.html",
+    "environment": "local",
+    "isHotSwappable": false
   }
 ]

@@ -11,7 +11,9 @@ egyedi-feladvanyok:
     kind: general
 firebase-data-layer:
     name: firebase-data-layer
-    text: Az alkalmazás eseményeit firebase adatbázisba rögzítjük.
+    text: |-
+        Az alkalmazás eseményeit firebase adatbázisba rögzítjük.
+        Ne indítsunk lokálisan firebase-t!
     type: app
     kind: tier
     tier_name: data
