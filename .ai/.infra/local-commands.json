@@ -49,7 +49,7 @@
   },
   {
     "id": "dev-server",
-    "command": "firebase serve --only hosting",
+    "command": "firebase emulators:start --only hosting,firestore",
     "environment": "local",
     "isHotSwappable": true
   },
@@ -68,6 +68,12 @@
   {
     "id": "start-szorzotabla-gyakorlo",
     "command": "start public/matek/2.osztaly/szorzotabla-gyakorlo.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "open-browser",
+    "command": "start http://localhost:5000/matek/2.osztaly/szamolas-tizesekkel.html",
     "environment": "local",
     "isHotSwappable": false
   }
