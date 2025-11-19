@@ -39,9 +39,20 @@ no-build-commands:
     text: A stack nem kíván buildelést.
     type: app
     kind: general
+no-dev-server:
+    name: no-dev-server
+    text: Ne futassunk dev szervert! Csak nyissuk meg az oldalt lokálisan teljes eléréssel.
+    type: infra
+    kind: tier
+    tier_name: local
 vanilla-stack:
     name: vanilla-stack
     text: Vanilla HTML, Javascript és CSS stacken dolgozunk.
     type: app
     kind: tier
     tier_name: web
+verification-check:
+    name: verification-check
+    text: A feladatok újraellenőrzésekor jelezzük mind üzenetben, mint a piros/zöld változást, ha változott az eredmény.
+    type: app
+    kind: general

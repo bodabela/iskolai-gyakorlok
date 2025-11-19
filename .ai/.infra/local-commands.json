@@ -49,7 +49,7 @@
   },
   {
     "id": "dev-server",
-    "command": "firebase emulators:start --only hosting,firestore",
+    "command": "firebase emulators:start --only hosting",
     "environment": "local",
     "isHotSwappable": true
   },
@@ -73,7 +73,7 @@
   },
   {
     "id": "open-browser",
-    "command": "start http://localhost:5000/matek/2.osztaly/szamolas-tizesekkel.html",
+    "command": "start public/matek/2.osztaly/szamkor-30.html",
     "environment": "local",
     "isHotSwappable": false
   }

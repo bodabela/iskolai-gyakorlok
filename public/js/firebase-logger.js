@@ -22,6 +22,12 @@ let db;
  * Ezt az egyetlen függvényt kell meghívni minden oldalról, ahol naplózni szeretnénk.
  */
 function initializeFirebaseAndLogger() {
+    // Ellenőrizzük, hogy a 'firebase' objektum egyáltalán betöltődött-e.
+    if (typeof firebase === 'undefined' || typeof firebase.initializeApp !== 'function') {
+        console.warn("Firebase script nem töltődött be vagy nem található. A naplózási funkciók nem lesznek elérhetőek.");
+        return; // Kilépünk a függvényből, hogy a többi script futhasson.
+    }
+
     try {
         // Firebase app inicializálása a fenti, központi konfigurációval
         firebase.initializeApp(firebaseConfig);
