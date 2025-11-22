@@ -216,11 +216,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (num === 0 || num > 30) return;
                 const box = document.createElement('div');
                 box.className = 'equation-box';
-                box.innerHTML = `<span>${num}</span> = `;
-                box.appendChild(createInput(Math.floor(num / 10), 1));
-                box.innerHTML += ' tízes ';
-                box.appendChild(createInput(num % 10, 1));
-                box.innerHTML += ' egyes';
+                
+                const span = document.createElement('span');
+                span.textContent = num;
+                
+                box.append(span, ' = ', createInput(Math.floor(num / 10), 1), ' tízes ', createInput(num % 10, 1), ' egyes');
+                
                 col.appendChild(box);
             });
             container.appendChild(col);
