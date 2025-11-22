@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. Osztály - Összeadás 30-as számkörben</title>
+    <link rel="stylesheet" href="osszeadas-30as-szamkorben.css">
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Összeadás 30-as számkörben</h1>
+        <h2>Téma: Összeadás tízesátlépéssel 30-ig</h2>
+
+        <!-- Task 1 -->
+        <div class="task" id="task-1-wrapper">
+            <div class="task-header">
+                <h3>1. Feladat: Számítsd ki az összegeket!</h3>
+                <button class="task-button new-task-button" id="new-task-1-button">Új feladat</button>
+            </div>
+            <p>Oldd meg a feladatokat! Figyeld meg, hogyan segít a felbontás a tízesátlépésnél!</p>
+            <div id="task-1-container"></div>
+            <button class="task-button" id="check-1-button">Ellenőrzés</button>
+            <p id="feedback-1" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 2 -->
+        <div class="task" id="task-2-wrapper">
+            <div class="task-header">
+                <h3>2. Feladat: Láncszámolás</h3>
+                <button class="task-button new-task-button" id="new-task-2-button">Új feladat</button>
+            </div>
+            <p>Írd be a hiányzó számokat!</p>
+            <div id="task-2-container"></div>
+            <button class="task-button" id="check-2-button">Ellenőrzés</button>
+            <p id="feedback-2" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 3 -->
+        <div class="task" id="task-3-wrapper">
+            <div class="task-header">
+                <h3>3. Feladat: Hiányzó pótlása</h3>
+                <button class="task-button new-task-button" id="new-task-3-button">Új feladat</button>
+            </div>
+            <p>Pótold a hiányzó számokat! Oszloponként dolgozz!</p>
+            <div id="task-3-container"></div>
+            <button class="task-button" id="check-3-button">Ellenőrzés</button>
+            <p id="feedback-3" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 4 -->
+        <div class="task" id="task-4-wrapper">
+            <div class="task-header">
+                <h3>4. Feladat: Építőkockák</h3>
+                <button class="task-button new-task-button" id="new-task-4-button">Új feladat</button>
+            </div>
+            <p>Sárkány Tihamér kék és piros építőkockákkal játszik, összesen 30 darabbal. Hány kék és hány piros kockája lehet? Töltsd ki a táblázatot!</p>
+            <div id="task-4-container"></div>
+            <button class="task-button" id="check-4-button">Ellenőrzés</button>
+            <p id="feedback-4" class="feedback"></p>
+        </div>
+    </div>
+
+    <script src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-auth-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
+    <script src="../../js/firebase-logger.js"></script>
+    <script src="osszeadas-30as-szamkorben.js"></script>
+</body>
+</html>

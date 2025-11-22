@@ -55,7 +55,7 @@
   },
   {
     "id": "open-page",
-    "command": "start public/matek/2.osztaly/szamolas-2-vel.html",
+    "command": "start public/matek/2.osztaly/osszeadas-30as-szamkorben.html",
     "environment": "local",
     "isHotSwappable": false
   },
