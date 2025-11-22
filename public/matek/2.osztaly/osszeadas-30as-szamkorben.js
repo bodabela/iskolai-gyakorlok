@@ -16,7 +16,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = event.target;
         if (target.value.length >= target.maxLength) {
             const taskWrapper = target.closest('.task');
-            const inputs = Array.from(taskWrapper.querySelectorAll('input[type="number"]:not([disabled])'));
+            const taskContainer = target.closest('[id^="task-"][id$="-container"]');
+            const focusOrder = taskContainer.dataset.autofocusOrder || 'default';
+
+            let inputs = [];
+            // Determine input order based on the task
+            if (focusOrder === 'task1-order') {
+                const cols = taskContainer.querySelectorAll('.equation-column');
+                if (cols.length === 2) {
+                    const col1Inputs = Array.from(cols[0].querySelectorAll('input[type="number"]:not([disabled])'));
+                    const col2Inputs = Array.from(cols[1].querySelectorAll('input[type="number"]:not([disabled])'));
+                    for (let i = 0; i < col1Inputs.length; i++) {
+                        inputs.push(col1Inputs[i]);
+                        if (col2Inputs[i]) inputs.push(col2Inputs[i]);
+                    }
+                } else { // fallback for safety
+                     inputs = Array.from(taskWrapper.querySelectorAll('input[type="number"]:not([disabled])'));
+                }
+            } else if (focusOrder === 'task4-order') {
+                const rows = taskContainer.querySelectorAll('tr');
+                if (rows.length === 2) {
+                    const blueTds = Array.from(rows[0].querySelectorAll('td:not(.icon-cell)'));
+                    const redTds = Array.from(rows[1].querySelectorAll('td:not(.icon-cell)'));
+                    for (let i = 0; i < blueTds.length; i++) {
+                        const blueInput = blueTds[i].querySelector('input');
+                        if (blueInput) inputs.push(blueInput);
+                        const redInput = redTds[i].querySelector('input');
+                        if (redInput) inputs.push(redInput);
+                    }
+                } else { // fallback
+                     inputs = Array.from(taskWrapper.querySelectorAll('input[type="number"]:not([disabled])'));
+                }
+            } else { // default order
+                inputs = Array.from(taskWrapper.querySelectorAll('input[type="number"]:not([disabled])'));
+            }
+
             const currentIndex = inputs.indexOf(target);
             if (currentIndex > -1) {
                 for (let i = currentIndex + 1; i < inputs.length; i++) {
@@ -39,11 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const createInput = (correctAnswer, maxLength = 2) => {
+    const createInput = (correctAnswer) => {
         const input = document.createElement('input');
         input.type = 'number';
         input.dataset.answer = correctAnswer;
-        input.maxLength = maxLength;
+        input.maxLength = String(correctAnswer).length;
         input.addEventListener('input', autoFocusNext);
         return input;
     };
@@ -99,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateTask1() {
         clearContainerAndFeedback(1);
         const container = containers[0];
+        container.dataset.autofocusOrder = 'task1-order';
         const problems = [];
         const generatedProblems = new Set();
         
@@ -125,14 +160,14 @@ document.addEventListener('DOMContentLoaded', () => {
         problems.forEach(p => {
             const box1 = document.createElement('div');
             box1.className = 'equation-box';
-            box1.innerHTML = `${p.a} + ${p.toTen} + ${p.remainder} = `;
-            box1.appendChild(createInput(p.sum, 2));
+            box1.append(`${p.a} + ${p.toTen} + ${p.remainder} = `);
+            box1.appendChild(createInput(p.sum));
             col1.appendChild(box1);
 
             const box2 = document.createElement('div');
             box2.className = 'equation-box';
-            box2.innerHTML = `${p.a} + ${p.b} = `;
-            box2.appendChild(createInput(p.sum, 2));
+            box2.append(`${p.a} + ${p.b} = `);
+            box2.appendChild(createInput(p.sum));
             col2.appendChild(box2);
         });
 
@@ -167,10 +202,16 @@ document.addEventListener('DOMContentLoaded', () => {
         problems.forEach(p => {
             const row = document.createElement('div');
             row.className = 'chain-row';
+
             row.innerHTML = `<span>${p.start}</span><span class="arrow"><span class="operation">+${p.op1}</span>&rarr;</span>`;
-            row.appendChild(createInput(p.res1, 2));
-            row.innerHTML += `<span class="arrow"><span class="operation">+${p.op2}</span>&rarr;</span>`;
-            row.appendChild(createInput(p.res2, 2));
+            row.appendChild(createInput(p.res1));
+            
+            const arrow2 = document.createElement('span');
+            arrow2.className = 'arrow';
+            arrow2.innerHTML = `<span class="operation">+${p.op2}</span>&rarr;`;
+            row.appendChild(arrow2);
+
+            row.appendChild(createInput(p.res2));
             container.appendChild(row);
         });
 
@@ -208,9 +249,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const b = c - a;
                     const box = document.createElement('div');
                     box.className = 'equation-box';
-                    box.innerHTML = `${a} + `;
-                    box.appendChild(createInput(b, 2));
-                    box.innerHTML += ` = ${c}`;
+                    box.append(`${a} + `);
+                    box.appendChild(createInput(b));
+                    box.append(` = ${c}`);
                     col.appendChild(box);
                     colProblems.push({ type: 'a+?=c', a, c, solution: b });
                 });
@@ -231,9 +272,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const b = c - a;
                     const box = document.createElement('div');
                     box.className = 'equation-box';
-                    box.innerHTML = `${c} = `;
-                    box.appendChild(createInput(b, 2));
-                    box.innerHTML += ` + ${a}`;
+                    box.append(`${c} = `);
+                    box.appendChild(createInput(b));
+                    box.append(` + ${a}`);
                     col.appendChild(box);
                     colProblems.push({ type: 'c=?+a', c, a, solution: b });
                 });
@@ -250,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateTask4() {
         clearContainerAndFeedback(4);
         const container = containers[3];
+        container.dataset.autofocusOrder = 'task4-order';
         const targetSum = 30;
         const numCols = 8;
         const gaps = new Map();
@@ -283,9 +325,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (gap.row === 0) { // blue is given
                 tdBlue.textContent = gap.val;
-                tdRed.appendChild(createInput(complement, 2));
+                tdRed.appendChild(createInput(complement));
             } else { // red is given
-                tdBlue.appendChild(createInput(complement, 2));
+                tdBlue.appendChild(createInput(complement));
                 tdRed.textContent = gap.val;
             }
             rowBlue.appendChild(tdBlue);
