@@ -14,12 +14,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function autoFocusNext(event) {
         const target = event.target;
-        if (target.value.length >= target.maxLength) {
+        const correctAnswer = target.dataset.answer;
+
+        if (correctAnswer && target.value.length >= correctAnswer.length) {
             const taskWrapper = target.closest('.task');
-            const inputs = Array.from(taskWrapper.querySelectorAll('input[type="number"]:not([disabled])'));
+            if (!taskWrapper) return;
+
+            const taskId = taskWrapper.id;
+            let inputs;
+
+            // Default: get inputs in document order.
+            let allInputs = Array.from(taskWrapper.querySelectorAll('input[type="number"]:not([disabled])'));
+
+            if (taskId === 'task-2-wrapper') {
+                // For task 2, order inputs by columns first, then rows.
+                const columns = Array.from(taskWrapper.querySelectorAll('.equation-column'));
+                const sortedInputs = [];
+                columns.forEach(column => {
+                    const columnInputs = Array.from(column.querySelectorAll('input[type="number"]:not([disabled])'));
+                    sortedInputs.push(...columnInputs);
+                });
+                inputs = sortedInputs;
+            } else if (taskId === 'task-5-wrapper') {
+                // For task 5, order inputs by columns first, then rows in the table.
+                const table = taskWrapper.querySelector('table.number-table');
+                if (table) {
+                    const inputPositions = allInputs.map(input => {
+                        const cell = input.closest('td');
+                        return {
+                            input: input,
+                            rowIndex: cell.parentElement.rowIndex,
+                            cellIndex: cell.cellIndex
+                        };
+                    });
+                    
+                    inputPositions.sort((a, b) => {
+                        if (a.cellIndex !== b.cellIndex) {
+                            return a.cellIndex - b.cellIndex;
+                        }
+                        return a.rowIndex - b.rowIndex;
+                    });
+                    inputs = inputPositions.map(pos => pos.input);
+                } else {
+                    inputs = allInputs;
+                }
+            } else {
+                inputs = allInputs;
+            }
+
             const currentIndex = inputs.indexOf(target);
-            if (currentIndex > -1 && currentIndex < inputs.length - 1) {
-                inputs[currentIndex + 1].focus();
+
+            if (currentIndex > -1) {
+                // Find the next input that is not yet filled correctly.
+                for (let i = currentIndex + 1; i < inputs.length; i++) {
+                    const nextInput = inputs[i];
+                    const nextAnswer = nextInput.dataset.answer;
+                    if (nextAnswer && nextInput.value.length < nextAnswer.length) {
+                        nextInput.focus();
+                        return; // Stop after focusing the first available input.
+                    }
+                }
             }
         }
     }
@@ -261,7 +315,22 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const steps = document.createElement('div');
             steps.className = 'decomposition-steps';
-            steps.innerHTML = `<div class="equation-box">${p.a} + ${p.b} = ${createInput(p.sum, 2).outerHTML}</div><div class="equation-box">${p.a} + ${createInput(p.toTen, 1).outerHTML} + ${createInput(p.rem, 1).outerHTML} = ${createInput(p.sum, 2).outerHTML}</div>`;
+            
+            const eqBox1 = document.createElement('div');
+            eqBox1.className = 'equation-box';
+            eqBox1.append(`${p.a} + ${p.b} = `);
+            eqBox1.appendChild(createInput(p.sum, 2));
+
+            const eqBox2 = document.createElement('div');
+            eqBox2.className = 'equation-box';
+            eqBox2.append(`${p.a} + `);
+            eqBox2.appendChild(createInput(p.toTen, 1));
+            eqBox2.append(` + `);
+            eqBox2.appendChild(createInput(p.rem, 1));
+            eqBox2.append(` = `);
+            eqBox2.appendChild(createInput(p.sum, 2));
+            
+            steps.append(eqBox1, eqBox2);
             taskEl.append(balls, steps);
             container.appendChild(taskEl);
         });
@@ -308,7 +377,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                grid.innerHTML = `<div class="neighbor-grid-cell">${createInput(lowerNeighbor, 2).outerHTML}</div><div class="neighbor-grid-cell given">${num}</div><div class="neighbor-grid-cell">${createInput(upperNeighbor, 2).outerHTML}</div>`;
+                const cell1 = document.createElement('div');
+                cell1.className = 'neighbor-grid-cell';
+                cell1.appendChild(createInput(lowerNeighbor, 2));
+
+                const cell2 = document.createElement('div');
+                cell2.className = 'neighbor-grid-cell given';
+                cell2.textContent = num;
+
+                const cell3 = document.createElement('div');
+                cell3.className = 'neighbor-grid-cell';
+                cell3.appendChild(createInput(upperNeighbor, 2));
+
+                grid.append(cell1, cell2, cell3);
                 wrapper.appendChild(grid);
                 container.appendChild(wrapper);
             }
@@ -329,7 +410,11 @@ document.addEventListener('DOMContentLoaded', () => {
             for(let c=1; c<=10; c++) {
                 const cell = row.insertCell();
                 const num = r * 10 + c;
-                cell.innerHTML = gaps.has(num) ? createInput(num, 2).outerHTML : num;
+                if (gaps.has(num)) {
+                    cell.appendChild(createInput(num, 2));
+                } else {
+                    cell.textContent = num;
+                }
             }
         }
         container.appendChild(table);
@@ -390,8 +475,26 @@ document.addEventListener('DOMContentLoaded', () => {
             svg.appendChild(createArcLabel(num1 + tens, sum, 70, `+${ones}`));
         }
 
-        container.innerHTML = `<div class="decomposition-steps"><div class="equation-box">${num1} + ${num2} = ${createInput(sum, 2).outerHTML}</div><div class="equation-box">${num1} + ${createInput(tens, 2).outerHTML} + ${createInput(ones, 1).outerHTML} = ${createInput(sum, 2).outerHTML}</div></div>`;
-        container.prepend(svg);
+        const stepsWrapper = document.createElement('div');
+        stepsWrapper.className = 'decomposition-steps';
+
+        const eqBox1 = document.createElement('div');
+        eqBox1.className = 'equation-box';
+        eqBox1.append(`${num1} + ${num2} = `);
+        eqBox1.appendChild(createInput(sum, 2));
+
+        const eqBox2 = document.createElement('div');
+        eqBox2.className = 'equation-box';
+        eqBox2.append(`${num1} + `);
+        eqBox2.appendChild(createInput(tens, 2));
+        eqBox2.append(` + `);
+        eqBox2.appendChild(createInput(ones, 1));
+        eqBox2.append(` = `);
+        eqBox2.appendChild(createInput(sum, 2));
+
+        stepsWrapper.append(eqBox1, eqBox2);
+        container.append(svg, stepsWrapper);
+
         if (typeof logNewTask === 'function') {
             logNewTask('szamkor-30-feladat-6', { num1, num2 });
         }
