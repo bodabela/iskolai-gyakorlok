@@ -55,7 +55,7 @@
   },
   {
     "id": "open-page",
-    "command": "start public/matek/2.osztaly/osszeadas-30as-szamkorben.html",
+    "command": "start public/matek/2.osztaly/szamkor-30.html",
     "environment": "local",
     "isHotSwappable": false
   },
