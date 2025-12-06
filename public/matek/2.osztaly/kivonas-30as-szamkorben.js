@@ -93,57 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateTask1() {
         clearContainerAndFeedback(1);
         const container = containers[0];
-        const minuends = shuffle([24, 23, 21, 18]);
-        const columnsData = [];
-
-        for (let i = 0; i < 4; i++) {
-            const a = minuends[i];
-            const type = getRandomInt(1, 2);
-            const columnProblems = [];
-            let b_start = getRandomInt(4, 9);
-
-            let attempts = 0;
-            while(columnProblems.length < 4 && attempts < 20) {
-                columnProblems.length = 0; // reset for new attempt
-                b_start = getRandomInt(4, 9);
-                for (let j = 0; j < 4; j++) {
-                    const b = b_start - j;
-                    if (b > 0 && a - b >= 0) {
-                        columnProblems.push({ a, b, c: a - b, type });
-                    } else {
-                        break; // Stop if b or result is invalid
-                    }
-                }
-                attempts++;
-            }
-
-            if (columnProblems.length >= 4) {
-                 columnsData.push(columnProblems.slice(0, 4));
-            }
-        }
-
-        columnsData.forEach(columnProblems => {
-            const colDiv = document.createElement('div');
-            colDiv.className = 'equation-column';
-            columnProblems.forEach(p => {
-                const box = document.createElement('div');
-                box.className = 'equation-box';
-                if (p.type === 1) { // A - ? = C
-                    box.append(`${p.a} - `, createInput(String(p.b), 1), ` = ${p.c}`);
-                } else { // ? = A - B
-                    box.append(createInput(String(p.c), 2), ` = ${p.a} - ${p.b}`);
-                }
-                colDiv.appendChild(box);
-            });
-            container.appendChild(colDiv);
-        });
-
-        if (typeof logNewTask === 'function') { logNewTask('kivonas-30as-szamkorben-feladat-1', { problems: columnsData.flat() }); }
-    }
-
-    function generateTask2() {
-        clearContainerAndFeedback(2);
-        const container = containers[1];
         const problems = [];
         const usedStarts = new Set();
         
@@ -223,7 +172,58 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(taskEl);
         });
 
-        if (typeof logNewTask === 'function') { logNewTask('kivonas-30as-szamkorben-feladat-2', { problems }); }
+        if (typeof logNewTask === 'function') { logNewTask('kivonas-30as-szamkorben-feladat-1', { problems }); }
+    }
+
+    function generateTask2() {
+        clearContainerAndFeedback(2);
+        const container = containers[1];
+        const minuends = shuffle([24, 23, 21, 18]);
+        const columnsData = [];
+
+        for (let i = 0; i < 4; i++) {
+            const a = minuends[i];
+            const type = getRandomInt(1, 2);
+            const columnProblems = [];
+            let b_start = getRandomInt(4, 9);
+
+            let attempts = 0;
+            while(columnProblems.length < 4 && attempts < 20) {
+                columnProblems.length = 0; // reset for new attempt
+                b_start = getRandomInt(4, 9);
+                for (let j = 0; j < 4; j++) {
+                    const b = b_start - j;
+                    if (b > 0 && a - b >= 0) {
+                        columnProblems.push({ a, b, c: a - b, type });
+                    } else {
+                        break; // Stop if b or result is invalid
+                    }
+                }
+                attempts++;
+            }
+
+            if (columnProblems.length >= 4) {
+                 columnsData.push(columnProblems.slice(0, 4));
+            }
+        }
+
+        columnsData.forEach(columnProblems => {
+            const colDiv = document.createElement('div');
+            colDiv.className = 'equation-column';
+            columnProblems.forEach(p => {
+                const box = document.createElement('div');
+                box.className = 'equation-box';
+                if (p.type === 1) { // A - ? = C
+                    box.append(`${p.a} - `, createInput(String(p.b), 1), ` = ${p.c}`);
+                } else { // ? = A - B
+                    box.append(createInput(String(p.c), 2), ` = ${p.a} - ${p.b}`);
+                }
+                colDiv.appendChild(box);
+            });
+            container.appendChild(colDiv);
+        });
+
+        if (typeof logNewTask === 'function') { logNewTask('kivonas-30as-szamkorben-feladat-2', { problems: columnsData.flat() }); }
     }
 
     function generateTask3() {
@@ -283,70 +283,85 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateTask4() {
         clearContainerAndFeedback(4);
         const container = containers[3];
-        const columnsData = [[], [], [], []];
-        const problems = new Set();
-
-        // Col 1: a increases by 10
-        let a1 = getRandomInt(2, 9);
-        let b1 = getRandomInt(1, a1);
-        for (let i = 0; i < 3; i++) {
-            let current_a = a1 + i * 10;
-            if (current_a > 30) continue;
-            const key = `${current_a}-${b1}`;
-            if (!problems.has(key)) {
-                columnsData[0].push({ a: current_a, b: b1 });
-                problems.add(key);
+        const allColumnGenerators = [
+            // Generator for: Minuend increases by 10
+            () => {
+                const col = [];
+                const b = getRandomInt(1, 8);
+                const aStart = getRandomInt(1, 9);
+                for (let i = 0; i < 3; i++) {
+                    const a = aStart + i * 10;
+                    if (a <= 30 && a > b) col.push({ a, b });
+                }
+                return col.length === 3 ? col : null;
+            },
+            // Generator for: Subtrahend increases by 10
+            () => {
+                const col = [];
+                const a = getRandomInt(21, 30);
+                const bStart = getRandomInt(1, 8);
+                for (let i = 0; i < 3; i++) {
+                    const b = bStart + i * 10;
+                    if (a > b) col.push({ a, b });
+                }
+                return col.length === 3 ? col : null;
+            },
+            // Generator for: Minuend increases by 1
+            () => {
+                const col = [];
+                const b = getRandomInt(1, 15);
+                const aStart = getRandomInt(b + 1, 26);
+                for (let i = 0; i < 3; i++) {
+                    const a = aStart + i;
+                    if (a <= 30 && a > b) col.push({ a, b });
+                }
+                return col.length === 3 ? col : null;
+            },
+            // Generator for: Subtrahend increases by 1
+            () => {
+                const col = [];
+                const a = getRandomInt(20, 30);
+                const bStart = getRandomInt(1, a > 5 ? a - 5 : 1);
+                for (let i = 0; i < 3; i++) {
+                    const b = bStart + i;
+                    if (a > b) col.push({ a, b });
+                }
+                return col.length === 3 ? col : null;
             }
-        }
+        ];
         
-        // Col 2: b increases by 10
-        let a2 = getRandomInt(22, 29);
-        let b2 = getRandomInt(1, 8);
-        for (let i = 0; i < 2; i++) {
-            let current_b = b2 + i * 10;
-            if (current_b > 29 || a2 - current_b < 0) continue;
-            const key = `${a2}-${current_b}`;
-            if (!problems.has(key)) {
-                columnsData[1].push({ a: a2, b: current_b });
-                problems.add(key);
-            }
-        }
+        const generatedColumns = [];
+        const problems = new Set();
+        
+        // Shuffle generators to get varied tasks on each "New Task" click
+        shuffle(allColumnGenerators);
 
-        // Col 3: a increases by 1
-        let a3 = getRandomInt(15, 25);
-        let b3 = getRandomInt(2, 8);
-        for (let i = 0; i < 3; i++) {
-            let current_a = a3 + i;
-            if (current_a > 30 || current_a - b3 < 0) continue;
-            const key = `${current_a}-${b3}`;
-            if (!problems.has(key)) {
-                columnsData[2].push({ a: current_a, b: b3 });
-                problems.add(key);
+        allColumnGenerators.forEach(generator => {
+            if (generatedColumns.length >= 4) return;
+            let attempts = 0;
+            while(attempts < 10) {
+                const newCol = generator();
+                if (newCol) {
+                    const uniqueNewCol = newCol.filter(p => !problems.has(`${p.a}-${p.b}`));
+                    if (uniqueNewCol.length === 3) {
+                         uniqueNewCol.forEach(p => problems.add(`${p.a}-${p.b}`));
+                         generatedColumns.push(uniqueNewCol);
+                         break; // success, move to next generator
+                    }
+                }
+                attempts++;
             }
-        }
+        });
 
-        // Col 4: b increases by 1
-        let a4 = getRandomInt(25, 29);
-        let b4 = getRandomInt(2, 8);
-        for (let i = 0; i < 3; i++) {
-            let current_b = b4 + i;
-            if (a4 - current_b < 0) continue;
-            const key = `${a4}-${current_b}`;
-            if (!problems.has(key)) {
-                columnsData[3].push({ a: a4, b: current_b });
-                problems.add(key);
-            }
-        }
-
-        columnsData.forEach((col) => {
-            if (col.length === 0) return;
+        generatedColumns.forEach((col) => {
             const colDiv = document.createElement('div');
             colDiv.className = 'equation-column';
-            shuffle(col).forEach(p => {
+            const type = getRandomInt(1, 2);
+            // DO NOT SHUFFLE problems inside the column to preserve the pattern
+            col.forEach(p => {
                 const box = document.createElement('div');
                 box.className = 'equation-box';
                 const c = p.a - p.b;
-                const type = getRandomInt(1, 2);
                 if (type === 1) { // A - B = ?
                     box.append(`${p.a} - ${p.b} = `, createInput(String(c)));
                 } else { // ? = A - B
@@ -363,25 +378,32 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateTask5() {
         clearContainerAndFeedback(5);
         const container = containers[4];
-        const generatedProblems = new Set();
         const problems = [];
 
-        while (problems.length < 2) {
-            const a = getRandomInt(11, 29);
-            const b = getRandomInt(Math.max(1, (a % 10) + 1), 9);
-            if (a-b < 0) continue;
-            
-            const problemKey = `${a},${b}`;
-            if (generatedProblems.has(problemKey)) continue;
-            
-            const p = { a, b };
-            p.toTen = p.a % 10;
-            p.rem = p.b - p.toTen;
-            p.result = p.a - p.b;
+        // Generate second problem's minuend first to ensure it's high enough (>=21)
+        // and doesn't end in 9, to avoid issues with subtrahend generation.
+        const a2 = getRandomInt(21, 28);
+        // First problem's minuend is 10 less than the second one.
+        const a1 = a2 - 10;
 
-            problems.push(p);
-            generatedProblems.add(problemKey);
-        }
+        // Generate subtrahend for the first problem, ensuring borrowing is needed.
+        const b1 = getRandomInt((a1 % 10) + 1, 9);
+        
+        // Generate subtrahend for the second problem, ensuring borrowing is needed.
+        const b2 = getRandomInt((a2 % 10) + 1, 9);
+
+        const p1 = { a: a1, b: b1 };
+        p1.toTen = p1.a % 10;
+        p1.rem = p1.b - p1.toTen;
+        p1.result = p1.a - p1.b;
+
+        const p2 = { a: a2, b: b2 };
+        p2.toTen = p2.a % 10;
+        p2.rem = p2.b - p2.toTen;
+        p2.result = p2.a - p2.b;
+
+        // The request specifies the order: first problem has the smaller minuend.
+        problems.push(p1, p2);
 
         problems.forEach(p => {
             const taskEl = document.createElement('div');
