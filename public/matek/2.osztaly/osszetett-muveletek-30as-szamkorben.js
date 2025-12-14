@@ -227,7 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        problems.forEach(p => {
+        problems.forEach((p, index) => {
+            const variableName = index === 0 ? 'X' : 'Y';
+
             const wrapper = document.createElement('div');
             wrapper.className = 'inequality-wrapper';
 
@@ -277,14 +279,14 @@ document.addEventListener('DOMContentLoaded', () => {
             rightSide.appendChild(rightOpDiv);
 
             expressionDiv.appendChild(leftSide);
-            expressionDiv.append(' > X > ');
+            expressionDiv.append(` > ${variableName} > `);
             expressionDiv.appendChild(rightSide);
 
             wrapper.appendChild(expressionDiv);
             
             const solutionsDiv = document.createElement('div');
             solutionsDiv.className = 'inequality-solutions';
-            solutionsDiv.append('X: ');
+            solutionsDiv.append(`${variableName}: `);
 
             p.solutions.forEach(sol => {
                 solutionsDiv.appendChild(createInput(sol));
