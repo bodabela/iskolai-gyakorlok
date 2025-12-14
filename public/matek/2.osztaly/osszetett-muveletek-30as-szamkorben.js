@@ -234,12 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const expressionDiv = document.createElement('div');
             expressionDiv.className = 'inequality-expression';
 
-            const createSide = (data) => {
-                const side = document.createElement('div');
-                side.className = 'side';
-                
-                const resultInput = createInput(data.result);
-                
+            const createOperationDiv = (data) => {
                 const operationDiv = document.createElement('div');
                 operationDiv.className = 'operation';
 
@@ -263,18 +258,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 operationDiv.append(document.createTextNode(parts[0]));
                 operationDiv.appendChild(interWrapper);
                 operationDiv.append(document.createTextNode(parts[1]));
-
-                side.appendChild(resultInput);
-                side.appendChild(operationDiv);
-                return side;
+                return operationDiv;
             };
 
-            const leftSide = createSide(p.left);
-            const rightSide = createSide(p.right);
+            const leftOpDiv = createOperationDiv(p.left);
+            const rightOpDiv = createOperationDiv(p.right);
+            const leftFinalInput = createInput(p.left.result);
+            const rightFinalInput = createInput(p.right.result);
             
-            expressionDiv.appendChild(leftSide);
+            expressionDiv.appendChild(leftFinalInput);
+            expressionDiv.appendChild(leftOpDiv);
             expressionDiv.append(' > X > ');
-            expressionDiv.appendChild(rightSide);
+            expressionDiv.appendChild(rightFinalInput);
+            expressionDiv.appendChild(rightOpDiv);
 
             wrapper.appendChild(expressionDiv);
             
