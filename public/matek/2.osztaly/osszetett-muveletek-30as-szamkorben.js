@@ -266,11 +266,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const leftFinalInput = createInput(p.left.result);
             const rightFinalInput = createInput(p.right.result);
             
-            expressionDiv.appendChild(leftFinalInput);
-            expressionDiv.appendChild(leftOpDiv);
+            const leftSide = document.createElement('div');
+            leftSide.className = 'operation-side left';
+            leftSide.appendChild(leftOpDiv);
+            leftSide.appendChild(leftFinalInput);
+
+            const rightSide = document.createElement('div');
+            rightSide.className = 'operation-side right';
+            rightSide.appendChild(rightFinalInput);
+            rightSide.appendChild(rightOpDiv);
+
+            expressionDiv.appendChild(leftSide);
             expressionDiv.append(' > X > ');
-            expressionDiv.appendChild(rightFinalInput);
-            expressionDiv.appendChild(rightOpDiv);
+            expressionDiv.appendChild(rightSide);
 
             wrapper.appendChild(expressionDiv);
             
