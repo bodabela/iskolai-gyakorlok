@@ -55,13 +55,13 @@
   },
   {
     "id": "open-page",
-    "command": "start public/matek/2.osztaly/szamkor-30.html",
+    "command": "start public/matek/2.osztaly/kivonas-30as-szamkorben.html",
     "environment": "local",
     "isHotSwappable": false
   },
   {
     "id": "open-new-page",
-    "command": "start public/matek/2.osztaly/szorzotabla-gyakorlo.html",
+    "command": "start public/matek/2.osztaly/osszetett-muveletek-30as-szamkorben.html",
     "environment": "local",
     "isHotSwappable": false
   },
@@ -79,6 +79,12 @@
   },
   {
     "id": "run-kivonas-30as-szamkorben",
+    "command": "start public/matek/2.osztaly/kivonas-30as-szamkorben.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "run-kivonas-30as-szamkorben-updated",
     "command": "start public/matek/2.osztaly/kivonas-30as-szamkorben.html",
     "environment": "local",
     "isHotSwappable": false
