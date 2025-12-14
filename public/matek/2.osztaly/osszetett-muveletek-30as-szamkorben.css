@@ -41,7 +41,7 @@ input.incorrect { border-color: #dc3545 !important; background-color: #fce8e6 !i
 .inequality-expression .operation-side { display: flex; align-items: center; gap: 5px; flex: 1; }
 .inequality-expression .operation-side.left { justify-content: flex-end; }
 .inequality-expression .operation-side.right { justify-content: flex-start; }
-.inequality-expression .operation-side .operation { margin-top: 25px; }
+.inequality-expression .operation-side .operation { margin-top: 25px; width: fit-content;}
 .inequality-expression .operation-side > input[type="number"] { width: 55px; }
 .inequality-solutions { display: flex; align-items: center; gap: 5px; font-size: 1.2em; font-weight: bold; margin-top: 10px; }
 .inequality-solutions input { width: 50px; }

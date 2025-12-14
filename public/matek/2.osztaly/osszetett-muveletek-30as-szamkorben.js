@@ -110,28 +110,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const operations = [
             () => {
-                const c = getRandomInt(2, 4);
+                const c = getRandomInt(1, 3);
                 const inter = getRandomInt(2, Math.floor(30 / c));
                 const a = getRandomInt(1, inter - 1);
                 const b = inter - a;
                 return { text: `(${a} + ${b}) · ${c}`, inter, final: inter * c, signature: `${a}+${b}*${c}` };
             },
             () => {
-                const c = getRandomInt(2, 4);
+                const c = getRandomInt(1, 3);
                 const inter = getRandomInt(2, Math.floor(30 / c));
                 const b = getRandomInt(1, 8);
                 const a = inter + b;
                 return { text: `(${a} - ${b}) · ${c}`, inter, final: inter * c, signature: `${a}-${b}*${c}` };
             },
             () => {
-                 const c = getRandomInt(2, 4);
+                 const c = getRandomInt(1, 3);
                 const inter = getRandomInt(2, Math.floor(30 / c));
                 const a = getRandomInt(1, inter - 1);
                 const b = inter - a;
                 return { text: `${c} · (${a} + ${b})`, inter, final: inter * c, signature: `${c}*${a}+${b}` };
             },
             () => {
-                const c = getRandomInt(2, 4);
+                const c = getRandomInt(1, 3);
                 const final = getRandomInt(2, 10);
                 const inter = final * c;
                 if (inter > 20) return null;
@@ -189,13 +189,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateSingleExpression() {
         const type = getRandomInt(1, 2);
         if (type === 1) { // (a-b) * c
-            const c = getRandomInt(2, 3);
+            const c = getRandomInt(1, 3);
             const inter = getRandomInt(3, Math.floor(30 / c));
             const b = getRandomInt(1, 8);
             const a = inter + b;
             return { text: `(${a} - ${b}) · ${c}`, result: inter * c, inter: inter };
         } else { // (a+b) * c
-            const c = getRandomInt(2, 3);
+            const c = getRandomInt(1, 3);
             const inter = getRandomInt(3, Math.floor(30 / c));
             const a = getRandomInt(1, inter - 1);
             const b = inter - a;
