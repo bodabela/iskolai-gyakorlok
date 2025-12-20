@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Osztály - Számsorozatok 10000-es számkörben</title>
+    <link rel="stylesheet" href="szamsorozatok-10000.css">
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Számsorozatok 10000-es számkörben</h1>
+        <h2>Téma: Szabályfelismerés és sorozat folytatása</h2>
+
+        <!-- Task 1 -->
+        <div class="task" id="task-1-wrapper">
+            <div class="task-header">
+                <h3>1. Feladat: Összeadás és kivonás</h3>
+                <button class="task-button new-task-button" id="new-task-1-button">Új feladat</button>
+            </div>
+            <p>Folytasd a számsorozatot! Írd be a szabályt a nyilak fölé, a hiányzó számokat pedig a vonalakra!</p>
+            <div id="task-1-container"></div>
+            <button class="task-button" id="check-1-button">Ellenőrzés</button>
+            <p id="feedback-1" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 2 -->
+        <div class="task" id="task-2-wrapper">
+            <div class="task-header">
+                <h3>2. Feladat: Vegyes műveletek</h3>
+                <button class="task-button new-task-button" id="new-task-2-button">Új feladat</button>
+            </div>
+            <p>Most nehezebb lesz! A szabályban szorzás és osztás is lehet. Fejtsd meg a szabályt és folytasd a sorozatot!</p>
+            <div id="task-2-container"></div>
+            <button class="task-button" id="check-2-button">Ellenőrzés</button>
+            <p id="feedback-2" class="feedback"></p>
+        </div>
+    </div>
+
+    <script src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-auth-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
+    <script src="../../js/firebase-logger.js"></script>
+    <script src="szamsorozatok-10000.js"></script>
+</body>
+</html>
