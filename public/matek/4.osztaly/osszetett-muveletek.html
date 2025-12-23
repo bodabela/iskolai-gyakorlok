@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Osztály - Összetett műveletek</title>
+    <link rel="stylesheet" href="osszetett-muveletek.css">
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+        <div>
+            <p class="control-label">Számkör:</p>
+            <div class="range-selector">
+                <button class="range-button" data-range="100">100</button>
+                <button class="range-button" data-range="1000">1000</button>
+                <button class="range-button" data-range="10000">10000</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Összetett műveletek</h1>
+        <h2>Téma: Műveleti sorrend, zárójelek használata</h2>
+
+        <!-- Task 1 -->
+        <div class="task" id="task-1-wrapper">
+            <div class="task-header">
+                <h3>1. Feladat: Összeadás és kivonás</h3>
+                <button class="task-button new-task-button" id="new-task-1-button">Új feladat</button>
+            </div>
+            <p>Végezd el a műveleteket sorban! Az első művelet eredményét írd a műveleti jel fölé!</p>
+            <div id="task-1-container"></div>
+            <button class="task-button" id="check-1-button">Ellenőrzés</button>
+            <p id="feedback-1" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 2 -->
+        <div class="task" id="task-2-wrapper">
+            <div class="task-header">
+                <h3>2. Feladat: Vegyes műveletek (zárójel nélkül)</h3>
+                <button class="task-button new-task-button" id="new-task-2-button">Új feladat</button>
+            </div>
+            <p>Figyelj a műveleti sorrendre! A szorzás és osztás mindig megelőzi az összeadást és kivonást. Az elsőként elvégzett művelet eredményét írd a műveleti jel fölé!</p>
+            <div id="task-2-container"></div>
+            <button class="task-button" id="check-2-button">Ellenőrzés</button>
+            <p id="feedback-2" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 3 -->
+        <div class="task" id="task-3-wrapper">
+            <div class="task-header">
+                <h3>3. Feladat: Műveletek zárójelben</h3>
+                <button class="task-button new-task-button" id="new-task-3-button">Új feladat</button>
+            </div>
+            <p>Először mindig a zárójelben lévő műveletet végezd el! Annak az eredményét írd a műveleti jel fölé!</p>
+            <div id="task-3-container"></div>
+            <button class="task-button" id="check-3-button">Ellenőrzés</button>
+            <p id="feedback-3" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 4 -->
+        <div class="task" id="task-4-wrapper">
+            <div class="task-header">
+                <h3>4. Feladat: Vegyes gyakorlás</h3>
+                <button class="task-button new-task-button" id="new-task-4-button">Új feladat</button>
+            </div>
+            <p>Most jön a java! Itt mindenféle feladat előfordulhat. Figyelj a szabályokra és számolj ügyesen!</p>
+            <div id="task-4-container"></div>
+            <button class="task-button" id="check-4-button">Ellenőrzés</button>
+            <p id="feedback-4" class="feedback"></p>
+        </div>
+    </div>
+
+    <script src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-auth-compat.js"></script>
+    <script src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
+    <script src="../../js/firebase-logger.js"></script>
+    <script src="osszetett-muveletek.js"></script>
+</body>
+</html>
