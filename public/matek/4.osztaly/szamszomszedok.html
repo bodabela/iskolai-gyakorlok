@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Számszomszédok - 4. Osztály</title>
+    <link rel="stylesheet" href="szamszomszedok.css">
+    <!-- Firebase -->
+    <script defer src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <script src="../../js/firebase-logger.js"></script>
+</head>
+<body class="theme-candy">
+
+    <div class="controls-container">
+        <div class="theme-selector">
+            <span class="control-label">Válassz témát:</span>
+            <button class="theme-button" data-theme="candy">Cukorka</button>
+            <button class="theme-button" data-theme="magicforest">Varázserdő</button>
+            <button class="theme-button" data-theme="ocean">Óceán</button>
+            <button class="theme-button" data-theme="space">Űr</button>
+            <button class="theme-button" data-theme="jungle">Dzsungel</button>
+            <button class="theme-button" data-theme="tech">Tech</button>
+            <button class="theme-button" data-theme="sport">Sport</button>
+            <button class="theme-button" data-theme="adventure">Kaland</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Számszomszédok</h1>
+        <h2>Írd be a táblázatba a számok szomszédait!</h2>
+
+        <!-- Task 1: Smaller Neighbors -->
+        <div class="task" id="task-1-wrapper">
+            <div class="task-header">
+                <h3>1. Feladat: Kisebb számszomszédok</h3>
+                <button id="new-task-1-button" class="task-button new-task-button">Új feladat</button>
+            </div>
+            <div id="task-1-container">
+                <!-- Feladatok ide generálódnak -->
+            </div>
+            <button id="check-1-button" class="task-button">Ellenőrzés</button>
+            <div id="feedback-1" class="feedback"></div>
+        </div>
+
+        <hr class="task-divider">
+
+        <!-- Task 2: Larger Neighbors -->
+        <div class="task" id="task-2-wrapper">
+            <div class="task-header">
+                <h3>2. Feladat: Nagyobb számszomszédok</h3>
+                <button id="new-task-2-button" class="task-button new-task-button">Új feladat</button>
+            </div>
+            <div id="task-2-container">
+                <!-- Feladatok ide generálódnak -->
+            </div>
+            <button id="check-2-button" class="task-button">Ellenőrzés</button>
+            <div id="feedback-2" class="feedback"></div>
+        </div>
+    </div>
+
+    <script src="szamszomszedok.js"></script>
+</body>
+</html>

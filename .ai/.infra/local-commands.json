@@ -55,7 +55,7 @@
   },
   {
     "id": "open-page",
-    "command": "start public/matek/2.osztaly/kivonas-30as-szamkorben.html",
+    "command": "start public/matek/4.osztaly/szamszomszedok.html",
     "environment": "local",
     "isHotSwappable": false
   },
