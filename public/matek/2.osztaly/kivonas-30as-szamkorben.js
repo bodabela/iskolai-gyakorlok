@@ -97,14 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const usedStarts = new Set();
         
         while (problems.length < 2) {
-            const start = getRandomInt(18, 29);
+            // Start selected between 21 and 29 to ensure we cross 20 downwards.
+            // We avoid 18-20 because we need to jump to 20 and then continue, or jump to 10 but end >= 10 constraint limits us.
+            const start = getRandomInt(21, 29);
             if (usedStarts.has(start)) continue;
             
-            const firstJump = getRandomInt(2, 8);
-            const secondJump = getRandomInt(2, 8);
-            const end = start - firstJump - secondJump;
+            // First jump always lands on 20 (tens crossing)
+            const firstJump = start - 20;
             
-            if (end < 10 || (firstJump + secondJump) > 15) continue;
+            // Second jump constraints:
+            // 1. Result must be >= 10 (so 20 - secondJump >= 10 => secondJump <= 10)
+            // 2. Total subtraction <= 15 (firstJump + secondJump <= 15 => secondJump <= 15 - firstJump)
+            const maxSecond = Math.min(10, 15 - firstJump);
+            
+            // Ensure we have a valid second jump (min 2 to be meaningful)
+            if (maxSecond < 2) continue;
+            
+            const secondJump = getRandomInt(2, maxSecond);
+            const end = start - firstJump - secondJump;
             
             usedStarts.add(start);
             problems.push({ start, firstJump, secondJump, end, totalSub: firstJump + secondJump });
