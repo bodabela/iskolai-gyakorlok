@@ -187,7 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let current = start;
         jumps.forEach(jump => {
             const next = current + jump;
-            const color = 'blue'; // You can alternate colors if needed
+            
+            // Logic for color based on range
+            let color = 'blue';
+            const mid = (current + next) / 2;
+            if (mid <= 10) color = 'green';
+            else if (mid <= 20) color = 'red';
+            
             svg.appendChild(createArc(current, next, lineY, color));
             svg.appendChild(createArcLabel(current, next, lineY, jump > 0 ? `+${jump}` : `${jump}`));
             current = next;
