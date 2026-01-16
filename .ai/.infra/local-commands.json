@@ -106,5 +106,11 @@
     "command": "start public/matek/2.osztaly/kivonas-30as-szamkorben.html",
     "environment": "local",
     "isHotSwappable": false
+  },
+  {
+    "id": "open-kivonas-szamkorokben",
+    "command": "start public/matek/2.osztaly/kivonas-szamkorokben.html",
+    "environment": "local",
+    "isHotSwappable": false
   }
 ]

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. Osztály - Kivonás számkörökben</title>
+    <link rel="stylesheet" href="kivonas-szamkorokben.css">
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="range-selector-container">
+            <label for="range-select" class="range-selector-label">Számkör:</label>
+            <select id="range-select" class="range-selector-select">
+                <option value="20">20-as számkör</option>
+                <option value="30" selected>30-as számkör</option>
+                <option value="40">40-es számkör</option>
+                <option value="50">50-es számkör</option>
+            </select>
+        </div>
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Kivonás 30-as számkörben</h1>
+        <h2>Téma: Gyakoroljuk a kivonást 30-ig!</h2>
+
+        <!-- Task 1 -->
+        <div class="task" id="task-1-wrapper">
+            <div class="task-header">
+                <h3>1. Feladat: Számolás a számegyenesen</h3>
+                <button class="task-button new-task-button" id="new-task-1-button">Új feladat</button>
+            </div>
+            <p>Írd le művelettel, honnan hová pattan a labda!</p>
+            <div id="task-1-container"></div>
+            <button class="task-button" id="check-1-button">Ellenőrzés</button>
+            <p id="feedback-1" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 2 -->
+        <div class="task" id="task-2-wrapper">
+            <div class="task-header">
+                <h3>2. Feladat: Pótold a hiányzó számokat!</h3>
+                <button class="task-button new-task-button" id="new-task-2-button">Új feladat</button>
+            </div>
+            <p>Oszloponként dolgozz!</p>
+            <div id="visual-task-2" class="visual-container"></div>
+            <div id="task-2-container" class="equation-column-container"></div>
+            <button class="task-button" id="check-2-button">Ellenőrzés</button>
+            <p id="feedback-2" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 3 -->
+        <div class="task" id="task-3-wrapper">
+            <div class="task-header">
+                <h3>3. Feladat: Számítsd ki a különbségeket!</h3>
+                <button class="task-button new-task-button" id="new-task-3-button">Új feladat</button>
+            </div>
+            <p>Soronként dolgozz!</p>
+            <div id="visual-task-3" class="visual-container"></div>
+            <div id="task-3-container" class="equation-column-container"></div>
+            <button class="task-button" id="check-3-button">Ellenőrzés</button>
+            <p id="feedback-3" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 4 -->
+        <div class="task" id="task-4-wrapper">
+            <div class="task-header">
+                <h3>4. Feladat: Pótold a hiányzó számokat!</h3>
+                <button class="task-button new-task-button" id="new-task-4-button">Új feladat</button>
+            </div>
+            <p>Oszloponként dolgozz!</p>
+            <div id="visual-task-4" class="visual-container"></div>
+            <div id="task-4-container" class="equation-column-container"></div>
+            <button class="task-button" id="check-4-button">Ellenőrzés</button>
+            <p id="feedback-4" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 5 -->
+        <div class="task" id="task-5-wrapper">
+            <div class="task-header">
+                <h3>5. Feladat: Kivonás tízesátlépéssel</h3>
+                <button class="task-button new-task-button" id="new-task-5-button">Új feladat</button>
+            </div>
+            <p>Figyeld meg, hogyan számoltunk! Írd be a hiányzó számokat!</p>
+            <div id="task-5-container" class="equation-column-container"></div>
+            <button class="task-button" id="check-5-button">Ellenőrzés</button>
+            <p id="feedback-5" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 6 -->
+        <div class="task" id="task-6-wrapper">
+            <div class="task-header">
+                <h3>6. Feladat: Számítsd ki a különbségeket!</h3>
+                <button class="task-button new-task-button" id="new-task-6-button">Új feladat</button>
+            </div>
+            <p>Figyeld a bontást! Soronként dolgozz!</p>
+            <div id="visual-task-6" class="visual-container"></div>
+            <div id="task-6-container"></div>
+            <button class="task-button" id="check-6-button">Ellenőrzés</button>
+            <p id="feedback-6" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+        
+        <!-- Task 7 -->
+        <div class="task" id="task-7-wrapper">
+            <div class="task-header">
+                <h3>7. Feladat: Számítsd ki a különbségeket!</h3>
+                <button class="task-button new-task-button" id="new-task-7-button">Új feladat</button>
+            </div>
+            <p>Oszloponként dolgozz!</p>
+            <div id="visual-task-7" class="visual-container"></div>
+            <div id="task-7-container" class="equation-column-container"></div>
+            <button class="task-button" id="check-7-button">Ellenőrzés</button>
+            <p id="feedback-7" class="feedback"></p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore-compat.js"></script>
+    <script src="../../js/firebase-logger.js"></script>
+    <script src="kivonas-szamkorokben.js"></script>
+</body>
+</html>
