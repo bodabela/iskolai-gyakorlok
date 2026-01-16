@@ -253,36 +253,32 @@ document.addEventListener('DOMContentLoaded', () => {
         clearContainerAndFeedback(3);
         const container = containers[2];
         const problems = new Set();
-        const columnsData = [[], [], [], []];
+        const columnsData = [[], [], []];
 
         for (let i = 0; i < 4; i++) {
-            let p1, p2;
+            let p1;
             do {
                 const a = getRandomInt(21, 29);
-                const b = getRandomInt(1, Math.min(8, (a % 10) - 1));
-                const c = getRandomInt(1, (a % 10) - b);
-                const d = getRandomInt(b + 1, 9);
-                p1 = { type: 1, a, b, c, result: a - b - c };
-                p2 = { type: 2, a: a, b: d, result: a - d };
-            } while (p1.b + p1.c >= 10 || problems.has(`${p1.a}-${p1.b}-${p1.c}`) || problems.has(`${p2.a}-${p2.b}`));
-            problems.add(`${p1.a}-${p1.b}-${p1.c}`);
-            problems.add(`${p2.a}-${p2.b}`);
+                const maxB = a % 10;
+                const b = getRandomInt(1, maxB);
+                p1 = { type: 1, a, b, result: a - b };
+            } while (problems.has(`col1-${p1.a}-${p1.b}`));
+            problems.add(`col1-${p1.a}-${p1.b}`);
             columnsData[0].push(p1);
-            columnsData[1].push(p2);
 
-            let p3, p4;
+            let p2, p3;
              do {
-                const a = getRandomInt(21, 29);
-                const b = getRandomInt(1, 5);
-                const c = getRandomInt(1, 4);
+                const a = getRandomInt(21, 28);
+                const b = a % 10;
+                const c = getRandomInt(1, 9 - b);
                 const d = b+c;
-                p3 = { type: 3, a, b, c, result: a - b - c };
-                p4 = { type: 4, a: a, b: d, result: a - d };
-            } while (problems.has(`=${p3.a}-${p3.b}-${p3.c}`) || problems.has(`=${p4.a}-${p4.b}`));
-            problems.add(`=${p3.a}-${p3.b}-${p3.c}`);
-            problems.add(`=${p4.a}-${p4.b}`);
+                p2 = { type: 3, a, b, c, result: a - b - c };
+                p3 = { type: 4, a: a, b: d, result: a - d };
+            } while (problems.has(`col23-${p2.a}-${p2.b}-${p2.c}`) || problems.has(`col23-${p3.a}-${p3.b}`));
+            problems.add(`col23-${p2.a}-${p2.b}-${p2.c}`);
+            problems.add(`col23-${p3.a}-${p3.b}`);
+            columnsData[1].push(p2);
             columnsData[2].push(p3);
-            columnsData[3].push(p4);
         }
 
         columnsData.forEach(columnProblems => {
@@ -291,8 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
             columnProblems.forEach(p => {
                 const box = document.createElement('div');
                 box.className = 'equation-box';
-                if (p.type === 1) box.append(`${p.a} - ${p.b} - ${p.c} = `, createInput(String(p.result)));
-                if (p.type === 2) box.append(`${p.a} - ${p.b} = `, createInput(String(p.result)));
+                if (p.type === 1) box.append(`${p.a} - ${p.b} = `, createInput(String(p.result)));
                 if (p.type === 3) box.append(createInput(String(p.result)), ` = ${p.a} - ${p.b} - ${p.c}`);
                 if (p.type === 4) box.append(createInput(String(p.result)), ` = ${p.a} - ${p.b}`);
                 colDiv.appendChild(box);
