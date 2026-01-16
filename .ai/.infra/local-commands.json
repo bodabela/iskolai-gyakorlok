@@ -94,5 +94,17 @@
     "command": "start public/matek/2.osztaly/osszetett-muveletek-30as-szamkorben.html",
     "environment": "local",
     "isHotSwappable": false
+  },
+  {
+    "id": "open-html",
+    "command": "start public/matek/2.osztaly/kivonas-30as-szamkorben.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "open-kivonas-30as",
+    "command": "start public/matek/2.osztaly/kivonas-30as-szamkorben.html",
+    "environment": "local",
+    "isHotSwappable": false
   }
 ]

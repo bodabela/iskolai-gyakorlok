@@ -34,12 +34,15 @@ input.incorrect { border-color: #dc3545 !important; background-color: #fce8e6 !i
 .equation-box span { min-width: 30px; text-align: right; }
 .equation-box input { width: 50px; }
 
-/* Task 2 & 5 */
-.number-line-svg { width: 100%; max-width: 800px; margin: 0 auto; display: block; }
+/* Visual Container */
+.visual-container { width: 100%; height: 120px; margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; overflow: hidden; }
+
+/* Task 2 & 5 & Others */
+.number-line-svg { width: 100%; max-width: 800px; margin: 0 auto; display: block; height: 100%; }
 .number-line-svg .axis, .number-line-svg .tick { stroke: var(--text-color); stroke-width: 1.5; }
 .number-line-svg .number-text { font-size: 14px; text-anchor: middle; fill: var(--text-color); }
 .number-line-svg .arrow { stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
-.number-line-svg .arrow-label { font-size: 14px; text-anchor: middle; fill: var(--text-color); }
+.number-line-svg .arrow-label { font-size: 14px; text-anchor: middle; fill: var(--text-color); font-weight: bold; }
 
 .decomposition-task { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; width: 100%; }
 .ball-container { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; align-items: center; }
