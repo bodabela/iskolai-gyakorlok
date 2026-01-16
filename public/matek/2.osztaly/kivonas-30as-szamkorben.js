@@ -193,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 0; i < 4; i++) {
             const a = minuends[i];
-            const type = getRandomInt(1, 2);
             const columnProblems = [];
             let b_start = getRandomInt(4, 9);
 
@@ -204,6 +203,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (let j = 0; j < 4; j++) {
                     const b = b_start - j;
                     if (b > 0 && a - b >= 0) {
+                        let type;
+                        // i=0 -> Type 1: X-Y=? (Missing C)
+                        // i=1 -> Type 2: ?-Y=X (Missing A)
+                        // i=2 -> Type 3: X-?=Y (Missing B)
+                        // i=3 -> Mixed
+                        if (i === 3) {
+                            type = getRandomInt(1, 3);
+                        } else {
+                            type = i + 1;
+                        }
                         columnProblems.push({ a, b, c: a - b, type });
                     } else {
                         break; // Stop if b or result is invalid
@@ -223,11 +232,15 @@ document.addEventListener('DOMContentLoaded', () => {
             columnProblems.forEach(p => {
                 const box = document.createElement('div');
                 box.className = 'equation-box';
-                if (p.type === 1) { // A - ? = C
+                
+                if (p.type === 1) { // A - B = [C]
+                    box.append(`${p.a} - ${p.b} = `, createInput(String(p.c), 2));
+                } else if (p.type === 2) { // [A] - B = C
+                    box.append(createInput(String(p.a), 2), ` - ${p.b} = ${p.c}`);
+                } else if (p.type === 3) { // A - [B] = C
                     box.append(`${p.a} - `, createInput(String(p.b), 1), ` = ${p.c}`);
-                } else { // ? = A - B
-                    box.append(createInput(String(p.c), 2), ` = ${p.a} - ${p.b}`);
                 }
+                
                 colDiv.appendChild(box);
             });
             container.appendChild(colDiv);
