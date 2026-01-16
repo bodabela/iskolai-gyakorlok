@@ -137,8 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!container) return;
         container.innerHTML = '';
 
-        const rangeStart = 0;
-        const rangeEnd = currentLimit; // Adjusted to dynamic limit
+        // Calculate dynamic range based on the operation
+        const totalSub = jumps.reduce((a, b) => a + b, 0);
+        const minVal = Math.min(start, start + totalSub);
+        const maxVal = Math.max(start, start + totalSub);
+        
+        const rangeStart = Math.floor(minVal / 10) * 10;
+        let rangeEnd = Math.ceil(maxVal / 10) * 10;
+        if (rangeEnd === rangeStart) rangeEnd += 10;
+
         const totalRange = rangeEnd - rangeStart;
         const width = 800;
         const padding = 40;
@@ -271,9 +278,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const taskEl = document.createElement('div');
             taskEl.className = 'decomposition-task';
             
-            // Visual range for SVG: show currentLimit - 20 to currentLimit
-            const vStart = Math.max(0, currentLimit - 20);
-            const vEnd = currentLimit;
+            // Visual range for SVG: based on problem values
+            const vStart = Math.floor(p.end / 10) * 10;
+            const vEnd = Math.ceil(p.start / 10) * 10;
             const vRange = vEnd - vStart;
             const step = 780 / vRange;
 
