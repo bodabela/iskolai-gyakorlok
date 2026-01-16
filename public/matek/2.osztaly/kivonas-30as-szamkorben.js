@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
         columnsData.forEach(columnProblems => {
             const colDiv = document.createElement('div');
             colDiv.className = 'equation-column';
-            shuffle(columnProblems).forEach(p => {
+            columnProblems.forEach(p => {
                 const box = document.createElement('div');
                 box.className = 'equation-box';
                 if (p.type === 1) box.append(`${p.a} - ${p.b} - ${p.c} = `, createInput(String(p.result)));
