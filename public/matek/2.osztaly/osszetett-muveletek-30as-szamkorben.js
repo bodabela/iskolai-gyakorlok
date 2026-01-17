@@ -104,82 +104,147 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateTask1() {
         clearContainerAndFeedback(1);
         const container = containers[0];
-        const problems = [];
-        const problemSignatures = new Set();
-        const NUM_PROBLEMS = 5;
-
-        const operations = [
-            () => {
-                const c = getRandomInt(1, 3);
-                const inter = getRandomInt(2, Math.floor(30 / c));
-                const a = getRandomInt(1, inter - 1);
-                const b = inter - a;
-                return { text: `(${a} + ${b}) · ${c}`, inter, final: inter * c, signature: `${a}+${b}*${c}` };
-            },
-            () => {
-                const c = getRandomInt(1, 3);
-                const inter = getRandomInt(2, Math.floor(30 / c));
-                const b = getRandomInt(1, 8);
-                const a = inter + b;
-                return { text: `(${a} - ${b}) · ${c}`, inter, final: inter * c, signature: `${a}-${b}*${c}` };
-            },
-            () => {
-                 const c = getRandomInt(1, 3);
-                const inter = getRandomInt(2, Math.floor(30 / c));
-                const a = getRandomInt(1, inter - 1);
-                const b = inter - a;
-                return { text: `${c} · (${a} + ${b})`, inter, final: inter * c, signature: `${c}*${a}+${b}` };
-            },
-            () => {
-                const c = getRandomInt(1, 3);
-                const final = getRandomInt(2, 10);
-                const inter = final * c;
-                if (inter > 20) return null;
-                const a = getRandomInt(1, inter - 1);
-                const b = inter - a;
-                return { text: `(${a} + ${b}) : ${c}`, inter, final, signature: `${a}+${b}/${c}` };
-            },
-        ];
-
-        while (problems.length < NUM_PROBLEMS) {
-            const opFunc = operations[getRandomInt(0, operations.length - 1)];
-            const p = opFunc();
-            if (p && !problemSignatures.has(p.signature)) {
-                problems.push(p);
-                problemSignatures.add(p.signature);
-            }
-        }
         
-        problems.forEach(p => {
+        // Create columnar structure
+        const columnsWrapper = document.createElement('div');
+        columnsWrapper.className = 'task-columns';
+        container.appendChild(columnsWrapper);
+
+        const problems = [];
+        const NUM_SETS = 3; // Number of columns (sets of numbers)
+        const MAX_VAL = 30;
+
+        // Helper to render problem parts
+        const renderProblem = (colContainer, prefix, activeText, suffix, interVal, finalVal) => {
             const mainEq = document.createElement('div');
             mainEq.className = 'main-equation';
 
-            const finalInput = createInput(p.final);
-            
-            const parenRegex = /(\(.*\))/;
-            const parenMatch = p.text.match(parenRegex);
-            const parenContent = parenMatch[1];
-            const parts = p.text.split(parenContent);
+            const finalInput = createInput(finalVal);
 
             const interWrapper = document.createElement('div');
             interWrapper.className = 'operation-wrapper';
             
-            const interInput = createInput(p.inter);
+            const interInput = createInput(interVal);
             interInput.classList.add('intermediate-result-input');
             
-            const parenSpan = document.createElement('span');
-            parenSpan.textContent = parenContent;
+            const activeSpan = document.createElement('span');
+            activeSpan.textContent = activeText;
 
             interWrapper.appendChild(interInput);
-            interWrapper.appendChild(parenSpan);
+            interWrapper.appendChild(activeSpan);
 
-            mainEq.append(document.createTextNode(parts[0]));
+            if (prefix) mainEq.appendChild(document.createTextNode(prefix));
             mainEq.appendChild(interWrapper);
-            mainEq.append(document.createTextNode(parts[1] + ' = '));
+            if (suffix) mainEq.appendChild(document.createTextNode(suffix));
+            mainEq.appendChild(document.createTextNode(' = '));
             mainEq.appendChild(finalInput);
             
-            container.appendChild(mainEq);
-        });
+            colContainer.appendChild(mainEq);
+        };
+
+        for (let i = 0; i < NUM_SETS; i++) {
+            const col = document.createElement('div');
+            col.className = 'task-column';
+            columnsWrapper.appendChild(col);
+
+            let tuple = null;
+            while(!tuple) {
+                // 1: Add+Mul, 2: Sub+Mul, 3: Add+Div, 4: Sub+Div
+                const opType = getRandomInt(1, 4);
+                
+                if (opType === 1 || opType === 2) { // Multiplication
+                    // Format: A +/- B * C  vs (A +/- B) * C
+                    const c = getRandomInt(2, 6); 
+                    const b = getRandomInt(2, 10);
+                    const a = getRandomInt(1, 20); 
+
+                    // Check Standard: A +/- (B*C)
+                    const prod = b * c;
+                    if (prod > MAX_VAL) continue;
+                    
+                    let resStandard;
+                    if (opType === 1) resStandard = a + prod;
+                    else resStandard = a - prod;
+                    
+                    if (resStandard < 0 || resStandard > MAX_VAL) continue;
+                    
+                    // Check Changed: (A +/- B) * C
+                    let inner;
+                    if (opType === 1) inner = a + b;
+                    else inner = a - b;
+                    
+                    if (inner < 0) continue;
+                    if (inner > 10) continue; // Factor limit for 10x10 table
+                    
+                    const resChanged = inner * c;
+                    if (resChanged > MAX_VAL) continue;
+                    
+                    tuple = { opType, a, b, c, operator: '·', resStandard, resChanged, interStd: prod, interChg: inner };
+
+                } else { // Division
+                    // Format: A +/- B : C vs (A +/- B) : C
+                    const c = getRandomInt(2, 5);
+                    
+                    // To have integers in both forms, A and B must be multiples of C
+                    const ma = getRandomInt(1, 10); // A = ma * c
+                    const mb = getRandomInt(1, 10); // B = mb * c
+                    
+                    const a = ma * c;
+                    const b = mb * c;
+                    
+                    if (a > MAX_VAL || b > MAX_VAL) continue;
+                    
+                    // Standard: A +/- (B:C)
+                    const quot = b / c;
+                    if (quot > 10) continue; 
+                    
+                    let resStandard;
+                    if (opType === 3) resStandard = a + quot;
+                    else resStandard = a - quot;
+                    
+                    if (resStandard < 0 || resStandard > MAX_VAL) continue;
+                    
+                    // Changed: (A +/- B) : C
+                    let inner;
+                    if (opType === 3) inner = a + b;
+                    else inner = a - b;
+                    
+                    if (inner < 0) continue;
+                    
+                    const resChanged = inner / c;
+                    if (resChanged > 10) continue;
+                    if (resChanged > MAX_VAL) continue;
+                    
+                    tuple = { opType, a, b, c, operator: ':', resStandard, resChanged, interStd: quot, interChg: inner };
+                }
+            }
+            problems.push(tuple);
+
+            // Render to this Column: all 3 variations for the same tuple
+            
+            // 1. Standard: X +/- Y * Z
+            {
+                const { a, b, c, operator, resStandard, interStd, opType } = tuple;
+                const prefix = (opType === 1 || opType === 3) ? `${a} + ` : `${a} - `;
+                const active = `${b} ${operator} ${c}`;
+                renderProblem(col, prefix, active, '', interStd, resStandard);
+            }
+            // 2. Standard with Parens: X +/- (Y * Z)
+            {
+                const { a, b, c, operator, resStandard, interStd, opType } = tuple;
+                const prefix = (opType === 1 || opType === 3) ? `${a} + ` : `${a} - `;
+                const active = `(${b} ${operator} ${c})`;
+                renderProblem(col, prefix, active, '', interStd, resStandard);
+            }
+            // 3. Changed Precedence: (X +/- Y) * Z
+            {
+                const { a, b, c, operator, resChanged, interChg, opType } = tuple;
+                const innerOp = (opType === 1 || opType === 3) ? '+' : '-';
+                const active = `(${a} ${innerOp} ${b})`;
+                const suffix = ` ${operator} ${c}`;
+                renderProblem(col, '', active, suffix, interChg, resChanged);
+            }
+        }
 
         if (typeof logNewTask === 'function') {
             logNewTask('osszetett-muveletek-30as-szamkorben-feladat-1', { problems });
