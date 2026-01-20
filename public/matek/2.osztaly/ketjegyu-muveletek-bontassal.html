@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. Osztály - Kétjegyű műveletek bontással</title>
+    <link rel="stylesheet" href="ketjegyu-muveletek-bontassal.css">
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="range-selector-container">
+            <label for="range-select" class="range-selector-label">Számkör:</label>
+            <select id="range-select" class="range-selector-select">
+                <option value="20">20-as számkör</option>
+                <option value="30">30-as számkör</option>
+                <option value="40">40-es számkör</option>
+                <option value="50" selected>50-es számkör</option>
+                <option value="60">60-as számkör</option>
+                <option value="70">70-es számkör</option>
+                <option value="80">80-as számkör</option>
+                <option value="90">90-es számkör</option>
+                <option value="100">100-as számkör</option>
+            </select>
+        </div>
+        <div class="range-selector-container">
+            <label for="operand-range-select" class="range-selector-label">Második szám:</label>
+            <select id="operand-range-select" class="range-selector-select">
+                <option value="10" selected>10-es nagyságrend (pl. 13)</option>
+                <option value="20">20-as nagyságrend (pl. 24)</option>
+            </select>
+        </div>
+        <div>
+            <p class="control-label">Téma választó:</p>
+            <div class="theme-selector">
+                <button class="theme-button" data-theme="theme-candy">Cukorka</button>
+                <button class="theme-button" data-theme="theme-magicforest">Varázserdő</button>
+                <button class="theme-button" data-theme="theme-ocean">Óceán</button>
+                <button class="theme-button" data-theme="theme-space">Űr</button>
+                <button class="theme-button" data-theme="theme-jungle">Őserdő</button>
+                <button class="theme-button" data-theme="theme-tech">Techno</button>
+                <button class="theme-button" data-theme="theme-sport">Sport</button>
+                <button class="theme-button" data-theme="theme-adventure">Kaland</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Kétjegyű műveletek bontással</h1>
+        <h2>Gyakoroljuk a tizesek és egyesek külön számolását!</h2>
+
+        <!-- Task 1: Addition -->
+        <div class="task" id="task-1-wrapper">
+            <div class="task-header">
+                <h3>1. Feladat: Összeadás bontással</h3>
+                <button class="task-button new-task-button" id="new-task-1-button">Új feladat</button>
+            </div>
+            <p>Add hozzá először a tizeseket, majd az egyeseket (ha kell, bontsd tovább)!</p>
+            <div id="task-1-container"></div>
+            <button class="task-button" id="check-1-button">Ellenőrzés</button>
+            <p id="feedback-1" class="feedback"></p>
+        </div>
+        <hr class="task-divider">
+
+        <!-- Task 2: Subtraction -->
+        <div class="task" id="task-2-wrapper">
+            <div class="task-header">
+                <h3>2. Feladat: Kivonás bontással</h3>
+                <button class="task-button new-task-button" id="new-task-2-button">Új feladat</button>
+            </div>
+            <p>Vond ki először a tizeseket, majd az egyeseket (ha kell, bontsd tovább)!</p>
+            <div id="task-2-container"></div>
+            <button class="task-button" id="check-2-button">Ellenőrzés</button>
+            <p id="feedback-2" class="feedback"></p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore-compat.js"></script>
+    <script src="../../js/firebase-logger.js"></script>
+    <script src="ketjegyu-muveletek-bontassal.js"></script>
+</body>
+</html>

@@ -97,7 +97,7 @@
   },
   {
     "id": "open-html",
-    "command": "start public/matek/2.osztaly/kivonas-30as-szamkorben.html",
+    "command": "start public/matek/2.osztaly/osszetett-muveletek-30as-szamkorben.html",
     "environment": "local",
     "isHotSwappable": false
   },
@@ -110,6 +110,12 @@
   {
     "id": "open-kivonas-szamkorokben",
     "command": "start public/matek/2.osztaly/kivonas-szamkorokben.html",
+    "environment": "local",
+    "isHotSwappable": false
+  },
+  {
+    "id": "open-ketjegyu-muveletek-bontassal",
+    "command": "start public/matek/2.osztaly/ketjegyu-muveletek-bontassal.html",
     "environment": "local",
     "isHotSwappable": false
   }
