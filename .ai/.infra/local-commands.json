@@ -118,5 +118,11 @@
     "command": "start public/matek/2.osztaly/ketjegyu-muveletek-bontassal.html",
     "environment": "local",
     "isHotSwappable": false
+  },
+  {
+    "id": "open-index",
+    "command": "start public/matek/index.html",
+    "environment": "local",
+    "isHotSwappable": false
   }
 ]
