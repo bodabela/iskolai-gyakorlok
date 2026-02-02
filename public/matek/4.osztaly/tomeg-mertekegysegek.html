@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Tömegmérés Gyakorló - 4. Osztály</title>
+    <link href="tomeg-mertekegysegek.css" rel="stylesheet"/>
+    <script defer src="/__/firebase/11.7.3/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/11.7.3/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <script src="../../js/firebase-logger.js"></script>
+</head>
+<body class="theme-candy">
+    <div class="controls-container">
+        <div class="theme-selector">
+            <span class="control-label">Válassz témát:</span>
+            <button class="theme-button" data-theme="candy">Cukorka</button>
+            <button class="theme-button" data-theme="magicforest">Varázserdő</button>
+            <button class="theme-button" data-theme="ocean">Óceán</button>
+            <button class="theme-button" data-theme="space">Űr</button>
+            <button class="theme-button" data-theme="jungle">Dzsungel</button>
+            <button class="theme-button" data-theme="tech">Tech</button>
+            <button class="theme-button" data-theme="sport">Sport</button>
+            <button class="theme-button" data-theme="adventure">Kaland</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Tömegmértékegységek Gyakorlása</h1>
+        <h2>4. Osztály</h2>
+
+        <!-- 1. Feladat: Átváltások -->
+        <div class="task" id="task-conversion">
+            <div class="task-header">
+                <h3>1. Fejezd ki másképp!</h3>
+                <button class="task-button new-task-button" onclick="generateConversionTask()">Új feladatok</button>
+            </div>
+            <p class="instructions">Váltsd át a mennyiségeket a megadott mértékegységre!</p>
+            <div class="questions-container" id="conversion-container"></div>
+            <button class="task-button check-button" onclick="checkConversionTask()">Ellenőrzés</button>
+            <p class="feedback" id="feedback-conversion">&nbsp;</p>
+        </div>
+
+        <hr class="task-divider"/>
+
+        <!-- 2. Feladat: Pótlas -->
+        <div class="task" id="task-missing">
+            <div class="task-header">
+                <h3>2. Pótold a hiányzó mérőszámokat!</h3>
+                <button class="task-button new-task-button" onclick="generateMissingTask()">Új feladatok</button>
+            </div>
+            <p class="instructions">Írd be a hiányzó számot, hogy igaz legyen az egyenlőség!</p>
+            <div class="questions-container" id="missing-container"></div>
+            <button class="task-button check-button" onclick="checkMissingTask()">Ellenőrzés</button>
+            <p class="feedback" id="feedback-missing">&nbsp;</p>
+        </div>
+
+        <hr class="task-divider"/>
+
+        <!-- 3. Feladat: Sorozatok -->
+        <div class="task" id="task-sequence">
+            <div class="task-header">
+                <h3>3. Folytasd a megkezdett sort!</h3>
+                <button class="task-button new-task-button" onclick="generateSequenceTask()">Új feladatok</button>
+            </div>
+            <p class="instructions">Írd be a sorozat következő két elemét! Figyeld meg a szabályt!</p>
+            <div class="questions-container" id="sequence-container"></div>
+            <button class="task-button check-button" onclick="checkSequenceTask()">Ellenőrzés</button>
+            <p class="feedback" id="feedback-sequence">&nbsp;</p>
+        </div>
+
+        <hr class="task-divider"/>
+
+        <!-- 4. Feladat: Összehasonlítás -->
+        <div class="task" id="task-comparison">
+            <div class="task-header">
+                <h3>4. Több, kevesebb vagy ugyanannyi?</h3>
+                <button class="task-button new-task-button" onclick="generateComparisonTask()">Új feladatok</button>
+            </div>
+            <p class="instructions">Tedd ki a megfelelő relációs jelet! (<, >, =)</p>
+            <div class="questions-container" id="comparison-container"></div>
+            <button class="task-button check-button" onclick="checkComparisonTask()">Ellenőrzés</button>
+            <p class="feedback" id="feedback-comparison">&nbsp;</p>
+        </div>
+
+        <hr class="task-divider"/>
+
+        <!-- 5. Feladat: Egyenlőtlenség -->
+        <div class="task" id="task-inequality">
+            <div class="task-header">
+                <h3>5. Tedd igazzá!</h3>
+                <button class="task-button new-task-button" onclick="generateInequalityTask()">Új feladatok</button>
+            </div>
+            <p class="instructions">Sorolj fel 3 olyan számot, amellyel igaz lesz az állítás! (Írj a mezőkbe különböző számokat)</p>
+            <div class="questions-container" id="inequality-container"></div>
+            <button class="task-button check-button" onclick="checkInequalityTask()">Ellenőrzés</button>
+            <p class="feedback" id="feedback-inequality">&nbsp;</p>
+        </div>
+    </div>
+
+    <script src="tomeg-mertekegysegek.js"></script>
+</body>
+</html>

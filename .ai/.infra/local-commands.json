@@ -124,5 +124,29 @@
     "command": "start public/matek/index.html",
     "environment": "local",
     "isHotSwappable": false
+  },
+  {
+    "id": "start-tomeg",
+    "command": "start public/matek/4.osztaly/tomeg-mertekegysegek.html",
+    "environment": "local",
+    "isHotSwappable": true
+  },
+  {
+    "id": "start-html",
+    "command": "start public/matek/4.osztaly/tomeg-mertekegysegek.html",
+    "environment": "local",
+    "isHotSwappable": true
+  },
+  {
+    "id": "start-html-tomeg",
+    "command": "start public/matek/4.osztaly/tomeg-mertekegysegek.html",
+    "environment": "local",
+    "isHotSwappable": true
+  },
+  {
+    "id": "start-html-tomeg-v2",
+    "command": "start public/matek/4.osztaly/tomeg-mertekegysegek.html",
+    "environment": "local",
+    "isHotSwappable": true
   }
 ]
